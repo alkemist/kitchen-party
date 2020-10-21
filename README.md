@@ -1,1 +1,1 @@
-# kitchen-party
+# Kitchen Party
