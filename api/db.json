@@ -1,0 +1,49 @@
+{
+  "family": [
+    {
+      "id": 1,
+      "name": "Végétal"
+    },
+    {
+      "id": 2,
+      "name": "Produit à base d'animaux"
+    },
+    {
+      "id": 3,
+      "name": "Fruit",
+      "familyId": 1
+    },
+    {
+      "id": 4,
+      "name": "Légume",
+      "familyId": 1
+    },
+    {
+      "id": 5,
+      "name": "Céréale / Féculent",
+      "familyId": 1
+    },
+    {
+      "id": 6,
+      "name": "Epice",
+      "familyId": 1
+    }
+  ],
+  "ingredient": [
+    {
+      "name": "test 4",
+      "family": "",
+      "id": 1
+    }
+  ],
+  "tool": [],
+  "action": [],
+  "measure": [],
+  "measure_ingredient": [],
+  "measure_tool": [],
+  "measure_operation": [],
+  "operation": [],
+  "operation_operation": [],
+  "operation_ingredient": [],
+  "operation_outil": []
+}

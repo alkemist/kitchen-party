@@ -1,0 +1,31 @@
+<div [formGroup]="form">
+  <div>
+    <mat-form-field>
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="name">
+      <button mat-button *ngIf="form.get('name').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('name').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error  *ngIf="form.get('name').hasError('required')">Le nom est requis</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <input type="text"
+             placeholder="Famille"
+             matInput
+             formControlName="family"
+             [matAutocomplete]="autoFamily">
+      <button mat-button *ngIf="form.get('family').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('family').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #autoFamily="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let family of families | async" [value]="family">
+          {{family.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('family').hasError('required') || form.get('family').hasError('unselected')">La famille est requis</mat-error>
+    </mat-form-field>
+  </div>
+</div>
