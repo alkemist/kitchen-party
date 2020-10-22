@@ -199,8 +199,8 @@
   "operation_operation": [],
   "operation_ingredient": [],
   "operation_outil": [],
-  "shelf": [],
-  "shelf_ingredient": [],
+  "product": [],
+  "product_ingredient": [],
   "list": [],
   "list_ingredient": []
 }

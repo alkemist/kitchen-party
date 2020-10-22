@@ -1,7 +1,7 @@
 <mat-toolbar>
   <span>Réfrigérateur</span>
   <span class="toolbar-spacer"></span>
-  <a routerLink="/shelf/new" mat-button color="accent"><mat-icon>add</mat-icon></a>
+  <a routerLink="/product/new" mat-button color="accent"><mat-icon>add</mat-icon></a>
 </mat-toolbar>
 
 <mat-card class="page-margin">
@@ -28,7 +28,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element" width="120px">
-          <a [routerLink]="['/shelf/', element.id]" matTooltip="Modifier le produit" mat-icon-button color="accent"><mat-icon>edit</mat-icon></a>
+          <a [routerLink]="['/product/', element.id]" matTooltip="Modifier le produit" mat-icon-button color="accent"><mat-icon>edit</mat-icon></a>
           <a (click)="delete(element)" matTooltip="Supprimer le produit" mat-icon-button color="warn"><mat-icon>delete</mat-icon></a>
         </td>
       </ng-container>

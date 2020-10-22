@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {ShelfInterface} from '../../interfaces/shelf';
+import {productInterface} from '../../interfaces/product';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
@@ -8,16 +8,16 @@ import {FamilyStoreService} from '../../services/family-store.service';
 import {MatterEnum} from '../../enums/matter';
 import {IngredientStoreService} from '../../services/ingredient-store.service';
 import {ToolStoreService} from '../../services/tool-store.service';
-import {ShelfStoreService} from '../../services/shelf-store.service';
+import {productStoreService} from '../../services/product-store.service';
 import {MeasureStoreService} from '../../services/measure-store.service';
 
 @Component({
-  selector: 'app-shelf',
-  templateUrl: './shelf.component.html',
-  styleUrls: ['./shelf.component.scss']
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss']
 })
-export class ShelfComponent implements OnInit {
-  @Input() shelf: ShelfInterface;
+export class productComponent implements OnInit {
+  @Input() product: productInterface;
   @Output() readonly formOutput = new EventEmitter<FormGroup>();
 
   form: FormGroup = new FormGroup({});

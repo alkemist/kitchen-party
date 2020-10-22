@@ -5,29 +5,29 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {ShelfInterface} from '../../interfaces/shelf';
+import {productInterface} from '../../interfaces/product';
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
-import {ShelfStoreService} from '../../services/shelf-store.service';
+import {productStoreService} from '../../services/product-store.service';
 import {FamilyStoreService} from '../../services/family-store.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GenericFormComponent} from '../../generics/generic-form.component';
 
 @Component({
-  selector: 'app-shelf-form',
-  templateUrl: './shelf-form.component.html',
-  styleUrls: ['./shelf-form.component.scss']
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html',
+  styleUrls: ['./product-form.component.scss']
 })
-export class ShelfFormComponent extends GenericFormComponent<ShelfInterface> implements OnInit {
-  entityName = 'shelf';
-  entity: ShelfInterface;
+export class productFormComponent extends GenericFormComponent<productInterface> implements OnInit {
+  entityName = 'product';
+  entity: productInterface;
 
   constructor(
     protected route: ActivatedRoute,
-    protected shelfStore: ShelfStoreService,
+    protected productStore: productStoreService,
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
-    super(shelfStore, route, formBuilder, snackBar);
+    super(productStore, route, formBuilder, snackBar);
   }
 
   ngOnInit(): void {

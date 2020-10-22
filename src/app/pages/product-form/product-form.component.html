@@ -1,6 +1,6 @@
 <form (ngSubmit)="edit()" [formGroup]="form">
   <mat-toolbar>
-    <a routerLink="/shelfs" mat-icon-button color="accent"><mat-icon>arrow_back</mat-icon></a>
+    <a routerLink="/products" mat-icon-button color="accent"><mat-icon>arrow_back</mat-icon></a>
     <span *ngIf="!entity">Nouveau produit</span>
     <span *ngIf="entity">Produit {{ entity.name }}</span>
     <span class="toolbar-spacer"></span>
@@ -13,7 +13,7 @@
            *ngIf="isLoadingResults">
         <mat-spinner></mat-spinner>
       </div>
-      <app-shelf [shelf]="entity" (formOutput)="formUpdate($event)"></app-shelf>
+      <app-product [product]="entity" (formOutput)="formUpdate($event)"></app-product>
     </mat-card-content>
   </mat-card>
 </form>

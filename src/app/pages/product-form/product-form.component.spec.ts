@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShelfListComponent } from './shelf-list.component';
+import { productFormComponent } from './product-form.component';
 
-describe('ShelfListComponent', () => {
-  let component: ShelfListComponent;
-  let fixture: ComponentFixture<ShelfListComponent>;
+describe('productFormComponent', () => {
+  let component: productFormComponent;
+  let fixture: ComponentFixture<productFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShelfListComponent ]
+      declarations: [ productFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShelfListComponent);
+    fixture = TestBed.createComponent(productFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

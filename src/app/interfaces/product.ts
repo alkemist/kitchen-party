@@ -1,7 +1,7 @@
 import {IdentifiableInterface} from './Identifiable';
 import {IngredientInterface} from './ingredient';
 
-export interface ShelfInterface extends IdentifiableInterface {
+export interface productInterface extends IdentifiableInterface {
   name: string;
   quantity: number;
   ingredientId: number;
