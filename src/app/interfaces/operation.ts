@@ -12,15 +12,13 @@ export interface OperationInterface extends IdentifiableInterface  {
   result?: string;
   actionId: number;
   action: ActionInterface;
-  measureId?: number;
-  measure?: MeasureInterface;
 
   measureIngredientIds: number[];
-  measureIngredients: MeasureIngredientInterface[];
+  measureIngredients: OperationMeasureIngredientInterface[];
   measureToolIds: number[];
-  measureTools: MeasureToolInterface[];
+  measureTools: OperationMeasureToolInterface[];
   measureOperationIds: number[];
-  measureOperations: MeasureOperationInterface[];
+  measureOperations: OperationMeasureOperationInterface[];
 }
 
 export interface OperationMeasureIngredientInterface extends IdentifiableInterface {
