@@ -28,10 +28,26 @@ export class MeasureFormComponent extends GenericFormComponent<MeasureInterface>
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
-    super(measureStore, route, formBuilder, snackBar)
+    super(measureStore, route, formBuilder, snackBar);
   }
 
   ngOnInit(): void {
     this.onInit();
+  }
+
+  edit(): void {
+    const measure = this.form.value;
+
+    if (this.form.valid) {
+      if (measure.family && typeof measure.family === 'string') {
+        this.familyStore.create({name: measure.family}).then(family => {
+          measure.family = family;
+          measure.familyId = family.id;
+          this.send(measure);
+        });
+      } else {
+        this.send(measure);
+      }
+    }
   }
 }

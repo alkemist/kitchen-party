@@ -7,6 +7,8 @@ import {IdentifiableInterface} from '../interfaces/Identifiable';
   providedIn: 'root'
 })
 export abstract class GenericStoreService<EntityInterface extends IdentifiableInterface > {
+  entityName = '';
+
   protected constructor(private apiService) { }
 
   private readonly obsEntities = new BehaviorSubject<EntityInterface[]>([]);
@@ -27,7 +29,16 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
   get entities(): EntityInterface[] {
     if (this.isOutdated) {
       this.apiService.getList().then((entities) => {
-        this.setEntities(entities);
+        console.log('[API]', this.entityName, 'list', entities);
+        const promises: Promise<EntityInterface>[] = [];
+
+        entities.forEach(entity => {
+          promises.push(this.hydrate(entity));
+        });
+
+        Promise.all(promises).then(entitiesHydrated => {
+          this.setEntities(entitiesHydrated);
+        });
       });
     }
 
@@ -47,7 +58,7 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
     return new Promise<EntityInterface>((resolve) => {
       if (this.isOutdated || !entitieStored) {
         this.apiService.getOne(id.toString()).then((entity: EntityInterface) => {
-          console.log('[API]', 'find', entity);
+          console.log('[API]', this.entityName, 'find', entity);
           this.hydrate(entity).then(entityHydrated => resolve(entityHydrated));
         });
       }
@@ -59,9 +70,10 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
 
   create(entity: EntityInterface): Promise<EntityInterface> {
     return new Promise<EntityInterface>((resolve) => {
-      this.apiService.create(entity).then(entitieSaved => {
-        this.addEntity(entitieSaved);
-        resolve(entitieSaved);
+      this.apiService.create(entity).then(entitySaved => {
+        this.hydrate(entitySaved).then(entityHydrated => {
+          resolve(entityHydrated);
+        });
       });
     });
   }
@@ -73,7 +85,7 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
 
   update(entity: EntityInterface): Promise<EntityInterface> {
     this.setEntity(entity);
-    return this.apiService.update(entity);
+    return this.apiService.update(entity)
   }
 
   protected hydrate(entity: EntityInterface): Promise<EntityInterface> {
@@ -83,19 +95,19 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
       if (promises.length > 0) {
         return Promise.all(promises).then(entities => {
           const entityHydrated = Object.assign({}, ...entities);
-          this.setEntity(entityHydrated);
           resolve(entityHydrated);
+          this.setEntity(entityHydrated);
         });
       } else {
-        this.setEntity(entity);
         resolve(entity);
+        this.setEntity(entity);
       }
     });
   }
 
   protected addEntity(entity: EntityInterface): any {
     this.setEntities([
-      ...this.entities,
+      ...this.obsEntities.getValue(),
       entity
     ]);
   }
@@ -108,8 +120,9 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
     // we need to make a new copy of entities array, and the entity as well
     // remember, our state must always remain immutable
     // otherwise, on push change detection won't work, and won't update its view
-    const entitieStored = this.entities.find(entityCurrent => entityCurrent.id === entity.id);
-    const index = this.entities.indexOf(entitieStored);
+    const entities = this.obsEntities.getValue();
+    const entitieStored = entities.find(entityCurrent => entityCurrent.id === entity.id);
+    const index = entities.indexOf(entitieStored);
     if (entitieStored) {
       this.entities[index] = entity;
       this.setEntities([...this.entities]);

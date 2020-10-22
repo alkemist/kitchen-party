@@ -8,5 +8,6 @@ export interface MeasureInterface extends IdentifiableInterface  {
   quantity: number;
   measureId?: number;
   measure?: MeasureInterface;
+  familyId?: number;
   family?: FamilyInterface;
 }

@@ -13,7 +13,7 @@
 
     <mat-form-field>
       <mat-label>Recherche</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Boiler" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
     </mat-form-field>
 
     <table mat-table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="id">
@@ -37,6 +37,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>

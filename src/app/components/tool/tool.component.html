@@ -16,6 +16,6 @@
         <mat-radio-button *ngFor="let matter of matterValuesLabels" [value]="matter.value">{{ matter.label }}</mat-radio-button>
       </mat-radio-group>
     </div>
-    <mat-error *ngIf="form.get('matter').hasError('required')">Le type de donnée est requis</mat-error>
+    <mat-error *ngIf="form.get('matter').hasError('required')">La matière est requis</mat-error>
   </div>
 </div>

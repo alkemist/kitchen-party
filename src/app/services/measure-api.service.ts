@@ -11,4 +11,19 @@ export class MeasureApiService extends GenericApiService<MeasureInterface>{
   constructor(protected http: HttpClient) {
     super(http);
   }
+
+  protected clearEntity(measure: MeasureInterface): MeasureInterface {
+    const measureCleared =  Object.assign({}, measure);
+
+    if (typeof measureCleared.family === 'object') {
+      measureCleared.familyId = measureCleared.family.id;
+      delete measureCleared.family;
+    }
+    if (typeof measureCleared.measure === 'object') {
+      measureCleared.measureId = measureCleared.measure.id;
+      delete measureCleared.measure;
+    }
+
+    return measureCleared;
+  }
 }

@@ -19,15 +19,21 @@ export abstract class GenericApiService<EntityInterface extends IdentifiableInte
     return this.http.get<EntityInterface[]>(`api/${this.entityName}`, {params}).toPromise();
   }
 
-  public create(action: EntityInterface): Promise<EntityInterface> {
-    return this.http.post<EntityInterface>(`api/${this.entityName}`, action).toPromise();
+  public create(entity: EntityInterface): Promise<EntityInterface> {
+    const entityCleared = this.clearEntity(entity);
+    return this.http.post<EntityInterface>(`api/${this.entityName}`, entityCleared).toPromise();
   }
 
-  public update(action: EntityInterface): Promise<EntityInterface> {
-    return this.http.put<EntityInterface>(`api/${this.entityName}/${action.id}`, action).toPromise();
+  public update(entity: EntityInterface): Promise<EntityInterface> {
+    const entityCleared = this.clearEntity(entity);
+    return this.http.put<EntityInterface>(`api/${this.entityName}/${entity.id}`, entityCleared).toPromise();
   }
 
   public delete(id: number): Promise<void> {
     return this.http.delete<void>(`api/${this.entityName}/${id}`).toPromise();
+  }
+
+  protected clearEntity(entity: EntityInterface): EntityInterface {
+    return entity;
   }
 }

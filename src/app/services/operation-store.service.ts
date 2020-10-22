@@ -9,6 +9,7 @@ import {MeasureInterface} from '../interfaces/measure';
   providedIn: 'root'
 })
 export class OperationStoreService extends GenericStoreService<OperationInterface> {
+  entityName = 'operation';
   constructor(private operationService: OperationApiService) {
     super(operationService);
   }

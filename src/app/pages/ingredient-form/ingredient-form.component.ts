@@ -28,7 +28,7 @@ export class IngredientFormComponent extends GenericFormComponent<IngredientInte
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
-    super(ingredientStore, route, formBuilder, snackBar)
+    super(ingredientStore, route, formBuilder, snackBar);
   }
 
   ngOnInit(): void {
@@ -41,15 +41,11 @@ export class IngredientFormComponent extends GenericFormComponent<IngredientInte
     if (this.form.valid) {
       if (ingredient.family && typeof ingredient.family === 'string') {
         this.familyStore.create({name: ingredient.family}).then(family => {
+          ingredient.family = family;
           ingredient.familyId = family.id;
           this.send(ingredient);
         });
       } else {
-        if (typeof ingredient.family === 'object') {
-          ingredient.familyId = ingredient.family.id;
-          delete ingredient.family;
-        }
-
         this.send(ingredient);
       }
     }

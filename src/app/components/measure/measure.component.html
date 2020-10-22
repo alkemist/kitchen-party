@@ -1,4 +1,14 @@
 <div [formGroup]="form">
+  <div style="margin-bottom: 20px">
+    <div class="mat-form-field-radio-group">
+      <mat-label>Type</mat-label>
+      <mat-radio-group formControlName="type">
+        <mat-radio-button *ngFor="let type of typeValuesLabels" [value]="type.value">{{ type.label }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-error *ngIf="form.get('type').hasError('required')">Le type de mesure est requis</mat-error>
+  </div>
+
   <div>
     <mat-form-field>
       <mat-label>Nom</mat-label>
@@ -8,5 +18,62 @@
       </button>
       <mat-error  *ngIf="form.get('name').hasError('required')">Le nom est requis</mat-error>
     </mat-form-field>
+  </div>
+
+  <div *ngIf="hasFamily()">
+    <mat-form-field>
+      <input type="text"
+             placeholder="Famille"
+             matInput
+             formControlName="family"
+             [matAutocomplete]="autoFamily">
+      <button mat-button *ngIf="form.get('family').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('family').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #autoFamily="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let family of families | async" [value]="family">
+          {{family.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('family').hasError('required') || form.get('family').hasError('unselected')">La famille est requis</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Quantité</mat-label>
+      <input type="number" min="0" matInput formControlName="quantity">
+      <button mat-button *ngIf="form.get('quantity').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('quantity').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error  *ngIf="form.get('quantity').hasError('required')">Le nom est requis</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="form.get('type').value">
+    <mat-form-field>
+      <input type="text"
+             placeholder="Parent"
+             matInput
+             formControlName="measure"
+             [matAutocomplete]="autoMeasure">
+      <button mat-button *ngIf="form.get('measure').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('measure').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #autoMeasure="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let measure of measures | async" [value]="measure">
+          {{measure.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('measure').hasError('required') || form.get('measure').hasError('unselected')">La famille est requis</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="form.valid" style="text-transform: lowercase">
+    <span>Un-e {{ form.get('name').value }}</span>
+    <span *ngIf="form.get('family').value"> de {{ form.get('family').value?.name }}</span>
+    <span> correspond à {{ form.get('quantity').value }}</span>
+    <span *ngIf="!form.get('measure').value"> {{ unitValuesLabels[form.get('type').value].label }}-s</span>
+    <span *ngIf="form.get('measure').value"> {{ form.get('measure').value.name }}-s</span>
   </div>
 </div>

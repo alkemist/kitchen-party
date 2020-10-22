@@ -28,7 +28,7 @@ export class RecipeFormComponent extends GenericFormComponent<RecipeInterface> i
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
-    super(recipeStore, route, formBuilder, snackBar)
+    super(recipeStore, route, formBuilder, snackBar);
   }
 
   ngOnInit(): void {

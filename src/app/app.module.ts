@@ -19,6 +19,22 @@ import { RecipeFormComponent } from './pages/recipe-form/recipe-form.component';
 import { MeasureComponent } from './components/measure/measure.component';
 import { IngredientComponent } from './components/ingredient/ingredient.component';
 import { ToolComponent } from './components/tool/tool.component';
+import { OperationComponent } from './components/operation/operation.component';
+import { FamilyComponent } from './components/family/family.component';
+import { FamilyListComponent } from './pages/family-list/family-list.component';
+import { FamilyFormComponent } from './pages/family-form/family-form.component';
+import { OperationListComponent } from './pages/operation-list/operation-list.component';
+import { OperationFormComponent } from './pages/operation-form/operation-form.component';
+import { ActionComponent } from './components/action/action.component';
+import { ActionFormComponent } from './pages/action-form/action-form.component';
+import { ActionListComponent } from './pages/action-list/action-list.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { ShelfComponent } from './components/shelf/shelf.component';
+import { ListComponent } from './components/list/list.component';
+import { ShelfListComponent } from './pages/shelf-list/shelf-list.component';
+import { ShelfFormComponent } from './pages/shelf-form/shelf-form.component';
+import {ListListComponent} from './pages/list-list/list-list.component';
+import {ListFormComponent} from './pages/list-form/list-form.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +51,22 @@ import { ToolComponent } from './components/tool/tool.component';
     MeasureComponent,
     IngredientComponent,
     ToolComponent,
+    OperationComponent,
+    FamilyComponent,
+    FamilyListComponent,
+    FamilyFormComponent,
+    OperationListComponent,
+    OperationFormComponent,
+    ActionComponent,
+    ActionFormComponent,
+    ActionListComponent,
+    RecipeComponent,
+    ShelfComponent,
+    ListComponent,
+    ShelfListComponent,
+    ShelfFormComponent,
+    ListListComponent,
+    ListFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -39,7 +39,7 @@ export class GenericFormComponent<EntityInterface extends IdentifiableInterface>
     });
   }
 
-  initForm(entity: EntityInterface): void {
+  initForm(entity): void {
     this.entity = entity;
     this.form.patchValue(entity);
   }

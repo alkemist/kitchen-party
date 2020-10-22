@@ -10,6 +10,7 @@ import {MeasureStoreService} from '../../services/measure-store.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GenericListComponent} from '../../generics/generic-list.component';
+import {MeasureTypeLabels} from '../../labels/measure';
 
 @Component({
   selector: 'app-measure-list',
@@ -19,6 +20,9 @@ import {GenericListComponent} from '../../generics/generic-list.component';
 export class MeasureListComponent extends GenericListComponent<MeasureInterface> implements OnInit, AfterViewInit{
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  displayedColumns: string[] = ['type', 'name', 'family', 'quantity', 'measure', 'actions'];
+
+  typeValuesLabels = MeasureTypeLabels;
 
   constructor(
     public measureStore: MeasureStoreService,

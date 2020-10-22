@@ -31,8 +31,8 @@ export class GenericListComponent<EntityInterface extends IdentifiableInterface>
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    this.entityStore.entities$.subscribe(entitys => {
-      this.dataSource.data = entitys;
+    this.entityStore.entities$.subscribe(entities => {
+      this.dataSource.data = entities;
       if (this.entityStore.lastUpdate) {
         this.isLoadingResults = false;
       }

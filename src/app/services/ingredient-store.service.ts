@@ -9,6 +9,7 @@ import {GenericStoreService} from '../generics/generic-store.service';
   providedIn: 'root'
 })
 export class IngredientStoreService extends GenericStoreService<IngredientInterface>{
+  entityName = 'ingredient';
   constructor(private ingredientService: IngredientApiService, private familyStore: FamilyStoreService) {
     super(ingredientService);
   }

@@ -9,6 +9,7 @@ import {MeasureInterface} from '../interfaces/measure';
   providedIn: 'root'
 })
 export class ToolStoreService extends GenericStoreService<ToolInterface> {
+  entityName = 'tool';
   constructor(private toolService: ToolApiService) {
     super(toolService);
   }

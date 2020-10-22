@@ -24,11 +24,10 @@ export class ToolFormComponent extends GenericFormComponent<ToolInterface> imple
   constructor(
     protected route: ActivatedRoute,
     protected toolStore: ToolStoreService,
-    protected familyStore: FamilyStoreService,
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
-    super(toolStore, route, formBuilder, snackBar)
+    super(toolStore, route, formBuilder, snackBar);
   }
 
   ngOnInit(): void {

@@ -1,4 +1,5 @@
 {
+  "recipe": [],
   "family": [
     {
       "id": 1,
@@ -9,9 +10,9 @@
       "name": "Produit à base d'animaux"
     },
     {
-      "id": 3,
       "name": "Fruit",
-      "familyId": 1
+      "familyId": 1,
+      "id": 3
     },
     {
       "id": 4,
@@ -27,23 +28,179 @@
       "id": 6,
       "name": "Epice",
       "familyId": 1
-    }
-  ],
-  "ingredient": [
+    },
     {
-      "name": "test 4",
+      "name": "Matière grasse",
+      "id": 7
+    },
+    {
+      "name": "Sucre",
+      "familyId": 1,
+      "id": 8
+    },
+    {
+      "name": "Beurre",
+      "familyId": 7,
+      "id": 9
+    },
+    {
+      "name": "Crème fraiche",
+      "familyId": 7,
+      "id": 10
+    },
+    {
+      "name": "Eau",
+      "id": 11,
+      "familyId": 12
+    },
+    {
+      "name": "Liquide",
       "family": "",
-      "id": 1
+      "id": 12
     }
   ],
+  "ingredient": [],
   "tool": [],
   "action": [],
-  "measure": [],
+  "measure": [
+    {
+      "name": "minute",
+      "type": 1,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 1
+    },
+    {
+      "name": "heure",
+      "type": 1,
+      "quantity": 60,
+      "family": "",
+      "measureId": 1,
+      "id": 2
+    },
+    {
+      "name": "litre",
+      "type": 4,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 3
+    },
+    {
+      "name": "centilitre",
+      "type": 4,
+      "quantity": 0.1,
+      "family": "",
+      "id": 4,
+      "measureId": 3
+    },
+    {
+      "name": "gramme",
+      "type": 2,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 5
+    },
+    {
+      "name": "kilogramme",
+      "type": 2,
+      "quantity": 1000,
+      "family": "",
+      "id": 6,
+      "measureId": 5
+    },
+    {
+      "name": "unité",
+      "type": 0,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 7
+    },
+    {
+      "name": "mètre",
+      "type": 3,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 8
+    },
+    {
+      "name": "centimètre",
+      "type": 3,
+      "quantity": 0.1,
+      "family": "",
+      "id": 9,
+      "measureId": 8
+    },
+    {
+      "name": "degré",
+      "type": 5,
+      "quantity": 1,
+      "measure": "",
+      "family": "",
+      "id": 10
+    },
+    {
+      "name": "cuillère à soupe",
+      "type": 4,
+      "quantity": 0.015,
+      "family": "",
+      "id": 11,
+      "measureId": 3
+    },
+    {
+      "name": "cuillère à café",
+      "type": 4,
+      "quantity": 0.005,
+      "family": "",
+      "id": 12,
+      "measureId": 3
+    },
+    {
+      "name": "cuillère à soupe",
+      "type": 2,
+      "quantity": 15,
+      "familyId": 8,
+      "measureId": 5,
+      "id": 13
+    },
+    {
+      "name": "cuillère à soupe",
+      "type": 2,
+      "quantity": 15,
+      "familyId": 9,
+      "measureId": 5,
+      "id": 14
+    },
+    {
+      "name": "cuillère à soupe",
+      "type": 2,
+      "quantity": 12,
+      "familyId": 10,
+      "measureId": 5,
+      "id": 15
+    },
+    {
+      "name": "porter à ébulition",
+      "type": 5,
+      "quantity": 100,
+      "id": 16,
+      "familyId": 11,
+      "measureId": 10
+    }
+  ],
   "measure_ingredient": [],
   "measure_tool": [],
   "measure_operation": [],
   "operation": [],
   "operation_operation": [],
   "operation_ingredient": [],
-  "operation_outil": []
+  "operation_outil": [],
+  "shelf": [],
+  "shelf_ingredient": [],
+  "list": [],
+  "list_ingredient": []
 }

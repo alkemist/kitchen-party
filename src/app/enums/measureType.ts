@@ -1,8 +1,17 @@
 export enum MeasureTypeEnum {
   quantity,
   time,
-  weight,
+  mass,
   dimension,
   volume,
   temperature,
+}
+
+export enum MeasureUnitEnum {
+  number,
+  minute,
+  gram,
+  meter,
+  liter,
+  degree
 }

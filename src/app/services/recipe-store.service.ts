@@ -9,6 +9,7 @@ import {IngredientInterface} from '../interfaces/ingredient';
   providedIn: 'root'
 })
 export class RecipeStoreService extends GenericStoreService<RecipeInterface> {
+  entityName = 'recipe';
   constructor(private recipeService: RecipeApiService) {
     super(recipeService);
   }

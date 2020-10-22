@@ -13,7 +13,7 @@
 
     <mat-form-field>
       <mat-label>Recherche</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Boiler" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
     </mat-form-field>
 
     <table mat-table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="id">
@@ -28,8 +28,8 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element" width="120px">
-          <a [routerLink]="['/recipe/', element.id]" matTooltip="Modifier l'recette" mat-icon-button color="accent"><mat-icon>edit</mat-icon></a>
-          <a (click)="delete(element)" matTooltip="Supprimer l'recette" mat-icon-button color="warn"><mat-icon>delete</mat-icon></a>
+          <a [routerLink]="['/recipe/', element.id]" matTooltip="Modifier la recette" mat-icon-button color="accent"><mat-icon>edit</mat-icon></a>
+          <a (click)="delete(element)" matTooltip="Supprimer la recette" mat-icon-button color="warn"><mat-icon>delete</mat-icon></a>
         </td>
       </ng-container>
 
@@ -37,6 +37,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>

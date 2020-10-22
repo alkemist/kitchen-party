@@ -1,0 +1,12 @@
+<div [formGroup]="form">
+  <div>
+    <mat-form-field>
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="name">
+      <button mat-button *ngIf="form.get('name').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('name').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error  *ngIf="form.get('name').hasError('required')">Le nom est requis</mat-error>
+    </mat-form-field>
+  </div>
+</div>
