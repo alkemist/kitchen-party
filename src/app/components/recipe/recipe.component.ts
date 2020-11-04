@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {RecipeInterface} from '../../interfaces/recipe';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {FamilyInterface} from '../../interfaces/family';
@@ -10,6 +10,8 @@ import {IngredientStoreService} from '../../services/ingredient-store.service';
 import {ToolStoreService} from '../../services/tool-store.service';
 import {RecipeStoreService} from '../../services/recipe-store.service';
 import {MeasureStoreService} from '../../services/measure-store.service';
+import {OperationStoreService} from '../../services/operation-store.service';
+import {OperationInterface} from '../../interfaces/operation';
 
 @Component({
   selector: 'app-recipe',
@@ -19,18 +21,70 @@ import {MeasureStoreService} from '../../services/measure-store.service';
 export class RecipeComponent implements OnInit {
   @Input() recipe: RecipeInterface;
   @Output() readonly formOutput = new EventEmitter<FormGroup>();
+  @Output() readonly operationOutput = new EventEmitter<{index: number, operation: OperationInterface}>();
 
   form: FormGroup = new FormGroup({});
 
+  get operations(): FormArray {
+    return (this.form.get('operations') as FormArray);
+  }
+  get operationsControls(): AbstractControl[] {
+    return (this.form.get('operations') as FormArray).controls.sort((a, b) => {
+      const aValue = a.get('order').value;
+      const bValue = b.get('order').value;
+      return aValue > bValue ? 1 : aValue === bValue ? 0 : -1;
+    });
+  }
+
   constructor(
     private formBuilder: FormBuilder,
+    private operationStore: OperationStoreService
   ) {
   }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      id: this.formBuilder.control('', []),
       name: this.formBuilder.control('', [Validators.required]),
+      // duration: this.formBuilder.control('', [Validators.required]),
+      // peoples: this.formBuilder.control('', [Validators.required]),
+      type: this.formBuilder.control('', []),
+      complexity: this.formBuilder.control('', []),
+      price: this.formBuilder.control('', []),
+      operations: this.formBuilder.array([])
     });
     this.formOutput.emit(this.form);
+  }
+
+  saveOperation(i: number): void {
+    if (this.operations.at(i).valid) {
+      this.operationOutput.emit({index: i, operation: this.operations.at(i).value});
+    }
+  }
+
+  addOperation(operation: OperationInterface = null): void {
+    const operationForm: FormGroup = this.formBuilder.group({
+      order: this.formBuilder.control(this.operations.length + 1, []),
+    });
+
+    this.operations.push(operationForm);
+  }
+
+  changeOrderOperation(i: number, value: number): void {
+    const currentOrderValue = this.operationsControls[i].get('order').value;
+    const newOrderValue = currentOrderValue + value;
+    this.operationsControls[newOrderValue - 1].get('order').patchValue(currentOrderValue);
+    this.operationsControls[currentOrderValue - 1].get('order').patchValue(newOrderValue);
+  }
+
+  deleteOperation(i: number): void {
+    this.operations.removeAt(i);
+    this.operations.controls.forEach((operation: FormGroup, index) => {
+      operation.get('order').patchValue(index + 1);
+    });
+  }
+
+  formOperationUpdate(index: number, form: FormGroup): void{
+    (this.operations.at(index) as FormGroup).addControl('operation', form);
   }
 }

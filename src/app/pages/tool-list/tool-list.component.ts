@@ -10,6 +10,7 @@ import {ToolStoreService} from '../../services/tool-store.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GenericListComponent} from '../../generics/generic-list.component';
+import {ToolMatterLabels} from '../../labels/tool';
 
 @Component({
   selector: 'app-tool-list',
@@ -19,6 +20,9 @@ import {GenericListComponent} from '../../generics/generic-list.component';
 export class ToolListComponent extends GenericListComponent<ToolInterface> implements OnInit, AfterViewInit{
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  displayedColumns: string[] = ['name', 'matter', 'actions'];
+  matterValuesLabels = ToolMatterLabels;
 
   constructor(
     public toolStore: ToolStoreService,

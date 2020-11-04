@@ -62,6 +62,10 @@ mat-label + mat-radio-group {
   max-width: 360px;
 }
 
+.mat-card-actions{
+  display: flex !important;
+}
+
 @import '~@angular/material/theming';
 @include mat-core();
 

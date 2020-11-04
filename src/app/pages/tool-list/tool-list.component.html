@@ -23,6 +23,10 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
+      <ng-container matColumnDef="matter">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Matière </th>
+        <td mat-cell *matCellDef="let element"> {{matterValuesLabels[element.matter].label}} </td>
+      </ng-container>
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="actions">

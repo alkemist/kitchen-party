@@ -5,9 +5,9 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {productInterface} from '../../interfaces/product';
+import {ProductInterface} from '../../interfaces/product';
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
-import {productStoreService} from '../../services/product-store.service';
+import {ProductStoreService} from '../../services/product-store.service';
 import {FamilyStoreService} from '../../services/family-store.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GenericFormComponent} from '../../generics/generic-form.component';
@@ -17,13 +17,13 @@ import {GenericFormComponent} from '../../generics/generic-form.component';
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
-export class productFormComponent extends GenericFormComponent<productInterface> implements OnInit {
+export class ProductFormComponent extends GenericFormComponent<ProductInterface> implements OnInit {
   entityName = 'product';
-  entity: productInterface;
+  entity: ProductInterface;
 
   constructor(
     protected route: ActivatedRoute,
-    protected productStore: productStoreService,
+    protected productStore: ProductStoreService,
     protected formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {

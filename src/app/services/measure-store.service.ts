@@ -41,7 +41,6 @@ export class MeasureStoreService extends GenericStoreService<MeasureInterface>{
       if (promises.length > 0) {
         return Promise.all(promises).then(families => {
           const measureHydrated = Object.assign({}, ...families);
-          console.log('[STORE]', 'measure', 'hydrated', measureHydrated);
           this.setEntity(measureHydrated);
           resolve(measureHydrated);
         });

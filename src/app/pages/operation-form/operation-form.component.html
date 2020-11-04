@@ -13,7 +13,7 @@
            *ngIf="isLoadingResults">
         <mat-spinner></mat-spinner>
       </div>
-      <app-operation [operation]="entity" (formOutput)="formUpdate($event)"></app-operation>
+      <app-operation #component [operation]="entity" (formOutput)="formUpdate($event)"></app-operation>
     </mat-card-content>
   </mat-card>
 </form>

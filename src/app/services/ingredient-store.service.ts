@@ -30,7 +30,6 @@ export class IngredientStoreService extends GenericStoreService<IngredientInterf
       if (promises.length > 0) {
         return Promise.all(promises).then(ingredients => {
           const ingredientHydrated = Object.assign({}, ...ingredients);
-          console.log('[STORE]', 'ingredient', 'hydrated', ingredientHydrated);
           this.setEntity(ingredientHydrated);
           resolve(ingredientHydrated);
         });

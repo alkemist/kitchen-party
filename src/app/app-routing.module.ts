@@ -17,8 +17,8 @@ import {ActionFormComponent} from './pages/action-form/action-form.component';
 import {ActionListComponent} from './pages/action-list/action-list.component';
 import {ListListComponent} from './pages/list-list/list-list.component';
 import {ListFormComponent} from './pages/list-form/list-form.component';
-import {productListComponent} from './pages/product-list/product-list.component';
-import {productFormComponent} from './pages/product-form/product-form.component';
+import {ProductListComponent} from './pages/product-list/product-list.component';
+import {ProductFormComponent} from './pages/product-form/product-form.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -41,9 +41,9 @@ const routes: Routes = [
   { path: 'operations', component: OperationListComponent, data: {} },
   { path: 'operation/new', component: OperationFormComponent, data: {} },
   { path: 'operation/:operationId', component: OperationFormComponent, data: {} },
-  { path: 'products', component: productListComponent, data: {} },
-  { path: 'product/new', component: productFormComponent, data: {} },
-  { path: 'product/:productId', component: productFormComponent, data: {} },
+  { path: 'products', component: ProductListComponent, data: {} },
+  { path: 'product/new', component: ProductFormComponent, data: {} },
+  { path: 'product/:productId', component: ProductFormComponent, data: {} },
   { path: 'recipes', component: RecipeListComponent, data: {} },
   { path: 'recipe/new', component: RecipeFormComponent, data: {} },
   { path: 'recipe/:recipeId', component: RecipeFormComponent, data: {} },

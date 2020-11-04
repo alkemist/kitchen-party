@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {FamilyInterface} from '../../interfaces/family';
 import {FamilyStoreService} from '../../services/family-store.service';
 import {MatterEnum} from '../../enums/matter';
+import {ToolMatterLabels} from '../../labels/tool';
 
 @Component({
   selector: 'app-tool',
@@ -18,13 +19,7 @@ export class ToolComponent implements OnInit {
 
   form: FormGroup = new FormGroup({});
 
-  matterValuesLabels = [
-    {value: MatterEnum.ceramic, label: 'Céramique'},
-    {value: MatterEnum.glass, label: 'Verre'},
-    {value: MatterEnum.plastic, label: 'Plastique'},
-    {value: MatterEnum.stainlessSteel, label: 'Inox'},
-    {value: MatterEnum.wood, label: 'Bois'},
-  ];
+  matterValuesLabels = ToolMatterLabels;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +28,7 @@ export class ToolComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      id: this.formBuilder.control('', []),
       name: this.formBuilder.control('', [Validators.required]),
       matter: this.formBuilder.control('', [])
     });

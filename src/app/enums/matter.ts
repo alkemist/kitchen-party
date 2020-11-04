@@ -1,7 +1,7 @@
 export enum MatterEnum {
-  stainlessSteel,
-  plastic,
-  wood,
   ceramic,
   glass,
+  plastic,
+  stainlessSteel,
+  wood,
 }

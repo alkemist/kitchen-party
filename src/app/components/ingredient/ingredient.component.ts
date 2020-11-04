@@ -26,6 +26,7 @@ export class IngredientComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      id: this.formBuilder.control('', []),
       name: this.formBuilder.control('', [Validators.required]),
       family: this.formBuilder.control('', []),
     });

@@ -11,4 +11,19 @@ export class RecipeApiService extends GenericApiService<RecipeInterface>{
   constructor(protected http: HttpClient) {
     super(http);
   }
+
+  protected clearEntity(recipe: RecipeInterface): RecipeInterface {
+    const recipeCleared =  Object.assign({}, recipe);
+
+    if (recipeCleared.operations.length > 0) {
+      const operationIds = [];
+      recipeCleared.operations.forEach(operation => {
+        operationIds.push(operation.id);
+      });
+      recipeCleared.operationIds = operationIds;
+      delete recipeCleared.operationIds;
+    }
+
+    return recipeCleared;
+  }
 }

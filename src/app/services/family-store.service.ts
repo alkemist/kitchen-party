@@ -30,7 +30,6 @@ export class FamilyStoreService extends GenericStoreService<FamilyInterface> {
       if (promises.length > 0) {
         return Promise.all(promises).then(families => {
           const familyHydrated = Object.assign({}, ...families);
-          console.log('[STORE]', 'family', 'hydrated', familyHydrated);
           this.setEntity(familyHydrated);
           resolve(familyHydrated);
         });

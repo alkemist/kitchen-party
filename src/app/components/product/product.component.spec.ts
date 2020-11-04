@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { productComponent } from './product.component';
 
 describe('productComponent', () => {
-  let component: productComponent;
+  let component: ProductComponent;
   let fixture: ComponentFixture<productComponent>;
 
   beforeEach(async(() => {

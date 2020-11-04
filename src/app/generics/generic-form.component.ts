@@ -58,7 +58,6 @@ export class GenericFormComponent<EntityInterface extends IdentifiableInterface>
 
   protected send(entity: EntityInterface): void {
     if (this.entity) {
-      entity.id = this.entity.id;
       this.entityStore.update(entity).then(entitySaved => {
         this.entity = entitySaved;
         this.snackBar.open('Mis à jour', 'Fermer', {duration: 5000});

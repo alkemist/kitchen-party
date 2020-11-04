@@ -36,7 +36,7 @@ export class IngredientFormComponent extends GenericFormComponent<IngredientInte
   }
 
   edit(): void {
-    const ingredient = this.form.value;
+    const ingredient: IngredientInterface = this.form.value;
 
     if (this.form.valid) {
       if (ingredient.family && typeof ingredient.family === 'string') {

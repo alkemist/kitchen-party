@@ -15,6 +15,7 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
 
   readonly entities$ = this.obsEntities.asObservable();
   lastUpdate = null;
+  currentUpdate = null;
 
   get isOutdated(): boolean {
     if (!this.lastUpdate) {
@@ -27,7 +28,8 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
   }
 
   get entities(): EntityInterface[] {
-    if (this.isOutdated) {
+    if (this.isOutdated && !this.currentUpdate) {
+      this.currentUpdate = new Date();
       this.apiService.getList().then((entities) => {
         console.log('[API]', this.entityName, 'list', entities);
         const promises: Promise<EntityInterface>[] = [];
@@ -50,20 +52,21 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
     // assigning a value to this.entities will push it onto the observable
     // and down to all of its subsribers (ex: this.entities = [])
     this.lastUpdate = new Date();
+    this.currentUpdate = null;
     this.obsEntities.next(val);
   }
 
   find(id: number): Promise<EntityInterface> {
-    const entitieStored = this.entities.find((entity) => entity.id === id);
+    const entityStored = this.entities.find((entity) => entity.id === id);
     return new Promise<EntityInterface>((resolve) => {
-      if (this.isOutdated || !entitieStored) {
+      if (this.isOutdated || !entityStored) {
         this.apiService.getOne(id.toString()).then((entity: EntityInterface) => {
           console.log('[API]', this.entityName, 'find', entity);
           this.hydrate(entity).then(entityHydrated => resolve(entityHydrated));
         });
       }
       else {
-        this.hydrate(entitieStored).then(entityHydrated => resolve(entityHydrated));
+        this.hydrate(entityStored).then(entityHydrated => resolve(entityHydrated));
       }
     });
   }
@@ -121,9 +124,9 @@ export abstract class GenericStoreService<EntityInterface extends IdentifiableIn
     // remember, our state must always remain immutable
     // otherwise, on push change detection won't work, and won't update its view
     const entities = this.obsEntities.getValue();
-    const entitieStored = entities.find(entityCurrent => entityCurrent.id === entity.id);
-    const index = entities.indexOf(entitieStored);
-    if (entitieStored) {
+    const entityStored = entities.find(entityCurrent => entityCurrent.id === entity.id);
+    const index = entities.indexOf(entityStored);
+    if (entityStored) {
       this.entities[index] = entity;
       this.setEntities([...this.entities]);
     } else {

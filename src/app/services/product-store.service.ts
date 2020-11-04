@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {productInterface} from '../interfaces/product';
-import {productApiService} from './product-api.service';
+import {ProductInterface} from '../interfaces/product';
+import {ProductApiService} from './product-api.service';
 import {GenericStoreService} from '../generics/generic-store.service';
 import {MeasureInterface} from '../interfaces/measure';
 
 @Injectable({
   providedIn: 'root'
 })
-export class productStoreService extends GenericStoreService<productInterface> {
+export class ProductStoreService extends GenericStoreService<ProductInterface> {
   entityName = 'product';
-  constructor(private productService: productApiService) {
+  constructor(private productService: ProductApiService) {
     super(productService);
   }
 }

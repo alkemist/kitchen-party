@@ -34,6 +34,8 @@ export abstract class GenericApiService<EntityInterface extends IdentifiableInte
   }
 
   protected clearEntity(entity: EntityInterface): EntityInterface {
-    return entity;
+    const entityCleared =  Object.assign({}, entity);
+
+    return entityCleared;
   }
 }

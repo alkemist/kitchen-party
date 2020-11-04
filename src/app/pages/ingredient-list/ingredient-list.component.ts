@@ -20,6 +20,8 @@ export class IngredientListComponent extends GenericListComponent<IngredientInte
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
+  displayedColumns: string[] = ['name', 'family', 'actions'];
+
   constructor(
     public ingredientStore: IngredientStoreService,
     public snackBar: MatSnackBar

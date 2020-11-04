@@ -9,4 +9,226 @@
       <mat-error  *ngIf="form.get('name').hasError('required')">Le nom est requis</mat-error>
     </mat-form-field>
   </div>
+
+  <div>
+    <mat-form-field>
+      <input type="text"
+             placeholder="Action"
+             matInput
+             formControlName="action"
+             [matAutocomplete]="autoAction">
+      <button mat-button *ngIf="form.get('action').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('action').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #autoAction="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let action of actions | async" [value]="action">
+          {{action.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('action').hasError('required') || form.get('action').hasError('unselected')">L'action est requis</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!--div>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description">
+      <button mat-button *ngIf="form.get('description').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('description').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Timing</mat-label>
+      <input matInput formControlName="timing">
+      <button mat-button *ngIf="form.get('timing').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('timing').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div-->
+
+  <div formArrayName="measureIngredients" class="block">
+    <button type="button" (click)="addMeasureIngredient()" mat-icon-button color="accent"><mat-icon>add</mat-icon><span>Ajouter un ingrédient</span></button>
+    <mat-card *ngFor="let formGroup of measureIngredientsControls; index as i" [formGroupName]="i">
+      <mat-card-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Quantité</mat-label>
+            <input matInput formControlName="quantity">
+            <button mat-button *ngIf="measureIngredientsControls[i].get('quantity').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('quantity').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Mesure"
+                   matInput
+                   formControlName="measure"
+                   [matAutocomplete]="autoMeasure">
+            <button mat-button *ngIf="measureIngredientsControls[i].get('measure').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureIngredientsControls[i].get('measure').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoMeasure="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let measure of measures | async" [value]="measure">
+                {{measure.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Ingrédient"
+                   matInput
+                   formControlName="ingredient"
+                   [matAutocomplete]="autoIngredient">
+            <button mat-button *ngIf="measureIngredientsControls[i].get('ingredient').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureIngredientsControls[i].get('ingredient').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoIngredient="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let ingredient of ingredients | async" [value]="ingredient">
+                {{ingredient.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="measureIngredientsControls[i].get('ingredient').hasError('required') || measureIngredientsControls[i].get('ingredient').hasError('unselected')">L'ingrédient est requis</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions>
+          <button type="button" (click)="changeOrderMeasureIngredient(i, -1)" *ngIf="i > 0" mat-icon-button color="primary"><mat-icon>arrow_upward</mat-icon></button>
+          <button type="button" (click)="changeOrderMeasureIngredient(i, 1)" *ngIf="i < measureIngredientsControls.length - 1" mat-icon-button color="primary"><mat-icon>arrow_downward</mat-icon></button>
+          <span class="toolbar-spacer"></span>
+          <button type="button" (click)="deleteMeasureIngredient(i)" mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div formArrayName="measureTools" class="block">
+    <button type="button" (click)="addMeasureTool()" mat-icon-button color="accent"><mat-icon>add</mat-icon><span>Ajouter un outil</span></button>
+    <mat-card *ngFor="let formGroup of measureToolsControls; index as i" [formGroupName]="i">
+      <mat-card-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Quantité</mat-label>
+            <input matInput formControlName="quantity">
+            <button mat-button *ngIf="measureToolsControls[i].get('quantity').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('quantity').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Mesure"
+                   matInput
+                   formControlName="measure"
+                   [matAutocomplete]="autoMeasure">
+            <button mat-button *ngIf="measureToolsControls[i].get('measure').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureToolsControls[i].get('measure').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoMeasure="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let measure of measures | async" [value]="measure">
+                {{measure.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Outil"
+                   matInput
+                   formControlName="tool"
+                   [matAutocomplete]="autoTool">
+            <button mat-button *ngIf="measureToolsControls[i].get('tool').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureToolsControls[i].get('tool').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoTool="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let tool of tools | async" [value]="tool">
+                {{tool.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="measureToolsControls[i].get('tool').hasError('required') || measureToolsControls[i].get('tool').hasError('unselected')">L'ingrédient est requis</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions>
+          <button type="button" (click)="changeOrderMeasureTool(i, -1)" *ngIf="i > 0" mat-icon-button color="primary"><mat-icon>arrow_upward</mat-icon></button>
+          <button type="button" (click)="changeOrderMeasureTool(i, 1)" *ngIf="i < measureToolsControls.length - 1" mat-icon-button color="primary"><mat-icon>arrow_downward</mat-icon></button>
+          <span class="toolbar-spacer"></span>
+          <button type="button" (click)="deleteMeasureTool(i)" mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div formArrayName="measureOperations" class="block">
+    <button type="button" (click)="addMeasureOperation()" mat-icon-button color="accent"><mat-icon>add</mat-icon><span>Ajouter un opération</span></button>
+    <mat-card *ngFor="let formGroup of measureOperationsControls; index as i" [formGroupName]="i">
+      <mat-card-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Quantité</mat-label>
+            <input matInput formControlName="quantity">
+            <button mat-button *ngIf="measureOperationsControls[i].get('quantity').value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('quantity').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Mesure"
+                   matInput
+                   formControlName="measure"
+                   [matAutocomplete]="autoMeasure">
+            <button mat-button *ngIf="measureOperationsControls[i].get('measure').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureOperationsControls[i].get('measure').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoMeasure="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let measure of measures | async" [value]="measure">
+                {{measure.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Opération"
+                   matInput
+                   formControlName="operation"
+                   [matAutocomplete]="autoOperation">
+            <button mat-button *ngIf="measureOperationsControls[i].get('operation').value" matSuffix mat-icon-button aria-label="Clear" (click)="measureOperationsControls[i].get('operation').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #autoOperation="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let operation of operations | async" [value]="operation">
+                {{operation.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="measureOperationsControls[i].get('operation').hasError('required') || measureOperationsControls[i].get('operation').hasError('unselected')">L'ingrédient est requis</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions>
+          <button type="button" (click)="changeOrderMeasureOperation(i, -1)" *ngIf="i > 0" mat-icon-button color="primary"><mat-icon>arrow_upward</mat-icon></button>
+          <button type="button" (click)="changeOrderMeasureOperation(i, 1)" *ngIf="i < measureOperationsControls.length - 1" mat-icon-button color="primary"><mat-icon>arrow_downward</mat-icon></button>
+          <span class="toolbar-spacer"></span>
+          <button type="button" (click)="deleteMeasureOperation(i)" mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

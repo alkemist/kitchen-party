@@ -9,4 +9,24 @@
       <mat-error  *ngIf="form.get('name').hasError('required')">Le nom est requis</mat-error>
     </mat-form-field>
   </div>
+
+  <div formArrayName="operations" class="block">
+    <button type="button" (click)="addOperation()" mat-icon-button color="accent"><mat-icon>add</mat-icon><span>Ajouter une opération</span></button>
+
+    <div *ngFor="let formGroup of operationsControls; index as i">
+      <mat-divider *ngIf="i > 0"></mat-divider>
+      <mat-card [formGroupName]="i">
+        <mat-card-content>
+          <app-operation [operation]="" (formOutput)="formOperationUpdate(i, $event)"></app-operation>
+        </mat-card-content>
+        <mat-card-actions>
+          <button type="button" (click)="changeOrderOperation(i, -1)" *ngIf="i > 0" mat-icon-button color="primary"><mat-icon>arrow_upward</mat-icon></button>
+          <button type="button" (click)="changeOrderOperation(i, 1)" *ngIf="i < operationsControls.length - 1" mat-icon-button color="primary"><mat-icon>arrow_downward</mat-icon></button>
+          <span class="toolbar-spacer"></span>
+          <button type="button" (click)="saveOperation(i)" mat-icon-button color="warn"><mat-icon>check</mat-icon></button>
+          <button type="button" (click)="deleteOperation(i)" mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
 </div>

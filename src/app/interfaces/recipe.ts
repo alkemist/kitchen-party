@@ -10,13 +10,5 @@ export interface RecipeInterface extends IdentifiableInterface {
   complexity: number;
   price: number;
   operationIds: number[];
-  operations: RecipeOperationInterface[];
-}
-
-export interface RecipeOperationInterface extends IdentifiableInterface {
-  order: number;
-  recipeId: number;
-  recipe: RecipeInterface;
-  operationId: number;
-  operation: OperationInterface;
+  operations: OperationInterface[];
 }

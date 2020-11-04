@@ -29,6 +29,7 @@ export class ActionComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      id: this.formBuilder.control('', []),
       name: this.formBuilder.control('', [Validators.required]),
     });
     this.formOutput.emit(this.form);

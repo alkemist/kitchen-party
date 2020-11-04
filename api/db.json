@@ -59,9 +59,31 @@
       "id": 12
     }
   ],
-  "ingredient": [],
-  "tool": [],
-  "action": [],
+  "ingredient": [
+    {
+      "name": "Carotte",
+      "familyId": 4,
+      "id": 1
+    },
+    {
+      "name": "Fraise",
+      "id": 2,
+      "familyId": 3
+    }
+  ],
+  "tool": [
+    {
+      "name": "Bol",
+      "matter": 1,
+      "id": 1
+    }
+  ],
+  "action": [
+    {
+      "name": "Éplucher",
+      "id": 1
+    }
+  ],
   "measure": [
     {
       "name": "minute",
@@ -196,9 +218,9 @@
   "measure_tool": [],
   "measure_operation": [],
   "operation": [],
-  "operation_operation": [],
-  "operation_ingredient": [],
-  "operation_outil": [],
+  "operation_measure_ingredient": [],
+  "operation_measure_tool": [],
+  "operation_measure_operation": [],
   "product": [],
   "product_ingredient": [],
   "list": [],
