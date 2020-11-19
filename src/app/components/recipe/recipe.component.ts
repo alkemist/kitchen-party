@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import {RecipeInterface} from '../../interfaces/recipe';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
@@ -12,6 +12,7 @@ import {RecipeStoreService} from '../../services/recipe-store.service';
 import {MeasureStoreService} from '../../services/measure-store.service';
 import {OperationStoreService} from '../../services/operation-store.service';
 import {OperationInterface} from '../../interfaces/operation';
+import {OperationComponent} from '../operation/operation.component';
 
 @Component({
   selector: 'app-recipe',
@@ -24,6 +25,9 @@ export class RecipeComponent implements OnInit {
   @Output() readonly operationOutput = new EventEmitter<{index: number, operation: OperationInterface}>();
 
   form: FormGroup = new FormGroup({});
+  operationObjects = [];
+
+  @ViewChild('component') component: OperationComponent;
 
   get operations(): FormArray {
     return (this.form.get('operations') as FormArray);
@@ -56,16 +60,26 @@ export class RecipeComponent implements OnInit {
     this.formOutput.emit(this.form);
   }
 
+  initForm(recipe: RecipeInterface): void {
+    this.operationObjects = recipe.operations;
+
+    recipe.operations.forEach(operation => {
+      this.addOperation(operation);
+    });
+  }
+
   saveOperation(i: number): void {
     if (this.operations.at(i).valid) {
-      this.operationOutput.emit({index: i, operation: this.operations.at(i).value});
+      this.operationOutput.emit({index: i, operation: this.operations.at(i).get('operation').value});
     }
   }
 
   addOperation(operation: OperationInterface = null): void {
     const operationForm: FormGroup = this.formBuilder.group({
       order: this.formBuilder.control(this.operations.length + 1, []),
+      operation: this.formBuilder.group({})
     });
+    operationForm.get('operation').patchValue(operation);
 
     this.operations.push(operationForm);
   }
@@ -82,9 +96,16 @@ export class RecipeComponent implements OnInit {
     this.operations.controls.forEach((operation: FormGroup, index) => {
       operation.get('order').patchValue(index + 1);
     });
+    this.operationObjects.splice(i, 1);
   }
 
   formOperationUpdate(index: number, form: FormGroup): void{
-    (this.operations.at(index) as FormGroup).addControl('operation', form);
+    (this.operations.at(index) as FormGroup).setControl('operation', form);
+
+    if (typeof this.operationObjects[index] !== 'undefined') {
+      this.operations.at(index).get('operation').patchValue(this.operationObjects[index]);
+    } else {
+      this.operationObjects.push(null);
+    }
   }
 }

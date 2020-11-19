@@ -13,7 +13,7 @@
            *ngIf="isLoadingResults">
         <mat-spinner></mat-spinner>
       </div>
-      <app-recipe [recipe]="entity" (formOutput)="formUpdate($event)" (operationOutput)="saveOperation($event)"></app-recipe>
+      <app-recipe #component [recipe]="entity" (formOutput)="formUpdate($event)" (operationOutput)="onSaveOperation($event)"></app-recipe>
     </mat-card-content>
   </mat-card>
 </form>

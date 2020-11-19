@@ -68,7 +68,7 @@ export class OperationComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       id: this.formBuilder.control('', []),
-      name: this.formBuilder.control('', [Validators.required]),
+      name: this.formBuilder.control('', []),
       action: this.formBuilder.control('', [Validators.required]),
       timing: this.formBuilder.control('', []),
       description: this.formBuilder.control('', []),
@@ -83,6 +83,9 @@ export class OperationComponent implements OnInit {
     );
 
     this.formOutput.emit(this.form);
+    if (this.operation) {
+      this.initForm(this.operation);
+    }
   }
 
   initForm(operation: OperationInterface): void {

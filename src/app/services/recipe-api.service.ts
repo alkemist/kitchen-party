@@ -21,7 +21,7 @@ export class RecipeApiService extends GenericApiService<RecipeInterface>{
         operationIds.push(operation.id);
       });
       recipeCleared.operationIds = operationIds;
-      delete recipeCleared.operationIds;
+      delete recipeCleared.operations;
     }
 
     return recipeCleared;

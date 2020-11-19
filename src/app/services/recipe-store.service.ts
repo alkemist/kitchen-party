@@ -17,7 +17,8 @@ export class RecipeStoreService extends GenericStoreService<RecipeInterface> {
     return new Promise<RecipeInterface>((resolve) => {
       const promises: Promise<RecipeInterface>[] = [];
 
-      if (recipe.operationIds && recipe.operations.length === 0) {
+      if (recipe.operationIds && !recipe.operations) {
+        recipe.operations = [];
         recipe.operationIds.forEach(operationId => {
           promises.push(new Promise<RecipeInterface>((resolveOperation) => {
             this.operationStore.find(operationId).then(operation => {

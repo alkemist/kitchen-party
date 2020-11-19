@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {GenericStoreService} from '../generics/generic-store.service';
-import {MeasureOperationInterface} from '../interfaces/operation';
+import {MeasureIngredientInterface, MeasureOperationInterface} from '../interfaces/operation';
 import {MeasureOperationApiService} from './measure-operation-api.service';
 import {OperationStoreService} from './operation-store.service';
 import {MeasureStoreService} from './measure-store.service';
+import {OperationApiService} from './operation-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import {MeasureStoreService} from './measure-store.service';
 export class MeasureOperationStoreService extends GenericStoreService<MeasureOperationInterface>{
   entityName = 'measure_operation';
   constructor(private measureOperationService: MeasureOperationApiService,
-              private measureStore: MeasureStoreService
+              private measureStore: MeasureStoreService,
+              private operationService: OperationApiService
   ) {
     super(measureOperationService);
   }
@@ -25,6 +27,15 @@ export class MeasureOperationStoreService extends GenericStoreService<MeasureOpe
           this.measureStore.find(measureOperation.measureId).then(measure => {
             measureOperation.measure = measure;
             resolveMeasure(measureOperation);
+          });
+        }));
+      }
+
+      if (measureOperation.operationId && !measureOperation.operation) {
+        promises.push(new Promise<MeasureOperationInterface>((resolveOperation) => {
+          this.operationService.getOne(measureOperation.operationId.toString()).then(operation => {
+            measureOperation.operation = operation;
+            resolveOperation(measureOperation);
           });
         }));
       }

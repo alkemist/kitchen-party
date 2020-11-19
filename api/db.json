@@ -1,5 +1,16 @@
 {
-  "recipe": [],
+  "recipe": [
+    {
+      "id": 13,
+      "name": "Fraises et carottes",
+      "type": "",
+      "complexity": "",
+      "price": "",
+      "operationIds": [
+        12
+      ]
+    }
+  ],
   "family": [
     {
       "id": 1,
@@ -214,10 +225,93 @@
       "measureId": 10
     }
   ],
-  "measure_ingredient": [],
-  "measure_tool": [],
-  "measure_operation": [],
-  "operation": [],
+  "measure_ingredient": [
+    {
+      "id": 1,
+      "order": 1,
+      "quantity": 1,
+      "measureId": 6,
+      "ingredientId": 1
+    },
+    {
+      "id": 2,
+      "order": 1,
+      "quantity": 1,
+      "measureId": 6,
+      "ingredientId": 2
+    },
+    {
+      "id": 3,
+      "order": 1,
+      "quantity": 1,
+      "measureId": 6,
+      "ingredientId": 2
+    },
+    {
+      "id": 4,
+      "order": 1,
+      "quantity": 1,
+      "measureId": 6,
+      "ingredientId": 2
+    }
+  ],
+  "measure_tool": [
+    {
+      "id": 1,
+      "order": 1,
+      "quantity": 1,
+      "measure": "",
+      "toolId": 1
+    },
+    {
+      "id": 2,
+      "order": 1,
+      "quantity": 1,
+      "measure": "",
+      "toolId": 1
+    }
+  ],
+  "measure_operation": [
+    {
+      "id": 1,
+      "order": 1,
+      "quantity": 1,
+      "measure": "",
+      "operationId": 1
+    }
+  ],
+  "operation": [
+    {
+      "id": 1,
+      "name": "1kg carottes épluchés",
+      "timing": "",
+      "description": "",
+      "measureOperations": [],
+      "actionId": 1,
+      "measureIngredientIds": [
+        1
+      ],
+      "measureToolIds": [
+        1
+      ]
+    },
+    {
+      "id": 12,
+      "name": "1kg fraises épluchés avec ses carottes",
+      "timing": "",
+      "description": "",
+      "actionId": 1,
+      "measureIngredientIds": [
+        4
+      ],
+      "measureToolIds": [
+        2
+      ],
+      "measureOperationIds": [
+        1
+      ]
+    }
+  ],
   "operation_measure_ingredient": [],
   "operation_measure_tool": [],
   "operation_measure_operation": [],

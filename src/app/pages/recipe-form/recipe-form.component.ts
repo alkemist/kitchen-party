@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RecipeInterface} from '../../interfaces/recipe';
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
@@ -12,6 +12,8 @@ import {OperationFormComponent} from '../operation-form/operation-form.component
 import {MeasureIngredientStoreService} from '../../services/measure-ingredient-store.service';
 import {MeasureToolStoreService} from '../../services/measure-tool-store.service';
 import {MeasureOperationStoreService} from '../../services/measure-operation-store.service';
+import {OperationComponent} from '../../components/operation/operation.component';
+import {RecipeComponent} from '../../components/recipe/recipe.component';
 
 @Component({
   selector: 'app-recipe-form',
@@ -21,6 +23,8 @@ import {MeasureOperationStoreService} from '../../services/measure-operation-sto
 export class RecipeFormComponent extends GenericFormComponent<RecipeInterface> implements OnInit {
   entityName = 'recipe';
   entity: RecipeInterface;
+
+  @ViewChild('component') component: RecipeComponent;
 
   constructor(
     protected route: ActivatedRoute,
@@ -40,71 +44,76 @@ export class RecipeFormComponent extends GenericFormComponent<RecipeInterface> i
     this.onInit();
   }
 
-  saveOperation(output: {index: number, operation: OperationInterface}): Promise<OperationInterface> {
-    console.error('save operation', output);
+  initForm(entity): void {
+    this.entity = entity;
+    this.form.patchValue(entity);
+    this.component.initForm(entity);
+  }
 
+  onSaveOperation(output: {index: number, operation: OperationInterface}): Promise<OperationInterface> {
+    const promises = OperationFormComponent.saveOperation(output.operation,
+      this.measureIngredientStore,
+      this.measureToolStore,
+      this.measureOperationStore
+    );
+
+    if (promises.length > 0) {
+      Promise.all(promises).then(operations => {
+        const operationHydrated = Object.assign({}, ...operations);
+
+        return this.saveOperation(output.index, output.operation.id, operationHydrated);
+      });
+    } else {
+      return this.saveOperation(output.index, output.operation.id, output.operation);
+    }
+  }
+
+  private saveOperation(index: number, id: number, operationHydrated: OperationInterface): Promise<OperationInterface> {
     return new Promise<OperationInterface>(operationResolve => {
-      const promises = OperationFormComponent.saveOperation(output.operation,
-        this.measureIngredientStore,
-        this.measureToolStore,
-        this.measureOperationStore
-      );
+      const promiseOperation = id
+        ? this.operationStore.update(operationHydrated)
+        : this.operationStore.create(operationHydrated);
 
-      if (promises.length > 0) {
-        Promise.all(promises).then(operations => {
-          const operationHydrated = Object.assign({}, ...operations);
-
-          console.error('operationHydrated', operationHydrated);
-
-          const promiseOperation = output.operation.id
-            ? this.operationStore.create(operationHydrated)
-            : this.operationStore.update(operationHydrated);
-
-          promiseOperation.then(operationCreated => {
-            if (output.operation.id) {
-              this.snackBar.open('Opération créé', 'Fermer', {duration: 5000});
-            } else {
-              this.snackBar.open('Opération mis à jour', 'Fermer', {duration: 5000});
-            }
-            // TODO : On patch uniquement l'id
-            //(this.form.get('operations') as FormArray).at(output.index).get('operation').patchValue(operationCreated);
-            operationResolve(operationCreated);
-          });
-        });
-      } else {
-        // TODO : On crée uniquement l'opération
-      }
+      promiseOperation.then(operationCreated => {
+        if (id) {
+          this.snackBar.open('Opération mis à jour', 'Fermer', {duration: 5000});
+        } else {
+          this.snackBar.open('Opération créé', 'Fermer', {duration: 5000});
+        }
+        (this.form.get('operations') as FormArray).at(index).get('operation').get('id').patchValue(operationCreated.id);
+        operationResolve(operationCreated);
+      });
     });
   }
 
   edit(): void {
-    const recipe: RecipeInterface = this.form.value;
-
-    console.error('edit', recipe, this.form.valid);
+    const operations = this.form.value.operations as {index: number, operation: OperationInterface}[];
 
     if (this.form.valid) {
       const promises: Promise<OperationInterface>[] = [];
 
-      recipe.operations.forEach((operation, index) => {
-
-        if (typeof operation.action === 'string') {
+      operations.forEach((formData, index) => {
+        if (typeof formData.operation.action === 'string') {
           promises.push(new Promise<OperationInterface>(resolve => {
-            this.actionStoreService.create({name: operation.action.toString()}).then(actionCreated => {
-              operation.action = actionCreated;
-              operation.actionId = actionCreated.id;
+            this.actionStoreService.create({name: formData.operation.action.toString()}).then(actionCreated => {
+              formData.operation.action = actionCreated;
 
-              this.saveOperation({index, operation}).then((operationCreated) => {
+              this.onSaveOperation({index, operation: formData.operation}).then((operationCreated) => {
                 resolve(operationCreated);
               });
             });
           }));
         } else {
-          promises.push(this.saveOperation({index, operation}));
+          promises.push(this.onSaveOperation({index, operation: formData.operation}));
         }
       });
 
-      Promise.all(promises).then(operations => {
-        console.error('operations', operations);
+      Promise.all(promises).then(operationsCreated => {
+        const recipe = { ...this.form.value };
+
+        recipe.operations = (this.form.value.operations as {index: number, operation: OperationInterface}[])
+          .map(formData => formData.operation);
+
         this.send(recipe);
       });
     }
