@@ -6,7 +6,8 @@
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "init": "yarn install"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +19,11 @@
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
+    "@ngxs/store": "^3.7.3",
+    "firebase": "^9.6.3",
+    "primeflex": "^3.1.2",
+    "primeicons": "^5.0.0",
+    "primeng": "^13.1.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
