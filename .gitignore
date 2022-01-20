@@ -34,5 +34,5 @@ testem.log
 Thumbs.db
 
 # Environnement variables
-.env.local
-environnement.ts
+.env
+src/environments/environnement.*
