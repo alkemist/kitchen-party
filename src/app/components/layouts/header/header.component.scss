@@ -1,0 +1,18 @@
+@import "/src/assets/styles/variables";
+
+::ng-deep .p-toolbar {
+  @media screen and (max-width: $size-mobile-breakpoint) {
+    padding: 0.5rem;
+  }
+
+  border-radius: 0;
+}
+
+.header__logo {
+  color: var(--text-color);
+  font-size: $font-size-m;
+
+  @media screen and (max-width: $size-mobile-breakpoint) {
+    font-size: $font-size-s;
+  }
+}

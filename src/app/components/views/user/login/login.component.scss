@@ -1,0 +1,26 @@
+@import "/src/assets/styles/variables";
+
+::ng-deep .p-card {
+  .p-card-content {
+    .field {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media screen and (max-width: $size-mobile-breakpoint) {
+  .formgroup-inline {
+    flex-direction: column;
+    align-content: stretch;
+    align-items: stretch !important;
+
+    .field {
+      margin-right: 0 !important;
+      margin-bottom: 2rem !important;
+
+      .p-component, input {
+        width: 100%;
+      }
+    }
+  }
+}

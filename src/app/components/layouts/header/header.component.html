@@ -1,1 +1,13 @@
-<p>header works!</p>
+<p-toolbar class="header">
+  <div class="p-toolbar-group-left">
+    <a class="header__logo" routerLink="/">
+      Kitchen Party
+    </a>
+  </div>
+
+  <div class="p-toolbar-group-right">
+    <a *ngIf="!loggedUser" icon="pi pi-user" label="Log in" pButton routerLink="/login"></a>
+    <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton type="button"></button>
+    <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
+  </div>
+</p-toolbar>

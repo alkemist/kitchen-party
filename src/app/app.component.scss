@@ -1,0 +1,8 @@
+.app {
+  background: var(--surface-ground);
+  color: var(--text-color);
+
+  &__content {
+    overflow: auto;
+  }
+}
