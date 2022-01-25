@@ -13,22 +13,37 @@ import {
   where,
 } from 'firebase/firestore';
 import {generatePushID} from '../tools/generate-pushid';
+import {slugify} from '../tools/slugify';
+import {LoggedError, LoggerService} from './logger.service';
 
-interface Document {
+export interface DataObject {
   id?: string;
+  name?: string;
+  slug?: string;
 }
 
-export class DocumentNotFound<T extends Document> extends Error {
+export class DocumentNotFound<T extends DataObject> extends Error {
   private readonly collectionName: string;
 
   constructor(collectionName: string, document?: T) {
     super();
     this.collectionName = collectionName;
-    this.message = `Document "${this.collectionName}" not found ${document ? `with id ${document.id}` : ''}`;
+    this.message = `Document ["${this.collectionName}"] not found ${document ? `with id ${document.id}` : ''}`;
   }
 }
 
-export class TooManyRequestError extends Error {
+export class EmptyDocument<T extends DataObject> extends Error {
+  private readonly collectionName: string;
+
+  constructor(collectionName: string) {
+    super();
+    this.collectionName = collectionName;
+    this.message = `Document ["${this.collectionName}"] is empty`;
+  }
+}
+
+export class TooManyRequestError extends LoggedError<any> {
+  override type = 'Database';
   override message = 'Too many request';
 }
 
@@ -36,18 +51,43 @@ export class OfflineError extends Error {
   override message = 'You are offline';
 }
 
-export abstract class FirestoreService<T extends Document> {
+export class DatabaseError extends LoggedError<DataObject> {
+  override type = 'Database';
+
+  constructor(public override message: string, public override context: DataObject) {
+    super();
+  }
+}
+
+export abstract class FirestoreService<T extends DataObject> {
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
   private readonly ref: CollectionReference;
+  private readonly loggerService: LoggerService;
 
-  protected constructor(collectionName: string, converter: FirestoreDataConverter<T>) {
+  protected constructor(logger: LoggerService, collectionName: string, converter: FirestoreDataConverter<T>) {
+    this.loggerService = logger;
     this.collectionName = collectionName;
     this.converter = converter;
     this.ref = collection(getFirestore(), collectionName);
   }
 
-  protected async list(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+  public async exist(name: string): Promise<boolean> {
+    if (!name) {
+      return false;
+    }
+
+    const slug = slugify(name);
+    let dataObjectDocument = null;
+    try {
+      dataObjectDocument = await this.findOneBySlug(slug);
+    } catch (e) {
+
+    }
+    return !!dataObjectDocument;
+  }
+
+  protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const querySnapshot = await getDocs(q);
     const documents: T[] = [];
@@ -62,8 +102,18 @@ export abstract class FirestoreService<T extends Document> {
   }
 
   protected async findOneById(id: string): Promise<T> {
-    const ref = doc(this.ref, id).withConverter(this.converter);
-    const docSnapshot = await getDoc(ref);
+    let docSnapshot;
+    try {
+      const ref = doc(this.ref, id).withConverter(this.converter);
+      docSnapshot = await getDoc(ref);
+    } catch (error) {
+      this.loggerService.error(new DatabaseError((error as Error).message, {id}));
+    }
+
+    if (!docSnapshot) {
+      throw new DocumentNotFound<T>(this.collectionName);
+    }
+
     const document = docSnapshot.data();
 
     if (!document) {
@@ -75,7 +125,7 @@ export abstract class FirestoreService<T extends Document> {
   }
 
   protected async findOneBySlug(slug: string): Promise<T> {
-    const list = await this.list(where('slug', '==', slug));
+    const list = await this.select(where('slug', '==', slug));
 
     if (list.length === 0) {
       throw new DocumentNotFound<T>(this.collectionName);
@@ -86,26 +136,50 @@ export abstract class FirestoreService<T extends Document> {
 
   protected async addOne(document: T): Promise<T> {
     const id = generatePushID();
-    const ref = doc(this.ref, id).withConverter(this.converter);
-    await setDoc(ref, document);
+    this.updateSlug(document);
+
+    try {
+      const ref = doc(this.ref, id).withConverter(this.converter);
+      await setDoc(ref, document);
+    } catch (error) {
+      this.loggerService.error(new DatabaseError((error as Error).message, document));
+    }
     return {...document, id: id};
   }
 
-  protected async updateOne(document: T): Promise<void> {
+  protected async updateOne(document: T): Promise<T> {
     if (!document.id) {
       throw new DocumentNotFound<T>(this.collectionName, document);
     }
+    this.updateSlug(document);
 
-    const ref = doc(this.ref, document.id).withConverter(this.converter);
-    return setDoc(ref, document);
+    try {
+      const ref = doc(this.ref, document.id).withConverter(this.converter);
+      await setDoc(ref, document);
+    } catch (error) {
+      this.loggerService.error(new DatabaseError((error as Error).message, document));
+    }
+    return document;
   }
 
-  protected async deleteOne(document: T): Promise<void> {
+  protected async removeOne(document: T): Promise<void> {
     if (!document.id) {
       throw new DocumentNotFound<T>(this.collectionName, document);
     }
 
-    const ref = doc(this.ref, document.id).withConverter(this.converter);
-    return deleteDoc(ref);
+    try {
+      const ref = doc(this.ref, document.id).withConverter(this.converter);
+      return deleteDoc(ref);
+    } catch (error) {
+      this.loggerService.error(new DatabaseError((error as Error).message, document));
+    }
+  }
+
+  private updateSlug(document: T) {
+    if (!document.name) {
+      throw new EmptyDocument(this.collectionName);
+    }
+
+    document.slug = slugify(document.name);
   }
 }

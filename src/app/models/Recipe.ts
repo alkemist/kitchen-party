@@ -1,9 +1,10 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {RecipeType} from '../enums/RecipeType';
+import {DataObject} from '../services/firestore.service';
 import {RecipeIngredient, RecipeIngredientInterface} from './RecipeIngredient';
 
-export interface RecipeInterface {
+export interface RecipeInterface extends DataObject {
   id?: string,
   name: string,
   slug: string,

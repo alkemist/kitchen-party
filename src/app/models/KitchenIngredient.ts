@@ -1,7 +1,7 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions, WithFieldValue} from 'firebase/firestore';
 import {MeasureUnit} from '../enums/MeasureUnit';
-import {Ingredient} from './Ingredient';
+import {IngredientModel} from './ingredient.model';
 
 export interface KitchenIngredientInterface {
   id?: string,
@@ -9,7 +9,7 @@ export interface KitchenIngredientInterface {
   measure?: string,
   unit?: MeasureUnit | null,
 
-  ingredient?: Ingredient,
+  ingredient?: IngredientModel,
   ingredientId?: string,
 }
 
@@ -19,7 +19,7 @@ export class KitchenIngredient implements KitchenIngredientInterface {
   measure: string;
   unit: MeasureUnit | null;
 
-  ingredient?: Ingredient;
+  ingredient?: IngredientModel;
   ingredientId?: string;
 
   constructor(kitchenIngredient: KitchenIngredientInterface) {

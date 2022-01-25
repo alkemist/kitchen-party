@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import {User} from 'firebase/auth';
+import {MenuItem} from 'primeng/api';
 import {UserService} from '../../../services/user.service';
 
 @Component({
@@ -10,17 +12,17 @@ import {UserService} from '../../../services/user.service';
 })
 export class HeaderComponent implements OnInit {
   loggedUser?: User;
-  menuItems = [
+  menuItems: MenuItem[] = [
     {
-      label: 'Ingrédients',
+      label: 'Ingredients',
       items: [
         {
-          label: 'Liste',
+          label: 'List',
           icon: 'pi pi-list',
           routerLink: '/ingredients',
         },
         {
-          label: 'Nouveau',
+          label: 'New',
           icon: 'pi pi-plus',
           routerLink: '/ingredient'
         },
@@ -39,18 +41,20 @@ export class HeaderComponent implements OnInit {
     }
   ];
 
-  constructor(private userService: UserService, private router: Router) {
-
+  constructor(private userService: UserService, private router: Router, private translatorService: TranslateService) {
+    this.translatorService.getTranslation('fr').subscribe(translations => {
+      this.menuItems.forEach(item => {
+        item.label = translations[item.label!] ?? item.label;
+        item.items?.forEach(item => {
+          item.label = translations[item.label!] ?? item.label;
+        });
+      });
+    });
   }
 
   async ngOnInit(): Promise<void> {
     await this.userService.getLoggedUser((loggedUser) => {
       this.loggedUser = loggedUser;
     });
-    //console.log(this.userService.loggedUser);
-    /*this.userService.loggedUser.subscribe((user) => {
-      console.log('loggedUser subscribe', user);
-      this.loggedUser = user;
-    });*/
   }
 }

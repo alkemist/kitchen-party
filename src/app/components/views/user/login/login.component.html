@@ -2,7 +2,7 @@
       class="flex w-full flex-grow-1 flex-column justify-content-center align-items-center">
   <p-card>
     <ng-template pTemplate="title">
-      <h5 class="text-center">Login to Your Account</h5>
+      <h5 class="text-center" translate="">Login</h5>
     </ng-template>
 
     <div class="fluid formgroup-inline">
@@ -10,13 +10,14 @@
         <div class="p-float-label">
           <input [ngClass]="{'p-invalid':email.invalid && (email.dirty || email.touched)}" formControlName="email"
                  id="email" pInputText/>
-          <label [ngClass]="{'p-error':email.invalid && (email.dirty || email.touched)}" for="email">Email</label>
+          <label [ngClass]="{'p-error':email.invalid && (email.dirty || email.touched)}" for="email"
+                 translate="">Email</label>
         </div>
         <div *ngIf="email.invalid && (email.dirty || email.touched)" class="p-error">
-          <small *ngIf="email.errors?.['required']">
+          <small *ngIf="email.errors?.['required']" translate="">
             Email is required.
           </small>
-          <small *ngIf="email.errors?.['email']">
+          <small *ngIf="email.errors?.['email']" translate="">
             Email is malformed.
           </small>
         </div>
@@ -26,16 +27,18 @@
           <input [ngClass]="{'p-invalid':password.invalid && (password.dirty || password.touched)}"
                  formControlName="password" id="password" pInputText
                  type="password"/>
-          <label [ngClass]="{'p-error':password.invalid && (password.dirty || password.touched)}" for="password">Password</label>
+          <label [ngClass]="{'p-error':password.invalid && (password.dirty || password.touched)}" for="password"
+                 translate="">Password</label>
         </div>
         <div *ngIf="password.invalid && (password.dirty || password.touched)" class="p-error">
-          <small *ngIf="password.errors?.['required']">
+          <small *ngIf="password.errors?.['required']"
+                 translate="">
             Password is required.
           </small>
         </div>
         <small *ngIf="error" class="p-error">{{ error }}</small>
       </div>
-      <button icon="pi pi-check" label="Sign in" pButton type="submit"></button>
+      <button [label]="'Sign in' | translate" icon="pi pi-check" pButton pRipple type="submit"></button>
     </div>
   </p-card>
 </form>

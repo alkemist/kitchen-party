@@ -7,6 +7,7 @@ import {MenuModule} from 'primeng/menu';
 import {PasswordModule} from 'primeng/password';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {TableModule} from 'primeng/table';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 
 const modules = [
@@ -19,11 +20,12 @@ const modules = [
   DropdownModule,
   SelectButtonModule,
   TableModule,
+  ToggleButtonModule
 ];
 
 @NgModule({
   imports: modules,
   exports: modules,
 })
-export class PrimevueModule {
+export class UiModule {
 }

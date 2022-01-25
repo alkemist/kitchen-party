@@ -1,0 +1,23 @@
+p-table {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  ::ng-deep {
+    .p-datatable {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      &-wrapper {
+        flex-grow: 1;
+      }
+
+      &-tbody > tr > td {
+        vertical-align: middle;
+      }
+    }
+  }
+
+
+}

@@ -4,34 +4,34 @@ import {User} from 'firebase/auth';
 import {UserLogin, UserLogout} from './user.action';
 
 export class UserStateModel {
-  loggedUser: User | undefined = undefined;
+  logged: User | undefined = undefined;
 }
 
 @Injectable()
 @State<UserStateModel>({
-  name: 'user',
+  name: 'users',
   defaults: {
-    loggedUser: undefined
+    logged: undefined
   }
 })
 export class UserState {
 
   @Selector()
   static getLoggedUser(state: UserStateModel) {
-    return state.loggedUser;
+    return state.logged;
   }
 
   @Action(UserLogin)
   login({getState, patchState}: StateContext<UserStateModel>, {payload}: UserLogin) {
     patchState({
-      loggedUser: payload
+      logged: payload
     });
   }
 
   @Action(UserLogout)
   logout({patchState}: StateContext<UserStateModel>) {
     patchState({
-      loggedUser: undefined
+      logged: undefined
     });
   }
 }

@@ -1,10 +1,11 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {IngredientType} from '../enums/IngredientType';
+import {DataObject} from '../services/firestore.service';
 import {Recipe} from './Recipe';
 
 
-export interface IngredientInterface {
+export interface IngredientInterface extends DataObject {
   id?: string,
   name: string,
   slug: string,
@@ -16,7 +17,7 @@ export interface IngredientInterface {
   recipe?: Recipe
 }
 
-export class Ingredient implements IngredientInterface {
+export class IngredientModel implements IngredientInterface {
   id?: string;
   name: string;
   slug: string;
@@ -29,6 +30,13 @@ export class Ingredient implements IngredientInterface {
 
   constructor(ingredient: IngredientInterface) {
     this.id = ingredient.id;
+    this.name = ingredient.name;
+    this.slug = ingredient.slug;
+    this.type = ingredient.type;
+    this.isLiquid = ingredient.isLiquid || null;
+  }
+
+  hydrate(ingredient: IngredientInterface) {
     this.name = ingredient.name;
     this.slug = ingredient.slug;
     this.type = ingredient.type;
@@ -60,16 +68,16 @@ export class Ingredient implements IngredientInterface {
   }
 }
 
-export const ingredientConverter: FirestoreDataConverter<Ingredient> = {
-  toFirestore: (ingredient: Ingredient): IngredientInterface => {
+export const ingredientConverter: FirestoreDataConverter<IngredientModel> = {
+  toFirestore: (ingredient: IngredientModel): IngredientInterface => {
     const ingredientFields = {...ingredient};
-    ingredientFields.recipeId = ingredientFields.recipe?.id;
+    ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
     delete ingredientFields.id;
     delete ingredientFields.recipe;
     return ingredientFields;
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
     const data = snapshot.data(options);
-    return new Ingredient(data as IngredientInterface);
+    return new IngredientModel(data as IngredientInterface);
   }
 };

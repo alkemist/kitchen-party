@@ -1,15 +1,17 @@
 import {Injectable} from '@angular/core';
+import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {Recipe, recipeConverter} from '../models/Recipe';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
+import {LoggerService} from './logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService extends FirestoreService<Recipe> {
 
-  constructor() {
-    super('recipe', recipeConverter);
+  constructor(private logger: LoggerService, private store: Store) {
+    super(logger, 'recipe', recipeConverter);
   }
 
   async getList(): Promise<Recipe[]> {
@@ -20,7 +22,7 @@ export class RecipeService extends FirestoreService<Recipe> {
   }
 
   async refreshList(): Promise<Recipe[]> {
-    const recipes = await super.list(orderBy('name'));
+    const recipes = await super.select(orderBy('name'));
     recipes.forEach(recipe => this.hydrate(recipe));
     //store.dispatch('fillRecipes', recipes);
     return this.getList();
@@ -59,7 +61,7 @@ export class RecipeService extends FirestoreService<Recipe> {
   }
 
   async delete(recipe: Recipe): Promise<void> {
-    await super.deleteOne(recipe);
+    await super.removeOne(recipe);
     //return store.dispatch('deleteRecipe', recipe);
   }
 

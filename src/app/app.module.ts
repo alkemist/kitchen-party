@@ -2,22 +2,22 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
-import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
-import {NgxsModule} from '@ngxs/store';
-
-import {AppRoutingModule} from './app-routing.module';
+import {RippleModule} from 'primeng/ripple';
 import {AppComponent} from './app.component';
-import './app.database';
 import {HeaderComponent} from './components/layouts/header/header.component';
 import {IndexComponent} from './components/views/kitchen/index/index.component';
+import {IngredientComponent} from './components/views/kitchen/ingredient/ingredient.component';
 import {IngredientsComponent} from './components/views/kitchen/ingredients/ingredients.component';
 import {LoginComponent} from './components/views/user/login/login.component';
-import {PrimevueModule} from './primevue.module';
+import './modules/app.database';
+
+import {RoutingModule} from './modules/routing.module';
+import {StoringModule} from './modules/storing.module';
+import {TranslatingModule} from './modules/translating.module';
+import {UiModule} from './modules/ui.module';
 import {IngredientService} from './services/ingredient.service';
 import {RecipeService} from './services/recipe.service';
 import {UserService} from './services/user.service';
-import {UserState} from './store/user.state';
 
 @NgModule({
   declarations: [
@@ -25,21 +25,23 @@ import {UserState} from './store/user.state';
     HeaderComponent,
     LoginComponent,
     IngredientsComponent,
-    IndexComponent
+    IndexComponent,
+    IngredientComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule,
+    RoutingModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([UserState]),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
-    NgxsLoggerPluginModule.forRoot(),
-    PrimevueModule,
-    ReactiveFormsModule
+    StoringModule,
+    UiModule,
+    ReactiveFormsModule,
+    RippleModule,
+    TranslatingModule,
   ],
   providers: [UserService, IngredientService, RecipeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
 }
+

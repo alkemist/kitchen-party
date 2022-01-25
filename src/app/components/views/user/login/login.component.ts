@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
+    this.form.markAllAsTouched();
+
     if (this.form.valid) {
       try {
         await this.userService.login(this.form.value.email, this.form.value.password)

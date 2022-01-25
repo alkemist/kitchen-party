@@ -54,6 +54,12 @@ html {
 a {
   color: #3f51b5;
   text-decoration: none;
+
+  &.p-button {
+    &:hover, &:active, &:focus {
+      text-decoration: none;
+    }
+  }
 }
 
 a:hover {

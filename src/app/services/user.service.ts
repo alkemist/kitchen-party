@@ -24,7 +24,7 @@ export class UserService {
   }
 
   get loggedUser(): Observable<User> {
-    return this.store.selectOnce<User>(state => state.user.loggedUser);
+    return this.store.selectOnce<User>(state => state.users.loggedUser);
   }
 
   getLoggedUser(event?: (user?: User) => void): Promise<User | undefined> {
