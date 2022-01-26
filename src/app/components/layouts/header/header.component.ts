@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit {
     }
   ];
 
-  constructor(private userService: UserService, private router: Router, private translatorService: TranslateService) {
-    this.translatorService.getTranslation('fr').subscribe(translations => {
+  constructor(private userService: UserService, private router: Router, private translateService: TranslateService) {
+    this.translateService.getTranslation('fr').subscribe(translations => {
       this.menuItems.forEach(item => {
         item.label = translations[item.label!] ?? item.label;
         item.items?.forEach(item => {

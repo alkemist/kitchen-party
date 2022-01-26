@@ -18,7 +18,8 @@ import {AppMissingTranslationHandler} from '../handlers/missing-translation.hand
           return new TranslateHttpLoader(http);
         },
         deps: [HttpClient]
-      }
+      },
+      isolate: true,
     })
   ],
   exports: [

@@ -18,15 +18,12 @@ import {FormComponent} from '../../../../tools/form.component';
 })
 export class IngredientComponent extends FormComponent<IngredientModel> implements OnInit {
   override document = new IngredientModel({} as IngredientInterface);
-  ingredientTypes = EnumHelper.enumToObject(IngredientType);
+  ingredientTypes = EnumHelper.enumToObject(IngredientType).map(item => {
+    return {...item, label: this.translateService.instant(item.label)};
+  });
 
-  constructor(private route: ActivatedRoute, private ingredientService: IngredientService, routerService: Router, private translaterService: TranslateService) {
+  constructor(private route: ActivatedRoute, private ingredientService: IngredientService, routerService: Router, private translateService: TranslateService) {
     super('ingredient', ingredientService, routerService);
-    this.translaterService.getTranslation('fr').subscribe(translations => {
-      this.ingredientTypes.forEach(ingredient => {
-        ingredient.label = translations[ingredient.label];
-      });
-    });
     this.form = new FormGroup({
       name: new FormControl('', [
         Validators.required
