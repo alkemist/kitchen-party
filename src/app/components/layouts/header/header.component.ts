@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RoutesRecognized} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {User} from 'firebase/auth';
 import {MenuItem} from 'primeng/api';
@@ -27,7 +27,23 @@ export class HeaderComponent implements OnInit {
           routerLink: '/ingredient'
         },
       ]
-    }, {
+    },
+    {
+      label: 'Recipes',
+      items: [
+        {
+          label: 'List',
+          icon: 'pi pi-list',
+          routerLink: '/recipes',
+        },
+        {
+          label: 'New',
+          icon: 'pi pi-plus',
+          routerLink: '/recipe'
+        },
+      ]
+    },
+    {
       label: 'User',
       items: [{
         label: 'Sign out',
@@ -40,15 +56,25 @@ export class HeaderComponent implements OnInit {
       }]
     }
   ];
+  title: string = '';
 
   constructor(private userService: UserService, private router: Router, private translateService: TranslateService) {
-    this.translateService.getTranslation('fr').subscribe(translations => {
+    this.translateService.getTranslation('fr').subscribe(() => {
       this.menuItems.forEach(item => {
-        item.label = translations[item.label!] ?? item.label;
+        item.label = this.translateService.instant(item.label!);
         item.items?.forEach(item => {
-          item.label = translations[item.label!] ?? item.label;
+          item.label = this.translateService.instant(item.label!);
         });
       });
+    });
+    this.router.events.subscribe((data) => {
+      if (data instanceof RoutesRecognized) {
+        if (typeof data.state.root.firstChild?.data['title'] === 'string') {
+          this.title = data.state.root.firstChild?.data['title'];
+        } else {
+          this.title = '';
+        }
+      }
     });
   }
 

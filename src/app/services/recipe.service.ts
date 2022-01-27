@@ -1,40 +1,67 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {Recipe, recipeConverter} from '../models/Recipe';
+import {IngredientModel} from '../models/ingredient.model';
+import {recipeConverter, RecipeModel} from '../models/recipe.model';
+import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
+import {slugify} from '../tools/slugify';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RecipeService extends FirestoreService<Recipe> {
+export class RecipeService extends FirestoreService<RecipeModel> {
 
   constructor(private logger: LoggerService, private store: Store) {
     super(logger, 'recipe', recipeConverter);
   }
 
-  async getList(): Promise<Recipe[]> {
-    return new Promise(resolve => {
-      resolve([]);
-    });
-    //return store.getters.allRecipes;
+  getList(): RecipeModel[] {
+    return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
   }
 
-  async refreshList(): Promise<Recipe[]> {
+  async getListOrRefresh(): Promise<RecipeModel[]> {
+    const recipes = this.getList();
+    if (recipes.length === 0) {
+      return await this.refreshList();
+    }
+    return recipes;
+  }
+
+  async search(query: string): Promise<RecipeModel[]> {
+    const regexName = new RegExp(query, 'gi');
+    const regexSlug = new RegExp(slugify(query), 'gi');
+    const recipes = await this.getListOrRefresh();
+    return recipes.filter((recipe: RecipeModel) => {
+      return recipe.name.search(regexName) > -1 || recipe.slug.search(regexSlug) > -1;
+    });
+  }
+
+  getBySlug(slug: string): RecipeModel {
+    return this.store.selectSnapshot<RecipeModel>(state => state.recipes.all.find((recipe: RecipeModel) => {
+      return recipe.slug === slug;
+    }));
+  }
+
+  async refreshList(): Promise<RecipeModel[]> {
     const recipes = await super.select(orderBy('name'));
     recipes.forEach(recipe => this.hydrate(recipe));
-    //store.dispatch('fillRecipes', recipes);
+    this.store.dispatch(new FillRecipes(recipes));
     return this.getList();
   }
 
-  async get(slug: string): Promise<Recipe | undefined> {
-    let recipe = undefined;//await store.getters.getRecipeBySlug(slug) as Recipe;
+  async get(slug: string): Promise<RecipeModel | undefined> {
+    if (!slug) {
+      return undefined;
+    }
+
+    let recipe = this.getBySlug(slug);
     if (!recipe) {
       try {
         recipe = await super.findOneBySlug(slug);
-        //store.dispatch('addRecipe', recipe);
-        return undefined; //store.getters.getRecipeBySlug(slug);
+        this.store.dispatch(new AddRecipe(recipe));
+        return this.getBySlug(slug);
       } catch (e) {
         if (e instanceof DocumentNotFound) {
           return undefined;
@@ -44,30 +71,34 @@ export class RecipeService extends FirestoreService<Recipe> {
     return recipe;
   }
 
-  async add(recipe: Recipe): Promise<null> {
-    const newRecipe = await super.addOne(recipe);
-    this.hydrate(newRecipe);
-    return new Promise<null>(resolve => {
-      resolve(null);
-    });
-    //store.dispatch('addRecipe', newRecipe);
-    //return store.getters.getRecipe(newRecipe.slug);
+  async add(recipe: RecipeModel): Promise<RecipeModel> {
+    const recipeStored = await super.addOne(recipe);
+    this.hydrate(recipeStored);
+    this.store.dispatch(new AddRecipe(recipeStored));
+    return this.getBySlug(recipeStored.slug);
   }
 
-  async update(recipe: Recipe): Promise<void> {
-    await super.updateOne(recipe);
-    this.hydrate(recipe);
-    //return store.dispatch('updateRecipe', recipe);
+  async update(recipe: RecipeModel): Promise<RecipeModel> {
+    const recipeStored = await super.updateOne(recipe);
+    this.hydrate(recipeStored);
+    this.store.dispatch(new UpdateRecipe(recipeStored));
+    return this.getBySlug(recipeStored.slug);
   }
 
-  async delete(recipe: Recipe): Promise<void> {
+  async remove(recipe: RecipeModel): Promise<void> {
     await super.removeOne(recipe);
-    //return store.dispatch('deleteRecipe', recipe);
+    this.store.dispatch(new RemoveRecipe(recipe));
   }
 
-  private hydrate(recipe: Recipe): void {
+  override async exist(name: string): Promise<boolean> {
+    return await super.exist(name);
+  }
+
+  private hydrate(recipe: RecipeModel): void {
     recipe.recipeIngredients.forEach(recipeIngredient => {
-      //recipeIngredient.ingredient = store.getters.getIngredientById(recipeIngredient.ingredientId);
+      recipeIngredient.ingredient = this.store.selectSnapshot<IngredientModel>(state => state.ingredients.all.find((ingredient: IngredientModel) => {
+        return ingredient.id === recipeIngredient.ingredientId;
+      }));
       delete recipeIngredient.ingredientId;
     });
   }

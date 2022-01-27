@@ -1,8 +1,13 @@
 <form (submit)="handleSubmit()" [formGroup]="form"
-      class="flex w-full flex-grow-1 flex-column justify-content-center align-items-center">
-  <p-card>
+      class="form-grid flex w-full flex-grow-1 flex-column justify-content-center align-items-center">
+  <p-card class="ingredient">
     <ng-template pTemplate="title">
-      <h5 class="text-center">{{ document.name ?? ('New Ingredient' | translate) }}</h5>
+      <div class="flex flex-row align-items-center">
+        <a [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+           pRipple
+           type="button"></a>
+        <h5 class="text-center flex-grow-1">{{ document.name ?? ('New ingredient' | translate) }}</h5>
+      </div>
     </ng-template>
 
     <div class="field grid">
@@ -27,7 +32,8 @@
       <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
              for="type" translate="">Type</label>
       <div class="col-12 md:col-8">
-        <p-dropdown [options]="ingredientTypes" [placeholder]="'Select a type' | translate" formControlName="type"
+        <p-dropdown [autoDisplayFirst]="false" [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
+                    formControlName="type"
                     inputId="type" optionValue="key"
                     styleClass="inputfield w-full"></p-dropdown>
       </div>
@@ -50,7 +56,9 @@
 
     <ng-template pTemplate="footer">
       <div class="flex flex-row">
-        <button [label]="('Delete' | translate)" class="p-button-danger" icon="pi pi-trash" pButton pRipple></button>
+        <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)" class="p-button-danger"
+                icon="pi pi-trash" pButton pRipple
+                type="button"></button>
         <div class="flex-grow-1"></div>
         <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
                 type="submit"></button>
@@ -58,3 +66,14 @@
     </ng-template>
   </p-card>
 </form>
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+            pRipple
+            type="button"></button>
+    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+            pRipple
+            type="button"></button>
+  </p-footer>
+</p-confirmDialog>
+<p-toast position="bottom-right"></p-toast>

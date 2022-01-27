@@ -1,12 +1,15 @@
 <p-toolbar class="header">
   <div class="p-toolbar-group-left">
-    <a class="header__logo" routerLink="/">
+    <a [routerLink]="['/']" class="header__logo">
       Kitchen Party
     </a>
+    <span *ngIf="title" style="">
+      <span style="margin: 0 10px;">/</span>{{ title | translate }}
+    </span>
   </div>
 
   <div class="p-toolbar-group-right">
-    <a *ngIf="!loggedUser" icon="pi pi-user" label="Log in" pButton pRipple routerLink="/login"></a>
+    <a *ngIf="!loggedUser" [routerLink]="['/', 'login']" icon="pi pi-user" label="Log in" pButton pRipple></a>
     <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
             type="button"></button>
     <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>

@@ -1,12 +1,19 @@
 import {NgModule} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {DropdownModule} from 'primeng/dropdown';
+import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MenuModule} from 'primeng/menu';
+import {MultiSelectModule} from 'primeng/multiselect';
 import {PasswordModule} from 'primeng/password';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {TableModule} from 'primeng/table';
+import {ToastModule} from 'primeng/toast';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 
@@ -20,12 +27,19 @@ const modules = [
   DropdownModule,
   SelectButtonModule,
   TableModule,
-  ToggleButtonModule
+  ToggleButtonModule,
+  ConfirmDialogModule,
+  ToastModule,
+  MultiSelectModule,
+  InputNumberModule,
+  AutoCompleteModule,
+  InputTextareaModule
 ];
 
 @NgModule({
   imports: modules,
   exports: modules,
+  providers: [ConfirmationService, MessageService],
 })
 export class UiModule {
 }

@@ -3,6 +3,7 @@ import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {ingredientConverter, IngredientModel} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from '../store/ingredient.action';
+import {slugify} from '../tools/slugify';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
 
@@ -19,10 +20,27 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     return this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
   }
 
+  async getListOrRefresh(): Promise<IngredientModel[]> {
+    const ingredients = this.getList();
+    if (ingredients.length === 0) {
+      return await this.refreshList();
+    }
+    return ingredients;
+  }
+
   getBySlug(slug: string): IngredientModel {
     return this.store.selectSnapshot<IngredientModel>(state => state.ingredients.all.find((ingredient: IngredientModel) => {
       return ingredient.slug === slug;
     }));
+  }
+
+  async search(query: string): Promise<IngredientModel[]> {
+    const regexName = new RegExp(query, 'gi');
+    const regexSlug = new RegExp(slugify(query), 'gi');
+    const ingredients = await this.getListOrRefresh();
+    return ingredients.filter((ingredient: IngredientModel) => {
+      return ingredient.name.search(regexName) > -1 || ingredient.slug.search(regexSlug) > -1;
+    });
   }
 
   async refreshList(): Promise<IngredientModel[]> {

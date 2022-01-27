@@ -1,8 +1,8 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
-import {IngredientType} from '../enums/IngredientType';
+import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
 import {DataObject} from '../services/firestore.service';
-import {Recipe} from './Recipe';
+import {RecipeModel} from './recipe.model';
 
 
 export interface IngredientInterface extends DataObject {
@@ -10,11 +10,11 @@ export interface IngredientInterface extends DataObject {
   name: string,
   slug: string,
 
-  type: IngredientType,
+  type: IngredientTypeEnum,
   isLiquid?: boolean | null,
 
   recipeId?: string,
-  recipe?: Recipe
+  recipe?: RecipeModel
 }
 
 export class IngredientModel implements IngredientInterface {
@@ -22,11 +22,11 @@ export class IngredientModel implements IngredientInterface {
   name: string;
   slug: string;
 
-  type: IngredientType;
+  type: IngredientTypeEnum;
   isLiquid: boolean | null;
 
   recipeId?: string;
-  recipe?: Recipe;
+  recipe?: RecipeModel;
 
   constructor(ingredient: IngredientInterface) {
     this.id = ingredient.id;
@@ -34,6 +34,10 @@ export class IngredientModel implements IngredientInterface {
     this.slug = ingredient.slug;
     this.type = ingredient.type;
     this.isLiquid = ingredient.isLiquid || null;
+  }
+
+  get typeName(): string {
+    return this.type.charAt(0).toUpperCase() + this.type.slice(1);
   }
 
   hydrate(ingredient: IngredientInterface) {

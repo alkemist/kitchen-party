@@ -1,11 +1,11 @@
-import {KitchenIngredient, KitchenIngredientInterface} from './KitchenIngredient';
+import {KitchenIngredientInterface, KitchenIngredientModel} from './kitchen-ingredient.model';
 
 export interface RecipeIngredientInterface extends KitchenIngredientInterface {
   isMain: boolean,
   isBase: boolean,
 }
 
-export class RecipeIngredient extends KitchenIngredient implements RecipeIngredientInterface {
+export class RecipeIngredientModel extends KitchenIngredientModel implements RecipeIngredientInterface {
   isMain: boolean;
   isBase: boolean;
 

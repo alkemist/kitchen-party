@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       try {
         await this.userService.login(this.form.value.email, this.form.value.password)
           .then(() => {
-            this.router.navigate(['/ingredients']);
+            this.router.navigate(['/', 'logged']);
           });
       } catch (error) {
         this.error = (error as Error).message;

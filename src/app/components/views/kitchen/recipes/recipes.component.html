@@ -1,5 +1,5 @@
 <p-table #dt [loading]="loading" [paginator]="true" [rows]="10"
-         [showCurrentPageReport]="false" [value]="ingredients" dataKey="id">
+         [showCurrentPageReport]="false" [value]="recipes" dataKey="id">
   <ng-template pTemplate="header">
     <tr>
       <th translate="">Name</th>
@@ -19,7 +19,7 @@
                         field="type" matchMode="in">
           <ng-template let-filter="filterCallback" let-value pTemplate="filter">
             <p-multiSelect (onChange)="filter($event.value)"
-                           [ngModel]="value" [options]="ingredientTypes"
+                           [ngModel]="value" [options]="recipeTypes"
                            [selectionLimit]="3" [showHeader]="false"
                            optionValue="key">
             </p-multiSelect>
@@ -29,16 +29,16 @@
       <th></th>
     </tr>
   </ng-template>
-  <ng-template let-ingredient pTemplate="body">
+  <ng-template let-recipe pTemplate="body">
     <tr>
       <td>
-        {{ingredient.name}}
+        {{recipe.name}}
       </td>
       <td>
-        {{ingredient.typeName | translate}}
+        {{recipe.typeName | translate}}
       </td>
       <td>
-        <a [routerLink]="['/', 'ingredient', ingredient.slug]"
+        <a [routerLink]="['/', 'recipe', recipe.slug]"
            class="p-button-rounded p-button-success p-button-text"
            icon="pi pi-pencil"
            pButton
@@ -48,7 +48,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="3" translate="">No ingredients found.</td>
+      <td colspan="3" translate="">No recipes found.</td>
     </tr>
   </ng-template>
 </p-table>

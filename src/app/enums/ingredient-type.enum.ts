@@ -1,4 +1,4 @@
-export enum IngredientType {
+export enum IngredientTypeEnum {
   meats = 'Meats', // Viandes
   fishes_seafoods = 'Fishes and seafoods', // Poissons et fruits de mer
   fruits_vegetables_mushrooms = 'Fruits, vegetables and mushrooms', // Fruits, légumes et champignons

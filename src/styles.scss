@@ -19,8 +19,13 @@ form {
     }
 
     .p-card-content {
-      padding-top: 2rem !important;
+      padding-top: 1rem !important;
       padding-bottom: 0 !important;
+
+      h5 {
+        margin: 2rem 0 1rem;
+        font-weight: bold;
+      }
 
       .field {
         div.p-error {
@@ -29,5 +34,33 @@ form {
         }
       }
     }
+  }
+}
+
+p-table {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  ::ng-deep {
+    .p-datatable {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      &-wrapper {
+        flex-grow: 1;
+      }
+
+      &-tbody > tr > td {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+p-inputNumber, p-autoComplete {
+  & > span, & > span > input {
+    width: 100%;
   }
 }

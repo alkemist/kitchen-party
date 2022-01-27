@@ -21,6 +21,8 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

@@ -1,8 +1,8 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
-import {RecipeType} from '../enums/RecipeType';
+import {RecipeTypeEnum} from '../enums/recipe-type.enum';
 import {DataObject} from '../services/firestore.service';
-import {RecipeIngredient, RecipeIngredientInterface} from './RecipeIngredient';
+import {RecipeIngredientInterface, RecipeIngredientModel} from './recipe-ingredient.model';
 
 export interface RecipeInterface extends DataObject {
   id?: string,
@@ -15,14 +15,14 @@ export interface RecipeInterface extends DataObject {
 
   nbSlices?: number,
   instructions?: string[],
-  type?: RecipeType | null,
+  type?: RecipeTypeEnum | null,
   image?: string,
   source?: string,
 
   recipeIngredients: RecipeIngredientInterface[],
 }
 
-export class Recipe {
+export class RecipeModel implements RecipeInterface {
   id?: string;
   name: string;
   slug: string;
@@ -33,11 +33,11 @@ export class Recipe {
 
   nbSlices?: number;
   instructions?: string[];
-  type?: RecipeType | null;
+  type?: RecipeTypeEnum | null;
   image?: string;
   source?: string;
 
-  recipeIngredients: RecipeIngredient[] = [];
+  recipeIngredients: RecipeIngredientModel[] = [];
 
   constructor(recipe: RecipeInterface) {
     this.id = recipe.id;
@@ -54,8 +54,16 @@ export class Recipe {
     this.image = recipe.image;
     this.source = recipe.source;
 
-    this.recipeIngredients =
-      recipe.recipeIngredients.map(recipeIngredient => new RecipeIngredient(recipeIngredient));
+    if (recipe.recipeIngredients?.length > 0) {
+      this.recipeIngredients =
+        recipe.recipeIngredients.map(recipeIngredient => new RecipeIngredientModel(recipeIngredient));
+    }
+  }
+
+  get typeName(): string {
+    if (!this.type) return '';
+
+    return this.type.charAt(0).toUpperCase() + this.type.slice(1);
   }
 
   isVege(): boolean {
@@ -83,8 +91,8 @@ export class Recipe {
   }
 }
 
-export const recipeConverter: FirestoreDataConverter<Recipe> = {
-  toFirestore: (recipe: Recipe): RecipeInterface => {
+export const recipeConverter: FirestoreDataConverter<RecipeModel> = {
+  toFirestore: (recipe: RecipeModel): RecipeInterface => {
     const recipeFields = {...recipe} as RecipeInterface;
     delete recipeFields.id;
     recipeFields.recipeIngredients = [];
@@ -105,7 +113,7 @@ export const recipeConverter: FirestoreDataConverter<Recipe> = {
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
     const recipeData = snapshot.data(options) as RecipeInterface;
-    return new Recipe(recipeData);
+    return new RecipeModel(recipeData);
   }
 };
 

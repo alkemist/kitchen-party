@@ -12,12 +12,12 @@ import {LoginComponent} from './components/views/user/login/login.component';
 import './modules/app.database';
 
 import {RoutingModule} from './modules/routing.module';
+import {ServicesModule} from './modules/services.module';
 import {StoringModule} from './modules/storing.module';
 import {TranslatingModule} from './modules/translating.module';
 import {UiModule} from './modules/ui.module';
-import {IngredientService} from './services/ingredient.service';
-import {RecipeService} from './services/recipe.service';
-import {UserService} from './services/user.service';
+import { RecipesComponent } from './components/views/kitchen/recipes/recipes.component';
+import { RecipeComponent } from './components/views/kitchen/recipe/recipe.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,9 @@ import {UserService} from './services/user.service';
     LoginComponent,
     IngredientsComponent,
     IndexComponent,
-    IngredientComponent
+    IngredientComponent,
+    RecipesComponent,
+    RecipeComponent
   ],
   imports: [
     BrowserModule,
@@ -38,8 +40,8 @@ import {UserService} from './services/user.service';
     ReactiveFormsModule,
     RippleModule,
     TranslatingModule,
+    ServicesModule,
   ],
-  providers: [UserService, IngredientService, RecipeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -18,8 +18,10 @@ export class IngredientStateModel {
 export class IngredientState {
 
   @Selector()
-  static getIngredients(state: IngredientStateModel) {
-    return state.all;
+  static getIngredientBySlug(state: IngredientStateModel, slug: string) {
+    return state.all.find((ingredient: IngredientModel) => {
+      return ingredient.slug === slug;
+    });
   }
 
   @Action(FillIngredients)
