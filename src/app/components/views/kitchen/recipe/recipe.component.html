@@ -1,173 +1,193 @@
-<form (submit)="handleSubmit()" [formGroup]="form"
-      class="form-grid flex w-full flex-grow-1 flex-column justify-content-center align-items-center">
-  <p-card class="recipe">
-    <ng-template pTemplate="title">
-      <div class="flex flex-row align-items-center">
-        <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
-           pRipple
-           type="button"></a>
-        <h5 class="text-center flex-grow-1">{{ document.name ?? ('New recipe' | translate) }}</h5>
-      </div>
-    </ng-template>
-
-    <div class="field grid">
-      <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
-             for="name" translate="">Name</label>
-      <div class="col-12 md:col-8">
-        <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
-               formControlName="name" id="name" pInputText/>
-      </div>
-      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
-        <small *ngIf="name.errors?.['required']" translate="">
-          Name is required.
-        </small>
-        <small *ngIf="name.errors?.['exist']" translate="">
-          Recipe already exist.
-        </small>
-      </div>
-    </div>
-
-    <div class="field grid">
-      <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
-             for="type" translate="">Type</label>
-      <div class="col-12 md:col-8">
-        <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-                    [placeholder]="'Select a type' | translate" formControlName="type"
-                    inputId="type" optionValue="key"
-                    styleClass="inputfield w-full"></p-dropdown>
-      </div>
-      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-      <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
-        <small *ngIf="type.errors?.['required']" translate="">
-          Type is required.
-        </small>
-      </div>
-    </div>
-
-    <h5 translate="">Duration</h5>
-    <div class="formgrid grid">
-      <div class="field col-12 md:col-4">
-        <label for="preparationDuration" translate="">Preparation</label>
-        <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
-                       inputId="preparationDuration" suffix=" min"></p-inputNumber>
-      </div>
-      <div class="field col-12 md:col-4">
-        <label for="cookingDuration" translate="">Cooking</label>
-        <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
-                       inputId="cookingDuration" suffix=" min"></p-inputNumber>
-      </div>
-      <div class="field col-12 md:col-4">
-        <label for="waitingDuration" translate="">Waiting</label>
-        <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
-                       inputId="waitingDuration" suffix=" min"></p-inputNumber>
-      </div>
-    </div>
-
-    <h5 class="flex flex-row align-items-center">
-      <span translate="">Ingredients</span>
-      <div class="flex-grow-1"></div>
-      <button (click)="addRecipeIngredient()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton pRipple
-              type="button"></button>
-    </h5>
-    <div
-      *ngFor="let item of recipeIngredients.controls; let i = index;"
-      formArrayName="recipeIngredients"
-    >
-      <p-card [formGroupName]="i">
-        <div class="formgrid grid">
-          <div class="field col-12 md:col-4">
-            <label [for]="'quantity' + i" translate="">Quantity</label>
-            <p-inputNumber [inputId]="'quantity' + i" [min]="0" class="inputfield w-full"
-                           formControlName="quantity"></p-inputNumber>
-          </div>
-          <div class="field col-12 md:col-4">
-            <label [for]="'unit' + i" translate="">Unit</label>
-            <p-dropdown [autoDisplayFirst]="false" [inputId]="'unit' + i"
-                        [options]="measureUnits"
-                        formControlName="unit" optionValue="key"
-                        styleClass="inputfield w-full"></p-dropdown>
-          </div>
-          <div class="field col-12 md:col-4">
-            <label [for]="'measure' + i" translate="">Measure</label>
-            <input [id]="'measure' + i"
-                   class="inputfield w-full" formControlName="measure" pInputText/>
-          </div>
+<div class="page-container__content">
+  <form (submit)="handleSubmit()" [formGroup]="form">
+    <p-card class="recipe">
+      <ng-template pTemplate="title">
+        <div class="flex flex-row align-items-center">
+          <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+             pRipple
+             type="button"></a>
+          <h5 class="text-center flex-grow-1">{{ document.name ?? ('New recipe' | translate) }}</h5>
         </div>
+      </ng-template>
 
-        <div class="formgrid grid">
-          <div class="field col-12 md:col-6">
-            <label [for]="'ingredient' + i" translate="">Ingredient</label>
-            <p-autoComplete (completeMethod)="searchIngredient($event)" [dropdown]="true"
-                            [suggestions]="ingredients" class="inputfield w-full" dataKey="id"
-                            field="name" formControlName="ingredient">
-            </p-autoComplete>
-          </div>
-          <div class="field col-12 md:col-6">
-            <label [for]="'recipe' + i" translate="">Recipe</label>
-            <p-autoComplete (completeMethod)="searchRecipe($event)" [dropdown]="true" [suggestions]="recipes"
-                            class="inputfield w-full" dataKey="id" field="name"
-                            formControlName="recipe"></p-autoComplete>
-          </div>
-        </div>
-
-        <div class="field grid">
-          <label [for]="'base' + i"
-                 class="col-12 mb-2 md:col-3 md:mb-0" translate="">Base ?</label>
-          <div class="col-12 md:col-2">
-            <p-toggleButton [inputId]="'base' + i" formControlName="main" offIcon="pi pi-times"
-                            onIcon="pi pi-check"></p-toggleButton>
-          </div>
-          <div class="col-12 md:col-2"></div>
-          <label [for]="'main' + i"
-                 class="col-12 mb-2 md:col-3 md:mb-0" translate="">Main ?</label>
-          <div class="col-12 md:col-2">
-            <p-toggleButton [inputId]="'main' + i" formControlName="main" offIcon="pi pi-times"
-                            onIcon="pi pi-check"></p-toggleButton>
-          </div>
-        </div>
-
-        <ng-template pTemplate="footer">
-          <div class="flex flex-row">
+      <div class="grid">
+        <div class="col">
+          <h5 class="flex flex-row align-items-center">
+            <span translate="">Description</span>
             <div class="flex-grow-1"></div>
-            <button (click)="removeRecipeIngredient(i)" class="p-button-rounded p-button-text" icon="pi pi-minus"
-                    pButton pRipple
-                    type="button"></button>
+            <button class="p-button-rounded p-button-text" pButton type="button"></button>
+          </h5>
+
+          <div class="field grid">
+            <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}"
+                   class="col-12 mb-2 md:col-4 md:mb-0"
+                   for="name" translate="">Name</label>
+            <div class="col-12 md:col-8">
+              <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
+                     formControlName="name" id="name" pInputText/>
+            </div>
+            <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
+              <small *ngIf="name.errors?.['required']" translate="">
+                Name is required.
+              </small>
+              <small *ngIf="name.errors?.['exist']" translate="">
+                Recipe already exist.
+              </small>
+            </div>
           </div>
-        </ng-template>
-      </p-card>
-    </div>
 
-    <h5 class="flex flex-row align-items-center">
-      <span translate="">Instructions</span>
-      <div class="flex-grow-1"></div>
-      <button (click)="addInstructionRow()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton pRipple
-              type="button"></button>
-    </h5>
-    <div
-      *ngFor="let item of instructionRows.controls; let i = index;"
-      formArrayName="instructions"
-    >
-      <div class="flex flex-row">
-        <textarea [formControlName]="i" class="flex-grow-1" pInputTextarea></textarea>
-        <button (click)="removeInstructionRow(i)" class="p-button-rounded p-button-text" icon="pi pi-minus"
-                pButton pRipple
-                type="button"></button>
-      </div>
-    </div>
+          <div class="field grid">
+            <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
+                   class="col-12 mb-2 md:col-4 md:mb-0"
+                   for="type" translate="">Type</label>
+            <div class="col-12 md:col-8">
+              <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
+                          [placeholder]="'Select a type' | translate" formControlName="type"
+                          inputId="type" optionValue="key"
+                          styleClass="inputfield w-full"></p-dropdown>
+            </div>
+            <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+            <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
+              <small *ngIf="type.errors?.['required']" translate="">
+                Type is required.
+              </small>
+            </div>
+          </div>
 
-    <ng-template pTemplate="footer">
-      <div class="flex flex-row">
-        <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)" class="p-button-danger"
-                icon="pi pi-trash" pButton pRipple
-                type="button"></button>
-        <div class="flex-grow-1"></div>
-        <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
-                type="submit"></button>
+          <h5 class="flex flex-row align-items-center">
+            <span translate="">Duration</span>
+            <div class="flex-grow-1"></div>
+            <button class="p-button-rounded p-button-text" pButton type="button"></button>
+          </h5>
+          <div class="formgrid grid">
+            <div class="field col-12 md:col-4">
+              <label for="preparationDuration" translate="">Preparation</label>
+              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
+                             inputId="preparationDuration" suffix=" min"></p-inputNumber>
+            </div>
+            <div class="field col-12 md:col-4">
+              <label for="cookingDuration" translate="">Cooking</label>
+              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
+                             inputId="cookingDuration" suffix=" min"></p-inputNumber>
+            </div>
+            <div class="field col-12 md:col-4">
+              <label for="waitingDuration" translate="">Waiting</label>
+              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
+                             inputId="waitingDuration" suffix=" min"></p-inputNumber>
+            </div>
+          </div>
+
+          <h5 class="flex flex-row align-items-center">
+            <span translate="">Instructions</span>
+            <div class="flex-grow-1"></div>
+            <button (click)="addInstructionRow()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton
+                    pRipple
+                    type="button"></button>
+          </h5>
+          <div
+            *ngFor="let item of instructionRows.controls; let i = index;"
+            formArrayName="instructions"
+          >
+            <div class="flex flex-row">
+              <textarea [formControlName]="i" class="flex-grow-1" pInputTextarea></textarea>
+              <button (click)="removeInstructionRow(i)" class="p-button-rounded p-button-text" icon="pi pi-minus"
+                      pButton pRipple
+                      type="button"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <h5 class="flex flex-row align-items-center">
+            <span translate="">Ingredients</span>
+            <div class="flex-grow-1"></div>
+            <button (click)="addRecipeIngredient()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton
+                    pRipple
+                    type="button"></button>
+          </h5>
+          <p-accordion>
+            <p-accordionTab *ngFor="let item of recipeIngredients.controls; let i = index;"
+                            formArrayName="recipeIngredients">
+              <ng-template pTemplate="header">
+                <span>{{ recipeIngredientToString(i) }}</span>
+                <div class="flex-grow-1"></div>
+                <button (click)="removeRecipeIngredient(i)" class="p-button-rounded p-button-text" icon="pi pi-minus"
+                        pButton pRipple
+                        type="button"></button>
+              </ng-template>
+              <div [formGroupName]="i" class="ingredients">
+                <div class="formgrid grid">
+                  <div class="field col-12 md:col-4">
+                    <label [for]="'quantity' + i" translate="">Quantity</label>
+                    <p-inputNumber [inputId]="'quantity' + i" [min]="0" class="inputfield w-full"
+                                   formControlName="quantity"></p-inputNumber>
+                  </div>
+                  <div class="field col-12 md:col-4">
+                    <label [for]="'unit' + i" translate="">Unit</label>
+                    <p-dropdown [autoDisplayFirst]="false" [inputId]="'unit' + i"
+                                [options]="measureUnits"
+                                formControlName="unit" optionValue="key"
+                                styleClass="inputfield w-full"></p-dropdown>
+                  </div>
+                  <div class="field col-12 md:col-4">
+                    <label [for]="'measure' + i" translate="">Measure</label>
+                    <input [id]="'measure' + i"
+                           class="inputfield w-full" formControlName="measure" pInputText/>
+                  </div>
+                </div>
+
+                <div class="formgrid grid">
+                  <div class="field col-12 md:col-6">
+                    <label [for]="'ingredient' + i" translate="">Ingredient</label>
+                    <p-autoComplete (completeMethod)="searchIngredient($event)" [dropdown]="true"
+                                    [suggestions]="ingredients" class="inputfield w-full" dataKey="id"
+                                    field="name" formControlName="ingredient">
+                    </p-autoComplete>
+                  </div>
+                  <div class="field col-12 md:col-6">
+                    <label [for]="'recipe' + i" translate="">Recipe</label>
+                    <p-autoComplete (completeMethod)="searchRecipe($event)" [dropdown]="true" [suggestions]="recipes"
+                                    class="inputfield w-full" dataKey="id" field="name"
+                                    formControlName="recipe"></p-autoComplete>
+                  </div>
+                </div>
+
+                <div class="field grid">
+                  <label [for]="'base' + i"
+                         class="col-12 mb-2 md:col-3 md:mb-0" translate="">Base ?</label>
+                  <div class="col-12 md:col-2">
+                    <p-toggleButton [inputId]="'base' + i" formControlName="main" offIcon="pi pi-times"
+                                    onIcon="pi pi-check"></p-toggleButton>
+                  </div>
+                  <div class="col-12 md:col-2"></div>
+                  <label [for]="'main' + i"
+                         class="col-12 mb-2 md:col-3 md:mb-0" translate="">Main ?</label>
+                  <div class="col-12 md:col-2">
+                    <p-toggleButton [inputId]="'main' + i" formControlName="main" offIcon="pi pi-times"
+                                    onIcon="pi pi-check"></p-toggleButton>
+                  </div>
+                </div>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </div>
       </div>
-    </ng-template>
-  </p-card>
-</form>
+
+      <ng-template pTemplate="footer">
+        <div class="flex flex-row">
+          <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)"
+                  class="p-button-danger"
+                  icon="pi pi-trash" pButton pRipple
+                  type="button"></button>
+          <div class="flex-grow-1"></div>
+          <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
+                  type="submit"></button>
+        </div>
+      </ng-template>
+    </p-card>
+  </form>
+</div>
 <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
   <p-footer>
     <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton

@@ -11,7 +11,7 @@ import {EnumHelper} from '../../../../tools/enum.helper';
   templateUrl: './ingredients.component.html',
   styleUrls: ['./ingredients.component.scss'],
   host: {
-    class: 'flex flex-column flex-grow-1 w-full'
+    class: 'page-container'
   }
 })
 export class IngredientsComponent implements OnInit {

@@ -1,79 +1,81 @@
-<form (submit)="handleSubmit()" [formGroup]="form"
-      class="form-grid flex w-full flex-grow-1 flex-column justify-content-center align-items-center">
-  <p-card class="ingredient">
-    <ng-template pTemplate="title">
-      <div class="flex flex-row align-items-center">
-        <a [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
-           pRipple
-           type="button"></a>
-        <h5 class="text-center flex-grow-1">{{ document.name ?? ('New ingredient' | translate) }}</h5>
-      </div>
-    </ng-template>
+<div class="page-container__content">
+  <form (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
+    <p-card class="ingredient">
+      <ng-template pTemplate="title">
+        <div class="flex flex-row align-items-center">
+          <a [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+             pRipple
+             type="button"></a>
+          <h5 class="text-center flex-grow-1">{{ document.name ?? ('New ingredient' | translate) }}</h5>
+        </div>
+      </ng-template>
 
-    <div class="field grid">
-      <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
-             for="name" translate="">Name</label>
-      <div class="col-12 md:col-8">
-        <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
-               formControlName="name" id="name" pInputText/>
+      <div class="field grid">
+        <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
+               for="name" translate="">Name</label>
+        <div class="col-12 md:col-8">
+          <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
+                 formControlName="name" id="name" pInputText/>
+        </div>
+        <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
+          <small *ngIf="name.errors?.['required']" translate="">
+            Name is required.
+          </small>
+          <small *ngIf="name.errors?.['exist']" translate="">
+            Ingredient already exist.
+          </small>
+        </div>
       </div>
-      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
-        <small *ngIf="name.errors?.['required']" translate="">
-          Name is required.
-        </small>
-        <small *ngIf="name.errors?.['exist']" translate="">
-          Ingredient already exist.
-        </small>
-      </div>
-    </div>
 
-    <div class="field grid">
-      <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
-             for="type" translate="">Type</label>
-      <div class="col-12 md:col-8">
-        <p-dropdown [autoDisplayFirst]="false" [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
-                    formControlName="type"
-                    inputId="type" optionValue="key"
-                    styleClass="inputfield w-full"></p-dropdown>
+      <div class="field grid">
+        <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
+               for="type" translate="">Type</label>
+        <div class="col-12 md:col-8">
+          <p-dropdown [autoDisplayFirst]="false" [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
+                      formControlName="type"
+                      inputId="type" optionValue="key"
+                      styleClass="inputfield w-full"></p-dropdown>
+        </div>
+        <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+        <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
+          <small *ngIf="type.errors?.['required']" translate="">
+            Type is required.
+          </small>
+        </div>
       </div>
-      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-      <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
-        <small *ngIf="type.errors?.['required']" translate="">
-          Type is required.
-        </small>
-      </div>
-    </div>
 
-    <div class="field grid">
-      <label class="col-12 mb-2 md:col-4 md:mb-0"
-             for="isLiquid" translate="">Liquid ?</label>
-      <div class="col-12 md:col-8">
-        <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-times"
-                        onIcon="pi pi-check"></p-toggleButton>
+      <div class="field grid">
+        <label class="col-12 mb-2 md:col-4 md:mb-0"
+               for="isLiquid" translate="">Liquid ?</label>
+        <div class="col-12 md:col-8">
+          <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-times"
+                          onIcon="pi pi-check"></p-toggleButton>
+        </div>
       </div>
-    </div>
 
-    <ng-template pTemplate="footer">
-      <div class="flex flex-row">
-        <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)" class="p-button-danger"
-                icon="pi pi-trash" pButton pRipple
-                type="button"></button>
-        <div class="flex-grow-1"></div>
-        <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
-                type="submit"></button>
-      </div>
-    </ng-template>
-  </p-card>
-</form>
-<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
-  <p-footer>
-    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
-            pRipple
-            type="button"></button>
-    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
-            pRipple
-            type="button"></button>
-  </p-footer>
-</p-confirmDialog>
-<p-toast position="bottom-right"></p-toast>
+      <ng-template pTemplate="footer">
+        <div class="flex flex-row">
+          <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)"
+                  class="p-button-danger"
+                  icon="pi pi-trash" pButton pRipple
+                  type="button"></button>
+          <div class="flex-grow-1"></div>
+          <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
+                  type="submit"></button>
+        </div>
+      </ng-template>
+    </p-card>
+  </form>
+  <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+    <p-footer>
+      <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+              pRipple
+              type="button"></button>
+      <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+              pRipple
+              type="button"></button>
+    </p-footer>
+  </p-confirmDialog>
+  <p-toast position="bottom-right"></p-toast>
+</div>

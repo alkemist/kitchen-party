@@ -1,8 +1,14 @@
+@import "../assets/styles/variables";
+
 .app {
   background: var(--surface-ground);
   color: var(--text-color);
 
   &__content {
-    overflow: auto;
+    height: calc(100% - #{$header-desktop-height});
+
+    @media screen and (max-width: $mobile-breakpoint-width) {
+      height: calc(100% - #{$header-mobile-height});
+    }
   }
 }

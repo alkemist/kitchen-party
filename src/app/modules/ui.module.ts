@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {AccordionModule} from 'primeng/accordion';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ButtonModule} from 'primeng/button';
@@ -33,7 +34,8 @@ const modules = [
   MultiSelectModule,
   InputNumberModule,
   AutoCompleteModule,
-  InputTextareaModule
+  InputTextareaModule,
+  AccordionModule
 ];
 
 @NgModule({

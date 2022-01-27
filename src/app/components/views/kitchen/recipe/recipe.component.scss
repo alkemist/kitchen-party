@@ -1,5 +1,9 @@
-::ng-deep {
-  .recipe > .p-card {
-    width: 520px;
+.page-container__content {
+  width: 100%;
+}
+
+.grid {
+  h5 {
+    border-bottom: 4px solid var(--surface-d);
   }
 }

@@ -8,7 +8,7 @@ import {UserService} from '../../../../services/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   host: {
-    class: 'flex flex-grow-1 w-full'
+    class: 'page-container'
   }
 })
 export class LoginComponent implements OnInit {

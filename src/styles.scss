@@ -6,18 +6,35 @@
 @import "assets/styles/variables";
 @import "assets/styles/reset";
 
+.page-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__content {
+    overflow: auto;
+    max-height: 100%;
+    width: 100%;
+    padding: 20px;
+
+    &__center {
+      margin: auto;
+      max-width: $page-width;
+    }
+  }
+}
+
 .shadow {
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%),
   0 1px 1px 0 rgb(0 0 0 / 14%),
   0 1px 3px 0 rgb(0 0 0 / 12%);
 }
 
+
 form {
   .p-card {
-    @media screen and (max-width: $size-mobile-breakpoint) {
-      width: auto;
-    }
-
     .p-card-content {
       padding-top: 1rem !important;
       padding-bottom: 0 !important;
@@ -37,30 +54,14 @@ form {
   }
 }
 
-p-table {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-
-  ::ng-deep {
-    .p-datatable {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-
-      &-wrapper {
-        flex-grow: 1;
-      }
-
-      &-tbody > tr > td {
-        vertical-align: middle;
-      }
-    }
-  }
-}
-
 p-inputNumber, p-autoComplete {
   & > span, & > span > input {
     width: 100%;
+  }
+}
+
+.p-accordion-header-link {
+  &:hover, &:active, &:focus {
+    text-decoration: none;
   }
 }

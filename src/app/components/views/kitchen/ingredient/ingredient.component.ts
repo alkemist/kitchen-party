@@ -14,7 +14,7 @@ import {FormComponent} from '../../../../tools/form.component';
   templateUrl: './ingredient.component.html',
   styleUrls: ['./ingredient.component.scss'],
   host: {
-    class: 'flex flex-grow-1 w-full'
+    class: 'page-container'
   }
 })
 export class IngredientComponent extends FormComponent<IngredientModel> implements OnInit {

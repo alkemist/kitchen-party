@@ -6,6 +6,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
+import {RecipeIngredientInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
@@ -17,7 +18,7 @@ import {FormComponent} from '../../../../tools/form.component';
   templateUrl: './recipe.component.html',
   styleUrls: ['./recipe.component.scss'],
   host: {
-    class: 'flex flex-grow-1 w-full'
+    class: 'page-container'
   }
 })
 export class RecipeComponent extends FormComponent<RecipeModel> implements OnInit {
@@ -26,6 +27,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
   ingredients: IngredientModel[] = [];
   recipes: RecipeModel[] = [];
+  private ingredientTranslation: string = 'Ingredient';
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +50,21 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
       nbSlices: new FormControl('', []),
       recipeIngredients: new FormArray([RecipeComponent.createRecipeIngredient()]),
       instructions: new FormArray([RecipeComponent.createInstructionRow()])
+    });
+    this.recipeIngredients.valueChanges.subscribe((recipeIngredients: RecipeIngredientInterface[]) => {
+      recipeIngredients.forEach((recipeIngredient, index) => {
+        if (recipeIngredient.unit) {
+          this.recipeIngredients.at(index).get('measure')?.patchValue('', {emitEvent: false});
+        } else if (recipeIngredient.measure) {
+          this.recipeIngredients.at(index).get('ingredient')?.patchValue('', {emitEvent: false});
+        }
+
+        if (recipeIngredient.ingredient) {
+          this.recipeIngredients.at(index).get('recipe')?.patchValue('', {emitEvent: false});
+        } else if (recipeIngredient.recipe) {
+          this.recipeIngredients.at(index).get('ingredient')?.patchValue('', {emitEvent: false});
+        }
+      });
     });
   }
 
@@ -88,6 +105,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
         }
       }));
     this.translateService.getTranslation('fr').subscribe(() => {
+      this.ingredientTranslation = this.translateService.instant('Ingredient');
       this.recipeTypes = this.recipeTypes.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
@@ -121,15 +139,22 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     this.instructionRows.removeAt(index);
   }
 
-  searchIngredient(event: { query: string }) {
+  searchIngredient(event: { query: string }): void {
     this.ingredientService.search(event.query).then(ingredients => {
       this.ingredients = ingredients;
     });
   }
 
-  searchRecipe(event: { query: string }) {
+  searchRecipe(event: { query: string }): void {
     this.recipeService.search(event.query).then(recipes => {
       this.recipes = recipes;
     });
+  }
+
+  recipeIngredientToString(i: number): string {
+    const recipeIngredientData: RecipeIngredientInterface = this.recipeIngredients.at(i).value;
+    const recipeIngredient = new RecipeIngredientModel(recipeIngredientData);
+    const recipeIngredientString = recipeIngredient.toString();
+    return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
 }

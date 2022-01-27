@@ -1,7 +1,10 @@
 @import "/src/assets/styles/variables";
 
 ::ng-deep .p-toolbar {
-  @media screen and (max-width: $size-mobile-breakpoint) {
+  height: $header-desktop-height;
+
+  @media screen and (max-width: $mobile-breakpoint-width) {
+    height: $header-mobile-height;
     padding: 0.5rem;
   }
 
@@ -12,7 +15,7 @@
   color: var(--text-color);
   font-size: $font-size-m;
 
-  @media screen and (max-width: $size-mobile-breakpoint) {
+  @media screen and (max-width: $mobile-breakpoint-width) {
     font-size: $font-size-s;
   }
 }
