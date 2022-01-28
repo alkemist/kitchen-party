@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {IngredientModel} from '../models/ingredient.model';
 import {recipeConverter, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
 import {slugify} from '../tools/slugify';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
+import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ import {LoggerService} from './logger.service';
 })
 export class RecipeService extends FirestoreService<RecipeModel> {
 
-  constructor(private logger: LoggerService, private store: Store) {
+  constructor(private logger: LoggerService, private store: Store, private ingredientService: IngredientService) {
     super(logger, 'recipe', recipeConverter);
   }
 
@@ -38,15 +38,18 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     });
   }
 
-  getBySlug(slug: string): RecipeModel {
-    return this.store.selectSnapshot<RecipeModel>(state => state.recipes.all.find((recipe: RecipeModel) => {
+  async getBySlug(slug: string): Promise<RecipeModel> {
+    const recipes = await this.getListOrRefresh();
+    return recipes.find((recipe: RecipeModel) => {
       return recipe.slug === slug;
-    }));
+    })!;
   }
 
   async refreshList(): Promise<RecipeModel[]> {
     const recipes = await super.select(orderBy('name'));
-    recipes.forEach(recipe => this.hydrate(recipe));
+    for (const recipe of recipes) {
+      await this.hydrate(recipe);
+    }
     this.store.dispatch(new FillRecipes(recipes));
     return this.getList();
   }
@@ -56,10 +59,11 @@ export class RecipeService extends FirestoreService<RecipeModel> {
       return undefined;
     }
 
-    let recipe = this.getBySlug(slug);
+    let recipe = await this.getBySlug(slug);
     if (!recipe) {
       try {
         recipe = await super.findOneBySlug(slug);
+        await this.hydrate(recipe);
         this.store.dispatch(new AddRecipe(recipe));
         return this.getBySlug(slug);
       } catch (e) {
@@ -73,14 +77,14 @@ export class RecipeService extends FirestoreService<RecipeModel> {
 
   async add(recipe: RecipeModel): Promise<RecipeModel> {
     const recipeStored = await super.addOne(recipe);
-    this.hydrate(recipeStored);
+    await this.hydrate(recipeStored);
     this.store.dispatch(new AddRecipe(recipeStored));
     return this.getBySlug(recipeStored.slug);
   }
 
   async update(recipe: RecipeModel): Promise<RecipeModel> {
     const recipeStored = await super.updateOne(recipe);
-    this.hydrate(recipeStored);
+    await this.hydrate(recipeStored);
     this.store.dispatch(new UpdateRecipe(recipeStored));
     return this.getBySlug(recipeStored.slug);
   }
@@ -94,12 +98,12 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     return await super.exist(name);
   }
 
-  private hydrate(recipe: RecipeModel): void {
-    recipe.recipeIngredients.forEach(recipeIngredient => {
-      recipeIngredient.ingredient = this.store.selectSnapshot<IngredientModel>(state => state.ingredients.all.find((ingredient: IngredientModel) => {
-        return ingredient.id === recipeIngredient.ingredientId;
-      }));
+  private async hydrate(recipe: RecipeModel): Promise<void> {
+    for (const recipeIngredient of recipe.recipeIngredients) {
+      if (recipeIngredient.ingredientId) {
+        recipeIngredient.ingredient = await this.ingredientService.getById(recipeIngredient.ingredientId);
+      }
       delete recipeIngredient.ingredientId;
-    });
+    }
   }
 }

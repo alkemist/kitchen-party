@@ -28,10 +28,18 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     return ingredients;
   }
 
-  getBySlug(slug: string): IngredientModel {
-    return this.store.selectSnapshot<IngredientModel>(state => state.ingredients.all.find((ingredient: IngredientModel) => {
+  async getBySlug(slug: string): Promise<IngredientModel> {
+    const ingredients = await this.getListOrRefresh();
+    return ingredients.find((ingredient: IngredientModel) => {
       return ingredient.slug === slug;
-    }));
+    })!;
+  }
+
+  async getById(id: string): Promise<IngredientModel> {
+    const ingredients = await this.getListOrRefresh();
+    return ingredients.find((ingredient: IngredientModel) => {
+      return ingredient.id === id;
+    })!;
   }
 
   async search(query: string): Promise<IngredientModel[]> {
@@ -54,7 +62,7 @@ export class IngredientService extends FirestoreService<IngredientModel> {
       return undefined;
     }
 
-    let ingredient = this.getBySlug(slug);
+    let ingredient = await this.getBySlug(slug);
     if (!ingredient) {
       try {
         ingredient = await super.findOneBySlug(slug);

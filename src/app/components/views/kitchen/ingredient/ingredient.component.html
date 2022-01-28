@@ -32,7 +32,8 @@
         <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}" class="col-12 mb-2 md:col-4 md:mb-0"
                for="type" translate="">Type</label>
         <div class="col-12 md:col-8">
-          <p-dropdown [autoDisplayFirst]="false" [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
+          <p-dropdown [autoDisplayFirst]="false" [ngClass]="{'p-invalid':type.invalid && (type.dirty || type.touched)}"
+                      [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
                       formControlName="type"
                       inputId="type" optionValue="key"
                       styleClass="inputfield w-full"></p-dropdown>

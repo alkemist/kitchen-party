@@ -1,5 +1,5 @@
 export const slugify = function (str: string) {
-  str = str.replace(/^\s+|\s+$/g, '');
+  str = str.trim().replace(/^\s+|\s+$/g, '');
 
   // Make the string lowercase
   str = str.toLowerCase();

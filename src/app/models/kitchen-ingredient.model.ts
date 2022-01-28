@@ -24,12 +24,12 @@ export class KitchenIngredientModel implements KitchenIngredientInterface {
 
   constructor(kitchenIngredient: KitchenIngredientInterface) {
     this.id = kitchenIngredient.id;
-    this.quantity = kitchenIngredient.quantity || 1;
-    this.measure = kitchenIngredient.measure || '';
+    this.quantity = parseInt(kitchenIngredient.quantity?.toString()!) || 1;
+    this.measure = kitchenIngredient.measure?.trim() || '';
     this.unit = kitchenIngredient.unit || null;
 
-    this.ingredient = kitchenIngredient.ingredient;
     this.ingredientId = kitchenIngredient.ingredientId;
+    this.ingredient = kitchenIngredient.ingredient;
   }
 
   getEquivalentGram(): number {

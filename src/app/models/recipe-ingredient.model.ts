@@ -1,3 +1,6 @@
+import {MeasureUnitEnum} from '../enums/measure-unit.enum';
+import {EnumHelper} from '../tools/enum.helper';
+import {IngredientModel} from './ingredient.model';
 import {KitchenIngredientInterface, KitchenIngredientModel} from './kitchen-ingredient.model';
 import {RecipeModel} from './recipe.model';
 
@@ -6,6 +9,11 @@ export interface RecipeIngredientInterface extends KitchenIngredientInterface {
   isBase: boolean,
   recipe?: RecipeModel,
   recipeId?: string,
+}
+
+export interface RecipeIngredientFormInterface extends RecipeIngredientInterface {
+  unitOrMeasure: MeasureUnitEnum | string;
+  ingredientOrRecipe: IngredientModel | RecipeModel;
 }
 
 export class RecipeIngredientModel extends KitchenIngredientModel implements RecipeIngredientInterface {
@@ -20,13 +28,36 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
 
     this.isMain = recipeIngredient.isMain;
     this.isBase = recipeIngredient.isBase;
-    
+
     this.recipe = recipeIngredient.recipe;
     this.recipeId = recipeIngredient.recipeId;
   }
 
+  static import(recipeIngredientForm: RecipeIngredientFormInterface): RecipeIngredientModel {
+    const recipeIngredient = new RecipeIngredientModel(recipeIngredientForm);
+    const measureUnit = EnumHelper.enumToAssociativArray(MeasureUnitEnum);
+
+    const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
+    if (ingredientOrRecipe instanceof RecipeModel) {
+      recipeIngredient.recipe = ingredientOrRecipe;
+    } else {
+      recipeIngredient.ingredient = ingredientOrRecipe;
+    }
+
+    const unitOrMeasure = recipeIngredientForm.unitOrMeasure.trim();
+    if (typeof measureUnit[unitOrMeasure] !== 'undefined') {
+      recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
+    } else if (unitOrMeasure.length > 0) {
+      recipeIngredient.measure = unitOrMeasure as string;
+    }
+
+    return recipeIngredient;
+  }
+
   override toString(): string {
-    return '';
+    const toString = '';
+
+    return toString;
   }
 }
 

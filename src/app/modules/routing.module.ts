@@ -45,7 +45,7 @@ const routes: Routes = [
     path: 'recipe/:slug',
     component: RecipeComponent,
     resolve: {
-      ingredient: RecipeResolver
+      recipe: RecipeResolver
     },
     canActivate: [LoggedGuard],
     data: {title: 'Recipe'},

@@ -73,11 +73,14 @@
   "Centiliter": "cl",
   "Liter": "l",
   "Tablespoon": "c-à-S",
-  "Teaspoon": "c-à-C,",
+  "Teaspoon": "c-à-C",
   "Quantity": "Quantité",
   "Measure": "Mesure",
   "Unit": "Unité",
   "Main ?": "Principal ?",
   "Base ?": "Base ?",
-  "Description": "Description"
+  "Description": "Description",
+  "Source": "Source",
+  "Instruction is required.": "L'instruction est requis.",
+  "Required.": "Requis."
 }

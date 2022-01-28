@@ -51,7 +51,7 @@ export class RecipeModel implements RecipeInterface {
     this.nbSlices = recipe.nbSlices;
     this.instructions = recipe.instructions || [];
     this.type = recipe.type || null;
-    this.image = recipe.image;
+    this.image = recipe.image || '';
     this.source = recipe.source;
 
     if (recipe.recipeIngredients?.length > 0) {
@@ -101,8 +101,11 @@ export const recipeConverter: FirestoreDataConverter<RecipeModel> = {
       const recipeIngredientField = {...recipeIngredient};
       delete recipeIngredientField.id;
 
-      recipeIngredientField.ingredientId = recipeIngredient.ingredient?.id!;
+      recipeIngredientField.ingredientId = recipeIngredient.ingredient?.id! || '';
       delete recipeIngredientField.ingredient;
+
+      recipeIngredientField.recipeId = recipeIngredient.recipe?.id! || '';
+      delete recipeIngredientField.recipe;
 
       recipeFields.recipeIngredients.push({
         ...recipeIngredientField

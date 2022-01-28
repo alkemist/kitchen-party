@@ -60,6 +60,13 @@ p-inputNumber, p-autoComplete {
   }
 }
 
+.p-inputtext.ng-touched.p-invalid,
+p-autoComplete.ng-touched.ng-invalid input,
+p-inputnumber.ng-touched.p-invalid input,
+p-dropdown.ng-touched.p-invalid > div {
+  border-color: #e97984;
+}
+
 .p-accordion-header-link {
   &:hover, &:active, &:focus {
     text-decoration: none;

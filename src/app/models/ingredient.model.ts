@@ -30,7 +30,7 @@ export class IngredientModel implements IngredientInterface {
 
   constructor(ingredient: IngredientInterface) {
     this.id = ingredient.id;
-    this.name = ingredient.name;
+    this.name = ingredient.name?.trim();
     this.slug = ingredient.slug;
     this.type = ingredient.type;
     this.isLiquid = ingredient.isLiquid || null;

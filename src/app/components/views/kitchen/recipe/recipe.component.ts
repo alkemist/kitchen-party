@@ -1,17 +1,33 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
-import {RecipeIngredientInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
+import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {FormComponent} from '../../../../tools/form.component';
+
+function recipeIngredientFormValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const recipeIngredientForm: RecipeIngredientFormInterface = control.value;
+    const isValid = recipeIngredientForm.quantity || recipeIngredientForm.quantity && recipeIngredientForm.unitOrMeasure;
+    return isValid ? null : {invalid: {value: control.value}};
+  };
+}
 
 @Component({
   selector: 'app-recipe',
@@ -44,27 +60,13 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
         Validators.required
       ]),
       type: new FormControl('', []),
+      source: new FormControl('', []),
       cookingDuration: new FormControl('', []),
       preparationDuration: new FormControl('', []),
       waitingDuration: new FormControl('', []),
       nbSlices: new FormControl('', []),
-      recipeIngredients: new FormArray([RecipeComponent.createRecipeIngredient()]),
-      instructions: new FormArray([RecipeComponent.createInstructionRow()])
-    });
-    this.recipeIngredients.valueChanges.subscribe((recipeIngredients: RecipeIngredientInterface[]) => {
-      recipeIngredients.forEach((recipeIngredient, index) => {
-        if (recipeIngredient.unit) {
-          this.recipeIngredients.at(index).get('measure')?.patchValue('', {emitEvent: false});
-        } else if (recipeIngredient.measure) {
-          this.recipeIngredients.at(index).get('ingredient')?.patchValue('', {emitEvent: false});
-        }
-
-        if (recipeIngredient.ingredient) {
-          this.recipeIngredients.at(index).get('recipe')?.patchValue('', {emitEvent: false});
-        } else if (recipeIngredient.recipe) {
-          this.recipeIngredients.at(index).get('ingredient')?.patchValue('', {emitEvent: false});
-        }
-      });
+      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()]),
+      instructions: new FormArray([RecipeComponent.createInstructionRow()], [Validators.required])
     });
   }
 
@@ -73,7 +75,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
   }
 
   get recipeIngredients(): FormArray {
-    return this.form.get('recipeIngredients') as FormArray;
+    return this.form.get('recipeIngredientForms') as FormArray;
   }
 
   get instructionRows(): FormArray {
@@ -82,18 +84,16 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
 
   private static createRecipeIngredient(): FormGroup {
     return new FormGroup({
-      ingredient: new FormControl('', []),
-      recipe: new FormControl('', []),
       quantity: new FormControl('', []),
-      measure: new FormControl('', []),
-      unit: new FormControl('', []),
-      main: new FormControl('', []),
-      base: new FormControl('', []),
-    });
+      unitOrMeasure: new FormControl('', []),
+      ingredientOrRecipe: new FormControl('', [Validators.required]),
+      isMain: new FormControl('', []),
+      isBase: new FormControl('', []),
+    }, [recipeIngredientFormValidator()]);
   }
 
   private static createInstructionRow(): FormControl {
-    return new FormControl('', []);
+    return new FormControl('', [Validators.required]);
   }
 
   ngOnInit(): void {
@@ -102,6 +102,11 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
         if (data && data['recipe']) {
           this.document = data['recipe'];
           this.form.patchValue(this.document);
+          this.document.recipeIngredients.forEach((recipeIngredient, i) => {
+            const recipeIngredientForm = {} as RecipeIngredientFormInterface;
+            recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ?? recipeIngredient.ingredient!;
+            this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
+          });
         }
       }));
     this.translateService.getTranslation('fr').subscribe(() => {
@@ -115,12 +120,6 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
       });
       this.measureUnits.unshift({key: '', label: this.translateService.instant('None')});
     });
-  }
-
-  async handleSubmit(): Promise<void> {
-    const formRecipe = new RecipeModel(this.form.value);
-    console.log('handleSubmit', formRecipe);
-    //await this.preSubmit(formRecipe);
   }
 
   addRecipeIngredient(): void {
@@ -152,9 +151,18 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
   }
 
   recipeIngredientToString(i: number): string {
-    const recipeIngredientData: RecipeIngredientInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = new RecipeIngredientModel(recipeIngredientData);
+    const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
+    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData);
     const recipeIngredientString = recipeIngredient.toString();
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
+  }
+
+  async handleSubmit(): Promise<void> {
+    const formRecipe = new RecipeModel(this.form.value);
+    for (let i = 0; i < this.recipeIngredients.length; i++) {
+      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value));
+    }
+
+    await this.preSubmit(formRecipe);
   }
 }
