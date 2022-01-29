@@ -102,10 +102,22 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
         if (data && data['recipe']) {
           this.document = data['recipe'];
           this.form.patchValue(this.document);
+          this.recipeIngredients.removeAt(0);
+          this.instructionRows.removeAt(0);
+
           this.document.recipeIngredients.forEach((recipeIngredient, i) => {
-            const recipeIngredientForm = {} as RecipeIngredientFormInterface;
-            recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ?? recipeIngredient.ingredient!;
+            this.addRecipeIngredient();
+
+            const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
+            recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
+            recipeIngredientForm.unitOrMeasure = recipeIngredient.measure ? recipeIngredient.measure : recipeIngredient.unit!;
+
             this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
+          });
+          this.document.instructions?.forEach((instruction, i) => {
+            this.addInstructionRow();
+
+            this.instructionRows.at(i).patchValue(instruction);
           });
         }
       }));
