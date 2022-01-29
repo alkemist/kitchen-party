@@ -165,7 +165,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
     const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData);
-    const recipeIngredientString = recipeIngredient.toString();
+    const recipeIngredientString = recipeIngredient.toString(this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
 

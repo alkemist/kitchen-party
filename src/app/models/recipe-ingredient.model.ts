@@ -54,10 +54,25 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
     return recipeIngredient;
   }
 
-  override toString(): string {
-    const toString = '';
+  override toString(measureUnits: { key: string, label: string }[]): string {
+    const strArray = [];
 
-    return toString;
+    if (this.quantity) {
+      strArray.push(this.quantity);
+    }
+    if (this.measure) {
+      strArray.push(this.measure);
+    } else if (this.unit) {
+      strArray.push(measureUnits.find(measure => measure.key === this.unit)?.label);
+    }
+
+    if (this.recipe) {
+      strArray.push(this.recipe.name);
+    } else if (this.ingredient) {
+      strArray.push(this.ingredient.name);
+    }
+
+    return strArray.join(' ');
   }
 }
 
