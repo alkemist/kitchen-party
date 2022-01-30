@@ -148,7 +148,8 @@
                   <div class="field col-12 md:col-4">
                     <label
                       [for]="'quantity' + i"
-                      [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}" translate="">Quantity</label>
+                      [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
+                      translate="">Quantity</label>
                     <p-inputNumber
                       [inputId]="'quantity' + i"
                       [min]="0"
@@ -167,7 +168,8 @@
                   <div class="field col-12 md:col-4">
                     <label
                       [for]="'unit' + i"
-                      [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}" translate="">Unit</label>
+                      [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
+                      translate="">Unit</label>
                     <p-dropdown
                       [autoDisplayFirst]="false"
                       [editable]="true"
@@ -190,9 +192,9 @@
                       [for]="'ingredient' + i"
                       [ngClass]="{'p-error':recipeIngredients.at(i).get('ingredientOrRecipe')?.invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
                       translate="">Ingredient</label>
-                    <p-autoComplete (completeMethod)="searchIngredient($event)" [dropdown]="true"
+                    <p-autoComplete (completeMethod)="searchIngredientOrRecipe($event)" [dropdown]="true"
                                     [forceSelection]="true"
-                                    [suggestions]="ingredients" class="inputfield w-full" dataKey="id"
+                                    [suggestions]="ingredientsOrRecipes" class="inputfield w-full" dataKey="id"
                                     field="name" formControlName="ingredientOrRecipe">
                     </p-autoComplete>
                     <div

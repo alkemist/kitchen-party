@@ -36,8 +36,9 @@ export class IngredientModel implements IngredientInterface {
     this.isLiquid = ingredient.isLiquid || null;
   }
 
-  get typeName(): string {
-    return this.type.charAt(0).toUpperCase() + this.type.slice(1);
+  get typeName(): IngredientTypeEnum {
+    // @ts-ignore
+    return IngredientTypeEnum[this.type];
   }
 
   hydrate(ingredient: IngredientInterface) {

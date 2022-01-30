@@ -44,11 +44,13 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
       recipeIngredient.ingredient = ingredientOrRecipe;
     }
 
-    const unitOrMeasure = recipeIngredientForm.unitOrMeasure.trim();
-    if (typeof measureUnit[unitOrMeasure] !== 'undefined') {
-      recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
-    } else if (unitOrMeasure.length > 0) {
-      recipeIngredient.measure = unitOrMeasure as string;
+    if (recipeIngredientForm.unitOrMeasure) {
+      const unitOrMeasure = recipeIngredientForm.unitOrMeasure.trim();
+      if (typeof measureUnit[unitOrMeasure] !== 'undefined') {
+        recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
+      } else if (unitOrMeasure.length > 0) {
+        recipeIngredient.measure = unitOrMeasure as string;
+      }
     }
 
     return recipeIngredient;

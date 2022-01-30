@@ -61,9 +61,8 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get typeName(): string {
-    if (!this.type) return '';
-
-    return this.type.charAt(0).toUpperCase() + this.type.slice(1);
+    // @ts-ignore
+    return RecipeTypeEnum[this.type];
   }
 
   isVege(): boolean {

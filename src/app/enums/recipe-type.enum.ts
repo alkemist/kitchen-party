@@ -7,5 +7,6 @@ export enum RecipeTypeEnum {
   quiche = 'Quiche', // Quiche
   pizza = 'Pizza', // Pizza
   gratin = 'Gratin', // Gratin
+  mash = 'Mash', // Purée
   ingredient = 'Ingredient' // Ingrédient
 }

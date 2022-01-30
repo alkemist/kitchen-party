@@ -46,6 +46,7 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     const regexName = new RegExp(query, 'gi');
     const regexSlug = new RegExp(slugify(query), 'gi');
     const ingredients = await this.getListOrRefresh();
+    const recipes = await this.getListOrRefresh();
     return ingredients.filter((ingredient: IngredientModel) => {
       return ingredient.name.search(regexName) > -1 || ingredient.slug.search(regexSlug) > -1;
     });

@@ -1,3 +1,4 @@
+import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {
   AbstractControl,
@@ -18,13 +19,15 @@ import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
+import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {FormComponent} from '../../../../tools/form.component';
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const recipeIngredientForm: RecipeIngredientFormInterface = control.value;
-    const isValid = recipeIngredientForm.quantity || recipeIngredientForm.quantity && recipeIngredientForm.unitOrMeasure;
+    const isValid = !recipeIngredientForm.unitOrMeasure
+      || recipeIngredientForm.quantity && recipeIngredientForm.unitOrMeasure;
     return isValid ? null : {invalid: {value: control.value}};
   };
 }
@@ -41,7 +44,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
   override document = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
-  ingredients: IngredientModel[] = [];
+  ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   recipes: RecipeModel[] = [];
   private ingredientTranslation: string = 'Ingredient';
 
@@ -49,10 +52,12 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private ingredientService: IngredientService,
+    private searchService: SearchService,
     routerService: Router,
     translateService: TranslateService,
     confirmationService: ConfirmationService,
     messageService: MessageService,
+    private http: HttpClient
   ) {
     super('recipe', recipeService, routerService, confirmationService, translateService, messageService);
     this.form = new FormGroup({
@@ -101,6 +106,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
       (data => {
         if (data && data['recipe']) {
           this.document = data['recipe'];
+          console.log(this.document);
           this.form.patchValue(this.document);
           this.recipeIngredients.removeAt(0);
           this.instructionRows.removeAt(0);
@@ -132,6 +138,19 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
       });
       this.measureUnits.unshift({key: '', label: this.translateService.instant('None')});
     });
+
+    /*this.ingredientService.refreshList().then(async (ingredients) => {
+      this.http.get('/assets/kitchen.json').subscribe(async (kitchen: any) => {
+        console.log('-- Kitchen', kitchen);
+      });
+    });*/
+    /*this.recipeService.refreshList().then(async (recipes) => {
+      for (const recipe of recipes) {
+        for (const recipeIngredient of recipe.recipeIngredients) {
+
+        }
+      }
+    });*/
   }
 
   addRecipeIngredient(): void {
@@ -150,15 +169,9 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     this.instructionRows.removeAt(index);
   }
 
-  searchIngredient(event: { query: string }): void {
-    this.ingredientService.search(event.query).then(ingredients => {
-      this.ingredients = ingredients;
-    });
-  }
-
-  searchRecipe(event: { query: string }): void {
-    this.recipeService.search(event.query).then(recipes => {
-      this.recipes = recipes;
+  searchIngredientOrRecipe(event: { query: string }): void {
+    this.searchService.searchIngredients(event.query).then(ingredientsOrRecipes => {
+      this.ingredientsOrRecipes = ingredientsOrRecipes;
     });
   }
 

@@ -5,7 +5,7 @@ import {IngredientModel} from './ingredient.model';
 
 export interface KitchenIngredientInterface {
   id?: string,
-  quantity?: number,
+  quantity?: number | null,
   measure?: string,
   unit?: MeasureUnitEnum | null,
 
@@ -15,7 +15,7 @@ export interface KitchenIngredientInterface {
 
 export class KitchenIngredientModel implements KitchenIngredientInterface {
   id?: string;
-  quantity: number;
+  quantity: number | null;
   measure: string;
   unit: MeasureUnitEnum | null;
 
@@ -24,7 +24,7 @@ export class KitchenIngredientModel implements KitchenIngredientInterface {
 
   constructor(kitchenIngredient: KitchenIngredientInterface) {
     this.id = kitchenIngredient.id;
-    this.quantity = parseInt(kitchenIngredient.quantity?.toString()!) || 1;
+    this.quantity = parseInt(kitchenIngredient.quantity?.toString()!) || null;
     this.measure = kitchenIngredient.measure?.trim() || '';
     this.unit = kitchenIngredient.unit || null;
 

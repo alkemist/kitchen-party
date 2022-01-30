@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
+import {RecipeTypeEnum} from '../enums/recipe-type.enum';
 import {recipeConverter, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
 import {slugify} from '../tools/slugify';
@@ -19,6 +20,10 @@ export class RecipeService extends FirestoreService<RecipeModel> {
 
   getList(): RecipeModel[] {
     return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
+  }
+
+  getRecipesHasIngredient(): RecipeModel[] {
+    return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all.filter((recipe: RecipeModel) => recipe.type === RecipeTypeEnum.ingredient));
   }
 
   async getListOrRefresh(): Promise<RecipeModel[]> {
