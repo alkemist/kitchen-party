@@ -21,7 +21,6 @@ import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
-import {FormComponent} from '../../../../tools/form.component';
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -40,12 +39,15 @@ function recipeIngredientFormValidator(): ValidatorFn {
     class: 'page-container'
   }
 })
-export class RecipeComponent extends FormComponent<RecipeModel> implements OnInit {
-  override document = new RecipeModel({} as RecipeInterface);
+export class RecipeComponent implements OnInit {
+  recipe = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   recipes: RecipeModel[] = [];
+  form: FormGroup = new FormGroup({});
+  loading = true;
+  error: string = '';
   private ingredientTranslation: string = 'Ingredient';
 
   constructor(
@@ -53,13 +55,12 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     private recipeService: RecipeService,
     private ingredientService: IngredientService,
     private searchService: SearchService,
-    routerService: Router,
-    translateService: TranslateService,
-    confirmationService: ConfirmationService,
-    messageService: MessageService,
+    private routerService: Router,
+    private translateService: TranslateService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     private http: HttpClient
   ) {
-    super('recipe', recipeService, routerService, confirmationService, translateService, messageService);
     this.form = new FormGroup({
       name: new FormControl('', [
         Validators.required
@@ -73,6 +74,10 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
       recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()]),
       instructions: new FormArray([RecipeComponent.createInstructionRow()], [Validators.required])
     });
+  }
+
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
   }
 
   get type(): FormControl {
@@ -105,13 +110,13 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     this.route.data.subscribe(
       (data => {
         if (data && data['recipe']) {
-          this.document = data['recipe'];
-          console.log(this.document);
-          this.form.patchValue(this.document);
+          this.recipe = data['recipe'];
+          console.log(this.recipe);
+          this.form.patchValue(this.recipe);
           this.recipeIngredients.removeAt(0);
           this.instructionRows.removeAt(0);
 
-          this.document.recipeIngredients.forEach((recipeIngredient, i) => {
+          this.recipe.recipeIngredients.forEach((recipeIngredient, i) => {
             this.addRecipeIngredient();
 
             const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
@@ -120,7 +125,7 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
 
             this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
           });
-          this.document.instructions?.forEach((instruction, i) => {
+          this.recipe.instructions?.forEach((instruction, i) => {
             this.addInstructionRow();
 
             this.instructionRows.at(i).patchValue(instruction);
@@ -189,5 +194,59 @@ export class RecipeComponent extends FormComponent<RecipeModel> implements OnIni
     }
 
     await this.preSubmit(formRecipe);
+  }
+
+  async preSubmit(formDocument: RecipeModel): Promise<void> {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      if (this.recipe.id) {
+        formDocument.id = this.recipe.id;
+      }
+
+      const checkExist = !this.recipe.id || formDocument.name !== this.recipe.name;
+
+      if (checkExist) {
+        this.recipeService.exist(formDocument.name!).then(async exist => {
+          if (exist) {
+            return this.name.setErrors({'exist': true});
+          }
+          await this.submit(formDocument);
+        });
+      } else {
+        await this.submit(formDocument);
+      }
+    }
+  }
+
+  async submit(localDocument: RecipeModel): Promise<void> {
+    if (this.recipe.id) {
+      this.recipe = await this.recipeService.update(localDocument);
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translateService.instant(`Updated recipe`)
+      });
+    } else {
+      this.recipe = await this.recipeService.add(localDocument);
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translateService.instant(`Added recipe`)
+      });
+    }
+    await this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
+  }
+
+  async remove(): Promise<void> {
+    this.confirmationService.confirm({
+      message: this.translateService.instant('Are you sure you want to delete it ?'),
+      accept: async () => {
+        await this.recipeService.remove(this.recipe);
+        await this.routerService.navigate(['/', 'recipe' + 's']);
+        this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Deleted recipe`)
+        });
+      }
+    });
   }
 }

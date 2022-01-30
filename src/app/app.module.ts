@@ -4,10 +4,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RippleModule} from 'primeng/ripple';
 import {AppComponent} from './app.component';
+import {FormIngredientComponent} from './components/forms/ingredient/ingredient.component';
 import {HeaderComponent} from './components/layouts/header/header.component';
 import {IndexComponent} from './components/views/kitchen/index/index.component';
 import {IngredientComponent} from './components/views/kitchen/ingredient/ingredient.component';
 import {IngredientsComponent} from './components/views/kitchen/ingredients/ingredients.component';
+import {RecipeComponent} from './components/views/kitchen/recipe/recipe.component';
+import {RecipesComponent} from './components/views/kitchen/recipes/recipes.component';
 import {LoginComponent} from './components/views/user/login/login.component';
 import './modules/app.database';
 
@@ -16,8 +19,6 @@ import {ServicesModule} from './modules/services.module';
 import {StoringModule} from './modules/storing.module';
 import {TranslatingModule} from './modules/translating.module';
 import {UiModule} from './modules/ui.module';
-import { RecipesComponent } from './components/views/kitchen/recipes/recipes.component';
-import { RecipeComponent } from './components/views/kitchen/recipe/recipe.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { RecipeComponent } from './components/views/kitchen/recipe/recipe.compon
     IndexComponent,
     IngredientComponent,
     RecipesComponent,
-    RecipeComponent
+    RecipeComponent,
+    FormIngredientComponent
   ],
   imports: [
     BrowserModule,

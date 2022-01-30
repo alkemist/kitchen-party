@@ -6,7 +6,7 @@
           <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
              pRipple
              type="button"></a>
-          <h5 class="text-center flex-grow-1">{{ document.name ?? ('New recipe' | translate) }}</h5>
+          <h5 class="text-center flex-grow-1">{{ recipe.name ?? ('New recipe' | translate) }}</h5>
         </div>
       </ng-template>
 
@@ -232,12 +232,12 @@
 
       <ng-template pTemplate="footer">
         <div class="flex flex-row">
-          <button (click)="remove(document)" *ngIf="document.id" [label]="('Delete' | translate)"
+          <button (click)="remove()" *ngIf="recipe.id" [label]="('Delete' | translate)"
                   class="p-button-danger"
                   icon="pi pi-trash" pButton pRipple
                   type="button"></button>
           <div class="flex-grow-1"></div>
-          <button [label]="(document.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
+          <button [label]="(recipe.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
                   type="submit"></button>
         </div>
       </ng-template>

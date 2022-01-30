@@ -7,7 +7,6 @@ import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
 import {IngredientInterface, IngredientModel} from '../../../../models/ingredient.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
-import {FormComponent} from '../../../../tools/form.component';
 
 @Component({
   selector: 'app-ingredient',
@@ -17,19 +16,22 @@ import {FormComponent} from '../../../../tools/form.component';
     class: 'page-container'
   }
 })
-export class IngredientComponent extends FormComponent<IngredientModel> implements OnInit {
-  override document = new IngredientModel({} as IngredientInterface);
+export class IngredientComponent implements OnInit {
+  ingredient = new IngredientModel({} as IngredientInterface);
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
+
+  form: FormGroup = new FormGroup({});
+  loading = true;
+  error: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private ingredientService: IngredientService,
-    routerService: Router,
-    translateService: TranslateService,
-    confirmationService: ConfirmationService,
-    messageService: MessageService,
+    private routerService: Router,
+    private translateService: TranslateService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
   ) {
-    super('ingredient', ingredientService, routerService, confirmationService, translateService, messageService);
     this.form = new FormGroup({
       name: new FormControl('', [
         Validators.required
@@ -40,6 +42,10 @@ export class IngredientComponent extends FormComponent<IngredientModel> implemen
       ]),
       isLiquid: new FormControl('', []),
     });
+  }
+
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
   }
 
   get type(): FormControl {
@@ -54,8 +60,8 @@ export class IngredientComponent extends FormComponent<IngredientModel> implemen
     this.route.data.subscribe(
       (data => {
         if (data && data['ingredient']) {
-          this.document = data['ingredient'];
-          this.form.patchValue(this.document);
+          this.ingredient = data['ingredient'];
+          this.form.patchValue(this.ingredient);
         }
       }));
     this.translateService.getTranslation('fr').subscribe(() => {
@@ -68,5 +74,59 @@ export class IngredientComponent extends FormComponent<IngredientModel> implemen
   async handleSubmit(): Promise<void> {
     const formIngredient = new IngredientModel(this.form.value);
     await this.preSubmit(formIngredient);
+  }
+
+  async preSubmit(formDocument: IngredientModel): Promise<void> {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      if (this.ingredient.id) {
+        formDocument.id = this.ingredient.id;
+      }
+
+      const checkExist = !this.ingredient.id || formDocument.name !== this.ingredient.name;
+
+      if (checkExist) {
+        this.ingredientService.exist(formDocument.name!).then(async exist => {
+          if (exist) {
+            return this.name.setErrors({'exist': true});
+          }
+          await this.submit(formDocument);
+        });
+      } else {
+        await this.submit(formDocument);
+      }
+    }
+  }
+
+  async submit(localDocument: IngredientModel): Promise<void> {
+    if (this.ingredient.id) {
+      this.ingredient = await this.ingredientService.update(localDocument);
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translateService.instant(`Updated ingredient`)
+      });
+    } else {
+      this.ingredient = await this.ingredientService.add(localDocument);
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translateService.instant(`Added ingredient`)
+      });
+    }
+    await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
+  }
+
+  async remove(): Promise<void> {
+    this.confirmationService.confirm({
+      message: this.translateService.instant('Are you sure you want to delete it ?'),
+      accept: async () => {
+        await this.ingredientService.remove(this.ingredient);
+        await this.routerService.navigate(['/', 'ingredient' + 's']);
+        this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Deleted ingredient`)
+        });
+      }
+    });
   }
 }
