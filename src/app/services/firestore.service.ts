@@ -47,6 +47,11 @@ export class TooManyRequestError extends LoggedError<any> {
   override message = 'Too many request';
 }
 
+export class QuotaExceededError extends LoggedError<any> {
+  override type = 'Database';
+  override message = 'Quota exceeded';
+}
+
 export class OfflineError extends Error {
   override message = 'You are offline';
 }
@@ -89,14 +94,20 @@ export abstract class FirestoreService<T extends DataObject> {
 
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
-    const querySnapshot = await getDocs(q);
     const documents: T[] = [];
-
-    querySnapshot.forEach((doc) => {
-      const document = doc.data();
-      document.id = doc.id;
-      documents.push(document);
-    });
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const document = doc.data();
+        document.id = doc.id;
+        documents.push(document);
+      });
+    } catch (e) {
+      const er = e as Error;
+      if (er.message === 'Quota exceeded.') {
+        this.loggerService.error(new QuotaExceededError());
+      }
+    }
 
     return documents;
   }
