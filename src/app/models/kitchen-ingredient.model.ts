@@ -29,7 +29,9 @@ export class KitchenIngredientModel implements KitchenIngredientInterface {
     this.unit = kitchenIngredient.unit || null;
 
     this.ingredientId = kitchenIngredient.ingredientId;
-    this.ingredient = kitchenIngredient.ingredient;
+    if (kitchenIngredient.ingredient) {
+      this.ingredient = new IngredientModel(kitchenIngredient.ingredient);
+    }
   }
 
   getEquivalentGram(): number {

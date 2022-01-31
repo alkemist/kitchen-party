@@ -15,6 +15,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {PasswordModule} from 'primeng/password';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {TableModule} from 'primeng/table';
+import {TagModule} from 'primeng/tag';
 import {ToastModule} from 'primeng/toast';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
@@ -37,7 +38,8 @@ const modules = [
   AutoCompleteModule,
   InputTextareaModule,
   AccordionModule,
-  DataViewModule
+  DataViewModule,
+  TagModule
 ];
 
 @NgModule({

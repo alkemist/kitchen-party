@@ -19,3 +19,15 @@
     font-size: $font-size-s;
   }
 }
+
+.filters {
+  margin-left: 20px;
+
+  .p-float-label {
+    margin-right: 10px;
+
+    ::ng-deep .p-multiselect-label {
+      min-width: 100px;
+    }
+  }
+}

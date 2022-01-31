@@ -1,5 +1,4 @@
-import {MeasureUnitEnum} from '../enums/measure-unit.enum';
-import {EnumHelper} from '../tools/enum.helper';
+import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
 import {IngredientModel} from './ingredient.model';
 import {KitchenIngredientInterface, KitchenIngredientModel} from './kitchen-ingredient.model';
 import {RecipeModel} from './recipe.model';
@@ -35,7 +34,6 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
 
   static import(recipeIngredientForm: RecipeIngredientFormInterface): RecipeIngredientModel {
     const recipeIngredient = new RecipeIngredientModel(recipeIngredientForm);
-    const measureUnit = EnumHelper.enumToAssociativArray(MeasureUnitEnum);
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     if (ingredientOrRecipe instanceof RecipeModel) {
@@ -46,7 +44,7 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
 
     if (recipeIngredientForm.unitOrMeasure) {
       const unitOrMeasure = recipeIngredientForm.unitOrMeasure.trim();
-      if (typeof measureUnit[unitOrMeasure] !== 'undefined') {
+      if (typeof MeasureUnits[unitOrMeasure] !== 'undefined') {
         recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
       } else if (unitOrMeasure.length > 0) {
         recipeIngredient.measure = unitOrMeasure as string;
@@ -56,9 +54,8 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
     return recipeIngredient;
   }
 
-  override toString(measureUnits: { key: string, label: string }[]): string {
+  quantityDescription(measureUnits: { key: string, label: string }[]) {
     const strArray = [];
-
     if (this.quantity) {
       strArray.push(this.quantity);
     }
@@ -66,6 +63,15 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
       strArray.push(this.measure);
     } else if (this.unit) {
       strArray.push(measureUnits.find(measure => measure.key === this.unit)?.label);
+    }
+    return strArray.join(' ');
+  }
+
+  override toString(measureUnits: { key: string, label: string }[]): string {
+    const strArray = [];
+    const quantityDescription = this.quantityDescription(measureUnits);
+    if (quantityDescription) {
+      strArray.push(quantityDescription);
     }
 
     if (this.recipe) {

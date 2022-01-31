@@ -1,10 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import "assets/styles/reset";
 @import 'primeng/resources/primeng.min.css';
 @import 'primeng/resources/themes/lara-dark-blue/theme.css';
 @import 'primeicons/primeicons.css';
 @import 'primeflex/primeflex.min.css';
+@import '~material-icons/iconfont/material-icons.css';
 @import "assets/styles/variables";
-@import "assets/styles/reset";
 
 .page-container {
   display: flex;

@@ -4,7 +4,6 @@ import {orderBy} from 'firebase/firestore';
 import {RecipeTypeEnum} from '../enums/recipe-type.enum';
 import {recipeConverter, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
-import {slugify} from '../tools/slugify';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
@@ -19,7 +18,8 @@ export class RecipeService extends FirestoreService<RecipeModel> {
   }
 
   getList(): RecipeModel[] {
-    return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
+    const recipes = this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
+    return recipes.map(recipe => new RecipeModel(recipe));
   }
 
   getRecipesHasIngredient(): RecipeModel[] {
@@ -35,19 +35,18 @@ export class RecipeService extends FirestoreService<RecipeModel> {
   }
 
   async search(query: string): Promise<RecipeModel[]> {
-    const regexName = new RegExp(query, 'gi');
-    const regexSlug = new RegExp(slugify(query), 'gi');
     const recipes = await this.getListOrRefresh();
     return recipes.filter((recipe: RecipeModel) => {
-      return recipe.name.search(regexName) > -1 || recipe.slug.search(regexSlug) > -1;
+      return recipe.nameContain(query);
     });
   }
 
   async getBySlug(slug: string): Promise<RecipeModel> {
     const recipes = await this.getListOrRefresh();
-    return recipes.find((recipe: RecipeModel) => {
+    const recipe = recipes.find((recipe: RecipeModel) => {
       return recipe.slug === slug;
     })!;
+    return new RecipeModel(recipe);
   }
 
   async refreshList(): Promise<RecipeModel[]> {

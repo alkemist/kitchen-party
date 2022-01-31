@@ -1,0 +1,49 @@
+<div class="page-container__content h-full">
+  <div class="recipes h-full flex flex-row align-items-center justify-content-center flex-wrap">
+    <div *ngFor="let recipe of filteredRecipes" class="recipe">
+      <div class="media">
+        <div *ngIf="recipe.image"
+             [style.background-image]="recipe.image ? 'url(' + recipe.imagePath + ')' : ''"
+             class="center-cropped"><img [src]="recipe.image ? recipe.imagePath : ''"/></div>
+      </div>
+      <div class="informations">
+        <h5 class="text-center">{{ recipe.name }}</h5>
+        <div class="details grid">
+          <div class="col-fixed flex align-items-center" style="width:80px">
+            <p-tag [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
+          </div>
+          <div class="col info flex align-items-center">
+            <i *ngIf="recipe.preparationDuration" class="material-icons">av_timer</i>
+            {{ recipe.preparationDuration }}
+          </div>
+          <div class="col flex align-items-center">
+            <i *ngIf="recipe.cookingDuration" class="material-icons">microwave</i>
+            {{ recipe.cookingDuration }}
+          </div>
+          <div class="col flex align-items-center">
+            <i *ngIf="recipe.waitingDuration" class="material-icons">snooze</i>
+            {{ recipe.waitingDuration }}
+          </div>
+          <div class="col flex align-items-center">
+            <i *ngIf="recipe.nbSlices" class="material-icons">local_pizza</i>
+            {{ recipe.nbSlices }}
+          </div>
+          <div class="col flex align-items-center">
+            <i class="material-icons">inventory</i>
+            {{ recipe.recipeIngredients.length }}
+          </div>
+          <div class="col" style="width:100px">
+            <a [routerLink]="['/', recipe.slug]" class="p-button-rounded" icon="pi pi-eye" pButton
+               pRipple></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="loading">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    </div>
+    <div *ngIf="!loading && filteredRecipes.length === 0">
+      {{ 'No recipes found.' | translate }}
+    </div>
+  </div>
+</div>

@@ -7,7 +7,7 @@ import {RecipeService} from '../../../../services/recipe.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 
 @Component({
-  selector: 'app-recipes',
+  selector: 'app-back-recipes',
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.scss'],
   host: {

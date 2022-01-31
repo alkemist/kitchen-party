@@ -1,7 +1,8 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
-import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
+import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
 import {DataObject} from '../services/firestore.service';
+import {slugify} from '../tools/slugify';
 import {RecipeModel} from './recipe.model';
 
 
@@ -18,13 +19,21 @@ export interface IngredientInterface extends DataObject {
 }
 
 export class IngredientModel implements IngredientInterface {
+  static saltyNames = [
+    'ail', 'herbes de provence', 'noix de muscade', 'curry', 'cumin',
+    'moutarde', 'mayonnaise',
+    'fromage râpé', 'parmesan',
+    'aubergine', 'salade', 'tomate',
+    'sauce soja salé', 'pomme de terre', 'patate douce'
+  ];
+  static sweetNames = [
+    'fraise', 'sucre vanillé', 'chocolat', 'framboise', 'sucre glace', 'spéculoos'
+  ];
   id?: string;
   name: string;
   slug: string;
-
   type: IngredientTypeEnum;
   isLiquid: boolean | null;
-
   recipeId?: string;
   recipe?: RecipeModel;
 
@@ -36,9 +45,57 @@ export class IngredientModel implements IngredientInterface {
     this.isLiquid = ingredient.isLiquid || null;
   }
 
-  get typeName(): IngredientTypeEnum {
-    // @ts-ignore
-    return IngredientTypeEnum[this.type];
+  get typeName(): string {
+    return IngredientTypes[this.type];
+  }
+
+  get typeIcon(): string {
+    if (IngredientTypes[this.type] === IngredientTypeEnum.meats) {
+      return 'goat';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods) {
+      return 'directions_boat';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms) {
+      return 'local_florist';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.cereals_legumines) {
+      return 'grass';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.animal_fats) {
+      return 'opacity';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.vegetable_fats) {
+      return 'opacity';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.yeasts) {
+      return 'bubble_chart';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.aromatic_herbs) {
+      return 'eco';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.spices) {
+      return 'bolt';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.sugars) {
+      return 'view_comfortable';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.salts) {
+      return 'grain';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.alcohols) {
+      return 'liquor';
+    }
+    if (IngredientTypes[this.type] === IngredientTypeEnum.water) {
+      return 'local_drink';
+    }
+    return '';
+  }
+
+  nameContain(search: string): boolean {
+    const regexName = new RegExp(search, 'gi');
+    const regexSlug = new RegExp(slugify(search), 'gi');
+    return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
   }
 
   hydrate(ingredient: IngredientInterface) {
@@ -49,26 +106,44 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isVege(): boolean {
-    return false;
+    return !this.isMeat() && !this.isFish();
   }
 
   isVegan(): boolean {
-    return false;
+    return this.isVege() && IngredientTypes[this.type] !== IngredientTypeEnum.animal_fats;
   }
 
   isMeat(): boolean {
-    return false;
+    return IngredientTypes[this.type] === IngredientTypeEnum.meats;
   }
 
   isFish(): boolean {
-    return false;
+    return IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods;
   }
 
   isSweet(): boolean {
+    const name = this.name.toLowerCase();
+
+    if (IngredientModel.sweetNames.includes(this.name)) {
+      return true;
+    }
+
     return false;
   }
 
   isSalty(): boolean {
+    const name = this.name.toLowerCase();
+    const regex = new RegExp('bouillon .*', 'gi');
+
+    if (IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods
+      || IngredientTypes[this.type] === IngredientTypeEnum.meats) {
+      return true;
+    } else if (IngredientModel.saltyNames.includes(this.name)) {
+      return true;
+    } else if (regex.test(this.name)) {
+      return true;
+    }
+
     return false;
   }
 }

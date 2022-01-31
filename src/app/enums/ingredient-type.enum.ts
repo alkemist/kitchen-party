@@ -1,3 +1,5 @@
+import {EnumHelper} from '../tools/enum.helper';
+
 export enum IngredientTypeEnum {
   meats = 'Meats', // Viandes
   fishes_seafoods = 'Fishes and seafoods', // Poissons et fruits de mer
@@ -13,3 +15,5 @@ export enum IngredientTypeEnum {
   alcohols = 'Alcohols', // Alcools
   water = 'Water', // Eau
 }
+
+export const IngredientTypes = EnumHelper.enumToAssociativArray(IngredientTypeEnum);

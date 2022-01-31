@@ -1,3 +1,5 @@
+import {EnumHelper} from '../tools/enum.helper';
+
 export enum MeasureUnitEnum {
   gram = 'Gram', // g
   kilogram = 'Kilogram', // kg
@@ -7,3 +9,5 @@ export enum MeasureUnitEnum {
   tablespoon = 'Tablespoon', // c-à-s
   teaspoon = 'Teaspoon', // c-à-c
 }
+
+export const MeasureUnits = EnumHelper.enumToAssociativArray(MeasureUnitEnum);

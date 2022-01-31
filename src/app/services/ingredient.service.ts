@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {ingredientConverter, IngredientModel} from '../models/ingredient.model';
+import {ingredientConverter, IngredientInterface, IngredientModel} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from '../store/ingredient.action';
-import {slugify} from '../tools/slugify';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
 
@@ -17,7 +16,8 @@ export class IngredientService extends FirestoreService<IngredientModel> {
   }
 
   getList(): IngredientModel[] {
-    return this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
+    const ingredients = this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
+    return ingredients.map(ingredient => new IngredientModel(ingredient));
   }
 
   async getListOrRefresh(): Promise<IngredientModel[]> {
@@ -30,9 +30,10 @@ export class IngredientService extends FirestoreService<IngredientModel> {
 
   async getBySlug(slug: string): Promise<IngredientModel> {
     const ingredients = await this.getListOrRefresh();
-    return ingredients.find((ingredient: IngredientModel) => {
+    const ingredient = ingredients.find((ingredient: IngredientInterface) => {
       return ingredient.slug === slug;
     })!;
+    return new IngredientModel(ingredient);
   }
 
   async getById(id: string): Promise<IngredientModel> {
@@ -43,12 +44,9 @@ export class IngredientService extends FirestoreService<IngredientModel> {
   }
 
   async search(query: string): Promise<IngredientModel[]> {
-    const regexName = new RegExp(query, 'gi');
-    const regexSlug = new RegExp(slugify(query), 'gi');
     const ingredients = await this.getListOrRefresh();
-    const recipes = await this.getListOrRefresh();
     return ingredients.filter((ingredient: IngredientModel) => {
-      return ingredient.name.search(regexName) > -1 || ingredient.slug.search(regexSlug) > -1;
+      return ingredient.nameContain(query);
     });
   }
 

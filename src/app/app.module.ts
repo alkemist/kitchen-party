@@ -6,11 +6,12 @@ import {RippleModule} from 'primeng/ripple';
 import {AppComponent} from './app.component';
 import {FormIngredientComponent} from './components/forms/ingredient/ingredient.component';
 import {HeaderComponent} from './components/layouts/header/header.component';
-import {IndexComponent} from './components/views/kitchen/index/index.component';
-import {IngredientComponent} from './components/views/kitchen/ingredient/ingredient.component';
-import {IngredientsComponent} from './components/views/kitchen/ingredients/ingredients.component';
-import {RecipeComponent} from './components/views/kitchen/recipe/recipe.component';
-import {RecipesComponent} from './components/views/kitchen/recipes/recipes.component';
+import {IngredientComponent} from './components/views/backend/ingredient/ingredient.component';
+import {IngredientsComponent} from './components/views/backend/ingredients/ingredients.component';
+import {RecipeComponent} from './components/views/backend/recipe/recipe.component';
+import {RecipesComponent} from './components/views/backend/recipes/recipes.component';
+import {FrontRecipeComponent} from './components/views/frontend/recipe/recipe.component';
+import {FrontRecipesComponent} from './components/views/frontend/recipes/recipes.component';
 import {LoginComponent} from './components/views/user/login/login.component';
 import './modules/app.database';
 
@@ -25,12 +26,13 @@ import {UiModule} from './modules/ui.module';
     AppComponent,
     HeaderComponent,
     LoginComponent,
-    IngredientsComponent,
-    IndexComponent,
+    FrontRecipeComponent,
+    FrontRecipesComponent,
     IngredientComponent,
-    RecipesComponent,
+    IngredientsComponent,
     RecipeComponent,
-    FormIngredientComponent
+    RecipesComponent,
+    FormIngredientComponent,
   ],
   imports: [
     BrowserModule,

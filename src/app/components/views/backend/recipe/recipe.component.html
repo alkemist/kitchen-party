@@ -43,7 +43,8 @@
                    for="type" translate="">Type</label>
             <div class="col-12 md:col-8">
               <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-                          [placeholder]="'Select a type' | translate" formControlName="type"
+                          [placeholder]="'Select a type' | translate"
+                          [showClear]="true" formControlName="type"
                           inputId="type" optionValue="key"
                           styleClass="inputfield w-full"></p-dropdown>
             </div>
@@ -185,6 +186,7 @@
                       [inputId]="'unit' + i"
                       [ngClass]="{'p-invalid':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
                       [options]="measureUnits"
+                      [showClear]="true"
                       formControlName="unitOrMeasure" optionValue="key"
                       styleClass="inputfield w-full"></p-dropdown>
                     <div

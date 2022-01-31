@@ -1,0 +1,53 @@
+$informationHeight: 106px;
+
+.page-container__content {
+  padding: 0;
+
+  .recipes {
+    .recipe {
+      width: 420px;
+      margin: 10px;
+
+      .media {
+        z-index: -1;
+        min-height: $informationHeight;
+
+        .center-cropped {
+          height: 280px;
+          background-position: 50%;
+          background-repeat: no-repeat;
+          background-size: 105% auto;
+          overflow: hidden;
+
+          img {
+            min-height: 100%;
+            min-width: 100%;
+            display: none;
+
+            width: 100%;
+          }
+        }
+      }
+
+      .informations {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: $informationHeight;
+        margin-top: -$informationHeight;
+
+        h5 {
+          padding: 1rem;
+          font-weight: bold;
+        }
+
+        .details {
+          padding: 0 10px;
+
+          .col {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+}
+

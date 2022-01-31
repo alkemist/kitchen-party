@@ -1,0 +1,59 @@
+<div class="page-container__content h-full">
+  <p-card>
+    <ng-template pTemplate="title">
+      <div class="flex flex-row align-items-center">
+        <a [routerLink]="['/']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+           pRipple
+           type="button"></a>
+        <h5 class="text-center flex-grow-1">{{ recipe.name }}</h5>
+        <div class="details flex flex-row align-items-center justify-content-center">
+          <p-tag [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
+          <div *ngIf="recipe.preparationDuration" class="flex align-items-center">
+            <i class="material-icons">av_timer</i>
+            {{ recipe.preparationDuration }}
+          </div>
+          <div *ngIf="recipe.cookingDuration" class="flex align-items-center">
+            <i class="material-icons">microwave</i>
+            {{ recipe.cookingDuration }}
+          </div>
+          <div *ngIf="recipe.waitingDuration" class="flex align-items-center">
+            <i class="material-icons">snooze</i>
+            {{ recipe.waitingDuration }}
+          </div>
+          <div *ngIf="recipe.nbSlices" class="flex align-items-center">
+            <i class="material-icons">local_pizza</i>
+            {{ recipe.nbSlices }}
+          </div>
+          <div class="flex align-items-center">
+            <i class="material-icons">inventory</i>
+            {{ recipe.recipeIngredients.length }}
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="ingredients flex flex-row align-items-center justify-content-between flex-wrap">
+      <div *ngFor="let recipeIngredient of recipe.orderedRecipeIngredients"
+           class="ingredient shadow flex flex-1 flex-column al align-items-center justify-content-start">
+
+        <h5 class="flex flex-row align-items-center">
+          <i class="material-icons">{{ recipeIngredient.ingredient?.typeIcon }}</i>
+          {{ recipeIngredient.ingredient?.name }}
+        </h5>
+        <span>{{ quantityDescription(recipeIngredient) || '' }}</span>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <div *ngFor="let instruction of recipe.instructions" class="instruction shadow">{{ instruction }}</div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div *ngIf="loggedUser" class="flex flex-row">
+        <div class="flex-grow-1"></div>
+        <a [label]="'Edit' | translate" [routerLink]="['/', 'recipe', recipe.slug]" icon="pi pi-pencil" pButton
+           pRipple></a>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

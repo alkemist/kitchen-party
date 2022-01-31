@@ -32,7 +32,7 @@ function recipeIngredientFormValidator(): ValidatorFn {
 }
 
 @Component({
-  selector: 'app-recipe',
+  selector: 'app-back-recipe',
   templateUrl: './recipe.component.html',
   styleUrls: ['./recipe.component.scss'],
   host: {
@@ -116,7 +116,7 @@ export class RecipeComponent implements OnInit {
           this.recipeIngredients.removeAt(0);
           this.instructionRows.removeAt(0);
 
-          this.recipe.recipeIngredients.forEach((recipeIngredient, i) => {
+          this.recipe.orderedRecipeIngredients.forEach((recipeIngredient, i) => {
             this.addRecipeIngredient();
 
             const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
@@ -130,6 +130,7 @@ export class RecipeComponent implements OnInit {
 
             this.instructionRows.at(i).patchValue(instruction);
           });
+          this.loading = false;
         }
       }));
     this.translateService.getTranslation('fr').subscribe(() => {
@@ -137,11 +138,9 @@ export class RecipeComponent implements OnInit {
       this.recipeTypes = this.recipeTypes.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.recipeTypes.unshift({key: '', label: this.translateService.instant('None')});
       this.measureUnits = this.measureUnits.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.measureUnits.unshift({key: '', label: this.translateService.instant('None')});
     });
 
     /*this.ingredientService.refreshList().then(async (ingredients) => {

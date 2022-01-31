@@ -1,7 +1,10 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
-import {RecipeTypeEnum} from '../enums/recipe-type.enum';
+import {DietTypeEnum} from '../enums/diet-type.enum';
+import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
+import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
 import {DataObject} from '../services/firestore.service';
+import {slugify} from '../tools/slugify';
 import {RecipeIngredientInterface, RecipeIngredientModel} from './recipe-ingredient.model';
 
 export interface RecipeInterface extends DataObject {
@@ -60,33 +63,131 @@ export class RecipeModel implements RecipeInterface {
     }
   }
 
-  get typeName(): string {
-    // @ts-ignore
-    return RecipeTypeEnum[this.type];
+  get orderedRecipeIngredients(): RecipeIngredientModel[] {
+    const ingredientTypes = Object.keys(IngredientTypeEnum);
+    return this.recipeIngredients.sort((a, b) => {
+      return ingredientTypes.indexOf(a.ingredient?.type!) - ingredientTypes.indexOf(b.ingredient?.type!);
+    });
   }
 
-  isVege(): boolean {
-    return false;
+  get typeName(): string {
+    return this.type ? RecipeTypes[this.type] : '';
+  }
+
+  get imagePath(): string {
+    return `/assets/upload/${this.image}`;
+  }
+
+  get ingredientIds(): string[] {
+    return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredient?.id!);
+  }
+
+  get diet(): string {
+    if (this.isVegan()) {
+      return DietTypeEnum.vegan;
+    } else if (this.isVege()) {
+      return DietTypeEnum.vege;
+    } else if (this.isFish()) {
+      return DietTypeEnum.fish;
+    } else if (this.isMeat()) {
+      return DietTypeEnum.meat;
+    }
+    return '';
+  }
+
+  get dietClassName(): string {
+    if (this.diet === DietTypeEnum.vegan) {
+      return 'success';
+    }
+    if (this.diet === DietTypeEnum.vege) {
+      return 'warning';
+    }
+    if (this.diet === DietTypeEnum.meat) {
+      return 'danger';
+    }
+    if (this.diet === DietTypeEnum.fish) {
+      return 'primary';
+    }
+    return '';
+  }
+
+  nameContain(search: string): boolean {
+    const regexName = new RegExp(search, 'gi');
+    const regexSlug = new RegExp(slugify(search), 'gi');
+    return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
+  }
+
+  dietIs(diet: string) {
+    if (diet === DietTypeEnum.vege) {
+      return this.diet === DietTypeEnum.vegan || this.diet === DietTypeEnum.vege;
+    }
+    return this.diet === diet;
   }
 
   isVegan(): boolean {
-    return false;
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (!recipeIngredient.ingredient?.isVegan()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isVege(): boolean {
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (!recipeIngredient.ingredient?.isVege()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   isMeat(): boolean {
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (recipeIngredient.ingredient?.isMeat()) {
+        return true;
+      }
+    }
     return false;
   }
 
   isFish(): boolean {
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (recipeIngredient.ingredient?.isFish()) {
+        return true;
+      }
+    }
     return false;
   }
 
-  isSweet(): boolean {
-    return false;
+  isSweet(): boolean | null {
+    if (this.type && RecipeTypes[this.type] === RecipeTypeEnum.ingredient) {
+      return null;
+    }
+
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (recipeIngredient.ingredient?.isSalty()) {
+        return false;
+      } else if (recipeIngredient.ingredient?.isSweet()) {
+        return true;
+      }
+    }
+    return null;
   }
 
-  isSalty(): boolean {
-    return false;
+  isSalty(): boolean | null {
+    if (this.type && RecipeTypes[this.type] === RecipeTypeEnum.ingredient) {
+      return null;
+    }
+
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (recipeIngredient.ingredient?.isSalty()) {
+        return true;
+      } else if (recipeIngredient.ingredient?.isSweet()) {
+        return false;
+      }
+    }
+    return null;
   }
 }
 

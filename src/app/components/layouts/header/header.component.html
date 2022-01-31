@@ -6,10 +6,39 @@
     <span *ngIf="title" style="">
       <span style="margin: 0 10px;">/</span>{{ title | translate }}
     </span>
+
+    <div *ngIf="showFilter" [formGroup]="form" class="filters flex flex-row align-items-center">
+      <span class="p-float-label">
+        <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
+                    [showClear]="true" formControlName="diet"
+                    optionValue="key"></p-dropdown>
+        <label for="float-input" translate="">Diet</label>
+      </span>
+      <span class="p-float-label">
+        <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
+                    [showClear]="true" formControlName="type"
+                    optionValue="key"></p-dropdown>
+          <label for="float-input" translate="">Type</label>
+      </span>
+      <span class="p-float-label">
+          <input formControlName="name" id="float-input" pInputText type="text">
+          <label for="float-input" translate="">Name</label>
+      </span>
+      <span class="p-float-label">
+        <p-multiSelect [emptyFilterMessage]="'No ingredients found.' | translate" [options]="ingredients"
+                       [selectionLimit]="3"
+                       formControlName="ingredients" optionLabel="name" optionValue="id">
+        </p-multiSelect>
+        <label for="float-input" translate="">Ingredients</label>
+      </span>
+      <button (click)="resetFilters()" class="p-button-rounded p-button-text" icon="pi pi-times" pButton
+              pRipple type="button"></button>
+    </div>
   </div>
 
   <div class="p-toolbar-group-right">
-    <a *ngIf="!loggedUser" [routerLink]="['/', 'login']" icon="pi pi-user" label="Log in" pButton pRipple></a>
+    <a *ngIf="!loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']" icon="pi pi-user" pButton
+       pRipple></a>
     <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
             type="button"></button>
     <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>

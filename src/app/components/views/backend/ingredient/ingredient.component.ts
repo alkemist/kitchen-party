@@ -9,7 +9,7 @@ import {IngredientService} from '../../../../services/ingredient.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 
 @Component({
-  selector: 'app-ingredient',
+  selector: 'app-back-ingredient',
   templateUrl: './ingredient.component.html',
   styleUrls: ['./ingredient.component.scss'],
   host: {
