@@ -66,6 +66,7 @@ export class RecipeComponent implements OnInit {
         Validators.required
       ]),
       type: new FormControl('', []),
+      image: new FormControl('', []),
       source: new FormControl('', []),
       cookingDuration: new FormControl('', []),
       preparationDuration: new FormControl('', []),
@@ -111,7 +112,6 @@ export class RecipeComponent implements OnInit {
       (data => {
         if (data && data['recipe']) {
           this.recipe = data['recipe'];
-          console.log(this.recipe);
           this.form.patchValue(this.recipe);
           this.recipeIngredients.removeAt(0);
           this.instructionRows.removeAt(0);

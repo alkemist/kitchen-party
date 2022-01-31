@@ -1,0 +1,41 @@
+::ng-deep .p-grid {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.page-container__content {
+  padding: 0;
+  height: 100%;
+}
+
+.recipe {
+  width: 420px;
+
+  .media {
+    z-index: -1;
+
+    .center-cropped {
+      height: 280px;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: 105% auto;
+      overflow: hidden;
+
+      img {
+        min-height: 100%;
+        min-width: 100%;
+        display: none;
+
+        width: 100%;
+      }
+    }
+  }
+
+  .informations {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 176px;
+    margin-top: -176px;
+  }
+}

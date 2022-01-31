@@ -5,6 +5,7 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {DataViewModule} from 'primeng/dataview';
 import {DropdownModule} from 'primeng/dropdown';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
@@ -35,7 +36,8 @@ const modules = [
   InputNumberModule,
   AutoCompleteModule,
   InputTextareaModule,
-  AccordionModule
+  AccordionModule,
+  DataViewModule
 ];
 
 @NgModule({

@@ -44,7 +44,7 @@
   "New recipe": "Nouvelle recette",
   "No": "Non",
   "No ingredients found.": "Aucun ingrédients trouvés.",
-  "No recipes found.": "Aucun recettes trouvéss.",
+  "No recipes found.": "Aucun recettes trouvés.",
   "No type found.": "Aucun types trouvés.",
   "None": "Aucun",
   "Number of slices": "Nombre de parts",
@@ -83,5 +83,6 @@
   "Water": "Eau",
   "Yeasts": "Levures",
   "Yes": "Oui",
+  "Search": "Recherche",
   "primeng": {}
 }

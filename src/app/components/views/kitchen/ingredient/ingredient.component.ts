@@ -45,15 +45,7 @@ export class IngredientComponent implements OnInit {
   }
 
   get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
-  get type(): FormControl {
-    return this.form.get('type') as FormControl;
-  }
-
-  get isLiquid(): FormControl {
-    return this.form.get('isLiquid') as FormControl;
+    return this.form?.get('name') as FormControl;
   }
 
   ngOnInit() {

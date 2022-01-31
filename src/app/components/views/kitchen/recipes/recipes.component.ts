@@ -23,7 +23,7 @@ export class RecipesComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.recipeService.refreshList().then(recipes => {
+    this.recipeService.getListOrRefresh().then(recipes => {
       this.recipes = recipes;
       this.loading = false;
     });

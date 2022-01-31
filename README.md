@@ -4,7 +4,6 @@
 
 ## Todo :
 
-- Import du json de recettes
 - Affichage des recettes en page d'acceuil
 - Form ingredient dans un composant
 - Modal pour ajouter un ingredient dans le form recipe
