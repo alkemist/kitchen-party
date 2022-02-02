@@ -61,7 +61,7 @@ const routes: Routes = [
     resolve: {
       recipe: RecipeResolver
     },
-    data: {showFilter: false}
+    data: {showFilter: false, hideHeader: true}
   },
   {path: '', component: FrontRecipesComponent, data: {showFilter: true}},
 ];

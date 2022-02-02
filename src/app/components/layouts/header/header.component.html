@@ -1,10 +1,10 @@
-<p-toolbar [formGroup]="form" class="header">
+<p-toolbar *ngIf="!hideHeader" [formGroup]="form" class="header">
   <div class="p-toolbar-group-left">
     <button (click)="menuShowed = true" *ngIf="showFilter" class="mobile-showed p-button-rounded p-button-text"
             icon="pi pi-chevron-right"
             pButton
             pRipple></button>
-    <a [routerLink]="['/']" class="header__logo">
+    <a [class.showFilter]="showFilter" [routerLink]="['/']" class="header__logo">
       Kitchen Party
     </a>
     <span *ngIf="title" style="">
@@ -44,7 +44,7 @@
             pRipple type="button"></button>
   </div>
 
-  <p-sidebar [(visible)]="menuShowed" [showCloseIcon]="false">
+  <p-sidebar [(visible)]="menuShowed">
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
                   [showClear]="true" formControlName="diet"
@@ -70,7 +70,10 @@
   </p-sidebar>
 
   <div class="p-toolbar-group-right">
-    <a *ngIf="!loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']" icon="pi pi-user" pButton
+    <a *ngIf="!loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']" class="mobile-hidden"
+       icon="pi pi-user" pButton
+       pRipple></a>
+    <a *ngIf="!loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
        pRipple></a>
     <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
             type="button"></button>

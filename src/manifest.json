@@ -1,0 +1,13 @@
+{
+  "short_name": "Kitchen Party",
+  "name": "Kitchen Party",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "728x644",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen"
+}

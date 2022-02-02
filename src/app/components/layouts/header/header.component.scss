@@ -22,6 +22,12 @@
   @media screen and (max-width: $mobile-tablet-width) {
     margin-left: 10px;
   }
+
+  &.showFilter {
+    @media screen and (max-width: $mobile-portrait-breakpoint-width) {
+      display: none;
+    }
+  }
 }
 
 .filters {
@@ -49,10 +55,6 @@
 }
 
 ::ng-deep .p-sidebar {
-  .p-sidebar-header {
-    display: none;
-  }
-
   .p-sidebar-content {
     height: 100%;
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -65,11 +65,13 @@ export class HeaderComponent implements OnInit {
   ];
   title: string = '';
   showFilter = false;
+  @HostBinding('class.hideHeader') hideHeader = false;
   ingredients: IngredientModel[] = [];
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   loading = true;
   menuShowed = false;
+
 
   constructor(
     private userService: UserService,
@@ -105,6 +107,11 @@ export class HeaderComponent implements OnInit {
             this.showFilter = routeData['showFilter'];
           } else {
             this.showFilter = true;
+          }
+          if (typeof routeData['hideHeader'] === 'boolean') {
+            this.hideHeader = routeData['hideHeader'];
+          } else {
+            this.hideHeader = false;
           }
         }
       }

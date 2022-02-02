@@ -34,6 +34,11 @@
     text-align: center;
     min-width: 150px;
 
+    @media screen and (max-width: $mobile-portrait-breakpoint-width) {
+      padding: 5px;
+      margin: 5px;
+    }
+
     h5 {
       i {
         margin-right: 5px;
@@ -48,8 +53,20 @@
 .instructions {
   .instruction {
     padding: 10px;
-    margin: 10px;
+    margin: 0 10px 10px;
+
+    @media screen and (max-width: $mobile-portrait-breakpoint-width) {
+      padding: 5px;
+      margin: 0 5px 5px;
+    }
   }
 }
 
 
+@media screen and (max-width: $mobile-portrait-breakpoint-width) {
+
+  ::ng-deep .p-card .p-card-body {
+    padding: 10px;
+  }
+
+}

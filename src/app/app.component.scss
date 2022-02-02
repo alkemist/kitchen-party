@@ -11,4 +11,8 @@
       height: calc(100% - #{$header-mobile-height});
     }
   }
+
+  .hideHeader + &__content {
+    height: 100%;
+  }
 }

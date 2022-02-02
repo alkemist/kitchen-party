@@ -20,6 +20,10 @@
     width: 100%;
     padding: 20px;
 
+    @media screen and (max-width: $mobile-portrait-breakpoint-width) {
+      padding: 10px;
+    }
+
     &__center {
       margin: auto;
       max-width: $page-width;

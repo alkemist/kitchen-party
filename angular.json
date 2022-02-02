@@ -28,6 +28,10 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
+              "src/favicon.png",
+              "src/humans.txt",
+              "src/manifest.json",
+              "src/robots.txt",
               "src/assets",
               "src/_redirects"
             ],
