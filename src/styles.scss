@@ -73,3 +73,33 @@ p-dropdown.ng-touched.p-invalid > div {
     text-decoration: none;
   }
 }
+
+.p-dropdown, .p-multiselect {
+  width: 100%;
+}
+
+.p-datatable {
+  .p-datatable-thead > tr > th {
+    padding: 0.7rem 1rem;
+  }
+
+  .p-datatable-tbody > tr > td {
+    padding: 0.9rem 1rem;
+  }
+}
+
+
+.mobile-showed {
+  display: none;
+  @media screen and (max-width: $mobile-tablet-width) {
+    display: block;
+  }
+}
+
+.mobile-hidden {
+  display: block;
+  @media screen and (max-width: $mobile-tablet-width) {
+    display: none;
+  }
+}
+

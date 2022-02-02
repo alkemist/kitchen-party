@@ -15,6 +15,7 @@ import {MenuModule} from 'primeng/menu';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {PasswordModule} from 'primeng/password';
 import {SelectButtonModule} from 'primeng/selectbutton';
+import {SidebarModule} from 'primeng/sidebar';
 import {TableModule} from 'primeng/table';
 import {TagModule} from 'primeng/tag';
 import {ToastModule} from 'primeng/toast';
@@ -42,6 +43,7 @@ const modules = [
   DataViewModule,
   TagModule,
   BlockUIModule,
+  SidebarModule
 ];
 
 @NgModule({

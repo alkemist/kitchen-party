@@ -69,6 +69,7 @@ export class HeaderComponent implements OnInit {
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   loading = true;
+  menuShowed = false;
 
   constructor(
     private userService: UserService,

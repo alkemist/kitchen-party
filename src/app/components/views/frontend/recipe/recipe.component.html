@@ -1,11 +1,13 @@
 <div class="page-container__content h-full">
   <p-card>
     <ng-template pTemplate="title">
-      <div class="flex flex-row align-items-center">
-        <a [routerLink]="['/']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
-           pRipple
-           type="button"></a>
-        <h5 class="text-center flex-grow-1">{{ recipe.name }}</h5>
+      <div class="title flex flex-row align-items-center">
+        <div class="flex flex-row align-items-center">
+          <a [routerLink]="['/']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+             pRipple
+             type="button"></a>
+          <h5 class="text-center flex-grow-1">{{ recipe.name }}</h5>
+        </div>
         <div class="details flex flex-row align-items-center justify-content-center">
           <p-tag [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
           <div *ngIf="recipe.preparationDuration" class="flex align-items-center">
