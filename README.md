@@ -6,11 +6,8 @@
 
 ### Front
 
-- Affichage la liste des ingrédients depuis la liste
-
 ### Back
 
-- Form ingredient dans un composant
 - Modal pour ajouter un ingredient dans le form recipe
 - Gestion des différentes mesures custom
 - Import recettes depuis une photo et livre défini
@@ -18,4 +15,4 @@
 
 ### Global
 
-- Ajout de loaders  
+- Responsive mobile

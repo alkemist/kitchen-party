@@ -1,6 +1,6 @@
 <div class="page-container__content">
   <form (submit)="handleSubmit()" [formGroup]="form">
-    <p-card class="recipe">
+    <p-card #pnl class="recipe">
       <ng-template pTemplate="title">
         <div class="flex flex-row align-items-center">
           <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
@@ -101,6 +101,12 @@
             <span [ngClass]="{'p-error':instructionRows.invalid && (instructionRows.dirty || instructionRows.touched)}"
                   translate="">Instructions</span>
             <div class="flex-grow-1"></div>
+            <button
+              *ngIf="instructionRows.invalid && (instructionRows.dirty || instructionRows.touched)"
+              class="p-button-rounded p-button-text p-button-danger"
+              icon="pi pi-exclamation-triangle"
+              pButton
+              type="button"></button>
             <button (click)="addInstructionRow()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton
                     pRipple
                     type="button"></button>
@@ -130,8 +136,16 @@
 
         <div class="col">
           <h5 class="flex flex-row align-items-center">
-            <span translate="">Ingredients</span>
+            <span
+              [ngClass]="{'p-error':recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)}"
+              translate="">Ingredients</span>
             <div class="flex-grow-1"></div>
+            <button
+              *ngIf="recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)"
+              class="p-button-rounded p-button-text p-button-danger"
+              icon="pi pi-exclamation-triangle"
+              pButton
+              type="button"></button>
             <button (click)="addRecipeIngredient()" class="p-button-rounded p-button-text" icon="pi pi-plus" pButton
                     pRipple
                     type="button"></button>
@@ -255,6 +269,9 @@
     </p-card>
   </form>
 </div>
+<p-blockUI [blocked]="loading" [target]="pnl">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+</p-blockUI>
 <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
   <p-footer>
     <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
@@ -265,4 +282,3 @@
             type="button"></button>
   </p-footer>
 </p-confirmDialog>
-<p-toast position="bottom-right"></p-toast>

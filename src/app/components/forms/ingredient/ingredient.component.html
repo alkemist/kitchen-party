@@ -1,5 +1,5 @@
 <form (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
-  <p-card class="ingredient">
+  <p-card #pnl class="ingredient">
     <ng-template pTemplate="title">
       <div class="flex flex-row align-items-center">
         <a [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
@@ -67,3 +67,6 @@
     </ng-template>
   </p-card>
 </form>
+<p-blockUI [blocked]="loading" [target]="pnl">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+</p-blockUI>

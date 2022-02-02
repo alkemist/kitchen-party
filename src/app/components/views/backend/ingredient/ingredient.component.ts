@@ -55,6 +55,7 @@ export class IngredientComponent implements OnInit {
           this.ingredient = data['ingredient'];
           this.form.patchValue(this.ingredient);
         }
+        this.loading = false;
       }));
     this.translateService.getTranslation('fr').subscribe(() => {
       this.ingredientTypes = this.ingredientTypes.map(item => {
@@ -92,31 +93,41 @@ export class IngredientComponent implements OnInit {
   }
 
   async submit(localDocument: IngredientModel): Promise<void> {
+    this.loading = true;
     if (this.ingredient.id) {
-      this.ingredient = await this.ingredientService.update(localDocument);
-      this.messageService.add({
-        severity: 'success',
-        detail: this.translateService.instant(`Updated ingredient`)
+      this.ingredientService.update(localDocument).then(ingredient => {
+        this.ingredient = ingredient;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Updated ingredient`)
+        });
+        this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
       });
     } else {
-      this.ingredient = await this.ingredientService.add(localDocument);
-      this.messageService.add({
-        severity: 'success',
-        detail: this.translateService.instant(`Added ingredient`)
+      await this.ingredientService.add(localDocument).then(ingredient => {
+        this.ingredient = ingredient;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Added ingredient`),
+        });
+        this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
       });
     }
-    await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
   }
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
       message: this.translateService.instant('Are you sure you want to delete it ?'),
-      accept: async () => {
-        await this.ingredientService.remove(this.ingredient);
-        await this.routerService.navigate(['/', 'ingredient' + 's']);
-        this.messageService.add({
-          severity: 'success',
-          detail: this.translateService.instant(`Deleted ingredient`)
+      accept: () => {
+        this.ingredientService.remove(this.ingredient).then(() => {
+          this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            detail: this.translateService.instant(`Deleted ingredient`)
+          });
+          this.routerService.navigate(['/', 'ingredients']);
         });
       }
     });

@@ -9,6 +9,7 @@ import {IngredientModel} from '../../../models/ingredient.model';
 })
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
+  @Input() loading = true;
   @Input() ingredientTypes: { key: string, label: string }[] = [];
   @Input() form: FormGroup = new FormGroup({});
   @Output() onSubmit = new EventEmitter<IngredientModel>();

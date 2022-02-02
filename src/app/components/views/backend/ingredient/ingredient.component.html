@@ -1,7 +1,7 @@
 <div class="page-container__content">
   <app-form-ingredient (onRemove)="remove()" (onSubmit)="handleSubmit()" [form]="form"
-                       [ingredientTypes]="ingredientTypes"
-                       [ingredient]="ingredient"></app-form-ingredient>
+                       [ingredientTypes]="ingredientTypes" [ingredient]="ingredient"
+                       [loading]="loading"></app-form-ingredient>
   <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
     <p-footer>
       <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
@@ -12,5 +12,4 @@
               type="button"></button>
     </p-footer>
   </p-confirmDialog>
-  <p-toast position="bottom-right"></p-toast>
 </div>

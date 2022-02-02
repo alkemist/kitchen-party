@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {AccordionModule} from 'primeng/accordion';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {AutoCompleteModule} from 'primeng/autocomplete';
+import {BlockUIModule} from 'primeng/blockui';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
@@ -39,7 +40,8 @@ const modules = [
   InputTextareaModule,
   AccordionModule,
   DataViewModule,
-  TagModule
+  TagModule,
+  BlockUIModule,
 ];
 
 @NgModule({

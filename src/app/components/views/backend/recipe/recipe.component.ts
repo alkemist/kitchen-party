@@ -72,7 +72,7 @@ export class RecipeComponent implements OnInit {
       preparationDuration: new FormControl('', []),
       waitingDuration: new FormControl('', []),
       nbSlices: new FormControl('', []),
-      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()]),
+      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()], [Validators.required]),
       instructions: new FormArray([RecipeComponent.createInstructionRow()], [Validators.required])
     });
   }
@@ -130,6 +130,8 @@ export class RecipeComponent implements OnInit {
 
             this.instructionRows.at(i).patchValue(instruction);
           });
+          this.loading = false;
+        } else {
           this.loading = false;
         }
       }));
@@ -220,30 +222,41 @@ export class RecipeComponent implements OnInit {
 
   async submit(localDocument: RecipeModel): Promise<void> {
     if (this.recipe.id) {
-      this.recipe = await this.recipeService.update(localDocument);
-      this.messageService.add({
-        severity: 'success',
-        detail: this.translateService.instant(`Updated recipe`)
+      this.loading = true;
+      this.recipeService.update(localDocument).then(async recipe => {
+        this.recipe = recipe;
+        this.loading = false;
+        await this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Updated recipe`)
+        });
+        await this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
       });
     } else {
-      this.recipe = await this.recipeService.add(localDocument);
-      this.messageService.add({
-        severity: 'success',
-        detail: this.translateService.instant(`Added recipe`)
+      this.recipeService.add(localDocument).then(recipe => {
+        this.recipe = recipe;
+        this.loading = false;
+        this.messageService.add({
+          severity: 'success',
+          detail: this.translateService.instant(`Added recipe`)
+        });
+        this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
       });
     }
-    await this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
   }
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
       message: this.translateService.instant('Are you sure you want to delete it ?'),
-      accept: async () => {
-        await this.recipeService.remove(this.recipe);
-        await this.routerService.navigate(['/', 'recipe' + 's']);
-        this.messageService.add({
-          severity: 'success',
-          detail: this.translateService.instant(`Deleted recipe`)
+      accept: () => {
+        this.loading = true;
+        this.recipeService.remove(this.recipe).then(() => {
+          this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            detail: this.translateService.instant(`Deleted recipe`)
+          });
+          this.routerService.navigate(['/', 'recipes']);
         });
       }
     });
