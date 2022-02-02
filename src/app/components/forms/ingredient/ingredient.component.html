@@ -2,10 +2,15 @@
   <p-card #pnl class="ingredient">
     <ng-template pTemplate="title">
       <div class="flex flex-row align-items-center">
-        <a [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+        <a *ngIf="!dialogMode" [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text"
+           icon="pi pi-angle-left" pButton
            pRipple
            type="button"></a>
         <h5 class="text-center flex-grow-1">{{ ingredient?.name ?? ('New ingredient' | translate) }}</h5>
+        <button (click)="close()" *ngIf="dialogMode"
+                class="p-button-rounded p-button-text" icon="pi pi-times"
+                pButton
+                pRipple type="button"></button>
       </div>
     </ng-template>
 

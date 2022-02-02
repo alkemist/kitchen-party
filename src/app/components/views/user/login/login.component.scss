@@ -4,6 +4,14 @@
   max-width: 300px;
 }
 
+.field {
+  margin-bottom: 2rem;
+}
+
+::ng-deep .p-card .p-card-footer {
+  padding: 0;
+}
+
 @media screen and (max-width: $mobile-breakpoint-width) {
 
 }

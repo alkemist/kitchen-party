@@ -11,7 +11,8 @@ import {
 } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
@@ -21,6 +22,7 @@ import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
+import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -43,6 +45,7 @@ export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+  measureOrUnits: { key: string, label: string }[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   recipes: RecipeModel[] = [];
   form: FormGroup = new FormGroup({});
@@ -59,6 +62,8 @@ export class RecipeComponent implements OnInit {
     private translateService: TranslateService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
+    private dialogService: DialogService,
+    private filterService: FilterService,
     private http: HttpClient
   ) {
     this.form = new FormGroup({
@@ -143,6 +148,7 @@ export class RecipeComponent implements OnInit {
       this.measureUnits = this.measureUnits.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
+      this.measureUnits = this.measureUnits.concat(this.recipeService.getCustomMeasures());
     });
 
     /*this.ingredientService.refreshList().then(async (ingredients) => {
@@ -259,6 +265,19 @@ export class RecipeComponent implements OnInit {
           this.routerService.navigate(['/', 'recipes']);
         });
       }
+    });
+  }
+
+  showNewIngredientModal() {
+    const ref = this.dialogService.open(DialogIngredientComponent, {
+      showHeader: false,
+      width: '70%'
+    });
+  }
+
+  searchUnitOrMeasure($event: any) {
+    this.measureOrUnits = this.measureUnits.filter(measureOrUnit => {
+      return this.filterService.filters.contains(measureOrUnit.key, $event.query);
     });
   }
 }

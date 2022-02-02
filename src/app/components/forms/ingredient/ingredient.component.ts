@@ -12,8 +12,10 @@ export class FormIngredientComponent implements OnInit {
   @Input() loading = true;
   @Input() ingredientTypes: { key: string, label: string }[] = [];
   @Input() form: FormGroup = new FormGroup({});
+  @Input() dialogMode = false;
   @Output() onSubmit = new EventEmitter<IngredientModel>();
   @Output() onRemove = new EventEmitter<void>();
+  @Output() onClose = new EventEmitter<void>();
 
   constructor() {
   }
@@ -40,5 +42,9 @@ export class FormIngredientComponent implements OnInit {
 
   remove() {
     this.onRemove.emit();
+  }
+
+  close() {
+    this.onClose.emit();
   }
 }

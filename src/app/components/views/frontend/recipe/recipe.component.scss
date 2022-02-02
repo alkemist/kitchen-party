@@ -62,11 +62,8 @@
   }
 }
 
-
 @media screen and (max-width: $mobile-portrait-breakpoint-width) {
-
   ::ng-deep .p-card .p-card-body {
     padding: 10px;
   }
-
 }

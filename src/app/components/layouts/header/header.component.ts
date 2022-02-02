@@ -130,6 +130,7 @@ export class HeaderComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.userService.getLoggedUser((loggedUser) => {
+      this.loading = false;
       this.loggedUser = loggedUser;
       this.ingredientService.getListOrRefresh().then(ingredients => {
         this.ingredients = ingredients;

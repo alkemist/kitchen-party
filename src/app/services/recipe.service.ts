@@ -26,11 +26,28 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all.filter((recipe: RecipeModel) => recipe.type === RecipeTypeEnum.ingredient));
   }
 
+  getCustomMeasures(): { key: string, label: string }[] {
+    const recipes = this.getList();
+    let measures = recipes.map(recipe => {
+      return recipe.recipeIngredients.map(recipeIngredient => recipeIngredient.measure);
+    });
+    const uniqueMeasures = measures.flat().filter((value, index, self) => {
+      return value && self.indexOf(value) === index;
+    });
+    return uniqueMeasures.map(measure => {
+      return {
+        key: measure,
+        label: measure
+      };
+    });
+  }
+
   async getListOrRefresh(): Promise<RecipeModel[]> {
     const recipes = this.getList();
     if (recipes.length === 0) {
       return await this.refreshList();
     }
+    this.getCustomMeasures();
     return recipes;
   }
 

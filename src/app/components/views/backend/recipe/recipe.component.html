@@ -194,15 +194,9 @@
                       [for]="'unit' + i"
                       [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
                       translate="">Unit</label>
-                    <p-dropdown
-                      [autoDisplayFirst]="false"
-                      [editable]="true"
-                      [inputId]="'unit' + i"
-                      [ngClass]="{'p-invalid':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
-                      [options]="measureUnits"
-                      [showClear]="true"
-                      formControlName="unitOrMeasure" optionValue="key"
-                      styleClass="inputfield w-full"></p-dropdown>
+                    <p-autoComplete (completeMethod)="searchUnitOrMeasure($event)" [dropdown]="true"
+                                    [suggestions]="measureOrUnits" class="inputfield w-full" dataKey="key"
+                                    field="label" formControlName="unitOrMeasure"></p-autoComplete>
                     <div
                       *ngIf="recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)"
                       class="p-error">
@@ -262,7 +256,10 @@
                   icon="pi pi-trash" pButton pRipple
                   type="button"></button>
           <div class="flex-grow-1"></div>
-          <button [label]="(recipe.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
+          <button (click)="showNewIngredientModal()" [label]="'Add a new ingredient' | translate"
+                  class="p-button-text p-button-secondary" icon="pi pi-plus" pButton
+                  pRipple style="margin-right: 20px;" type="button"></button>
+          <button [label]="((recipe.id ? 'Update' : 'Add') + ' recipe') | translate" icon="pi pi-check" pButton pRipple
                   type="submit"></button>
         </div>
       </ng-template>

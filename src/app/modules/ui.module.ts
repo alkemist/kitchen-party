@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {AccordionModule} from 'primeng/accordion';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {BlockUIModule} from 'primeng/blockui';
 import {ButtonModule} from 'primeng/button';
@@ -8,6 +8,7 @@ import {CardModule} from 'primeng/card';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {DataViewModule} from 'primeng/dataview';
 import {DropdownModule} from 'primeng/dropdown';
+import {DialogService, DynamicDialogModule} from 'primeng/dynamicdialog';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
@@ -43,13 +44,14 @@ const modules = [
   DataViewModule,
   TagModule,
   BlockUIModule,
-  SidebarModule
+  SidebarModule,
+  DynamicDialogModule
 ];
 
 @NgModule({
   imports: modules,
   exports: modules,
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, DialogService, FilterService],
 })
 export class UiModule {
 }

@@ -70,10 +70,13 @@
   </p-sidebar>
 
   <div class="p-toolbar-group-right">
-    <a *ngIf="!loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']" class="mobile-hidden"
+    <button *ngIf="loading"
+            [disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
+    <a *ngIf="!loading && !loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']"
+       class="mobile-hidden"
        icon="pi pi-user" pButton
        pRipple></a>
-    <a *ngIf="!loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
+    <a *ngIf="!loading && !loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
        pRipple></a>
     <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
             type="button"></button>

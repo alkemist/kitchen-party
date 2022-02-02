@@ -11,7 +11,7 @@ export interface RecipeIngredientInterface extends KitchenIngredientInterface {
 }
 
 export interface RecipeIngredientFormInterface extends RecipeIngredientInterface {
-  unitOrMeasure: MeasureUnitEnum | string;
+  unitOrMeasure: MeasureUnitEnum | string | { key: string, label: string };
   ingredientOrRecipe: IngredientModel | RecipeModel;
 }
 
@@ -43,7 +43,9 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
     }
 
     if (recipeIngredientForm.unitOrMeasure) {
-      const unitOrMeasure = recipeIngredientForm.unitOrMeasure.trim();
+      const unitOrMeasure = typeof recipeIngredientForm.unitOrMeasure === 'string'
+        ? recipeIngredientForm.unitOrMeasure
+        : (recipeIngredientForm.unitOrMeasure as { key: string, label: string }).key;
       if (typeof MeasureUnits[unitOrMeasure] !== 'undefined') {
         recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
       } else if (unitOrMeasure.length > 0) {

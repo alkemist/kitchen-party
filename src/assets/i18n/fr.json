@@ -1,5 +1,7 @@
 {
   "Add": "Ajouter",
+  "Add a new ingredient": "Ajouter un nouvel ingredient",
+  "Add recipe": "Ajouter la recette",
   "Added ingredient": "Ingrédient ajouté",
   "Added recipe": "Recette ajouté",
   "Alcohols": "Alcools",
@@ -85,6 +87,7 @@
   "Type is required.": "Le type est requis.",
   "Unit": "Unité",
   "Update": "Mettre à jour",
+  "Update recipe": "Mettre à jour la recette",
   "Updated ingredient": "Ingrédient mis à jour",
   "Updated recipe": "Recette mise à jour",
   "User": "Utilisateur",

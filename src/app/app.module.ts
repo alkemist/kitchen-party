@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RippleModule} from 'primeng/ripple';
 import {AppComponent} from './app.component';
+import {DialogIngredientComponent} from './components/dialogs/ingredient/ingredient.component';
 import {FormIngredientComponent} from './components/forms/ingredient/ingredient.component';
 import {HeaderComponent} from './components/layouts/header/header.component';
 import {IngredientComponent} from './components/views/backend/ingredient/ingredient.component';
@@ -33,6 +34,7 @@ import {UiModule} from './modules/ui.module';
     RecipeComponent,
     RecipesComponent,
     FormIngredientComponent,
+    DialogIngredientComponent,
   ],
   imports: [
     BrowserModule,
