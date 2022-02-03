@@ -4,8 +4,6 @@ import {KitchenIngredientInterface, KitchenIngredientModel} from './kitchen-ingr
 import {RecipeModel} from './recipe.model';
 
 export interface RecipeIngredientInterface extends KitchenIngredientInterface {
-  isMain: boolean,
-  isBase: boolean,
   recipe?: RecipeModel,
   recipeId?: string,
 }
@@ -16,17 +14,12 @@ export interface RecipeIngredientFormInterface extends RecipeIngredientInterface
 }
 
 export class RecipeIngredientModel extends KitchenIngredientModel implements RecipeIngredientInterface {
-  isMain: boolean;
-  isBase: boolean;
   recipe?: RecipeModel;
   recipeId?: string;
 
   constructor(recipeIngredient: RecipeIngredientInterface) {
     super(recipeIngredient);
     delete this.id;
-
-    this.isMain = recipeIngredient.isMain;
-    this.isBase = recipeIngredient.isBase;
 
     this.recipe = recipeIngredient.recipe;
     this.recipeId = recipeIngredient.recipeId;

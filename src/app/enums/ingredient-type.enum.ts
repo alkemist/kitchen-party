@@ -9,11 +9,11 @@ export enum IngredientTypeEnum {
   vegetable_fats = 'Vegetable fats', // matières grasses végétales
   yeasts = 'Yeasts', // Levures
   aromatic_herbs = 'Aromatic herbs', // Herbes aromatiques
+  alcohols = 'Alcohols', // Alcools
+  water = 'Water', // Eau
   spices = 'Spices', // Épices
   sugars = 'Sugars', // Sucres
   salts = 'Salts', // Sels
-  alcohols = 'Alcohols', // Alcools
-  water = 'Water', // Eau
 }
 
 export const IngredientTypes = EnumHelper.enumToAssociativArray(IngredientTypeEnum);

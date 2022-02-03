@@ -194,9 +194,16 @@
                       [for]="'unit' + i"
                       [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
                       translate="">Unit</label>
-                    <p-autoComplete (completeMethod)="searchUnitOrMeasure($event)" [dropdown]="true"
-                                    [suggestions]="measureOrUnits" class="inputfield w-full" dataKey="key"
-                                    field="label" formControlName="unitOrMeasure"></p-autoComplete>
+                    <p-dropdown
+                      [autoDisplayFirst]="false"
+                      [editable]="true"
+                      [filter]="true"
+                      [inputId]="'unit' + i"
+                      [ngClass]="{'p-invalid':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).get('ingredientOrRecipe')?.dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)}"
+                      [options]="measureUnits"
+                      [showClear]="true"
+                      formControlName="unitOrMeasure" optionValue="key"
+                      styleClass="inputfield w-full"></p-dropdown>
                     <div
                       *ngIf="recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).get('ingredientOrRecipe')?.touched)"
                       class="p-error">
@@ -224,23 +231,6 @@
                         Required.
                       </small>
                     </div>
-                  </div>
-                </div>
-
-
-                <div class="field grid">
-                  <label [for]="'base' + i"
-                         class="col-12 mb-2 md:col-3 md:mb-0" translate="">Base ?</label>
-                  <div class="col-12 md:col-2">
-                    <p-toggleButton [inputId]="'base' + i" formControlName="isBase" offIcon="pi pi-times"
-                                    onIcon="pi pi-check"></p-toggleButton>
-                  </div>
-                  <div class="col-12 md:col-2"></div>
-                  <label [for]="'main' + i"
-                         class="col-12 mb-2 md:col-3 md:mb-0" translate="">Main ?</label>
-                  <div class="col-12 md:col-2">
-                    <p-toggleButton [inputId]="'main' + i" formControlName="isMain" offIcon="pi pi-times"
-                                    onIcon="pi pi-check"></p-toggleButton>
                   </div>
                 </div>
               </div>
