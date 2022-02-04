@@ -1,15 +1,18 @@
 import {Injectable} from '@angular/core';
-import {Store} from '@ngxs/store';
+import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {ingredientConverter, IngredientInterface, IngredientModel} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from '../store/ingredient.action';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
+import {IngredientState} from "../store/ingredient.state";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService extends FirestoreService<IngredientModel> {
+  @Select(IngredientState.lastUpdated) override lastUpdated$?: Observable<Date>;
 
   constructor(private logger: LoggerService, private store: Store) {
     super(logger, 'ingredient', ingredientConverter);
@@ -22,7 +25,7 @@ export class IngredientService extends FirestoreService<IngredientModel> {
 
   async getListOrRefresh(): Promise<IngredientModel[]> {
     const ingredients = this.getList();
-    if (ingredients.length === 0) {
+    if (ingredients.length === 0 || this.storeIsOutdated()) {
       return await this.refreshList();
     }
     return ingredients;

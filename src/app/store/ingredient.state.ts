@@ -6,16 +6,23 @@ import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from
 
 export class IngredientStateModel {
   all: IngredientModel[] = [];
+  lastUpdated?: Date = undefined;
 }
 
 @Injectable()
 @State<IngredientStateModel>({
   name: 'ingredients',
   defaults: {
-    all: []
+    all: [],
+    lastUpdated: undefined,
   }
 })
 export class IngredientState {
+
+  @Selector()
+  static lastUpdated(state: IngredientStateModel): Date | undefined {
+    return state.lastUpdated;
+  }
 
   @Selector()
   static getIngredientBySlug(state: IngredientStateModel, slug: string) {
@@ -27,7 +34,8 @@ export class IngredientState {
   @Action(FillIngredients)
   fill({getState, patchState}: StateContext<IngredientStateModel>, {payload}: FillIngredients) {
     patchState({
-      all: payload
+      all: payload,
+      lastUpdated: new Date()
     });
   }
 

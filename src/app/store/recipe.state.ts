@@ -3,19 +3,27 @@ import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
 import {RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
+import {IngredientStateModel} from "./ingredient.state";
 
 export class RecipeStateModel {
   all: RecipeModel[] = [];
+  lastUpdated?: Date = undefined;
 }
 
 @Injectable()
 @State<RecipeStateModel>({
   name: 'recipes',
   defaults: {
-    all: []
+    all: [],
+    lastUpdated: undefined,
   }
 })
 export class RecipeState {
+
+  @Selector()
+  static lastUpdated(state: IngredientStateModel): Date | undefined {
+    return state.lastUpdated;
+  }
 
   @Selector()
   static getRecipes(state: RecipeStateModel) {
@@ -25,7 +33,8 @@ export class RecipeState {
   @Action(FillRecipes)
   fill({getState, patchState}: StateContext<RecipeStateModel>, {payload}: FillRecipes) {
     patchState({
-      all: payload
+      all: payload,
+      lastUpdated: new Date()
     });
   }
 

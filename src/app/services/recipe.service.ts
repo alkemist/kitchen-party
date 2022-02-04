@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Store} from '@ngxs/store';
+import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {RecipeTypeEnum} from '../enums/recipe-type.enum';
 import {recipeConverter, RecipeModel} from '../models/recipe.model';
@@ -7,11 +7,14 @@ import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recip
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
+import {Observable} from "rxjs";
+import {RecipeState} from "../store/recipe.state";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService extends FirestoreService<RecipeModel> {
+  @Select(RecipeState.lastUpdated) override lastUpdated$?: Observable<Date>;
 
   constructor(private logger: LoggerService, private store: Store, private ingredientService: IngredientService) {
     super(logger, 'recipe', recipeConverter);
@@ -44,7 +47,7 @@ export class RecipeService extends FirestoreService<RecipeModel> {
 
   async getListOrRefresh(): Promise<RecipeModel[]> {
     const recipes = this.getList();
-    if (recipes.length === 0) {
+    if (recipes.length === 0 || this.storeIsOutdated()) {
       return await this.refreshList();
     }
     this.getCustomMeasures();

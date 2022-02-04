@@ -15,6 +15,7 @@ import {
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
 import {LoggedError, LoggerService} from './logger.service';
+import {Observable} from "rxjs";
 
 export interface DataObject {
   id?: string;
@@ -65,6 +66,9 @@ export class DatabaseError extends LoggedError<DataObject> {
 }
 
 export abstract class FirestoreService<T extends DataObject> {
+  lastUpdated$?: Observable<Date>;
+  lastUpdated?: Date;
+
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
   private readonly ref: CollectionReference;
@@ -75,6 +79,19 @@ export abstract class FirestoreService<T extends DataObject> {
     this.collectionName = collectionName;
     this.converter = converter;
     this.ref = collection(getFirestore(), collectionName);
+    this.lastUpdated$?.subscribe(lastUpdated => {
+      this.lastUpdated = lastUpdated;
+    });
+  }
+
+  storeIsOutdated() {
+    if (this.lastUpdated === undefined) {
+      return true;
+    }
+    const dateTime = new Date().getTime();
+    const lastUpdatedTime = new Date(this.lastUpdated).getTime();
+    const nbHours = (dateTime - lastUpdatedTime) / (1000 * 60 * 60);
+    return nbHours > 24;
   }
 
   public async exist(name: string): Promise<boolean> {
