@@ -50,6 +50,8 @@ export class RecipeComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   loading = true;
   error: string = '';
+  indexRecipeIngredient = 0;
+
   private ingredientTranslation: string = 'Ingredient';
 
   constructor(
@@ -164,6 +166,7 @@ export class RecipeComponent implements OnInit {
 
   addRecipeIngredient(): void {
     this.recipeIngredients.push(RecipeComponent.createRecipeIngredient());
+    this.indexRecipeIngredient = this.recipeIngredients.length - 1;
   }
 
   removeRecipeIngredient(index: number): void {
