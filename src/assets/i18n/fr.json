@@ -99,5 +99,9 @@
   "Wrong password": "Mauvais mot de passe",
   "Yeasts": "Levures",
   "Yes": "Oui",
+  "Sauce": "Sauce",
+  "Burger": "Burger",
+  "Wrong Api Key": "Mauvaise clef API",
+  "Email is malformed.": "Email n'a pas le bon format.",
   "primeng": {}
 }

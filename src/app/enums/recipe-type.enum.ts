@@ -10,6 +10,8 @@ export enum RecipeTypeEnum {
   pizza = 'Pizza', // Pizza
   gratin = 'Gratin', // Gratin
   mash = 'Mash', // Purée
+  sauce = 'Sauce', // Sauce
+  burger = 'Burger', // Burger
   ingredient = 'Ingredient' // Ingrédient
 }
 

@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
-import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
+import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
 import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
@@ -124,7 +124,7 @@ export class RecipeComponent implements OnInit {
 
             const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
             recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
-            recipeIngredientForm.unitOrMeasure = recipeIngredient.measure ? recipeIngredient.measure : recipeIngredient.unit!;
+            recipeIngredientForm.unitOrMeasure = recipeIngredient.unit ? this.translateService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.measure;
 
             this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
           });
@@ -267,7 +267,7 @@ export class RecipeComponent implements OnInit {
   }
 
   showNewIngredientModal() {
-    const ref = this.dialogService.open(DialogIngredientComponent, {
+    this.dialogService.open(DialogIngredientComponent, {
       showHeader: false,
       width: '70%'
     });

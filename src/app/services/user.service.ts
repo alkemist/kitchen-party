@@ -4,6 +4,7 @@ import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, User} 
 import {Observable} from 'rxjs';
 import {UserLogin, UserLogout} from '../store/user.action';
 import {OfflineError, TooManyRequestError} from './firestore.service';
+import {LoggedError} from "./logger.service";
 
 export class InvalidEmailError extends Error {
   override message = 'Invalid email';
@@ -11,6 +12,10 @@ export class InvalidEmailError extends Error {
 
 export class WrongPasswordError extends Error {
   override message = 'Wrong password';
+}
+
+export class WrongApiKeyError extends LoggedError<void> {
+  override message = 'Wrong Api Key';
 }
 
 @Injectable({
@@ -58,6 +63,8 @@ export class UserService {
           throw new WrongPasswordError();
         } else if (error.code === 'auth/too-many-requests') {
           throw new TooManyRequestError();
+        } else if (error.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
+          throw new WrongApiKeyError();
         } else if (error.code === 'auth/network-request-failed') {
           throw new OfflineError();
         } else {
