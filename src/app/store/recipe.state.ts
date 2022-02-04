@@ -7,6 +7,7 @@ import {IngredientStateModel} from "./ingredient.state";
 
 export class RecipeStateModel {
   all: RecipeModel[] = [];
+  customMeasures: string[] = [];
   lastUpdated?: Date = undefined;
 }
 
@@ -15,6 +16,7 @@ export class RecipeStateModel {
   name: 'recipes',
   defaults: {
     all: [],
+    customMeasures: [],
     lastUpdated: undefined,
   }
 })

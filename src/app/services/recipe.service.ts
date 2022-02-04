@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {RecipeTypeEnum} from '../enums/recipe-type.enum';
 import {recipeConverter, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
@@ -25,10 +24,6 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     return recipes.map(recipe => new RecipeModel(recipe));
   }
 
-  getRecipesHasIngredient(): RecipeModel[] {
-    return this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all.filter((recipe: RecipeModel) => recipe.type === RecipeTypeEnum.ingredient));
-  }
-
   getCustomMeasures(): { key: string, label: string }[] {
     const recipes = this.getList();
     let measures = recipes.map(recipe => {
@@ -50,7 +45,6 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     if (recipes.length === 0 || this.storeIsOutdated()) {
       return await this.refreshList();
     }
-    this.getCustomMeasures();
     return recipes;
   }
 
@@ -67,6 +61,13 @@ export class RecipeService extends FirestoreService<RecipeModel> {
       return recipe.slug === slug;
     })!;
     return new RecipeModel(recipe);
+  }
+
+  async getById(id: string): Promise<RecipeModel> {
+    const recipes = await this.getListOrRefresh();
+    return recipes.find((recipe: RecipeModel) => {
+      return recipe.id === id;
+    })!;
   }
 
   async refreshList(): Promise<RecipeModel[]> {

@@ -6,11 +6,13 @@ import {NgxsModule} from '@ngxs/store';
 import {IngredientState} from '../store/ingredient.state';
 import {RecipeState} from '../store/recipe.state';
 import {UserState} from '../store/user.state';
+import {KitchenState} from "../store/kitchen.state";
 
 const states = [
   UserState,
   IngredientState,
   RecipeState,
+  KitchenState,
 ];
 
 @NgModule({
