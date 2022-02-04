@@ -23,14 +23,24 @@ export class RecipesComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.recipeService.getListOrRefresh().then(recipes => {
-      this.recipes = recipes;
-      this.loading = false;
+    this.loadTranslations(() => {
+      this.loadData();
     });
+  }
+
+  loadTranslations(callback: () => void) {
     this.translateService.getTranslation('fr').subscribe(() => {
       this.recipeTypes = this.recipeTypes.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
+      callback();
+    });
+  }
+
+  loadData() {
+    this.recipeService.getListOrRefresh().then(recipes => {
+      this.recipes = recipes;
+      this.loading = false;
     });
   }
 }

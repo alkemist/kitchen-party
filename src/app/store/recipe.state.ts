@@ -3,7 +3,6 @@ import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
 import {RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
-import {IngredientStateModel} from "./ingredient.state";
 
 export class RecipeStateModel {
   all: RecipeModel[] = [];
@@ -23,7 +22,7 @@ export class RecipeStateModel {
 export class RecipeState {
 
   @Selector()
-  static lastUpdated(state: IngredientStateModel): Date | undefined {
+  static lastUpdated(state: RecipeStateModel): Date | undefined {
     return state.lastUpdated;
   }
 

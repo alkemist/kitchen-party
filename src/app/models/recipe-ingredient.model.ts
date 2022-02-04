@@ -15,7 +15,7 @@ export interface RecipeIngredientInterface {
 }
 
 export interface RecipeIngredientFormInterface extends RecipeIngredientInterface {
-  unitOrMeasure: MeasureUnitEnum | string | { key: string, label: string };
+  unitOrMeasure: MeasureUnitEnum | string;
   ingredientOrRecipe: IngredientModel | RecipeModel;
 }
 
@@ -46,7 +46,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     this.recipeId = recipeIngredient.recipeId;
   }
 
-  static import(recipeIngredientForm: RecipeIngredientFormInterface): RecipeIngredientModel {
+  static import(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: { key: string, label: string }[]): RecipeIngredientModel {
     const recipeIngredient = new RecipeIngredientModel(recipeIngredientForm);
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
@@ -56,20 +56,46 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       recipeIngredient.ingredient = ingredientOrRecipe;
     }
 
-    if (recipeIngredientForm.unitOrMeasure) {
-      const unitOrMeasure = typeof recipeIngredientForm.unitOrMeasure === 'string'
-        ? recipeIngredientForm.unitOrMeasure
-        : (recipeIngredientForm.unitOrMeasure as { key: string, label: string }).key;
-      if (typeof MeasureUnits[unitOrMeasure] !== 'undefined') {
-        recipeIngredient.unit = unitOrMeasure as MeasureUnitEnum;
-      } else if (unitOrMeasure.length > 0) {
-        recipeIngredient.measure = unitOrMeasure as string;
-      }
-
-      console.log('save', recipeIngredientForm.unitOrMeasure, '-', recipeIngredient.unit, '-', recipeIngredient.measure);
-    }
+    recipeIngredient.setUnitOrMeasure(recipeIngredientForm.unitOrMeasure, measureUnits);
 
     return recipeIngredient;
+  }
+
+  setUnitOrMeasure(unitOrMeasure: string, measureUnits: { key: string, label: string }[]) {
+    let value = measureUnits.find(measureUnit => measureUnit.label === unitOrMeasure || measureUnit.key === unitOrMeasure)?.key!;
+    let isUnit = false;
+
+    if (!value) {
+      this.unit = null;
+      this.measure = '';
+      return;
+    }
+
+    if (MeasureUnits[value] !== undefined) {
+      isUnit = true;
+    } else {
+      const measureUnitKeys = Object.keys(MeasureUnitEnum);
+      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure);
+      if (keyIndex > -1) {
+        isUnit = true;
+        value = measureUnits[keyIndex].key;
+      } else {
+        const measureUnitValues = Object.values(MeasureUnitEnum);
+        const valueIndex = measureUnitValues.indexOf(unitOrMeasure as MeasureUnitEnum);
+        if (valueIndex > -1) {
+          isUnit = true;
+          value = measureUnits[valueIndex].key;
+        }
+      }
+    }
+
+    if (isUnit) {
+      this.unit = value as MeasureUnitEnum;
+      this.measure = '';
+    } else {
+      this.measure = value;
+      this.unit = null;
+    }
   }
 
   unitOrMeasureToString(measureUnits: { key: string, label: string }[]): string | undefined {

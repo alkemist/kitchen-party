@@ -21,8 +21,8 @@ import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
+import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
-import {slugify} from "../../../../tools/slugify";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -47,7 +47,6 @@ export class RecipeComponent implements OnInit {
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
   unitsOrMeasures: { key: string, label: string }[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
-  recipes: RecipeModel[] = [];
   form: FormGroup = new FormGroup({});
   loading = true;
   error: string = '';
@@ -113,34 +112,18 @@ export class RecipeComponent implements OnInit {
     this.route.data.subscribe(
       (data => {
         if (data && data['recipe']) {
-          this.recipe = data['recipe'];
-          this.form.patchValue(this.recipe);
-          this.recipeIngredients.removeAt(0);
-          this.instructionRows.removeAt(0);
-
-          this.recipe.orderedRecipeIngredients.forEach((recipeIngredient, i) => {
-            this.addRecipeIngredient();
-
-            const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
-            recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
-            recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
-              ? MeasureUnits[recipeIngredient.unit]
-              : recipeIngredient.measure;
-
-            console.log('load', recipeIngredientForm.unit, '-', recipeIngredientForm.measure, '-', recipeIngredientForm.unitOrMeasure);
-
-            this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
+          this.loadTranslations(() => {
+            this.loadData(data['recipe']);
           });
-          this.recipe.instructions?.forEach((instruction, i) => {
-            this.addInstructionRow();
 
-            this.instructionRows.at(i).patchValue(instruction);
-          });
           this.loading = false;
         } else {
           this.loading = false;
         }
       }));
+  }
+
+  loadTranslations(callback: () => void) {
     this.translateService.getTranslation('fr').subscribe(() => {
       this.ingredientTranslation = this.translateService.instant('Ingredient');
       this.recipeTypes = this.recipeTypes.map(item => {
@@ -150,6 +133,32 @@ export class RecipeComponent implements OnInit {
         return {...item, label: this.translateService.instant(item.label)};
       });
       this.measureUnits = this.measureUnits.concat(this.recipeService.getCustomMeasures());
+      callback();
+    });
+  }
+
+  loadData(recipe: RecipeModel) {
+    this.recipe = recipe;
+    this.form.patchValue(this.recipe);
+    this.recipeIngredients.removeAt(0);
+    this.instructionRows.removeAt(0);
+
+    this.recipe.orderedRecipeIngredients.forEach((recipeIngredient, i) => {
+      this.addRecipeIngredient();
+
+      const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
+      recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
+      recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
+        ? MeasureUnits[recipeIngredient.unit] ? this.translateService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.unit
+        : recipeIngredient.measure;
+
+      this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
+    });
+
+    this.recipe.instructions?.forEach((instruction, i) => {
+      this.addInstructionRow();
+
+      this.instructionRows.at(i).patchValue(instruction);
     });
   }
 
@@ -177,7 +186,7 @@ export class RecipeComponent implements OnInit {
 
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = new RecipeIngredientModel({} as RecipeInterface);//RecipeIngredientModel.import(recipeIngredientData);
+    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData, this.measureUnits);
     const recipeIngredientString = recipeIngredient.toString(this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
@@ -185,7 +194,7 @@ export class RecipeComponent implements OnInit {
   async handleSubmit(): Promise<void> {
     const formRecipe = new RecipeModel(this.form.value);
     for (let i = 0; i < this.recipeIngredients.length; i++) {
-      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value));
+      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value, this.measureUnits));
     }
 
     await this.preSubmit(formRecipe);
