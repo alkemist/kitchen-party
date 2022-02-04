@@ -49,33 +49,37 @@ export class RecipeIngredientModel extends KitchenIngredientModel implements Rec
     return recipeIngredient;
   }
 
-  quantityDescription(measureUnits: { key: string, label: string }[]) {
-    const strArray = [];
-    if (this.quantity) {
-      strArray.push(this.quantity);
-    }
+  unitOrMeasureToString(measureUnits: { key: string, label: string }[]): string | undefined {
+    let unitOrMeasure = '';
     if (this.measure) {
-      strArray.push(this.measure);
+      unitOrMeasure = this.measure;
     } else if (this.unit) {
-      strArray.push(measureUnits.find(measure => measure.key === this.unit)?.label);
+      unitOrMeasure = measureUnits.find(measure => measure.key === this.unit)?.label!;
     }
-    return strArray.join(' ');
+
+    return this.quantity && unitOrMeasure
+        ? `${this.quantity} ${unitOrMeasure}`
+        : this.quantity?.toString();
   }
 
   override toString(measureUnits: { key: string, label: string }[]): string {
-    const strArray = [];
-    const quantityDescription = this.quantityDescription(measureUnits);
-    if (quantityDescription) {
-      strArray.push(quantityDescription);
-    }
+    let str = '';
+    const quantityDescription = this.unitOrMeasureToString(measureUnits);
 
+    let ingredientOrRecipe = null;
     if (this.recipe) {
-      strArray.push(this.recipe.name);
+      ingredientOrRecipe = this.recipe.name;
     } else if (this.ingredient) {
-      strArray.push(this.ingredient.name);
+      ingredientOrRecipe = this.ingredient.name;
     }
 
-    return strArray.join(' ');
+    if (quantityDescription && ingredientOrRecipe) {
+      str = `${ingredientOrRecipe}:  ${quantityDescription}`;
+    } else if (ingredientOrRecipe) {
+      str = `${ingredientOrRecipe}`;
+    }
+
+    return str;
   }
 }
 

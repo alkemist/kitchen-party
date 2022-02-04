@@ -45,7 +45,7 @@ export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
-  measureOrUnits: { key: string, label: string }[] = [];
+  unitsOrMeasures: { key: string, label: string }[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   recipes: RecipeModel[] = [];
   form: FormGroup = new FormGroup({});
@@ -274,7 +274,7 @@ export class RecipeComponent implements OnInit {
   }
 
   searchUnitOrMeasure($event: any) {
-    this.measureOrUnits = this.measureUnits.filter(measureOrUnit => {
+    this.unitsOrMeasures = this.measureUnits.filter(measureOrUnit => {
       return this.filterService.filters.contains(measureOrUnit.key, $event.query);
     });
   }

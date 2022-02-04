@@ -42,7 +42,7 @@
           <i class="material-icons">{{ recipeIngredient.ingredient?.typeIcon }}</i>
           {{ recipeIngredient.ingredient?.name }}
         </h5>
-        <span>{{ quantityDescription(recipeIngredient) || '' }}</span>
+        <span>{{ unitOrMeasureToString(recipeIngredient) || '' }}</span>
       </div>
     </div>
 

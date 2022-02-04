@@ -53,7 +53,7 @@ export class FrontRecipeComponent implements OnInit {
     });
   }
 
-  quantityDescription(recipeIngredient: RecipeIngredientModel): string {
-    return recipeIngredient.quantityDescription(this.measureUnits);
+  unitOrMeasureToString(recipeIngredient: RecipeIngredientModel): string | undefined {
+    return recipeIngredient.unitOrMeasureToString(this.measureUnits);
   }
 }
