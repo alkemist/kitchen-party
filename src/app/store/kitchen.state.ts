@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {KitchenIngredientModel} from "../models/recipe-ingredient.model";
+import {KitchenIngredientModel} from "../models/kitchen-ingredient.model";
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -16,7 +16,7 @@ export class KitchenIngredientStateModel {
 
 @Injectable()
 @State<KitchenIngredientStateModel>({
-  name: 'kitchenKitchenIngredients',
+  name: 'kitchenIngredients',
   defaults: {
     all: [],
     lastUpdated: undefined,
@@ -63,7 +63,11 @@ export class KitchenIngredientState {
   }
 
   @Action(UpdateKitchenIngredient)
-  update({getState, patchState, setState}: StateContext<KitchenIngredientStateModel>, {payload}: UpdateKitchenIngredient) {
+  update({
+           getState,
+           patchState,
+           setState
+         }: StateContext<KitchenIngredientStateModel>, {payload}: UpdateKitchenIngredient) {
     setState(
       patch({
         all: updateItem<KitchenIngredientModel>((item?: KitchenIngredientModel) => item?.id === payload.id, payload)

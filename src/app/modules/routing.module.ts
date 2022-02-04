@@ -12,6 +12,9 @@ import {LoginGuard} from '../guards/login.guard';
 import {IngredientResolver} from '../resolvers/ingredient.resolver';
 import {RecipeResolver} from '../resolvers/recipe.resolver';
 import {UserService} from '../services/user.service';
+import {KitchenIngredientsComponent} from "../components/views/backend/kitchen-ingredients/kitchen-ingredients.component";
+import {KitchenIngredientComponent} from "../components/views/backend/kitchen-ingredient/kitchen-ingredient.component";
+import {KitchenResolver} from "../resolvers/kitchen.resolver";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [LoginGuard], data: {title: 'Login', showFilter: false}},
@@ -55,6 +58,27 @@ const routes: Routes = [
     component: RecipeComponent,
     canActivate: [LoggedGuard],
     data: {title: 'Recipe', showFilter: false},
+  },
+  {
+    path: 'kitchen-ingredients',
+    component: KitchenIngredientsComponent,
+    canActivate: [LoggedGuard],
+    data: {title: 'Kitchen ingredients', showFilter: false}
+  },
+  {
+    path: 'kitchen-ingredient/:slug',
+    component: KitchenIngredientComponent,
+    resolve: {
+      recipe: KitchenResolver
+    },
+    canActivate: [LoggedGuard],
+    data: {title: 'Kitchen ingredient', showFilter: false},
+  },
+  {
+    path: 'kitchen-ingredient',
+    component: KitchenIngredientComponent,
+    canActivate: [LoggedGuard],
+    data: {title: 'Kitchen ingredient', showFilter: false},
   },
   {
     path: ':slug', component: FrontRecipeComponent,

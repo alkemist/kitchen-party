@@ -34,7 +34,7 @@ export const generatePushID = function () {
   for (i = 0; i < 12; i++) {
     lastRandChars[i] = Math.floor(Math.random() * 64);
   }
-  
+
   for (i = 0; i < 12; i++) {
     id += PUSH_CHARS.charAt(lastRandChars[i]);
   }

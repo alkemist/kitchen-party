@@ -18,32 +18,28 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     super(logger, 'ingredient', ingredientConverter);
   }
 
-  getList(): IngredientModel[] {
-    const ingredients = this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
-    return ingredients.map(ingredient => new IngredientModel(ingredient));
-  }
-
-  async getListOrRefresh(): Promise<IngredientModel[]> {
+  async getListOrRefresh(sortField = 'name'): Promise<IngredientModel[]> {
     const ingredients = this.getList();
     if (ingredients.length === 0 || this.storeIsOutdated()) {
       return await this.refreshList();
     }
-    return ingredients;
+    return this.sort(ingredients);
   }
 
-  async getBySlug(slug: string): Promise<IngredientModel> {
+  async getBySlug(slug: string): Promise<IngredientModel | undefined> {
     const ingredients = await this.getListOrRefresh();
     const ingredient = ingredients.find((ingredient: IngredientInterface) => {
       return ingredient.slug === slug;
     })!;
-    return new IngredientModel(ingredient);
+    return ingredient ? new IngredientModel(ingredient) : undefined;
   }
 
-  async getById(id: string): Promise<IngredientModel> {
+  async getById(id: string): Promise<IngredientModel | undefined> {
     const ingredients = await this.getListOrRefresh();
-    return ingredients.find((ingredient: IngredientModel) => {
+    const ingredient = ingredients.find((ingredient: IngredientModel) => {
       return ingredient.id === id;
     })!;
+    return ingredient ? new IngredientModel(ingredient) : undefined;
   }
 
   async search(query: string): Promise<IngredientModel[]> {
@@ -79,13 +75,13 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     return ingredient;
   }
 
-  async add(ingredient: IngredientModel): Promise<IngredientModel> {
+  async add(ingredient: IngredientModel): Promise<IngredientModel | undefined> {
     const ingredientStored = await super.addOne(ingredient);
     this.store.dispatch(new AddIngredient(ingredientStored));
     return this.getBySlug(ingredientStored.slug);
   }
 
-  async update(ingredient: IngredientModel): Promise<IngredientModel> {
+  async update(ingredient: IngredientModel): Promise<IngredientModel | undefined> {
     const ingredientStored = await super.updateOne(ingredient);
     this.store.dispatch(new UpdateIngredient(ingredientStored));
     return this.getBySlug(ingredientStored.slug);
@@ -98,5 +94,10 @@ export class IngredientService extends FirestoreService<IngredientModel> {
 
   override async exist(name: string): Promise<boolean> {
     return await super.exist(name);
+  }
+
+  private getList(sortField = 'name'): IngredientModel[] {
+    const ingredients = this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
+    return ingredients.map(ingredient => new IngredientModel(ingredient));
   }
 }

@@ -1,4 +1,3 @@
-import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {
   AbstractControl,
@@ -23,6 +22,7 @@ import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
+import {slugify} from "../../../../tools/slugify";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -64,7 +64,6 @@ export class RecipeComponent implements OnInit {
     private messageService: MessageService,
     private dialogService: DialogService,
     private filterService: FilterService,
-    private http: HttpClient
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -148,19 +147,6 @@ export class RecipeComponent implements OnInit {
       });
       this.measureUnits = this.measureUnits.concat(this.recipeService.getCustomMeasures());
     });
-
-    /*this.ingredientService.refreshList().then(async (ingredients) => {
-      this.http.get('/assets/kitchen.json').subscribe(async (kitchen: any) => {
-        console.log('-- Kitchen', kitchen);
-      });
-    });*/
-    /*this.recipeService.refreshList().then(async (recipes) => {
-      for (const recipe of recipes) {
-        for (const recipeIngredient of recipe.recipeIngredients) {
-
-        }
-      }
-    });*/
   }
 
   addRecipeIngredient(): void {
@@ -209,7 +195,7 @@ export class RecipeComponent implements OnInit {
         formDocument.id = this.recipe.id;
       }
 
-      const checkExist = !this.recipe.id || formDocument.name !== this.recipe.name;
+      const checkExist = !this.recipe.id || slugify(formDocument.name) !== slugify(this.recipe.name);
 
       if (checkExist) {
         this.recipeService.exist(formDocument.name!).then(async exist => {
@@ -228,7 +214,7 @@ export class RecipeComponent implements OnInit {
     if (this.recipe.id) {
       this.loading = true;
       this.recipeService.update(localDocument).then(async recipe => {
-        this.recipe = recipe;
+        this.recipe = recipe!;
         this.loading = false;
         await this.messageService.add({
           severity: 'success',
@@ -238,7 +224,7 @@ export class RecipeComponent implements OnInit {
       });
     } else {
       this.recipeService.add(localDocument).then(recipe => {
-        this.recipe = recipe;
+        this.recipe = recipe!;
         this.loading = false;
         this.messageService.add({
           severity: 'success',

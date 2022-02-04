@@ -1,8 +1,6 @@
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
 import {IngredientModel} from './ingredient.model';
 import {RecipeModel} from './recipe.model';
-import {FirestoreDataConverter} from "@firebase/firestore";
-import {DocumentSnapshot, SnapshotOptions, WithFieldValue} from "firebase/firestore";
 
 export interface RecipeIngredientInterface {
   id?: string,
@@ -81,8 +79,8 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     return this.quantity && unitOrMeasure
-        ? `${this.quantity} ${unitOrMeasure}`
-        : this.quantity?.toString();
+      ? `${this.quantity} ${unitOrMeasure}`
+      : this.quantity?.toString();
   }
 
   getEquivalentGram(): number {
@@ -109,20 +107,4 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return str;
   }
 }
-
-export class KitchenIngredientModel extends RecipeIngredientModel {
-
-}
-
-export const kitchenIngredientConverter: FirestoreDataConverter<RecipeIngredientModel> = {
-  toFirestore: (kitchenIngredient: WithFieldValue<RecipeIngredientModel>) => {
-    const kitchenIngredientFields = {...kitchenIngredient};
-    delete kitchenIngredientFields.id;
-    return kitchenIngredientFields;
-  },
-  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    const data = snapshot.data(options);
-    return new RecipeIngredientModel(data as RecipeIngredientFormInterface);
-  }
-};
 

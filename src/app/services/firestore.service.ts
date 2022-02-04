@@ -109,6 +109,14 @@ export abstract class FirestoreService<T extends DataObject> {
     return !!dataObjectDocument;
   }
 
+  protected sort(documents: T[]): T[] {
+    return documents.sort((a, b) => {
+      const aName = slugify(a.name!);
+      const bName = slugify(b.name!);
+      return (aName > bName) ? 1 : ((bName > aName) ? -1 : 0);
+    });
+  }
+
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];

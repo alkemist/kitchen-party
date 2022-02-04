@@ -51,6 +51,21 @@ export class HeaderComponent implements OnInit {
       ]
     },
     {
+      label: 'Kitchen',
+      items: [
+        {
+          label: 'List',
+          icon: 'pi pi-list',
+          routerLink: '/kitchen-ingredients',
+        },
+        {
+          label: 'New',
+          icon: 'pi pi-plus',
+          routerLink: '/kitchen-ingredient'
+        },
+      ]
+    },
+    {
       label: 'User',
       items: [{
         label: 'Sign out',

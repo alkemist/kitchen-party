@@ -19,11 +19,6 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     super(logger, 'recipe', recipeConverter);
   }
 
-  getList(): RecipeModel[] {
-    const recipes = this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
-    return recipes.map(recipe => new RecipeModel(recipe));
-  }
-
   getCustomMeasures(): { key: string, label: string }[] {
     const recipes = this.getList();
     let measures = recipes.map(recipe => {
@@ -45,7 +40,7 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     if (recipes.length === 0 || this.storeIsOutdated()) {
       return await this.refreshList();
     }
-    return recipes;
+    return this.sort(recipes);
   }
 
   async search(query: string): Promise<RecipeModel[]> {
@@ -55,19 +50,20 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     });
   }
 
-  async getBySlug(slug: string): Promise<RecipeModel> {
+  async getBySlug(slug: string): Promise<RecipeModel | undefined> {
     const recipes = await this.getListOrRefresh();
     const recipe = recipes.find((recipe: RecipeModel) => {
       return recipe.slug === slug;
     })!;
-    return new RecipeModel(recipe);
+    return recipe ? new RecipeModel(recipe) : undefined;
   }
 
-  async getById(id: string): Promise<RecipeModel> {
+  async getById(id: string): Promise<RecipeModel | undefined> {
     const recipes = await this.getListOrRefresh();
-    return recipes.find((recipe: RecipeModel) => {
+    const recipe = recipes.find((recipe: RecipeModel) => {
       return recipe.id === id;
     })!;
+    return recipe ? new RecipeModel(recipe) : undefined;
   }
 
   async refreshList(): Promise<RecipeModel[]> {
@@ -100,14 +96,14 @@ export class RecipeService extends FirestoreService<RecipeModel> {
     return recipe;
   }
 
-  async add(recipe: RecipeModel): Promise<RecipeModel> {
+  async add(recipe: RecipeModel): Promise<RecipeModel | undefined> {
     const recipeStored = await super.addOne(recipe);
     await this.hydrate(recipeStored);
     this.store.dispatch(new AddRecipe(recipeStored));
     return this.getBySlug(recipeStored.slug);
   }
 
-  async update(recipe: RecipeModel): Promise<RecipeModel> {
+  async update(recipe: RecipeModel): Promise<RecipeModel | undefined> {
     const recipeStored = await super.updateOne(recipe);
     await this.hydrate(recipeStored);
     this.store.dispatch(new UpdateRecipe(recipeStored));
@@ -121,6 +117,11 @@ export class RecipeService extends FirestoreService<RecipeModel> {
 
   override async exist(name: string): Promise<boolean> {
     return await super.exist(name);
+  }
+
+  private getList(): RecipeModel[] {
+    const recipes = this.store.selectSnapshot<RecipeModel[]>(state => state.recipes.all);
+    return recipes.map(recipe => new RecipeModel(recipe));
   }
 
   private async hydrate(recipe: RecipeModel): Promise<void> {

@@ -103,5 +103,9 @@
   "Burger": "Burger",
   "Wrong Api Key": "Mauvaise clef API",
   "Email is malformed.": "Email n'a pas le bon format.",
+  "Kitchen ingredients": "Ingrédients en cuisine",
+  "Kitchen": "Cuisine",
+  "Kitchen ingredient": "Ingrédient en cuisine",
+  "New kitchen ingredient": "Nouvel ingrédient en cuisine",
   "primeng": {}
 }

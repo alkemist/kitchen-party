@@ -7,6 +7,7 @@ import {IngredientTypeEnum} from '../../../enums/ingredient-type.enum';
 import {IngredientInterface, IngredientModel} from '../../../models/ingredient.model';
 import {IngredientService} from '../../../services/ingredient.service';
 import {EnumHelper} from '../../../tools/enum.helper';
+import {slugify} from "../../../tools/slugify";
 
 @Component({
   selector: 'app-dialog-ingredient',
@@ -64,7 +65,7 @@ export class DialogIngredientComponent implements OnInit {
         formDocument.id = this.ingredient.id;
       }
 
-      const checkExist = !this.ingredient.id || formDocument.name !== this.ingredient.name;
+      const checkExist = !this.ingredient.id || slugify(formDocument.name) !== slugify(this.ingredient.name);
 
       if (checkExist) {
         this.ingredientService.exist(formDocument.name!).then(async exist => {
@@ -86,7 +87,7 @@ export class DialogIngredientComponent implements OnInit {
   async submit(localDocument: IngredientModel): Promise<void> {
     this.loading = true;
     await this.ingredientService.add(localDocument).then(ingredient => {
-      this.ingredient = ingredient;
+      this.ingredient = ingredient!;
       this.loading = false;
       this.messageService.add({
         severity: 'success',
