@@ -123,7 +123,11 @@ export class RecipeComponent implements OnInit {
 
             const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
             recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
-            recipeIngredientForm.unitOrMeasure = recipeIngredient.unit ? this.translateService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.measure;
+            recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
+              ? MeasureUnits[recipeIngredient.unit]
+              : recipeIngredient.measure;
+
+            console.log('load', recipeIngredientForm.unit, '-', recipeIngredientForm.measure, '-', recipeIngredientForm.unitOrMeasure);
 
             this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
           });
@@ -173,7 +177,7 @@ export class RecipeComponent implements OnInit {
 
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData);
+    const recipeIngredient = new RecipeIngredientModel({} as RecipeInterface);//RecipeIngredientModel.import(recipeIngredientData);
     const recipeIngredientString = recipeIngredient.toString(this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
@@ -263,5 +267,9 @@ export class RecipeComponent implements OnInit {
     this.unitsOrMeasures = this.measureUnits.filter(measureOrUnit => {
       return this.filterService.filters.contains(measureOrUnit.key, $event.query);
     });
+  }
+
+  getFormGroupRecipeIngredient(i: number): FormGroup {
+    return this.recipeIngredients.at(i) as FormGroup;
   }
 }

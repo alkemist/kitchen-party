@@ -65,6 +65,8 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       } else if (unitOrMeasure.length > 0) {
         recipeIngredient.measure = unitOrMeasure as string;
       }
+
+      console.log('save', recipeIngredientForm.unitOrMeasure, '-', recipeIngredient.unit, '-', recipeIngredient.measure);
     }
 
     return recipeIngredient;
