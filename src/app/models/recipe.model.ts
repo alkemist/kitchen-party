@@ -135,8 +135,14 @@ export class RecipeModel implements RecipeInterface {
 
   isVege(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (!recipeIngredient.ingredient?.isVege()) {
-        return false;
+      if (recipeIngredient.ingredient) {
+        if (!recipeIngredient.ingredient?.isVege()) {
+          return false;
+        }
+      } else if (recipeIngredient.recipe) {
+        /*if (!recipeIngredient.recipe?.isVege()) {
+          return false;
+        }*/
       }
     }
     return true;

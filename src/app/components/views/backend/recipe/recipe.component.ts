@@ -15,6 +15,7 @@ import {DialogService} from 'primeng/dynamicdialog';
 import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
+import {KeyObject} from '../../../../models/other.model';
 import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
@@ -45,7 +46,7 @@ export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
-  unitsOrMeasures: { key: string, label: string }[] = [];
+  unitsOrMeasures: KeyObject[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   form: FormGroup = new FormGroup({});
   loading = true;
@@ -134,13 +135,14 @@ export class RecipeComponent implements OnInit {
       this.measureUnits = this.measureUnits.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.measureUnits = this.measureUnits.concat(this.recipeService.getCustomMeasures());
+      this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
       callback();
     });
   }
 
   loadData(recipe: RecipeModel) {
     this.recipe = recipe;
+
     this.form.patchValue(this.recipe);
     this.recipeIngredients.removeAt(0);
     this.instructionRows.removeAt(0);

@@ -25,6 +25,11 @@ export class IngredientState {
   }
 
   @Selector()
+  static all(state: IngredientStateModel): IngredientModel[] {
+    return state.all;
+  }
+
+  @Selector()
   static getIngredientBySlug(state: IngredientStateModel, slug: string) {
     return state.all.find((ingredient: IngredientModel) => {
       return ingredient.slug === slug;

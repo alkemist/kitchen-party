@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
+import {KeyObject} from '../models/other.model';
 import {RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
 
@@ -27,8 +28,24 @@ export class RecipeState {
   }
 
   @Selector()
-  static getRecipes(state: RecipeStateModel) {
+  static all(state: RecipeStateModel): RecipeModel[] {
     return state.all;
+  }
+
+  @Selector()
+  static customMeasure(state: RecipeStateModel): KeyObject[] {
+    let measures = state.all.map(recipe => {
+      return recipe.recipeIngredients.map(recipeIngredient => recipeIngredient.measure);
+    });
+    const uniqueMeasures = measures.flat().filter((value, index, self) => {
+      return value && self.indexOf(value) === index;
+    });
+    return uniqueMeasures.map(measure => {
+      return {
+        key: measure,
+        label: measure
+      };
+    });
   }
 
   @Action(FillRecipes)

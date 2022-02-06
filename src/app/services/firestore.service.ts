@@ -12,10 +12,10 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
+import {Observable} from 'rxjs';
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
 import {LoggedError, LoggerService} from './logger.service';
-import {Observable} from "rxjs";
 
 export interface DataObject {
   id?: string;
@@ -66,8 +66,8 @@ export class DatabaseError extends LoggedError<DataObject> {
 }
 
 export abstract class FirestoreService<T extends DataObject> {
-  lastUpdated$?: Observable<Date>;
-  lastUpdated?: Date;
+  protected lastUpdated$?: Observable<Date>;
+  protected lastUpdated?: Date;
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;

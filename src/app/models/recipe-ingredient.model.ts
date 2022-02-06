@@ -1,5 +1,6 @@
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
 import {IngredientModel} from './ingredient.model';
+import {KeyObject} from './other.model';
 import {RecipeModel} from './recipe.model';
 
 export interface RecipeIngredientInterface {
@@ -42,11 +43,13 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       this.ingredient = new IngredientModel(recipeIngredient.ingredient);
     }
 
-    this.recipe = recipeIngredient.recipe;
     this.recipeId = recipeIngredient.recipeId;
+    if (recipeIngredient.recipe) {
+      this.recipe = new RecipeModel(recipeIngredient.recipe);
+    }
   }
 
-  static import(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: { key: string, label: string }[]): RecipeIngredientModel {
+  static import(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyObject[]): RecipeIngredientModel {
     const recipeIngredient = new RecipeIngredientModel(recipeIngredientForm);
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
@@ -61,7 +64,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return recipeIngredient;
   }
 
-  setUnitOrMeasure(unitOrMeasure: string, measureUnits: { key: string, label: string }[]) {
+  setUnitOrMeasure(unitOrMeasure: string, measureUnits: KeyObject[]) {
     let value = measureUnits.find(measureUnit => measureUnit.label === unitOrMeasure || measureUnit.key === unitOrMeasure)?.key!;
     let isUnit = false;
 
@@ -98,7 +101,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
   }
 
-  unitOrMeasureToString(measureUnits: { key: string, label: string }[]): string | undefined {
+  unitOrMeasureToString(measureUnits: KeyObject[]): string | undefined {
     let unitOrMeasure = '';
     if (this.measure) {
       unitOrMeasure = this.measure;
@@ -115,7 +118,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return 0;
   }
 
-  toString(measureUnits: { key: string, label: string }[]): string {
+  toString(measureUnits: KeyObject[]): string {
     let str = '';
     const quantityDescription = this.unitOrMeasureToString(measureUnits);
 
