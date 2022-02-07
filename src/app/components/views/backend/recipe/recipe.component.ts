@@ -15,6 +15,7 @@ import {DialogService} from 'primeng/dynamicdialog';
 import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
+import {KeyObject} from '../../../../models/other.model';
 import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
@@ -45,7 +46,7 @@ export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
-  unitsOrMeasures: { key: string, label: string }[] = [];
+  unitsOrMeasures: KeyObject[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   form: FormGroup = new FormGroup({});
   loading = true;
@@ -117,8 +118,6 @@ export class RecipeComponent implements OnInit {
           this.loadTranslations(() => {
             this.loadData(data['recipe']);
           });
-
-          this.loading = false;
         } else {
           this.loading = false;
         }
@@ -134,13 +133,14 @@ export class RecipeComponent implements OnInit {
       this.measureUnits = this.measureUnits.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.measureUnits = this.measureUnits.concat(this.recipeService.getCustomMeasures());
+      this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
       callback();
     });
   }
 
   loadData(recipe: RecipeModel) {
     this.recipe = recipe;
+
     this.form.patchValue(this.recipe);
     this.recipeIngredients.removeAt(0);
     this.instructionRows.removeAt(0);
@@ -162,6 +162,7 @@ export class RecipeComponent implements OnInit {
 
       this.instructionRows.at(i).patchValue(instruction);
     });
+    this.loading = false;
   }
 
   addRecipeIngredient(): void {
@@ -189,21 +190,21 @@ export class RecipeComponent implements OnInit {
 
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData, this.measureUnits);
-    const recipeIngredientString = recipeIngredient.toString(this.measureUnits);
+    const recipeIngredient = RecipeIngredientModel.format(recipeIngredientData, this.measureUnits);
+    const recipeIngredientString = RecipeIngredientModel.recipeIngredientToString(recipeIngredient, this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = new RecipeModel(this.form.value);
+    const formRecipe = {...this.form.value};
     for (let i = 0; i < this.recipeIngredients.length; i++) {
-      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value, this.measureUnits));
+      formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
 
     await this.preSubmit(formRecipe);
   }
 
-  async preSubmit(formDocument: RecipeModel): Promise<void> {
+  async preSubmit(formDocument: RecipeInterface): Promise<void> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
@@ -226,11 +227,11 @@ export class RecipeComponent implements OnInit {
     }
   }
 
-  async submit(localDocument: RecipeModel): Promise<void> {
+  async submit(localDocument: RecipeInterface): Promise<void> {
     if (this.recipe.id) {
       this.loading = true;
       this.recipeService.update(localDocument).then(async recipe => {
-        this.recipe = recipe!;
+        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         await this.messageService.add({
           severity: 'success',
@@ -240,7 +241,7 @@ export class RecipeComponent implements OnInit {
       });
     } else {
       this.recipeService.add(localDocument).then(recipe => {
-        this.recipe = recipe!;
+        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         this.messageService.add({
           severity: 'success',

@@ -2,14 +2,17 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {Select} from '@ngxs/store';
 import {User} from 'firebase/auth';
 import {MenuItem} from 'primeng/api';
+import {Observable} from 'rxjs';
 import {DietTypeEnum} from '../../../enums/diet-type.enum';
 import {RecipeTypeEnum} from '../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../models/ingredient.model';
 import {IngredientService} from '../../../services/ingredient.service';
 import {SearchService} from '../../../services/search.service';
 import {UserService} from '../../../services/user.service';
+import {IngredientState} from '../../../store/ingredient.state';
 import {EnumHelper} from '../../../tools/enum.helper';
 
 @Component({
@@ -18,6 +21,7 @@ import {EnumHelper} from '../../../tools/enum.helper';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  ingredients: IngredientModel[] = [];
   loggedUser?: User;
   menuItems: MenuItem[] = [
     {
@@ -81,12 +85,11 @@ export class HeaderComponent implements OnInit {
   title: string = '';
   showFilter = false;
   @HostBinding('class.hideHeader') hideHeader = false;
-  ingredients: IngredientModel[] = [];
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   loading = true;
   menuShowed = false;
-
+  @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
 
   constructor(
     private userService: UserService,
@@ -95,6 +98,9 @@ export class HeaderComponent implements OnInit {
     private ingredientService: IngredientService,
     private searchService: SearchService,
   ) {
+    this.ingredients$?.subscribe(ingredients => {
+      this.ingredients = ingredients;
+    });
     this.translateService.getTranslation('fr').subscribe(() => {
       this.menuItems.forEach(item => {
         item.label = this.translateService.instant(item.label!);

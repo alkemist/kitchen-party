@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {KitchenIngredientModel} from "../models/kitchen-ingredient.model";
+import {KitchenIngredientInterface} from "../models/kitchen-ingredient.model";
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -10,7 +10,7 @@ import {
 } from "./kitchen.action";
 
 export class KitchenIngredientStateModel {
-  all: KitchenIngredientModel[] = [];
+  all: KitchenIngredientInterface[] = [];
   lastUpdated?: Date = undefined;
 }
 
@@ -30,8 +30,13 @@ export class KitchenIngredientState {
   }
 
   @Selector()
+  static all(state: KitchenIngredientStateModel): KitchenIngredientInterface[] {
+    return state.all;
+  }
+
+  @Selector()
   static getKitchenIngredientBySlug(state: KitchenIngredientStateModel, slug: string) {
-    return state.all.find((kitchenIngredient: KitchenIngredientModel) => {
+    return state.all.find((kitchenIngredient: KitchenIngredientInterface) => {
       return kitchenIngredient.ingredient?.slug === slug;
     });
   }
@@ -57,7 +62,7 @@ export class KitchenIngredientState {
   remove({setState}: StateContext<KitchenIngredientStateModel>, {payload}: RemoveKitchenIngredient) {
     setState(
       patch({
-        all: removeItem<KitchenIngredientModel>((item?: KitchenIngredientModel) => item?.id === payload.id)
+        all: removeItem<KitchenIngredientInterface>((item?: KitchenIngredientInterface) => item?.id === payload.id)
       })
     );
   }
@@ -70,7 +75,7 @@ export class KitchenIngredientState {
          }: StateContext<KitchenIngredientStateModel>, {payload}: UpdateKitchenIngredient) {
     setState(
       patch({
-        all: updateItem<KitchenIngredientModel>((item?: KitchenIngredientModel) => item?.id === payload.id, payload)
+        all: updateItem<KitchenIngredientInterface>((item?: KitchenIngredientInterface) => item?.id === payload.id, payload)
       })
     );
   }

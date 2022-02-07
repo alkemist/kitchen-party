@@ -1,3 +1,5 @@
+import {KeyObject} from '../models/other.model';
+
 export abstract class EnumHelper {
   static enumToAssociativArray(enumValue: any): { [key: string]: string } {
     const keys = Object.keys(enumValue);
@@ -5,7 +7,7 @@ export abstract class EnumHelper {
     return keys.reduce((obj, key, index) => ({...obj, [key]: values[index]}), {});
   }
 
-  static enumToObject(enumValue: any): { key: string, label: string }[] {
+  static enumToObject(enumValue: any): KeyObject[] {
     const keys = Object.keys(enumValue);
     const values = Object.values(enumValue) as string[];
     return keys.map((value, index) => {

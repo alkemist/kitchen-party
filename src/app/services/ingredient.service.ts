@@ -6,40 +6,46 @@ import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
 import {IngredientState} from "../store/ingredient.state";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
+import {ArrayHelper} from "../tools/array.helper";
 
 @Injectable({
   providedIn: 'root'
 })
-export class IngredientService extends FirestoreService<IngredientModel> {
+export class IngredientService extends FirestoreService<IngredientInterface> {
   @Select(IngredientState.lastUpdated) override lastUpdated$?: Observable<Date>;
+  @Select(IngredientState.all) protected override all$?: Observable<IngredientInterface[]>;
+
+  private allSubscription?: Subscription;
+  private all: IngredientModel[] = [];
 
   constructor(private logger: LoggerService, private store: Store) {
     super(logger, 'ingredient', ingredientConverter);
   }
 
-  async getListOrRefresh(sortField = 'name'): Promise<IngredientModel[]> {
-    const ingredients = this.getList();
-    if (ingredients.length === 0 || this.storeIsOutdated()) {
-      return await this.refreshList();
+  async getListOrRefresh(): Promise<IngredientModel[]> {
+    if (this.allSubscription) {
+      this.allSubscription.unsubscribe();
     }
-    return this.sort(ingredients);
-  }
+    if (this.all.length > 0) {
+      return this.all;
+    }
 
-  async getBySlug(slug: string): Promise<IngredientModel | undefined> {
-    const ingredients = await this.getListOrRefresh();
-    const ingredient = ingredients.find((ingredient: IngredientInterface) => {
-      return ingredient.slug === slug;
-    })!;
-    return ingredient ? new IngredientModel(ingredient) : undefined;
-  }
+    return new Promise<IngredientModel[]>(resolve => {
+      this.all$?.subscribe(async ingredients => {
+        if (ingredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
+          await this.refreshList();
+          resolve([]);
+        }
 
-  async getById(id: string): Promise<IngredientModel | undefined> {
-    const ingredients = await this.getListOrRefresh();
-    const ingredient = ingredients.find((ingredient: IngredientModel) => {
-      return ingredient.id === id;
-    })!;
-    return ingredient ? new IngredientModel(ingredient) : undefined;
+        this.all = [];
+        for (const ingredient of ingredients) {
+          this.all.push(new IngredientModel(ingredient));
+        }
+        this.all = ArrayHelper.sortBySlug<IngredientModel>(this.all);
+        resolve(this.all);
+      });
+    });
   }
 
   async search(query: string): Promise<IngredientModel[]> {
@@ -49,10 +55,20 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     });
   }
 
-  async refreshList(): Promise<IngredientModel[]> {
-    const ingredients = await super.select(orderBy('name'));
-    this.store.dispatch(new FillIngredients(ingredients));
-    return this.getList();
+  async getBySlug(slug: string): Promise<IngredientModel | undefined> {
+    const ingredients = await this.getListOrRefresh();
+    const ingredient = ingredients.find((ingredient: IngredientInterface) => {
+      return ingredient.slug === slug;
+    })!;
+    return ingredient ?? undefined;
+  }
+
+  async getById(id: string): Promise<IngredientModel | undefined> {
+    const ingredients = await this.getListOrRefresh();
+    const ingredient = ingredients.find((ingredient: IngredientModel) => {
+      return ingredient.id === id;
+    })!;
+    return ingredient ?? undefined;
   }
 
   async get(slug: string): Promise<IngredientModel | undefined> {
@@ -63,9 +79,8 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     let ingredient = await this.getBySlug(slug);
     if (!ingredient) {
       try {
-        ingredient = await super.findOneBySlug(slug);
-        this.store.dispatch(new AddIngredient(ingredient));
-        return this.getBySlug(slug);
+        const ingredientData = await super.findOneBySlug(slug);
+        return new IngredientModel(this.addToStore(ingredientData));
       } catch (e) {
         if (e instanceof DocumentNotFound) {
           return undefined;
@@ -75,19 +90,18 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     return ingredient;
   }
 
-  async add(ingredient: IngredientModel): Promise<IngredientModel | undefined> {
+  async add(ingredient: IngredientInterface): Promise<IngredientInterface | undefined> {
     const ingredientStored = await super.addOne(ingredient);
-    this.store.dispatch(new AddIngredient(ingredientStored));
-    return this.getBySlug(ingredientStored.slug);
+    return this.addToStore(ingredientStored);
   }
 
-  async update(ingredient: IngredientModel): Promise<IngredientModel | undefined> {
+  async update(ingredient: IngredientInterface): Promise<IngredientInterface | undefined> {
     const ingredientStored = await super.updateOne(ingredient);
     this.store.dispatch(new UpdateIngredient(ingredientStored));
-    return this.getBySlug(ingredientStored.slug);
+    return ingredientStored;
   }
 
-  async remove(ingredient: IngredientModel): Promise<void> {
+  async remove(ingredient: IngredientInterface): Promise<void> {
     await super.removeOne(ingredient);
     this.store.dispatch(new RemoveIngredient(ingredient));
   }
@@ -96,8 +110,14 @@ export class IngredientService extends FirestoreService<IngredientModel> {
     return await super.exist(name);
   }
 
-  private getList(sortField = 'name'): IngredientModel[] {
-    const ingredients = this.store.selectSnapshot<IngredientModel[]>(state => state.ingredients.all);
-    return ingredients.map(ingredient => new IngredientModel(ingredient));
+  private addToStore(ingredient: IngredientInterface): IngredientInterface {
+    this.store.dispatch(new AddIngredient(ingredient));
+    return ingredient;
+  }
+
+  private async refreshList(): Promise<void> {
+    const ingredients = await super.select(orderBy('name'));
+
+    this.store.dispatch(new FillIngredients(ingredients));
   }
 }

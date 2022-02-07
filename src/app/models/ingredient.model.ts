@@ -3,7 +3,7 @@ import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
 import {DataObject} from '../services/firestore.service';
 import {slugify} from '../tools/slugify';
-import {RecipeModel} from './recipe.model';
+import {RecipeInterface, RecipeModel} from './recipe.model';
 
 
 export interface IngredientInterface extends DataObject {
@@ -15,7 +15,7 @@ export interface IngredientInterface extends DataObject {
   isLiquid?: boolean | null,
 
   recipeId?: string,
-  recipe?: RecipeModel
+  recipe?: RecipeInterface
 }
 
 export class IngredientModel implements IngredientInterface {
@@ -124,7 +124,7 @@ export class IngredientModel implements IngredientInterface {
   isSweet(): boolean {
     const name = this.name.toLowerCase();
 
-    if (IngredientModel.sweetNames.includes(this.name)) {
+    if (IngredientModel.sweetNames.includes(name)) {
       return true;
     }
 
@@ -138,7 +138,7 @@ export class IngredientModel implements IngredientInterface {
     if (IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods
       || IngredientTypes[this.type] === IngredientTypeEnum.meats) {
       return true;
-    } else if (IngredientModel.saltyNames.includes(this.name)) {
+    } else if (IngredientModel.saltyNames.includes(name)) {
       return true;
     } else if (regex.test(this.name)) {
       return true;
@@ -148,7 +148,7 @@ export class IngredientModel implements IngredientInterface {
   }
 }
 
-export const ingredientConverter: FirestoreDataConverter<IngredientModel> = {
+export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = {
   toFirestore: (ingredient: IngredientModel): IngredientInterface => {
     const ingredientFields = {...ingredient};
     ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
@@ -157,7 +157,6 @@ export const ingredientConverter: FirestoreDataConverter<IngredientModel> = {
     return ingredientFields;
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    const data = snapshot.data(options);
-    return new IngredientModel(data as IngredientInterface);
+    return snapshot.data(options) as IngredientInterface;
   }
 };

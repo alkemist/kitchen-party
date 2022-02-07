@@ -1,6 +1,7 @@
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
-import {IngredientModel} from './ingredient.model';
-import {RecipeModel} from './recipe.model';
+import {IngredientInterface, IngredientModel} from './ingredient.model';
+import {KeyObject} from './other.model';
+import {RecipeInterface, RecipeModel} from './recipe.model';
 
 export interface RecipeIngredientInterface {
   id?: string,
@@ -8,9 +9,9 @@ export interface RecipeIngredientInterface {
   measure?: string,
   unit?: MeasureUnitEnum | null,
 
-  ingredient?: IngredientModel,
+  ingredient?: IngredientInterface,
   ingredientId?: string,
-  recipe?: RecipeModel,
+  recipe?: RecipeInterface,
   recipeId?: string,
 }
 
@@ -42,12 +43,18 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       this.ingredient = new IngredientModel(recipeIngredient.ingredient);
     }
 
-    this.recipe = recipeIngredient.recipe;
     this.recipeId = recipeIngredient.recipeId;
+    if (recipeIngredient.recipe) {
+      this.recipe = new RecipeModel(recipeIngredient.recipe);
+    }
   }
 
-  static import(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: { key: string, label: string }[]): RecipeIngredientModel {
-    const recipeIngredient = new RecipeIngredientModel(recipeIngredientForm);
+  getEquivalentGram(): number {
+    return 0;
+  }
+
+  static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyObject[]): RecipeIngredientInterface {
+    const recipeIngredient = {...recipeIngredientForm};
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     if (ingredientOrRecipe instanceof RecipeModel) {
@@ -56,19 +63,14 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       recipeIngredient.ingredient = ingredientOrRecipe;
     }
 
-    recipeIngredient.setUnitOrMeasure(recipeIngredientForm.unitOrMeasure, measureUnits);
-
-    return recipeIngredient;
-  }
-
-  setUnitOrMeasure(unitOrMeasure: string, measureUnits: { key: string, label: string }[]) {
+    const unitOrMeasure = recipeIngredientForm.unitOrMeasure;
     let value = measureUnits.find(measureUnit => measureUnit.label === unitOrMeasure || measureUnit.key === unitOrMeasure)?.key!;
     let isUnit = false;
 
     if (!value) {
-      this.unit = null;
-      this.measure = '';
-      return;
+      recipeIngredient.unit = null;
+      recipeIngredient.measure = '';
+      return recipeIngredient;
     }
 
     if (MeasureUnits[value] !== undefined) {
@@ -90,40 +92,38 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     if (isUnit) {
-      this.unit = value as MeasureUnitEnum;
-      this.measure = '';
+      recipeIngredient.unit = value as MeasureUnitEnum;
+      recipeIngredient.measure = '';
     } else {
-      this.measure = value;
-      this.unit = null;
+      recipeIngredient.measure = value;
+      recipeIngredient.unit = null;
     }
+
+    return recipeIngredient;
   }
 
-  unitOrMeasureToString(measureUnits: { key: string, label: string }[]): string | undefined {
+  static unitOrMeasureToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyObject[]): string | undefined {
     let unitOrMeasure = '';
-    if (this.measure) {
-      unitOrMeasure = this.measure;
-    } else if (this.unit) {
-      unitOrMeasure = measureUnits.find(measure => measure.key === this.unit)?.label!;
+    if (recipeIngredient.measure) {
+      unitOrMeasure = recipeIngredient.measure;
+    } else if (recipeIngredient.unit) {
+      unitOrMeasure = measureUnits.find(measure => measure.key === recipeIngredient.unit)?.label!;
     }
 
-    return this.quantity && unitOrMeasure
-      ? `${this.quantity} ${unitOrMeasure}`
-      : this.quantity?.toString();
+    return recipeIngredient.quantity && unitOrMeasure
+      ? `${recipeIngredient.quantity} ${unitOrMeasure}`
+      : recipeIngredient.quantity?.toString();
   }
 
-  getEquivalentGram(): number {
-    return 0;
-  }
-
-  toString(measureUnits: { key: string, label: string }[]): string {
+  static recipeIngredientToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyObject[]): string {
     let str = '';
-    const quantityDescription = this.unitOrMeasureToString(measureUnits);
+    const quantityDescription = RecipeIngredientModel.unitOrMeasureToString(recipeIngredient, measureUnits);
 
     let ingredientOrRecipe = null;
-    if (this.recipe) {
-      ingredientOrRecipe = this.recipe.name;
-    } else if (this.ingredient) {
-      ingredientOrRecipe = this.ingredient.name;
+    if (recipeIngredient.recipe) {
+      ingredientOrRecipe = recipeIngredient.recipe.name;
+    } else if (recipeIngredient.ingredient) {
+      ingredientOrRecipe = recipeIngredient.ingredient.name;
     }
 
     if (quantityDescription && ingredientOrRecipe) {

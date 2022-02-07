@@ -54,6 +54,6 @@ export class FrontRecipeComponent implements OnInit {
   }
 
   unitOrMeasureToString(recipeIngredient: RecipeIngredientModel): string | undefined {
-    return recipeIngredient.unitOrMeasureToString(this.measureUnits);
+    return RecipeIngredientModel.unitOrMeasureToString(recipeIngredient, this.measureUnits);
   }
 }

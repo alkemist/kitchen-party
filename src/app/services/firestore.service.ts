@@ -12,10 +12,10 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
+import {Observable} from 'rxjs';
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
 import {LoggedError, LoggerService} from './logger.service';
-import {Observable} from "rxjs";
 
 export interface DataObject {
   id?: string;
@@ -66,8 +66,10 @@ export class DatabaseError extends LoggedError<DataObject> {
 }
 
 export abstract class FirestoreService<T extends DataObject> {
-  lastUpdated$?: Observable<Date>;
-  lastUpdated?: Date;
+  protected lastUpdated$?: Observable<Date>;
+  protected all$?: Observable<T[]>;
+  protected lastUpdated?: Date;
+  protected refreshed = false;
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
@@ -108,15 +110,7 @@ export abstract class FirestoreService<T extends DataObject> {
     }
     return !!dataObjectDocument;
   }
-
-  protected sort(documents: T[]): T[] {
-    return documents.sort((a, b) => {
-      const aName = slugify(a.name!);
-      const bName = slugify(b.name!);
-      return (aName > bName) ? 1 : ((bName > aName) ? -1 : 0);
-    });
-  }
-
+  
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];
@@ -133,6 +127,7 @@ export abstract class FirestoreService<T extends DataObject> {
         this.loggerService.error(new QuotaExceededError());
       }
     }
+    this.refreshed = true;
 
     return documents;
   }

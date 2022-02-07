@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {IngredientModel} from '../../../models/ingredient.model';
+import {KeyObject} from '../../../models/other.model';
 
 @Component({
   selector: 'app-form-ingredient',
@@ -10,7 +11,7 @@ import {IngredientModel} from '../../../models/ingredient.model';
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
   @Input() loading = true;
-  @Input() ingredientTypes: { key: string, label: string }[] = [];
+  @Input() ingredientTypes: KeyObject[] = [];
   @Input() form: FormGroup = new FormGroup({});
   @Input() dialogMode = false;
   @Output() onSubmit = new EventEmitter<IngredientModel>();
@@ -36,8 +37,7 @@ export class FormIngredientComponent implements OnInit {
   }
 
   handleSubmit() {
-    const formIngredient = new IngredientModel(this.form?.value);
-    this.onSubmit.emit(formIngredient);
+    this.onSubmit.emit(this.form?.value);
   }
 
   remove() {
