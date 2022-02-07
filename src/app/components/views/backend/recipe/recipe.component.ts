@@ -24,6 +24,7 @@ import {SearchService} from '../../../../services/search.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
+import {UploadService} from "../../../../services/upload.service";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -66,6 +67,7 @@ export class RecipeComponent implements OnInit {
     private messageService: MessageService,
     private dialogService: DialogService,
     private filterService: FilterService,
+    private uploadService: UploadService,
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -122,6 +124,7 @@ export class RecipeComponent implements OnInit {
           this.loading = false;
         }
       }));
+    this.uploadService.download();
   }
 
   loadTranslations(callback: () => void) {
