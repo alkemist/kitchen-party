@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
 import {KeyObject} from '../models/other.model';
-import {RecipeModel} from '../models/recipe.model';
+import {RecipeInterface} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
 
 export class RecipeStateModel {
-  all: RecipeModel[] = [];
+  all: RecipeInterface[] = [];
   customMeasures: string[] = [];
   lastUpdated?: Date = undefined;
 }
@@ -28,7 +28,7 @@ export class RecipeState {
   }
 
   @Selector()
-  static all(state: RecipeStateModel): RecipeModel[] {
+  static all(state: RecipeStateModel): RecipeInterface[] {
     return state.all;
   }
 
@@ -42,8 +42,8 @@ export class RecipeState {
     });
     return uniqueMeasures.map(measure => {
       return {
-        key: measure,
-        label: measure
+        key: measure!,
+        label: measure!
       };
     });
   }
@@ -51,7 +51,7 @@ export class RecipeState {
   @Action(FillRecipes)
   fill({getState, patchState}: StateContext<RecipeStateModel>, {payload}: FillRecipes) {
     patchState({
-      all: payload,
+      all: [...payload],
       lastUpdated: new Date()
     });
   }
@@ -69,7 +69,7 @@ export class RecipeState {
   remove({setState}: StateContext<RecipeStateModel>, {payload}: RemoveRecipe) {
     setState(
       patch({
-        all: removeItem<RecipeModel>((item?: RecipeModel) => item?.id === payload.id)
+        all: removeItem<RecipeInterface>((item?: RecipeInterface) => item?.id === payload.id)
       })
     );
   }
@@ -78,7 +78,7 @@ export class RecipeState {
   update({getState, patchState, setState}: StateContext<RecipeStateModel>, {payload}: UpdateRecipe) {
     setState(
       patch({
-        all: updateItem<RecipeModel>((item?: RecipeModel) => item?.id === payload.id, payload)
+        all: updateItem<RecipeInterface>((item?: RecipeInterface) => item?.id === payload.id, payload)
       })
     );
   }

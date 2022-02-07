@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {IngredientModel} from '../models/ingredient.model';
+import {IngredientInterface} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from './ingredient.action';
 
 export class IngredientStateModel {
-  all: IngredientModel[] = [];
+  all: IngredientInterface[] = [];
   lastUpdated?: Date = undefined;
 }
 
@@ -25,13 +25,13 @@ export class IngredientState {
   }
 
   @Selector()
-  static all(state: IngredientStateModel): IngredientModel[] {
+  static all(state: IngredientStateModel): IngredientInterface[] {
     return state.all;
   }
 
   @Selector()
   static getIngredientBySlug(state: IngredientStateModel, slug: string) {
-    return state.all.find((ingredient: IngredientModel) => {
+    return state.all.find((ingredient: IngredientInterface) => {
       return ingredient.slug === slug;
     });
   }
@@ -57,7 +57,7 @@ export class IngredientState {
   remove({setState}: StateContext<IngredientStateModel>, {payload}: RemoveIngredient) {
     setState(
       patch({
-        all: removeItem<IngredientModel>((item?: IngredientModel) => item?.id === payload.id)
+        all: removeItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id)
       })
     );
   }
@@ -66,7 +66,7 @@ export class IngredientState {
   update({getState, patchState, setState}: StateContext<IngredientStateModel>, {payload}: UpdateIngredient) {
     setState(
       patch({
-        all: updateItem<IngredientModel>((item?: IngredientModel) => item?.id === payload.id, payload)
+        all: updateItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id, payload)
       })
     );
   }

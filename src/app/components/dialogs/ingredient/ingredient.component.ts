@@ -53,11 +53,10 @@ export class DialogIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    const formIngredient = new IngredientModel(this.form.value);
-    await this.preSubmit(formIngredient);
+    await this.preSubmit(this.form.value);
   }
 
-  async preSubmit(formDocument: IngredientModel): Promise<void> {
+  async preSubmit(formDocument: IngredientInterface): Promise<void> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
@@ -84,10 +83,10 @@ export class DialogIngredientComponent implements OnInit {
     this.ref.close();
   }
 
-  async submit(localDocument: IngredientModel): Promise<void> {
+  async submit(localDocument: IngredientInterface): Promise<void> {
     this.loading = true;
     await this.ingredientService.add(localDocument).then(ingredient => {
-      this.ingredient = ingredient!;
+      this.ingredient = new IngredientModel(ingredient!);
       this.loading = false;
       this.messageService.add({
         severity: 'success',

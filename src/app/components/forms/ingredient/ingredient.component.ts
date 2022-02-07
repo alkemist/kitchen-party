@@ -37,8 +37,7 @@ export class FormIngredientComponent implements OnInit {
   }
 
   handleSubmit() {
-    const formIngredient = new IngredientModel(this.form?.value);
-    this.onSubmit.emit(formIngredient);
+    this.onSubmit.emit(this.form?.value);
   }
 
   remove() {

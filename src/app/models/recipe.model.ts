@@ -197,7 +197,7 @@ export class RecipeModel implements RecipeInterface {
   }
 }
 
-export const recipeConverter: FirestoreDataConverter<RecipeModel> = {
+export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
   toFirestore: (recipe: RecipeModel): RecipeInterface => {
     const recipeFields = {...recipe} as RecipeInterface;
     delete recipeFields.id;
@@ -221,8 +221,7 @@ export const recipeConverter: FirestoreDataConverter<RecipeModel> = {
     return recipeFields;
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    const recipeData = snapshot.data(options) as RecipeInterface;
-    return new RecipeModel(recipeData);
+    return snapshot.data(options) as RecipeInterface;
   }
 };
 

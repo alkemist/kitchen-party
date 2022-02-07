@@ -118,8 +118,6 @@ export class RecipeComponent implements OnInit {
           this.loadTranslations(() => {
             this.loadData(data['recipe']);
           });
-
-          this.loading = false;
         } else {
           this.loading = false;
         }
@@ -164,6 +162,7 @@ export class RecipeComponent implements OnInit {
 
       this.instructionRows.at(i).patchValue(instruction);
     });
+    this.loading = false;
   }
 
   addRecipeIngredient(): void {
@@ -191,21 +190,21 @@ export class RecipeComponent implements OnInit {
 
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData, this.measureUnits);
-    const recipeIngredientString = recipeIngredient.toString(this.measureUnits);
+    const recipeIngredient = RecipeIngredientModel.format(recipeIngredientData, this.measureUnits);
+    const recipeIngredientString = RecipeIngredientModel.recipeIngredientToString(recipeIngredient, this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = new RecipeModel(this.form.value);
+    const formRecipe = {...this.form.value};
     for (let i = 0; i < this.recipeIngredients.length; i++) {
-      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value, this.measureUnits));
+      formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
 
     await this.preSubmit(formRecipe);
   }
 
-  async preSubmit(formDocument: RecipeModel): Promise<void> {
+  async preSubmit(formDocument: RecipeInterface): Promise<void> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
@@ -228,11 +227,11 @@ export class RecipeComponent implements OnInit {
     }
   }
 
-  async submit(localDocument: RecipeModel): Promise<void> {
+  async submit(localDocument: RecipeInterface): Promise<void> {
     if (this.recipe.id) {
       this.loading = true;
       this.recipeService.update(localDocument).then(async recipe => {
-        this.recipe = recipe!;
+        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         await this.messageService.add({
           severity: 'success',
@@ -242,7 +241,7 @@ export class RecipeComponent implements OnInit {
       });
     } else {
       this.recipeService.add(localDocument).then(recipe => {
-        this.recipe = recipe!;
+        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         this.messageService.add({
           severity: 'success',
