@@ -8,8 +8,8 @@
   }
 }
 
-::ng-deep .p-dialog .p-dialog-content {
-  padding: 0;
+::ng-deep p-card.ingredient .p-card-body {
+  padding: 0 !important;
   overflow: initial;
 }
 

@@ -91,12 +91,12 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
   }
 
   async add(ingredient: IngredientInterface): Promise<IngredientInterface | undefined> {
-    const ingredientStored = await super.addOne(ingredient);
+    const ingredientStored = await super.addOne(new IngredientModel(ingredient));
     return this.addToStore(ingredientStored);
   }
 
   async update(ingredient: IngredientInterface): Promise<IngredientInterface | undefined> {
-    const ingredientStored = await super.updateOne(ingredient);
+    const ingredientStored = await super.updateOne(new IngredientModel(ingredient));
     this.store.dispatch(new UpdateIngredient(ingredientStored));
     return ingredientStored;
   }
