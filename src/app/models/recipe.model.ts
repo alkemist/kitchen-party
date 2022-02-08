@@ -27,6 +27,13 @@ export interface RecipeInterface extends DataObject {
 }
 
 export class RecipeModel implements RecipeInterface {
+  static saltyNames = [
+    'pâte brisée', 'pâte à pizza',
+  ];
+  static sweetNames = [
+    'pâte sablée'
+  ];
+
   id?: string;
   name: string;
   slug: string;
@@ -167,14 +174,27 @@ export class RecipeModel implements RecipeInterface {
 
   isSweet(): boolean | null {
     if (this.type && RecipeTypes[this.type] === RecipeTypeEnum.ingredient) {
+      const name = this.name.toLowerCase();
+
+      if (RecipeModel.sweetNames.includes(name)) {
+        return true;
+      }
       return null;
     }
 
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isSalty()) {
-        return false;
-      } else if (recipeIngredient.ingredient?.isSweet()) {
-        return true;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient?.isSalty()) {
+          return false;
+        } else if (recipeIngredient.ingredient?.isSweet()) {
+          return true;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe?.isSalty()) {
+          return false;
+        } else if (recipeIngredient.recipe?.isSweet()) {
+          return true;
+        }
       }
     }
     return null;
@@ -182,14 +202,27 @@ export class RecipeModel implements RecipeInterface {
 
   isSalty(): boolean | null {
     if (this.type && RecipeTypes[this.type] === RecipeTypeEnum.ingredient) {
+      const name = this.name.toLowerCase();
+
+      if (RecipeModel.saltyNames.includes(name)) {
+        return true;
+      }
       return null;
     }
 
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isSalty()) {
-        return true;
-      } else if (recipeIngredient.ingredient?.isSweet()) {
-        return false;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient?.isSalty()) {
+          return true;
+        } else if (recipeIngredient.ingredient?.isSweet()) {
+          return false;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe?.isSalty()) {
+          return true;
+        } else if (recipeIngredient.recipe?.isSweet()) {
+          return false;
+        }
       }
     }
     return null;

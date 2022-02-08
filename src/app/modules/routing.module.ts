@@ -15,6 +15,8 @@ import {UserService} from '../services/user.service';
 import {KitchenIngredientsComponent} from "../components/views/backend/kitchen-ingredients/kitchen-ingredients.component";
 import {KitchenIngredientComponent} from "../components/views/backend/kitchen-ingredient/kitchen-ingredient.component";
 import {KitchenResolver} from "../resolvers/kitchen.resolver";
+import {ShoppingComponent} from "../components/views/frontend/shopping/shopping.component";
+import {RecipesResolver} from "../resolvers/recipes.resolver";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [LoginGuard], data: {title: 'Login', showFilter: false}},
@@ -81,11 +83,18 @@ const routes: Routes = [
     data: {title: 'Kitchen ingredient', showFilter: false},
   },
   {
+    path: 'shopping/:slugs', component: ShoppingComponent,
+    resolve: {
+      recipes: RecipesResolver
+    },
+    data: {title: 'Shopping list', showFilter: false, hideHeader: false}
+  },
+  {
     path: ':slug', component: FrontRecipeComponent,
     resolve: {
       recipe: RecipeResolver
     },
-    data: {showFilter: false, hideHeader: true}
+    data: {title: 'Recipe', showFilter: false, hideHeader: true}
   },
   {path: '', component: FrontRecipesComponent, data: {showFilter: true}},
 ];

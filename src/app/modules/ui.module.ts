@@ -24,6 +24,8 @@ import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 import {FileUploadModule} from "primeng/fileupload";
 import {ImageModule} from "primeng/image";
+import {TooltipModule} from "primeng/tooltip";
+import {CheckboxModule} from "primeng/checkbox";
 
 const modules = [
   ToolbarModule,
@@ -50,6 +52,8 @@ const modules = [
   DynamicDialogModule,
   FileUploadModule,
   ImageModule,
+  TooltipModule,
+  CheckboxModule
 ];
 
 @NgModule({

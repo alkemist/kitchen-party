@@ -22,12 +22,12 @@ export class IngredientModel implements IngredientInterface {
   static saltyNames = [
     'ail', 'herbes de provence', 'noix de muscade', 'curry', 'cumin',
     'moutarde', 'mayonnaise',
-    'fromage râpé', 'parmesan',
+    'fromage râpé', 'parmesan', 'pâte brisée', 'pâte à pizza',
     'aubergine', 'salade', 'tomate',
     'sauce soja salé', 'pomme de terre', 'patate douce'
   ];
   static sweetNames = [
-    'fraise', 'sucre vanillé', 'chocolat', 'framboise', 'sucre glace', 'spéculoos'
+    'fraise', 'sucre vanillé', 'chocolat', 'framboise', 'sucre glace', 'spéculoos', 'pâte sablée'
   ];
   id?: string;
   name: string;

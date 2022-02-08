@@ -11,6 +11,7 @@ import {RecipeService} from './recipe.service';
 })
 export class SearchService {
   filters: FormGroup = new FormGroup({});
+  selectedRecipes: RecipeModel[] = [];
 
   constructor(
     private ingredientService: IngredientService,

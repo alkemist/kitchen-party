@@ -24,6 +24,7 @@ import {UiModule} from './modules/ui.module';
 import {FormKitchenIngredientComponent,} from './components/forms/kitchen-ingredient/kitchen-ingredient.component';
 import {KitchenIngredientsComponent} from './components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
 import {KitchenIngredientComponent} from "./components/views/backend/kitchen-ingredient/kitchen-ingredient.component";
+import {ShoppingComponent} from './components/views/frontend/shopping/shopping.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {KitchenIngredientComponent} from "./components/views/backend/kitchen-ing
     DialogIngredientComponent,
     KitchenIngredientComponent,
     KitchenIngredientsComponent,
-    FormKitchenIngredientComponent
+    FormKitchenIngredientComponent,
+    ShoppingComponent
   ],
   imports: [
     BrowserModule,

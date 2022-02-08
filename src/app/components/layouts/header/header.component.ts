@@ -149,6 +149,10 @@ export class HeaderComponent implements OnInit {
     return this.searchService.filters;
   }
 
+  get selectedRecipes() {
+    return this.searchService.selectedRecipes;
+  }
+
   async ngOnInit(): Promise<void> {
     await this.userService.getLoggedUser((loggedUser) => {
       this.loading = false;
@@ -167,5 +171,9 @@ export class HeaderComponent implements OnInit {
       name: null,
       ingredients: []
     });
+  }
+
+  gotoShopping() {
+    //this.router.navigate(['/', 'shopping', this.selectedRecipes.join(',')])
   }
 }

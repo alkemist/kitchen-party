@@ -109,5 +109,11 @@
   "Upload": "Envoyer",
   "Kitchen ingredient": "Ingrédient en cuisine",
   "New kitchen ingredient": "Nouvel ingrédient en cuisine",
+  "Preparation duration": "Temps de préparation",
+  "Cooking duration": "Temps de cuisson",
+  "Waiting duration": "Temps de repos",
+  "Number of ingredients": "Nombre d'ingrédients",
+  "View recipe": "Voir la recette",
+  "Shopping list": "Liste de course",
   "primeng": {}
 }

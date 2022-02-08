@@ -1,6 +1,6 @@
 @import "/src/assets/styles/variables";
 
-$informationHeight: 106px;
+$informationHeight: 115px;
 
 .page-container__content {
   padding: 0;
@@ -40,9 +40,10 @@ $informationHeight: 106px;
         background-color: rgba(0, 0, 0, 0.5);
         height: $informationHeight;
         margin-top: -$informationHeight;
+        padding: 0 10px 10px;
 
         h5 {
-          padding: 1rem;
+          padding: 1rem 1rem 1rem 0;
           font-weight: bold;
         }
 

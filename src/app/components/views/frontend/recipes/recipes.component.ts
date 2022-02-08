@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DietTypes} from '../../../../enums/diet-type.enum';
 import {RecipeModel} from '../../../../models/recipe.model';
@@ -22,8 +21,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
 
   constructor(
     private recipeService: RecipeService,
-    private searchService: SearchService,
-    private router: Router
+    private searchService: SearchService
   ) {
     this.recipeService.getListOrRefresh().then(recipes => {
       this.recipes = recipes;
@@ -31,9 +29,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.loading = false;
     });
     this.subscription = this.searchService.filters.valueChanges.subscribe((filters) => {
-      let filteredRecipes = this.recipes;
-
-      filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
+      this.filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
         let valid = true;
 
         if (valid && filters.diet) {
@@ -51,9 +47,15 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
 
         return valid;
       });
-
-      this.filteredRecipes = filteredRecipes;
     });
+  }
+
+  get selectedRecipes() {
+    return this.searchService.selectedRecipes;
+  }
+
+  set selectedRecipes(selectedRecipes) {
+    this.searchService.selectedRecipes = selectedRecipes;
   }
 
   ngOnInit(): void {
