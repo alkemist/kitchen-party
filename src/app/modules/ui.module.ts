@@ -23,6 +23,7 @@ import {ToastModule} from 'primeng/toast';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 import {FileUploadModule} from "primeng/fileupload";
+import {ImageModule} from "primeng/image";
 
 const modules = [
   ToolbarModule,
@@ -47,7 +48,8 @@ const modules = [
   BlockUIModule,
   SidebarModule,
   DynamicDialogModule,
-  FileUploadModule
+  FileUploadModule,
+  ImageModule,
 ];
 
 @NgModule({

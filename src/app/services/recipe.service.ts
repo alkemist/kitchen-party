@@ -99,12 +99,12 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   }
 
   async add(recipe: RecipeInterface): Promise<RecipeInterface | undefined> {
-    const recipeStored = await super.addOne(recipe);
+    const recipeStored = await super.addOne(new RecipeModel(recipe));
     return this.addToStore(recipeStored);
   }
 
   async update(recipe: RecipeInterface): Promise<RecipeInterface | undefined> {
-    const recipeStored = await super.updateOne(recipe);
+    const recipeStored = await super.updateOne(new RecipeModel(recipe));
     this.store.dispatch(new UpdateRecipe(recipeStored));
     return recipeStored;
   }

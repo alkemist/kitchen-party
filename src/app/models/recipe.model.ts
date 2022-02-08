@@ -20,6 +20,7 @@ export interface RecipeInterface extends DataObject {
   instructions?: string[],
   type?: RecipeTypeEnum | null,
   image?: string,
+  imagePath?: string,
   source?: string,
 
   recipeIngredients: RecipeIngredientInterface[],
@@ -38,6 +39,7 @@ export class RecipeModel implements RecipeInterface {
   instructions?: string[];
   type?: RecipeTypeEnum | null;
   image?: string;
+  imagePath?: string;
   source?: string;
 
   recipeIngredients: RecipeIngredientModel[] = [];
@@ -55,6 +57,7 @@ export class RecipeModel implements RecipeInterface {
     this.instructions = recipe.instructions || [];
     this.type = recipe.type || null;
     this.image = recipe.image || '';
+    this.imagePath = recipe.imagePath || '';
     this.source = recipe.source;
 
     if (recipe.recipeIngredients?.length > 0) {
@@ -72,10 +75,6 @@ export class RecipeModel implements RecipeInterface {
 
   get typeName(): string {
     return this.type ? RecipeTypes[this.type] : '';
-  }
-
-  get imagePath(): string {
-    return `/assets/upload/${this.image}`;
   }
 
   get ingredientIds(): string[] {

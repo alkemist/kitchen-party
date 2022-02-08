@@ -51,10 +51,12 @@ export class RecipeComponent implements OnInit {
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   form: FormGroup = new FormGroup({});
   loading = true;
+  uploading = false;
   error: string = '';
   indexRecipeIngredient = 0;
 
   private ingredientTranslation: string = 'Ingredient';
+  files: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +77,7 @@ export class RecipeComponent implements OnInit {
       ]),
       type: new FormControl('', []),
       image: new FormControl('', []),
+      imagePath: new FormControl('', []),
       source: new FormControl('', []),
       cookingDuration: new FormControl('', []),
       preparationDuration: new FormControl('', []),
@@ -87,6 +90,14 @@ export class RecipeComponent implements OnInit {
 
   get name(): FormControl {
     return this.form.get('name') as FormControl;
+  }
+
+  get image(): FormControl {
+    return this.form.get('image') as FormControl;
+  }
+
+  get imagePath(): FormControl {
+    return this.form.get('imagePath') as FormControl;
   }
 
   get type(): FormControl {
@@ -124,7 +135,6 @@ export class RecipeComponent implements OnInit {
           this.loading = false;
         }
       }));
-    this.uploadService.download();
   }
 
   loadTranslations(callback: () => void) {
@@ -199,7 +209,7 @@ export class RecipeComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = {...this.form.value};
+    const formRecipe = {...this.form.value, recipeIngredients: []};
     for (let i = 0; i < this.recipeIngredients.length; i++) {
       formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
@@ -287,5 +297,24 @@ export class RecipeComponent implements OnInit {
 
   getFormGroupRecipeIngredient(i: number): FormGroup {
     return this.recipeIngredients.at(i) as FormGroup;
+  }
+
+  async uploadImage($event: { files: File[] }) {
+    if ($event.files.length > 0) {
+      this.uploading = true;
+      this.uploadService.upload($event.files[0]).then(async (image) => {
+        this.uploading = false;
+        if (image) {
+          this.files = [];
+          this.image.patchValue(image.name);
+          this.imagePath.patchValue(image.path);
+        }
+      });
+    }
+  }
+
+  removeCurrentImage() {
+    this.image.patchValue('')
+    this.imagePath.patchValue('')
   }
 }

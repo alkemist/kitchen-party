@@ -1,217 +1,232 @@
 <div class="page-container__content">
-  <form (submit)="handleSubmit()" [formGroup]="form">
-    <p-card #pnl class="recipe">
-      <ng-template pTemplate="title">
-        <div class="flex flex-row align-items-center">
-          <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left"
-             pButton
-             pRipple
-             type="button"></a>
-          <h5 class="text-center flex-grow-1">{{ recipe.name ?? ('New recipe' | translate) }}</h5>
-        </div>
-      </ng-template>
+    <form (submit)="handleSubmit()" [formGroup]="form">
+        <p-card #pnl class="recipe">
+            <ng-template pTemplate="title">
+                <div class="flex flex-row align-items-center">
+                    <a [routerLink]="['/', 'recipes']" class="p-button-rounded p-button-text" icon="pi pi-angle-left"
+                       pButton
+                       pRipple
+                       type="button"></a>
+                    <h5 class="text-center flex-grow-1">{{ recipe.name ?? ('New recipe' | translate) }}</h5>
+                </div>
+            </ng-template>
 
-      <div class="grid">
-        <div class="col">
-          <h5 class="flex flex-row align-items-center">
-            <span translate="">Description</span>
-            <div class="flex-grow-1"></div>
-            <button class="p-button-rounded p-button-text" pButton type="button"></button>
-          </h5>
+            <div class="grid">
+                <div class="col">
+                    <h5 class="flex flex-row align-items-center">
+                        <span translate="">Description</span>
+                        <div class="flex-grow-1"></div>
+                        <button class="p-button-rounded p-button-text" pButton type="button"></button>
+                    </h5>
 
-          <div class="field grid">
-            <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}"
-                   class="col-12 mb-2 md:col-4 md:mb-0"
-                   for="name" translate="">Name</label>
-            <div class="col-12 md:col-8">
-              <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}"
-                     class="inputfield w-full"
-                     formControlName="name" id="name" pInputText/>
-            </div>
-            <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
-              <small *ngIf="name.errors?.['required']" translate="">
-                Name is required.
-              </small>
-              <small *ngIf="name.errors?.['exist']" translate="">
-                Recipe already exist.
-              </small>
-            </div>
-          </div>
+                    <div class="field grid">
+                        <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}"
+                               class="col-12 mb-2 md:col-4 md:mb-0"
+                               for="name" translate="">Name</label>
+                        <div class="col-12 md:col-8">
+                            <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}"
+                                   class="inputfield w-full"
+                                   formControlName="name" id="name" pInputText/>
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+                        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
+                            <small *ngIf="name.errors?.['required']" translate="">
+                                Name is required.
+                            </small>
+                            <small *ngIf="name.errors?.['exist']" translate="">
+                                Recipe already exist.
+                            </small>
+                        </div>
+                    </div>
 
-          <div class="field grid">
-            <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
-                   class="col-12 mb-2 md:col-4 md:mb-0"
-                   for="type" translate="">Type</label>
-            <div class="col-12 md:col-8">
-              <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-                          [placeholder]="'Select a type' | translate"
-                          [showClear]="true" formControlName="type"
-                          inputId="type" optionValue="key"
-                          styleClass="inputfield w-full"></p-dropdown>
-            </div>
-            <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-            <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
-              <small *ngIf="type.errors?.['required']" translate="">
-                Type is required.
-              </small>
-            </div>
-          </div>
+                    <div class="field grid">
+                        <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
+                               class="col-12 mb-2 md:col-4 md:mb-0"
+                               for="type" translate="">Type</label>
+                        <div class="col-12 md:col-8">
+                            <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
+                                        [placeholder]="'Select a type' | translate"
+                                        [showClear]="true" formControlName="type"
+                                        inputId="type" optionValue="key"
+                                        styleClass="inputfield w-full"></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+                        <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
+                            <small *ngIf="type.errors?.['required']" translate="">
+                                Type is required.
+                            </small>
+                        </div>
+                    </div>
 
-          <div class="field grid">
-            <label class="col-12 mb-2 md:col-4 md:mb-0"
-                   for="source" translate="">Source</label>
-            <div class="col-12 md:col-8">
-              <input class="inputfield w-full"
-                     formControlName="source" id="source" pInputText/>
-            </div>
-          </div>
+                    <div class="field grid">
+                        <label class="col-12 mb-2 md:col-4 md:mb-0"
+                               for="source" translate="">Source</label>
+                        <div class="col-12 md:col-8">
+                            <input class="inputfield w-full"
+                                   formControlName="source" id="source" pInputText/>
+                        </div>
+                    </div>
 
-          <div class="field grid">
-            <label class="col-12 mb-2 md:col-4 md:mb-0"
-                   for="image" translate="">Image</label>
-            <div class="col-12 md:col-8">
-              <input class="inputfield w-full"
-                     formControlName="image" id="image" pInputText/>
-            </div>
-          </div>
+                    <div class="field grid">
+                        <label class="col-12 mb-2 md:col-4 md:mb-0"
+                               translate="">Image</label>
+                        <div class="col-12 md:col-8">
+                            <div *ngIf="imagePath.value"
+                                 class="flex flex-row align-items-center justify-content-between">
+                                <p-image [src]="imagePath.value"
+                                         height="100px"></p-image>
+                                <button [disabled]="uploading" (click)="removeCurrentImage()" pButton pRipple
+                                        type="button" icon="pi pi-times"
+                                        class="p-button-rounded p-button-danger p-button-text"></button>
+                            </div>
+                            <p-fileUpload *ngIf="!uploading" [disabled]="uploading" [showCancelButton]="false"
+                                          [customUpload]="true"
+                                          (uploadHandler)="uploadImage($event)"
+                                          [chooseLabel]="'Choose a image' | translate"
+                                          [uploadLabel]="'Upload' | translate"
+                                          accept="image/*" [maxFileSize]="5000000" [files]="files"></p-fileUpload>
+                            <div *ngIf="uploading" class="flex flex-row justify-content-center" style="padding: 10px;">
+                                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                            </div>
+                        </div>
+                    </div>
 
-          <h5 class="flex flex-row align-items-center">
-            <span translate="">Duration</span>
-            <div class="flex-grow-1"></div>
-            <button class="p-button-rounded p-button-text" pButton type="button"></button>
-          </h5>
-          <div class="formgrid grid">
-            <div class="field col-12 md:col-4">
-              <label for="preparationDuration" translate="">Preparation</label>
-              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
-                             inputId="preparationDuration" suffix=" min"></p-inputNumber>
-            </div>
-            <div class="field col-12 md:col-4">
-              <label for="cookingDuration" translate="">Cooking</label>
-              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
-                             inputId="cookingDuration" suffix=" min"></p-inputNumber>
-            </div>
-            <div class="field col-12 md:col-4">
-              <label for="waitingDuration" translate="">Waiting</label>
-              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
-                             inputId="waitingDuration" suffix=" min"></p-inputNumber>
-            </div>
-          </div>
+                    <h5 class="flex flex-row align-items-center">
+                        <span translate="">Duration</span>
+                        <div class="flex-grow-1"></div>
+                        <button class="p-button-rounded p-button-text" pButton type="button"></button>
+                    </h5>
+                    <div class="formgrid grid">
+                        <div class="field col-12 md:col-4">
+                            <label for="preparationDuration" translate="">Preparation</label>
+                            <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
+                                           inputId="preparationDuration" suffix=" min"></p-inputNumber>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label for="cookingDuration" translate="">Cooking</label>
+                            <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
+                                           inputId="cookingDuration" suffix=" min"></p-inputNumber>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label for="waitingDuration" translate="">Waiting</label>
+                            <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
+                                           inputId="waitingDuration" suffix=" min"></p-inputNumber>
+                        </div>
+                    </div>
 
-          <h5 class="flex flex-row align-items-center">
+                    <h5 class="flex flex-row align-items-center">
             <span [ngClass]="{'p-error':instructionRows.invalid && (instructionRows.dirty || instructionRows.touched)}"
                   translate="">Instructions</span>
-            <div class="flex-grow-1"></div>
-            <button
-              *ngIf="instructionRows.invalid && (instructionRows.dirty || instructionRows.touched)"
-              class="p-button-rounded p-button-text p-button-danger"
-              icon="pi pi-exclamation-triangle"
-              pButton
-              type="button"></button>
-            <button (click)="addInstructionRow()" class="p-button-rounded p-button-text" icon="pi pi-plus"
-                    pButton
-                    pRipple
-                    type="button"></button>
-          </h5>
-          <div
-            *ngFor="let item of instructionRows.controls; let i = index;"
-            formArrayName="instructions"
-          >
-            <div class="flex flex-row">
+                        <div class="flex-grow-1"></div>
+                        <button
+                                *ngIf="instructionRows.invalid && (instructionRows.dirty || instructionRows.touched)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                icon="pi pi-exclamation-triangle"
+                                pButton
+                                type="button"></button>
+                        <button (click)="addInstructionRow()" class="p-button-rounded p-button-text" icon="pi pi-plus"
+                                pButton
+                                pRipple
+                                type="button"></button>
+                    </h5>
+                    <div
+                            *ngFor="let item of instructionRows.controls; let i = index;"
+                            formArrayName="instructions"
+                    >
+                        <div class="flex flex-row">
               <textarea
-                [formControlName]="i"
-                [ngClass]="{'p-invalid':instructionRows.at(i).invalid && (instructionRows.at(i).dirty || instructionRows.at(i).touched)}"
-                class="flex-grow-1" pInputTextarea></textarea>
-              <button (click)="removeInstructionRow(i)" class="p-button-rounded p-button-text"
-                      icon="pi pi-minus"
-                      pButton pRipple
-                      type="button"></button>
-            </div>
-            <div
-              *ngIf="instructionRows.at(i).invalid && (instructionRows.at(i).dirty || instructionRows.at(i).touched)"
-              class="col-12 md:col-8 p-error">
-              <small *ngIf="instructionRows.at(i).errors?.['required']" translate="">
-                Instruction is required.
-              </small>
-            </div>
-          </div>
-        </div>
+                      [formControlName]="i"
+                      [ngClass]="{'p-invalid':instructionRows.at(i).invalid && (instructionRows.at(i).dirty || instructionRows.at(i).touched)}"
+                      class="flex-grow-1" pInputTextarea></textarea>
+                            <button (click)="removeInstructionRow(i)" class="p-button-rounded p-button-text"
+                                    icon="pi pi-minus"
+                                    pButton pRipple
+                                    type="button"></button>
+                        </div>
+                        <div
+                                *ngIf="instructionRows.at(i).invalid && (instructionRows.at(i).dirty || instructionRows.at(i).touched)"
+                                class="col-12 md:col-8 p-error">
+                            <small *ngIf="instructionRows.at(i).errors?.['required']" translate="">
+                                Instruction is required.
+                            </small>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="col">
-          <h5 class="flex flex-row align-items-center">
+                <div class="col">
+                    <h5 class="flex flex-row align-items-center">
             <span
-              [ngClass]="{'p-error':recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)}"
-              translate="">Ingredients</span>
-            <div class="flex-grow-1"></div>
-            <button
-              *ngIf="recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)"
-              class="p-button-rounded p-button-text p-button-danger"
-              icon="pi pi-exclamation-triangle"
-              pButton
-              type="button"></button>
-            <button (click)="addRecipeIngredient()" class="p-button-rounded p-button-text" icon="pi pi-plus"
-                    pButton
-                    pRipple
-                    type="button"></button>
-          </h5>
-          <p-accordion [activeIndex]="indexRecipeIngredient">
-            <p-accordionTab *ngFor="let item of recipeIngredients.controls; let i = index;"
-                            formArrayName="recipeIngredientForms">
-              <ng-template pTemplate="header">
+                    [ngClass]="{'p-error':recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)}"
+                    translate="">Ingredients</span>
+                        <div class="flex-grow-1"></div>
+                        <button
+                                *ngIf="recipeIngredients.invalid && (recipeIngredients.dirty || recipeIngredients.touched)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                icon="pi pi-exclamation-triangle"
+                                pButton
+                                type="button"></button>
+                        <button (click)="addRecipeIngredient()" class="p-button-rounded p-button-text" icon="pi pi-plus"
+                                pButton
+                                pRipple
+                                type="button"></button>
+                    </h5>
+                    <p-accordion [activeIndex]="indexRecipeIngredient">
+                        <p-accordionTab *ngFor="let item of recipeIngredients.controls; let i = index;"
+                                        formArrayName="recipeIngredientForms">
+                            <ng-template pTemplate="header">
                 <span
-                  [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)}">{{ recipeIngredientToString(i) }}</span>
-                <div class="flex-grow-1"></div>
-                <button
-                  *ngIf="recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)"
-                  class="p-button-rounded p-button-text p-button-danger"
-                  icon="pi pi-exclamation-triangle"
-                  pButton
-                  type="button"></button>
-                <button (click)="removeRecipeIngredient(i)" class="p-button-rounded p-button-text"
-                        icon="pi pi-minus"
-                        pButton pRipple
-                        type="button"></button>
-              </ng-template>
-              <app-form-kitchen-ingredient
-                (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
-                [form]="getFormGroupRecipeIngredient(i)"
-                [ingredientsOrRecipes]="ingredientsOrRecipes"
-                [measureUnits]="measureUnits"
-              ></app-form-kitchen-ingredient>
-            </p-accordionTab>
-          </p-accordion>
-        </div>
-      </div>
+                        [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)}">{{ recipeIngredientToString(i) }}</span>
+                                <div class="flex-grow-1"></div>
+                                <button
+                                        *ngIf="recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)"
+                                        class="p-button-rounded p-button-text p-button-danger"
+                                        icon="pi pi-exclamation-triangle"
+                                        pButton
+                                        type="button"></button>
+                                <button (click)="removeRecipeIngredient(i)" class="p-button-rounded p-button-text"
+                                        icon="pi pi-minus"
+                                        pButton pRipple
+                                        type="button"></button>
+                            </ng-template>
+                            <app-form-kitchen-ingredient
+                                    (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
+                                    [form]="getFormGroupRecipeIngredient(i)"
+                                    [ingredientsOrRecipes]="ingredientsOrRecipes"
+                                    [measureUnits]="measureUnits"
+                            ></app-form-kitchen-ingredient>
+                        </p-accordionTab>
+                    </p-accordion>
+                </div>
+            </div>
 
-      <ng-template pTemplate="footer">
-        <div class="flex flex-row">
-          <button (click)="remove()" *ngIf="recipe.id" [label]="('Delete' | translate)"
-                  class="p-button-danger"
-                  icon="pi pi-trash" pButton pRipple
-                  type="button"></button>
-          <div class="flex-grow-1"></div>
-          <button (click)="showNewIngredientModal()" [label]="'Add a new ingredient' | translate"
-                  class="p-button-text p-button-secondary" icon="pi pi-plus" pButton
-                  pRipple style="margin-right: 20px;" type="button"></button>
-          <button [label]="((recipe.id ? 'Update' : 'Add') + ' recipe') | translate" icon="pi pi-check"
-                  pButton pRipple
-                  type="submit"></button>
-        </div>
-      </ng-template>
-    </p-card>
-  </form>
+            <ng-template pTemplate="footer">
+                <div class="flex flex-row">
+                    <button (click)="remove()" *ngIf="recipe.id" [label]="('Delete' | translate)"
+                            class="p-button-danger"
+                            icon="pi pi-trash" pButton pRipple
+                            type="button"></button>
+                    <div class="flex-grow-1"></div>
+                    <button (click)="showNewIngredientModal()" [label]="'Add a new ingredient' | translate"
+                            class="p-button-text p-button-secondary" icon="pi pi-plus" pButton
+                            pRipple style="margin-right: 20px;" type="button"></button>
+                    <button [label]="((recipe.id ? 'Update' : 'Add') + ' recipe') | translate" icon="pi pi-check"
+                            pButton pRipple
+                            type="submit"></button>
+                </div>
+            </ng-template>
+        </p-card>
+    </form>
 </div>
 <p-blockUI [blocked]="loading" [target]="pnl">
-  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>
 <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
-  <p-footer>
-    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
-            pRipple
-            type="button"></button>
-    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
-            pRipple
-            type="button"></button>
-  </p-footer>
+    <p-footer>
+        <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+                pRipple
+                type="button"></button>
+        <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+                pRipple
+                type="button"></button>
+    </p-footer>
 </p-confirmDialog>

@@ -110,7 +110,7 @@ export abstract class FirestoreService<T extends DataObject> {
     }
     return !!dataObjectDocument;
   }
-  
+
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];
@@ -175,7 +175,7 @@ export abstract class FirestoreService<T extends DataObject> {
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
-    return {...document, id: id};
+    return await this.findOneById(id);
   }
 
   protected async updateOne(document: T): Promise<T> {
@@ -190,7 +190,7 @@ export abstract class FirestoreService<T extends DataObject> {
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
-    return document;
+    return await this.findOneById(document.id);
   }
 
   protected async removeOne(document: T): Promise<void> {
