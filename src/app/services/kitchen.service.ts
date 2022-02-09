@@ -1,24 +1,23 @@
 import {Injectable} from '@angular/core';
-import {DocumentNotFound, FirestoreService} from "./firestore.service";
-import {Select, Store} from "@ngxs/store";
-import {Observable, Subscription} from "rxjs";
-import {LoggerService} from "./logger.service";
-import {IngredientService} from "./ingredient.service";
-import {orderBy} from "firebase/firestore";
+import {Select, Store} from '@ngxs/store';
+import {Observable, Subscription} from 'rxjs';
 import {
   kitchenIngredientConverter,
   KitchenIngredientInterface,
   KitchenIngredientModel
-} from "../models/kitchen-ingredient.model";
-import {KitchenIngredientState} from "../store/kitchen.state";
+} from '../models/kitchen-ingredient.model';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
-} from "../store/kitchen.action";
-import {RecipeService} from "./recipe.service";
-import {ArrayHelper} from "../tools/array.helper";
+} from '../store/kitchen.action';
+import {KitchenIngredientState} from '../store/kitchen.state';
+import {ArrayHelper} from '../tools/array.helper';
+import {DocumentNotFound, FirestoreService} from './firestore.service';
+import {IngredientService} from './ingredient.service';
+import {LoggerService} from './logger.service';
+import {RecipeService} from './recipe.service';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +48,6 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
       this.all$?.subscribe(async kitchenIngredients => {
         if (kitchenIngredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
           await this.refreshList();
-          resolve([]);
         }
 
         this.all = [];
@@ -127,7 +125,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
   }
 
   private async refreshList(): Promise<void> {
-    const kitchenIngredients = await super.select(orderBy('name'));
+    const kitchenIngredients = await super.select();
 
     this.store.dispatch(new FillKitchenIngredients(kitchenIngredients));
   }

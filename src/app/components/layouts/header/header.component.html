@@ -1,94 +1,95 @@
 <p-toolbar *ngIf="!hideHeader" [formGroup]="form" class="header">
-	<div class="p-toolbar-group-left">
-		<button (click)="menuShowed = true" *ngIf="showFilter" class="mobile-showed p-button-rounded p-button-text"
-						icon="pi pi-chevron-right"
-						pButton
-						pRipple></button>
-		<a [class.showFilter]="showFilter" [routerLink]="['/']" class="header__logo">
-			Kitchen Party
-		</a>
-		<span *ngIf="title" style="">
+  <div class="p-toolbar-group-left">
+    <button (click)="menuShowed = true" *ngIf="showFilters" class="mobile-showed p-button-rounded p-button-text"
+            icon="pi pi-chevron-right"
+            pButton
+            pRipple></button>
+    <a [class.showFilters]="showFilters" [routerLink]="['/']" class="header__logo">
+      Kitchen Party
+    </a>
+    <span *ngIf="title" style="">
       <span style="margin: 0 10px;">/</span>{{ title | translate }}
     </span>
 
-		<div *ngIf="showFilter" class="filters flex flex-row align-items-center">
+    <div *ngIf="showFilters" class="filters flex flex-row align-items-center">
       <span class="p-float-label mobile-hidden">
         <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
-										[showClear]="true" formControlName="diet"
-										optionValue="key"></p-dropdown>
+                    [showClear]="true" formControlName="diet"
+                    optionValue="key"></p-dropdown>
         <label for="float-input" translate="">Diet</label>
       </span>
-			<span class="p-float-label mobile-hidden">
+      <span class="p-float-label mobile-hidden">
         <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-										[showClear]="true" formControlName="type"
-										optionValue="key"></p-dropdown>
+                    [showClear]="true" formControlName="type"
+                    optionValue="key"></p-dropdown>
           <label for="float-input" translate="">Type</label>
       </span>
-			<span class="p-float-label mobile-hidden">
+      <span class="p-float-label mobile-hidden">
         <p-multiSelect [emptyFilterMessage]="'No ingredients found.' | translate" [options]="ingredients"
-											 [selectionLimit]="3"
-											 formControlName="ingredients" optionLabel="name" optionValue="id">
+                       [selectionLimit]="3"
+                       formControlName="ingredients" optionLabel="name" optionValue="id">
         </p-multiSelect>
         <label for="float-input" translate="">Ingredients</label>
       </span>
 
-		</div>
-	</div>
+    </div>
+  </div>
 
-	<div *ngIf="showFilter" class="filter-name flex flex-row align-items-center">
+  <div *ngIf="showFilters" class="filter-name flex flex-row align-items-center">
     <span class="p-float-label">
           <input formControlName="name" id="float-input" pInputText type="text">
           <label for="float-input" translate="">Name</label>
     </span>
-		<button (click)="resetFilters()" class="p-button-rounded p-button-text" icon="pi pi-times" pButton
-						pRipple type="button"></button>
-		<button (click)="gotoShopping()" class="p-button-rounded p-button-text"
-						icon="pi pi-shopping-cart" pButton
-						pRipple type="button" [disabled]="selectedRecipes.length === 0"></button>
-	</div>
+    <button (click)="resetFilters()" class="p-button-rounded p-button-text" icon="pi pi-times" pButton
+            pRipple type="button"></button>
+    <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+            class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
+            pButton pRipple type="button"></button>
+  </div>
 
-	<p-sidebar [(visible)]="menuShowed">
+  <p-sidebar [(visible)]="menuShowed">
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
-									[showClear]="true" formControlName="diet"
-									optionValue="key"></p-dropdown>
+                  [showClear]="true" formControlName="diet"
+                  optionValue="key"></p-dropdown>
       <label for="float-input" translate="">Diet</label>
     </span>
-		<span class="p-float-label">
+    <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-									[showClear]="true" formControlName="type"
-									optionValue="key"></p-dropdown>
+                  [showClear]="true" formControlName="type"
+                  optionValue="key"></p-dropdown>
         <label for="float-input" translate="">Type</label>
     </span>
-		<span class="p-float-label">
+    <span class="p-float-label">
       <p-multiSelect [emptyFilterMessage]="'No ingredients found.' | translate" [options]="ingredients"
-										 [selectionLimit]="3"
-										 formControlName="ingredients" optionLabel="name" optionValue="id">
+                     [selectionLimit]="3"
+                     formControlName="ingredients" optionLabel="name" optionValue="id">
       </p-multiSelect>
       <label for="float-input" translate="">Ingredients</label>
     </span>
-		<div class="flex flex-row justify-content-between" style="padding: 40px 0 20px;">
-			<button (click)="resetFilters()" [label]="'Clear filters' | translate"
-							class="p-button-rounded p-button-text"
-							icon="pi pi-times" pButton
-							pRipple type="button"></button>
-			<button (click)="gotoShopping()" class="p-button-rounded p-button-text" [disabled]="selectedRecipes.length === 0"
-							icon="pi pi-shopping-cart" pButton
-							pRipple type="button"></button>
-		</div>
-	</p-sidebar>
+    <div class="flex flex-row justify-content-between" style="padding: 40px 0 20px;">
+      <button (click)="resetFilters()" [label]="'Clear filters' | translate"
+              class="p-button-rounded p-button-text"
+              icon="pi pi-times" pButton
+              pRipple type="button"></button>
+      <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+              class="p-button-rounded p-button-text"
+              icon="pi pi-shopping-cart" pButton
+              pRipple type="button"></button>
+    </div>
+  </p-sidebar>
 
-	<div class="p-toolbar-group-right">
-		<button *ngIf="loading"
-						[disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
-		<a *ngIf="!loading && !loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']"
-			 class="mobile-hidden"
-			 icon="pi pi-user" pButton
-			 pRipple></a>
-		<a *ngIf="!loading && !loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
-			 pRipple></a>
-		<button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
-						type="button"></button>
-		<p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
-	</div>
+  <div class="p-toolbar-group-right">
+    <button *ngIf="loading"
+            [disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
+    <a *ngIf="!loading && !loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']"
+       class="mobile-hidden"
+       icon="pi pi-user" pButton
+       pRipple></a>
+    <a *ngIf="!loading && !loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
+       pRipple></a>
+    <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
+            type="button"></button>
+    <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
+  </div>
 </p-toolbar>

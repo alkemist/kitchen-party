@@ -1,7 +1,6 @@
 import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {DietTypeEnum} from '../enums/diet-type.enum';
-import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
 import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
 import {DataObject} from '../services/firestore.service';
 import {slugify} from '../tools/slugify';
@@ -74,10 +73,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get orderedRecipeIngredients(): RecipeIngredientModel[] {
-    const ingredientTypes = Object.keys(IngredientTypeEnum);
-    return this.recipeIngredients.sort((a, b) => {
-      return ingredientTypes.indexOf(a.ingredient?.type!) - ingredientTypes.indexOf(b.ingredient?.type!);
-    });
+    return RecipeIngredientModel.orderRecipeIngredients(this.recipeIngredients) as RecipeIngredientModel[];
   }
 
   get typeName(): string {
