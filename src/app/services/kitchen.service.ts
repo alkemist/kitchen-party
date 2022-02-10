@@ -18,6 +18,7 @@ import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
 import {RecipeService} from './recipe.service';
+import {orderBy} from "firebase/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -105,12 +106,12 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
   }
 
   async add(kitchenIngredient: KitchenIngredientInterface): Promise<KitchenIngredientInterface | undefined> {
-    const kitchenIngredientStored = await super.addOne(kitchenIngredient);
+    const kitchenIngredientStored = await super.addOne(new KitchenIngredientModel(kitchenIngredient));
     return this.addToStore(kitchenIngredientStored);
   }
 
   async update(kitchenIngredient: KitchenIngredientInterface): Promise<KitchenIngredientInterface | undefined> {
-    const kitchenIngredientStored = await super.updateOne(kitchenIngredient);
+    const kitchenIngredientStored = await super.updateOne(new KitchenIngredientModel(kitchenIngredient));
     this.store.dispatch(new UpdateKitchenIngredient(kitchenIngredientStored));
     return kitchenIngredientStored;
   }
@@ -125,7 +126,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
   }
 
   private async refreshList(): Promise<void> {
-    const kitchenIngredients = await super.select();
+    const kitchenIngredients = await super.select(orderBy('slug'));
 
     this.store.dispatch(new FillKitchenIngredients(kitchenIngredients));
   }

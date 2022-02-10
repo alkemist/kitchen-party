@@ -3,9 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {IngredientComponent} from '../components/views/backend/ingredient/ingredient.component';
 import {IngredientsComponent} from '../components/views/backend/ingredients/ingredients.component';
 import {KitchenIngredientComponent} from '../components/views/backend/kitchen-ingredient/kitchen-ingredient.component';
-import {
-  KitchenIngredientsComponent
-} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
+import {KitchenIngredientsComponent} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
 import {RecipeComponent} from '../components/views/backend/recipe/recipe.component';
 import {RecipesComponent} from '../components/views/backend/recipes/recipes.component';
 import {FrontRecipeComponent} from '../components/views/frontend/recipe/recipe.component';
@@ -73,7 +71,7 @@ const routes: Routes = [
     path: 'kitchen-ingredient/:slug',
     component: KitchenIngredientComponent,
     resolve: {
-      recipe: KitchenResolver
+      kitchenIngredient: KitchenResolver
     },
     canActivate: [LoggedGuard],
     data: {title: 'Kitchen ingredient'},

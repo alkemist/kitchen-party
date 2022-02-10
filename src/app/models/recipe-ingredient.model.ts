@@ -26,6 +26,7 @@ export interface RecipeIngredientFormInterface extends RecipeIngredientInterface
 }
 
 export class RecipeIngredientModel implements RecipeIngredientInterface {
+  static ingredientTypes = Object.keys(IngredientTypeEnum);
   id?: string;
   quantity: number | null;
   measure: string;
@@ -165,10 +166,23 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   }
 
   static orderRecipeIngredients(recipeIngredients: HasIngredient[]): HasIngredient[] {
-    const ingredientTypes = Object.keys(IngredientTypeEnum);
     return recipeIngredients.sort((a, b) => {
-      return ingredientTypes.indexOf(a.ingredient?.type!) - ingredientTypes.indexOf(b.ingredient?.type!);
+      return RecipeIngredientModel.orderTwoRecipeIngredients(a, b)
     });
+  }
+
+  static orderTwoRecipeIngredients(a: HasIngredient, b: HasIngredient): number {
+    const aNumber = RecipeIngredientModel.ingredientTypes.indexOf(a.ingredient?.type!);
+    let bNumber = RecipeIngredientModel.ingredientTypes.indexOf(b.ingredient?.type!);
+
+    if (aNumber == bNumber) {
+      const aString = a.ingredient?.name!;
+      const bString = b.ingredient?.name!;
+
+      return (aString > bString) ? 1 : ((bString > aString) ? -1 : 0);
+    }
+    
+    return (aNumber > bNumber) ? 1 : ((bNumber > aNumber) ? -1 : 0);
   }
 }
 

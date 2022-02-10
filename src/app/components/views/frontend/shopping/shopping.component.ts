@@ -44,6 +44,14 @@ export class ShoppingComponent implements OnInit {
     });
   }
 
+  get cartOrderedByChecked(): CartElement[] {
+    return this.cart.sort((a, b) => {
+      const aValue = a.inKitchen ? 1 : -1;
+      const bValue = b.inKitchen ? 1 : -1;
+      return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : RecipeIngredientModel.orderTwoRecipeIngredients(a, b));
+    });
+  }
+
   loadData() {
     this.route.data.subscribe(
       (async data => {
@@ -53,15 +61,18 @@ export class ShoppingComponent implements OnInit {
           const kitchenIngredients = await this.kitchenService.getListOrRefresh();
           this.kitchenIndexes = kitchenIngredients.map(kitchenIngredient => kitchenIngredient.ingredient?.id!);
 
-          this.init();
+          this.initCart();
+
+          RecipeIngredientModel.orderRecipeIngredients(this.cart);
+
+          this.mergeCart();
+
           this.loading = false;
         }
       }));
   }
 
-  init() {
-    const ingredientIds = [];
-
+  initCart() {
     for (const recipe of this.recipes) {
       for (const recipeIngredient of recipe.recipeIngredients) {
         if (recipeIngredient.ingredient?.recipe) {
@@ -74,9 +85,6 @@ export class ShoppingComponent implements OnInit {
         }
       }
     }
-    RecipeIngredientModel.orderRecipeIngredients(this.cart);
-
-    this.mergeCart();
   }
 
   addToCart(recipeIngredient: RecipeIngredientModel) {
@@ -146,9 +154,6 @@ export class ShoppingComponent implements OnInit {
         }
       }
       cartElement.quantity = quantities.join(', ');
-      console.log('-- merge', cartElement.ingredient.name, ':', cartElement.quantity);
     }
-
-    console.log(this.cart);
   }
 }

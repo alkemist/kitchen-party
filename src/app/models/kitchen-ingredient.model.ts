@@ -4,6 +4,7 @@ import {RecipeIngredientInterface, RecipeIngredientModel} from "./recipe-ingredi
 
 export interface KitchenIngredientInterface extends RecipeIngredientInterface {
   slug?: string;
+  name?: string;
 }
 
 export class KitchenIngredientModel extends RecipeIngredientModel implements KitchenIngredientInterface {

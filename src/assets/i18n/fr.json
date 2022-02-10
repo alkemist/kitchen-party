@@ -1,6 +1,7 @@
 {
   "Add": "Ajouter",
   "Add a new ingredient": "Ajouter un nouvel ingredient",
+  "Add ingredient in kitchen": "Ajouter l'ingrédient à la cuisine",
   "Add recipe": "Ajouter la recette",
   "Added ingredient": "Ingrédient ajouté",
   "Added recipe": "Recette ajouté",
@@ -51,6 +52,7 @@
   "Name is required.": "Le nom est requis.",
   "New": "Nouveau",
   "New ingredient": "Nouvel ingrédient",
+  "New ingredient in kitchen": "Nouvel ingrédient en cuisine",
   "New recipe": "Nouvelle recette",
   "No": "Non",
   "No ingredients found.": "Aucun ingrédients trouvés.",
@@ -88,6 +90,7 @@
   "Unit": "Unité",
   "Update": "Mettre à jour",
   "Update recipe": "Mettre à jour la recette",
+  "Update ingredient in kitchen": "Mettre à jour la recette",
   "Updated ingredient": "Ingrédient mis à jour",
   "Updated recipe": "Recette mise à jour",
   "User": "Utilisateur",
@@ -115,5 +118,6 @@
   "Number of ingredients": "Nombre d'ingrédients",
   "View recipe": "Voir la recette",
   "Shopping list": "Liste de course",
+  "Ingredient already in kitchen.": "L'ingrédient est déjà dans la cuisine.",
   "primeng": {}
 }
