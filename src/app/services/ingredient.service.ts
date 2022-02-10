@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
+import {Observable, Subscription} from 'rxjs';
 import {ingredientConverter, IngredientInterface, IngredientModel} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from '../store/ingredient.action';
+import {IngredientState} from '../store/ingredient.state';
+import {ArrayHelper} from '../tools/array.helper';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
-import {IngredientState} from "../store/ingredient.state";
-import {Observable, Subscription} from "rxjs";
-import {ArrayHelper} from "../tools/array.helper";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,6 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
       this.all$?.subscribe(async ingredients => {
         if (ingredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
           await this.refreshList();
-          resolve([]);
         }
 
         this.all = [];

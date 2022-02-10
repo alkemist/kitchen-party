@@ -4,6 +4,7 @@ import {Router, RoutesRecognized} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {Select} from '@ngxs/store';
 import {User} from 'firebase/auth';
+import NoSleep from 'nosleep.js';
 import {MenuItem} from 'primeng/api';
 import {Observable} from 'rxjs';
 import {DietTypeEnum} from '../../../enums/diet-type.enum';
@@ -83,12 +84,13 @@ export class HeaderComponent implements OnInit {
     }
   ];
   title: string = '';
-  showFilter = false;
+  showFilters = false;
   @HostBinding('class.hideHeader') hideHeader = false;
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   loading = true;
   menuShowed = false;
+  noSleep = new NoSleep();
   @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
 
   constructor(
@@ -124,16 +126,25 @@ export class HeaderComponent implements OnInit {
           } else {
             this.title = '';
           }
-          if (typeof routeData['showFilter'] === 'boolean') {
-            this.showFilter = routeData['showFilter'];
+
+          if (typeof routeData['showFilters'] === 'boolean') {
+            this.showFilters = routeData['showFilters'];
           } else {
-            this.showFilter = true;
+            this.showFilters = false;
           }
+
           if (typeof routeData['hideHeader'] === 'boolean') {
             this.hideHeader = routeData['hideHeader'];
           } else {
             this.hideHeader = false;
           }
+
+          if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
+            this.noSleep.enable();
+          } else {
+            this.noSleep.disable();
+          }
+
         }
       }
     });
@@ -141,7 +152,7 @@ export class HeaderComponent implements OnInit {
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
       name: new FormControl(null, []),
-      ingredients: new FormControl([], [])
+      ingredients: new FormControl([], []),
     });
   }
 
@@ -165,6 +176,7 @@ export class HeaderComponent implements OnInit {
   }
 
   resetFilters() {
+    this.menuShowed = false;
     this.form.patchValue({
       diet: null,
       type: null,
@@ -174,6 +186,7 @@ export class HeaderComponent implements OnInit {
   }
 
   gotoShopping() {
-    //this.router.navigate(['/', 'shopping', this.selectedRecipes.join(',')])
+    this.menuShowed = false;
+    this.router.navigate(['/', 'shopping', this.selectedRecipes.join(',')]);
   }
 }

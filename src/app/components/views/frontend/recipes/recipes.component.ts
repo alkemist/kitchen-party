@@ -29,24 +29,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.loading = false;
     });
     this.subscription = this.searchService.filters.valueChanges.subscribe((filters) => {
-      this.filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
-        let valid = true;
-
-        if (valid && filters.diet) {
-          valid = recipe.dietIs(DietTypes[filters.diet]);
-        }
-        if (valid && filters.type) {
-          valid = recipe.type! && recipe.type === filters.type;
-        }
-        if (valid && filters.name) {
-          valid = recipe.nameContain(filters.name);
-        }
-        if (valid && filters.ingredients) {
-          valid = filters.ingredients.every((filterIngredientId: string) => recipe.ingredientIds.some(recipeIngredientId => filterIngredientId === recipeIngredientId));
-        }
-
-        return valid;
-      });
+      this.filter(filters);
     });
   }
 
@@ -58,7 +41,29 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.searchService.selectedRecipes = selectedRecipes;
   }
 
+  filter(filters: { diet: string, type: string, name: string, ingredients: string[] }) {
+    this.filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
+      let valid = true;
+
+      if (valid && filters.diet) {
+        valid = recipe.dietIs(DietTypes[filters.diet]);
+      }
+      if (valid && filters.type) {
+        valid = recipe.type! && recipe.type === filters.type;
+      }
+      if (valid && filters.name) {
+        valid = recipe.nameContain(filters.name);
+      }
+      if (valid && filters.ingredients) {
+        valid = filters.ingredients.every((filterIngredientId: string) => recipe.ingredientIds.some(recipeIngredientId => filterIngredientId === recipeIngredientId));
+      }
+
+      return valid;
+    });
+  }
+
   ngOnInit(): void {
+    this.filter(this.searchService.filters.value);
   }
 
   ngOnDestroy() {

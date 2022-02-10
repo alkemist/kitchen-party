@@ -1,9 +1,14 @@
+import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
 import {IngredientInterface, IngredientModel} from './ingredient.model';
 import {KeyObject} from './other.model';
 import {RecipeInterface, RecipeModel} from './recipe.model';
 
-export interface RecipeIngredientInterface {
+export interface HasIngredient {
+  ingredient?: IngredientInterface;
+}
+
+export interface RecipeIngredientInterface extends HasIngredient {
   id?: string,
   quantity?: number | null,
   measure?: string,
@@ -49,8 +54,32 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
   }
 
-  getEquivalentGram(): number {
-    return 0;
+  get baseQuantity(): { count: number, unit?: string, measure?: string } {
+    let quantity = this.quantity || 0;
+
+
+    const unit = this.unit ? MeasureUnits[this.unit] : null;
+
+    switch (unit) {
+      case MeasureUnitEnum.tablespoon:
+        return {
+          count: quantity * 15,
+          unit: this.ingredient?.isLiquid ? MeasureUnitEnum.milliliter : MeasureUnitEnum.gram
+        };
+      case MeasureUnitEnum.teaspoon:
+        return {
+          count: quantity * 5,
+          unit: this.ingredient?.isLiquid ? MeasureUnitEnum.milliliter : MeasureUnitEnum.gram
+        };
+      case MeasureUnitEnum.centiliter:
+        return {count: quantity * 10, unit: MeasureUnitEnum.milliliter};
+      case MeasureUnitEnum.kilogram:
+        return {count: quantity * 1000, unit: MeasureUnitEnum.gram};
+      case MeasureUnitEnum.gram:
+        return {count: quantity, unit: MeasureUnitEnum.gram};
+    }
+
+    return {count: quantity, measure: this.measure};
   }
 
   static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyObject[]): RecipeIngredientInterface {
@@ -133,6 +162,13 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     return str;
+  }
+
+  static orderRecipeIngredients(recipeIngredients: HasIngredient[]): HasIngredient[] {
+    const ingredientTypes = Object.keys(IngredientTypeEnum);
+    return recipeIngredients.sort((a, b) => {
+      return ingredientTypes.indexOf(a.ingredient?.type!) - ingredientTypes.indexOf(b.ingredient?.type!);
+    });
   }
 }
 
