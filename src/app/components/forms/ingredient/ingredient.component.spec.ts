@@ -1,20 +1,19 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {IngredientComponent} from './ingredient.component';
+import {FormIngredientComponent} from "./ingredient.component";
 
 describe('IngredientComponent', () => {
-  let component: IngredientComponent;
-  let fixture: ComponentFixture<IngredientComponent>;
+  let component: FormIngredientComponent;
+  let fixture: ComponentFixture<FormIngredientComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [IngredientComponent]
+      declarations: [FormIngredientComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IngredientComponent);
+    fixture = TestBed.createComponent(FormIngredientComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

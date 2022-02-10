@@ -4,6 +4,7 @@ import {DietTypes} from '../../../../enums/diet-type.enum';
 import {RecipeModel} from '../../../../models/recipe.model';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
+import {SweetSalty, SweetSaltyEnum} from "../../../../enums/sweet-salty.enum";
 
 @Component({
   selector: 'app-front-recipes',
@@ -41,15 +42,19 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.searchService.selectedRecipes = selectedRecipes;
   }
 
-  filter(filters: { diet: string, type: string, name: string, ingredients: string[] }) {
+  filter(filters: { diet: string, type: string, name: string, sweetOrSalty: string, ingredients: string[] }) {
     this.filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
-      let valid = true;
+      let valid: boolean | null = true;
 
       if (valid && filters.diet) {
         valid = recipe.dietIs(DietTypes[filters.diet]);
       }
       if (valid && filters.type) {
         valid = recipe.type! && recipe.type === filters.type;
+      }
+      if (valid && filters.sweetOrSalty) {
+        valid = recipe.isSweet() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.sweet
+          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.salty
       }
       if (valid && filters.name) {
         valid = recipe.nameContain(filters.name);

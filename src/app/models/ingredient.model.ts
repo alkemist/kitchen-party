@@ -4,6 +4,7 @@ import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum
 import {DataObject} from '../services/firestore.service';
 import {slugify} from '../tools/slugify';
 import {RecipeInterface, RecipeModel} from './recipe.model';
+import {DateHelper} from "../tools/date.helper";
 
 
 export interface IngredientInterface extends DataObject {
@@ -11,11 +12,19 @@ export interface IngredientInterface extends DataObject {
   name: string,
   slug: string,
 
+  monthBegin?: number | null,
+  monthEnd?: number | null,
+
   type: IngredientTypeEnum,
   isLiquid?: boolean | null,
 
   recipeId?: string,
   recipe?: RecipeInterface
+}
+
+export interface IngredientFormInterface extends IngredientInterface {
+  dateBegin: Date;
+  dateEnd: Date;
 }
 
 export class IngredientModel implements IngredientInterface {
@@ -32,6 +41,8 @@ export class IngredientModel implements IngredientInterface {
   id?: string;
   name: string;
   slug: string;
+  monthBegin?: number | null;
+  monthEnd?: number | null;
   type: IngredientTypeEnum;
   isLiquid: boolean | null;
   recipeId?: string;
@@ -42,6 +53,8 @@ export class IngredientModel implements IngredientInterface {
     this.name = ingredient.name?.trim();
     this.slug = ingredient.slug;
     this.type = ingredient.type;
+    this.monthBegin = ingredient.monthBegin;
+    this.monthEnd = ingredient.monthEnd;
     this.isLiquid = ingredient.isLiquid || null;
   }
 
@@ -146,12 +159,36 @@ export class IngredientModel implements IngredientInterface {
 
     return false;
   }
+
+  isSeason(): boolean {
+    const date = new Date();
+    if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
+      console.log(date.getMonth(), this.monthBegin, this.monthEnd);
+      return false;
+    }
+
+    return true;
+  }
+
+  static format(ingredientForm: IngredientFormInterface) {
+    const ingredient = new IngredientModel(ingredientForm);
+    ingredient.monthBegin = ingredientForm.dateBegin ? DateHelper.clearDayAndTime(ingredientForm.dateBegin).getMonth() + 1 : null;
+    ingredient.monthEnd = ingredientForm.dateEnd ? DateHelper.clearDayAndTime(ingredientForm.dateEnd).getMonth() + 1 : null;
+    return ingredient;
+  }
 }
 
 export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = {
   toFirestore: (ingredient: IngredientModel): IngredientInterface => {
     const ingredientFields = {...ingredient};
     ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
+    if (!ingredientFields.monthBegin) {
+      ingredientFields.monthBegin = null;
+    }
+    if (!ingredientFields.monthEnd) {
+      ingredientFields.monthEnd = null;
+    }
+    
     delete ingredientFields.id;
     delete ingredientFields.recipe;
     return ingredientFields;

@@ -37,6 +37,8 @@ export class DialogIngredientComponent implements OnInit {
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
       ]),
       isLiquid: new FormControl('', []),
+      dateBegin: new FormControl('', []),
+      dateEnd: new FormControl('', []),
     });
   }
 
@@ -53,7 +55,7 @@ export class DialogIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(this.form.value);
+    await this.preSubmit(IngredientModel.format(this.form.value));
   }
 
   async preSubmit(formDocument: IngredientInterface): Promise<void> {

@@ -118,6 +118,18 @@
   "Number of ingredients": "Nombre d'ingrédients",
   "View recipe": "Voir la recette",
   "Shopping list": "Liste de course",
+  "Sweet": "Sucré",
+  "Salty": "Salé",
+  "Season": "Saison",
+  "Sweet / Salty": "Sucré / Salé",
   "Ingredient already in kitchen.": "L'ingrédient est déjà dans la cuisine.",
-  "primeng": {}
+  "Feb": "Fev",
+  "monthNames": {
+    "February": "Fevrier"
+  },
+  "monthNamesShort": {
+    "Feb": "Fev"
+  },
+  "primeng": {
+  }
 }

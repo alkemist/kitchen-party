@@ -15,6 +15,7 @@ import {SearchService} from '../../../services/search.service';
 import {UserService} from '../../../services/user.service';
 import {IngredientState} from '../../../store/ingredient.state';
 import {EnumHelper} from '../../../tools/enum.helper';
+import {SweetSaltyEnum} from "../../../enums/sweet-salty.enum";
 
 @Component({
   selector: 'app-header',
@@ -88,6 +89,7 @@ export class HeaderComponent implements OnInit {
   @HostBinding('class.hideHeader') hideHeader = false;
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
+  sweetOrSalty = EnumHelper.enumToObject(SweetSaltyEnum);
   loading = true;
   menuShowed = false;
   noSleep = new NoSleep();
@@ -114,6 +116,9 @@ export class HeaderComponent implements OnInit {
         return {...item, label: this.translateService.instant(item.label)};
       });
       this.recipeTypes = this.recipeTypes.map(item => {
+        return {...item, label: this.translateService.instant(item.label)};
+      });
+      this.sweetOrSalty = this.sweetOrSalty.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
     });
@@ -152,6 +157,7 @@ export class HeaderComponent implements OnInit {
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
       name: new FormControl(null, []),
+      sweetOrSalty: new FormControl(null, []),
       ingredients: new FormControl([], []),
     });
   }

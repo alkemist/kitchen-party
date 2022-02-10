@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {IngredientModel} from '../../../models/ingredient.model';
 import {KeyObject} from '../../../models/other.model';
+import {IngredientTypeEnum, IngredientTypes} from "../../../enums/ingredient-type.enum";
+import {LocaleSettings} from "primeng/calendar";
 
 @Component({
   selector: 'app-form-ingredient',
@@ -12,6 +14,7 @@ export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
   @Input() loading = true;
   @Input() ingredientTypes: KeyObject[] = [];
+  @Input() localSettings: LocaleSettings = {};
   @Input() form: FormGroup = new FormGroup({});
   @Input() dialogMode = false;
   @Output() onSubmit = new EventEmitter<IngredientModel>();
@@ -19,6 +22,10 @@ export class FormIngredientComponent implements OnInit {
   @Output() onClose = new EventEmitter<void>();
 
   constructor() {
+  }
+
+  get isFruitsOrVegetables(): boolean {
+    return IngredientTypes[this.type.value] === IngredientTypeEnum.fruits_vegetables_mushrooms
   }
 
   get name(): FormControl {
@@ -34,6 +41,8 @@ export class FormIngredientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.localSettings);
+    console.log(this.ingredientTypes);
   }
 
   handleSubmit() {

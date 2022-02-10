@@ -8,6 +8,7 @@ import {IngredientInterface, IngredientModel} from '../../../../models/ingredien
 import {IngredientService} from '../../../../services/ingredient.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from "../../../../tools/slugify";
+import {LocaleSettings} from "primeng/calendar";
 
 @Component({
   selector: 'app-back-ingredient',
@@ -20,6 +21,7 @@ import {slugify} from "../../../../tools/slugify";
 export class IngredientComponent implements OnInit {
   ingredient = new IngredientModel({} as IngredientInterface);
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
+  localSettings: LocaleSettings = {};
 
   form: FormGroup = new FormGroup({});
   loading = true;
@@ -42,6 +44,8 @@ export class IngredientComponent implements OnInit {
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
       ]),
       isLiquid: new FormControl('', []),
+      dateBegin: new FormControl('', []),
+      dateEnd: new FormControl('', []),
     });
   }
 
@@ -55,6 +59,8 @@ export class IngredientComponent implements OnInit {
         if (data && data['ingredient']) {
           this.ingredient = data['ingredient'];
           this.form.patchValue(this.ingredient);
+          this.form.get('dateBegin')?.patchValue(this.ingredient.monthBegin ? new Date(2000, this.ingredient.monthBegin - 1, 1) : null)
+          this.form.get('dateEnd')?.patchValue(this.ingredient.monthEnd ? new Date(2000, this.ingredient.monthEnd - 1, 1) : null)
         }
         this.loading = false;
       }));
@@ -62,11 +68,17 @@ export class IngredientComponent implements OnInit {
       this.ingredientTypes = this.ingredientTypes.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
+      this.localSettings = {
+        monthNames: this.translateService.instant('monthNames'),
+        monthNamesShort: this.translateService.instant('monthNamesShort')
+      }
+      console.log(this.localSettings);
+      console.log(this.ingredientTypes);
     });
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(this.form.value);
+    await this.preSubmit(IngredientModel.format(this.form.value));
   }
 
   async preSubmit(formDocument: IngredientInterface): Promise<void> {
