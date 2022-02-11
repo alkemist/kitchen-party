@@ -34,7 +34,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     return new Promise<IngredientModel[]>(resolve => {
       this.all$?.subscribe(async ingredients => {
         if (ingredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          await this.refreshList();
+          return await this.refreshList();
         }
 
         this.all = [];

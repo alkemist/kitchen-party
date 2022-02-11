@@ -41,7 +41,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     return new Promise<RecipeModel[]>((resolve) => {
       this.all$?.subscribe(async recipes => {
         if (recipes.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          await this.refreshList();
+          return await this.refreshList();
         }
 
         this.all = [];

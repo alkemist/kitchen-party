@@ -48,7 +48,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     return new Promise<KitchenIngredientModel[]>(resolve => {
       this.all$?.subscribe(async kitchenIngredients => {
         if (kitchenIngredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          await this.refreshList();
+          return await this.refreshList();
         }
 
         this.all = [];
