@@ -38,10 +38,6 @@ export class FormIngredientComponent implements OnInit {
     return this.form?.get('isLiquid') as FormControl;
   }
 
-  get datesSeason(): FormControl {
-    return this.form?.get('datesSeason') as FormControl;
-  }
-
   ngOnInit(): void {
   }
 

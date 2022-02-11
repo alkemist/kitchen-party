@@ -57,7 +57,7 @@
       <label class="col-12 mb-2 md:col-4 md:mb-0"
              for="isLiquid" translate="">Liquid ?</label>
       <div class="col-12 md:col-8">
-        <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-times"
+        <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-check"
                         onIcon="pi pi-check"></p-toggleButton>
       </div>
     </div>
@@ -65,16 +65,15 @@
     <div class="field grid" *ngIf="isFruitsOrVegetables">
       <label class="col-12 mb-2 md:col-4 md:mb-0"
              translate="">Season</label>
-      <div class="col-12 md:col-8">
-        <p-calendar selectionMode="range" formControlName="datesSeason" view="month"
+      <div class="col-6 md:col-4">
+        <p-calendar formControlName="dateBegin" view="month"
                     dateFormat="MM" [showIcon]="true"
-                    [ngClass]="{'p-invalid':datesSeason.invalid && (datesSeason.dirty || datesSeason.touched)}"
                     styleClass="inputfield w-full"></p-calendar>
       </div>
-      <div *ngIf="datesSeason.invalid && (datesSeason.dirty || datesSeason.touched)" class="col-12 md:col-8 p-error">
-        <small *ngIf="datesSeason.errors?.['lengthArray']" translate="">
-          Two months required.
-        </small>
+      <div class="col-6 md:col-4">
+        <p-calendar formControlName="dateEnd" view="month"
+                    dateFormat="MM" [showIcon]="true"
+                    styleClass="inputfield w-full"></p-calendar>
       </div>
     </div>
 

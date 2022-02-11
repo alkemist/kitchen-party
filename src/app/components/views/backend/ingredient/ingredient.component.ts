@@ -8,7 +8,6 @@ import {IngredientInterface, IngredientModel} from '../../../../models/ingredien
 import {IngredientService} from '../../../../services/ingredient.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from "../../../../tools/slugify";
-import {lengthArrayValidator} from "../../../../validators/lengthArrayValidator";
 
 @Component({
   selector: 'app-back-ingredient',
@@ -43,14 +42,15 @@ export class IngredientComponent implements OnInit {
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
       ]),
       isLiquid: new FormControl('', []),
-      datesSeason: new FormControl('', [lengthArrayValidator(2)]),
+      dateBegin: new FormControl('', []),
+      dateEnd: new FormControl('', []),
     });
   }
 
   get name(): FormControl {
     return this.form?.get('name') as FormControl;
   }
-  
+
   async ngOnInit(): Promise<void> {
     this.loadTranslations(() => {
       this.loadData();
@@ -72,10 +72,12 @@ export class IngredientComponent implements OnInit {
         if (data && data['ingredient']) {
           this.ingredient = data['ingredient'];
           this.form.patchValue(this.ingredient);
-          this.form.get('datesSeason')?.patchValue(this.ingredient.monthBegin && this.ingredient.monthEnd ? [
-            new Date(new Date().getFullYear(), this.ingredient.monthBegin - 1, 1),
-            new Date(new Date().getFullYear(), this.ingredient.monthEnd - 1, 1)
-          ] : null);
+          this.form.get('dateBegin')?.patchValue(this.ingredient.monthBegin
+            ? new Date(new Date().getFullYear(), this.ingredient.monthBegin - 1, 1)
+            : null)
+          this.form.get('dateEnd')?.patchValue(this.ingredient.monthEnd
+            ? new Date(new Date().getFullYear(), this.ingredient.monthEnd - 1, 1)
+            : null);
         }
         this.loading = false;
       }));

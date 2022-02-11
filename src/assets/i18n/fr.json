@@ -129,18 +129,18 @@
   "Name contain": "Le nom contient",
   "primeng": {
     "monthNamesShort": [
-      "Janvier",
-      "Février",
+      "Jan",
+      "Fév",
       "Mars",
-      "Avril",
+      "Avr",
       "Mai",
       "Juin",
-      "Juillet",
+      "Juil",
       "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre"
+      "Sept",
+      "Oct",
+      "Nov",
+      "Déc"
     ],
     "monthNames": [
       "Janvier",

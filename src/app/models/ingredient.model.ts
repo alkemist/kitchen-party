@@ -23,7 +23,8 @@ export interface IngredientInterface extends DataObject {
 }
 
 export interface IngredientFormInterface extends IngredientInterface {
-  datesSeason: Date[];
+  dateBegin: Date;
+  dateEnd: Date;
 }
 
 export class IngredientModel implements IngredientInterface {
@@ -136,11 +137,7 @@ export class IngredientModel implements IngredientInterface {
   isSweet(): boolean {
     const name = this.name.toLowerCase();
 
-    if (IngredientModel.sweetNames.includes(name)) {
-      return true;
-    }
-
-    return false;
+    return IngredientModel.sweetNames.includes(name);
   }
 
   isSalty(): boolean {
@@ -163,13 +160,23 @@ export class IngredientModel implements IngredientInterface {
 
     if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
       const date = new Date();
+      let monthCurrent = date.getMonth() + 1;
+      let yearBegin = date.getFullYear();
+      let yearEnd = date.getFullYear();
 
-      let dateBegin = new Date(date.getFullYear(), this.monthBegin - 1, 1);
+      if (this.monthEnd < this.monthBegin) {
+        if (monthCurrent <= this.monthEnd) {
+          yearBegin--;
+        } else if (monthCurrent >= this.monthBegin) {
+          yearEnd++;
+        }
+      }
+
+      let dateBegin = new Date(yearBegin, this.monthBegin - 1, 1);
       dateBegin = DateHelper.monthBegin(dateBegin);
 
-      let dateEnd = new Date(date.getFullYear(), this.monthEnd - 1, 1);
+      let dateEnd = new Date(yearEnd, this.monthEnd - 1, 1);
       dateEnd = DateHelper.monthEnd(dateEnd);
-
 
       return date.getTime() > dateBegin.getTime() && date.getTime() < dateEnd.getTime();
     }
@@ -179,14 +186,11 @@ export class IngredientModel implements IngredientInterface {
 
   static format(ingredientForm: IngredientFormInterface) {
     const ingredient = new IngredientModel(ingredientForm);
-    if (ingredientForm.datesSeason && ingredientForm.datesSeason.length === 2) {
-      ingredient.monthBegin = ingredientForm.datesSeason[0]
-        ? DateHelper.monthBegin(ingredientForm.datesSeason[0]).getMonth() + 1
-        : null;
-      ingredient.monthEnd = ingredientForm.datesSeason[1]
-        ? DateHelper.monthEnd(ingredientForm.datesSeason[1]).getMonth() + 1
-        : null;
+    if (ingredientForm.dateBegin && ingredientForm.dateEnd) {
+      ingredient.monthBegin = ingredientForm.dateBegin.getMonth() + 1;
+      ingredient.monthEnd = ingredientForm.dateEnd.getMonth() + 1;
     }
+    console.log(ingredient.isSeason());
     return ingredient;
   }
 }
