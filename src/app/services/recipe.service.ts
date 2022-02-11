@@ -50,7 +50,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
           await this.hydrate(recipeModel, recipes);
           this.all.push(recipeModel);
         }
-        this.all = ArrayHelper.sortBySlug<RecipeModel>(this.all);
+        this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
         resolve(this.all);
       });
     });

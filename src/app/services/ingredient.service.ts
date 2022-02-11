@@ -41,7 +41,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
         for (const ingredient of ingredients) {
           this.all.push(new IngredientModel(ingredient));
         }
-        this.all = ArrayHelper.sortBySlug<IngredientModel>(this.all);
+        this.all = ArrayHelper.sortBy<IngredientModel>(this.all, 'slug');
         resolve(this.all);
       });
     });

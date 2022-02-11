@@ -57,7 +57,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
           await this.hydrate(kitchenIngredientModel);
           this.all.push(kitchenIngredientModel);
         }
-        this.all = ArrayHelper.sortBySlug<KitchenIngredientModel>(this.all);
+        this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
         resolve(this.all);
       });
     });

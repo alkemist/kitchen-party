@@ -1,8 +1,9 @@
 import {KeyObject} from '../models/other.model';
+import {ArrayHelper} from "./array.helper";
 
 export abstract class EnumHelper {
   static enumToAssociativArray(enumValue: any): { [key: string]: string } {
-    const keys = Object.keys(enumValue);
+    const keys = Object.keys(enumValue).sort();
     const values = Object.values(enumValue);
     return keys.reduce((obj, key, index) => ({...obj, [key]: values[index]}), {});
   }
@@ -10,9 +11,10 @@ export abstract class EnumHelper {
   static enumToObject(enumValue: any): KeyObject[] {
     const keys = Object.keys(enumValue);
     const values = Object.values(enumValue) as string[];
-    return keys.map((value, index) => {
+    const objects = keys.map((value, index) => {
       return {key: value, label: values[index]};
     });
+    return ArrayHelper.sortBy<KeyObject>(objects, 'label');
   }
 
   static enumToRegex(enumValue: any): RegExp {
