@@ -1,9 +1,6 @@
 module.exports = {
     preset: 'jest-preset-angular',
     roots: ['src'],
-    transform: {
-        '^.+\\.(ts|js|html)$': 'ts-jest',
-    },
     moduleNameMapper: {
         '@app/(.*)': '<rootDir>/src/app/$1',
         '@components/(.*)': '<rootDir>/src/app/components/$1',
@@ -18,5 +15,6 @@ module.exports = {
         '@assets/(.*)': '<rootDir>/src/assets/$1',
         '@env': '<rootDir>/src/environments/environment',
     },
-    transformIgnorePatterns: ['node_modules/(?!(jest-test))']
+    transform: {'^.+.(ts|mjs|js|html)$': 'jest-preset-angular'},
+    transformIgnorePatterns: ['node_modules/(?!.*.mjs$)'],
 };

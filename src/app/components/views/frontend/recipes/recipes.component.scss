@@ -5,6 +5,14 @@ $informationHeight: 115px;
 .page-container__content {
   padding: 0;
 
+  .filter-summary {
+    padding: 10px 10px 0;
+
+    p-chip {
+      margin: 0 5px 10px;
+    }
+  }
+
   .recipes {
     .recipe {
       width: 420px;

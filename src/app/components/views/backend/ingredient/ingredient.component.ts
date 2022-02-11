@@ -8,6 +8,7 @@ import {IngredientInterface, IngredientModel} from '../../../../models/ingredien
 import {IngredientService} from '../../../../services/ingredient.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from "../../../../tools/slugify";
+import {lengthArrayValidator} from "../../../../validators/lengthArrayValidator";
 
 @Component({
   selector: 'app-back-ingredient',
@@ -42,31 +43,46 @@ export class IngredientComponent implements OnInit {
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
       ]),
       isLiquid: new FormControl('', []),
+      datesSeason: new FormControl('', [lengthArrayValidator(2)]),
     });
   }
 
   get name(): FormControl {
     return this.form?.get('name') as FormControl;
   }
+  
+  async ngOnInit(): Promise<void> {
+    this.loadTranslations(() => {
+      this.loadData();
+    });
+  }
 
-  ngOnInit() {
+  loadTranslations(callback: () => void) {
+    this.translateService.getTranslation('fr').subscribe(() => {
+      this.ingredientTypes = this.ingredientTypes.map(item => {
+        return {...item, label: this.translateService.instant(item.label)};
+      });
+      callback();
+    });
+  }
+
+  loadData() {
     this.route.data.subscribe(
       (data => {
         if (data && data['ingredient']) {
           this.ingredient = data['ingredient'];
           this.form.patchValue(this.ingredient);
+          this.form.get('datesSeason')?.patchValue(this.ingredient.monthBegin && this.ingredient.monthEnd ? [
+            new Date(new Date().getFullYear(), this.ingredient.monthBegin - 1, 1),
+            new Date(new Date().getFullYear(), this.ingredient.monthEnd - 1, 1)
+          ] : null);
         }
         this.loading = false;
       }));
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTypes = this.ingredientTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-    });
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(this.form.value);
+    await this.preSubmit(IngredientModel.format(this.form.value));
   }
 
   async preSubmit(formDocument: IngredientInterface): Promise<void> {

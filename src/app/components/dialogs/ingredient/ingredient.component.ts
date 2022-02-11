@@ -8,6 +8,7 @@ import {IngredientInterface, IngredientModel} from '../../../models/ingredient.m
 import {IngredientService} from '../../../services/ingredient.service';
 import {EnumHelper} from '../../../tools/enum.helper';
 import {slugify} from "../../../tools/slugify";
+import {lengthArrayValidator} from "../../../validators/lengthArrayValidator";
 
 @Component({
   selector: 'app-dialog-ingredient',
@@ -37,6 +38,7 @@ export class DialogIngredientComponent implements OnInit {
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
       ]),
       isLiquid: new FormControl('', []),
+      datesSeason: new FormControl('', [lengthArrayValidator(2)]),
     });
   }
 
@@ -53,7 +55,7 @@ export class DialogIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(this.form.value);
+    await this.preSubmit(IngredientModel.format(this.form.value));
   }
 
   async preSubmit(formDocument: IngredientInterface): Promise<void> {

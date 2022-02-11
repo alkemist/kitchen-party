@@ -27,7 +27,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if (this.all.length > 0) {
+    if (this.all.length > 0 || this.refreshed) {
       return this.all;
     }
 
@@ -70,13 +70,13 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     return ingredient ?? undefined;
   }
 
-  async get(slug: string): Promise<IngredientModel | undefined> {
+  async get(slug: string, forceRefresh = false): Promise<IngredientModel | undefined> {
     if (!slug) {
       return undefined;
     }
 
     let ingredient = await this.getBySlug(slug);
-    if (!ingredient) {
+    if (!ingredient || forceRefresh) {
       try {
         const ingredientData = await super.findOneBySlug(slug);
         return new IngredientModel(this.addToStore(ingredientData));

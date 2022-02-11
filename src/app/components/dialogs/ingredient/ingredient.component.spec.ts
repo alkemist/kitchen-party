@@ -1,20 +1,19 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {DialogIngredientComponent} from "./ingredient.component";
 
-import {IngredientComponent} from './ingredient.component';
-
-describe('IngredientComponent', () => {
-  let component: IngredientComponent;
-  let fixture: ComponentFixture<IngredientComponent>;
+describe('DialogIngredientComponent', () => {
+  let component: DialogIngredientComponent;
+  let fixture: ComponentFixture<DialogIngredientComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [IngredientComponent]
+      declarations: [DialogIngredientComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IngredientComponent);
+    fixture = TestBed.createComponent(DialogIngredientComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

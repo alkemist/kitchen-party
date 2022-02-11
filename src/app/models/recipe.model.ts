@@ -126,6 +126,15 @@ export class RecipeModel implements RecipeInterface {
     return this.diet === diet;
   }
 
+  isSeason(): boolean {
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (!recipeIngredient.ingredient?.isSeason()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   isVegan(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
       if (!recipeIngredient.ingredient?.isVegan()) {

@@ -1,65 +1,70 @@
 <div class="page-container__content h-full">
-	<div class="recipes h-full flex flex-row align-items-center justify-content-center flex-wrap">
-		<div *ngFor="let recipe of filteredRecipes" class="recipe">
-			<div class="media">
-				<div *ngIf="recipe.imagePath"
-						 [style.background-image]="recipe.imagePath ? 'url(' + recipe.imagePath + ')' : ''"
-						 class="center-cropped"><img [src]="recipe.imagePath ? recipe.imagePath : ''"/></div>
-			</div>
-			<div class="informations flex flex-column justify-content-between">
-				<div class="flex flex-row justify-content-between">
-					<div class="flex align-items-center" style="width:80px">
-						<p-tag *ngIf="recipe.diet"
-									 [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
-					</div>
-					<h5 class="text-center flex-grow-1">
-						{{ recipe.name }}
-					</h5>
-					<div class="flex align-items-center">
-						<p-checkbox [value]="recipe.slug" [(ngModel)]="selectedRecipes"></p-checkbox>
-					</div>
-				</div>
-				<div class="details grid">
-					<div class="col info flex align-items-center"
-							 [pTooltip]="recipe.preparationDuration ? ('Preparation duration' | translate) : ''"
-							 tooltipPosition="bottom">
-						<i *ngIf="recipe.preparationDuration" class="material-icons">av_timer</i>
-						{{ recipe.preparationDuration }}
-					</div>
-					<div class="col flex align-items-center"
-							 [pTooltip]="recipe.cookingDuration ? ('Cooking duration' | translate) : ''"
-							 tooltipPosition="bottom">
-						<i *ngIf="recipe.cookingDuration" class="material-icons">microwave</i>
-						{{ recipe.cookingDuration }}
-					</div>
-					<div class="col flex align-items-center"
-							 [pTooltip]="recipe.waitingDuration ? ('Waiting duration' | translate) : ''"
-							 tooltipPosition="bottom">
-						<i *ngIf="recipe.waitingDuration" class="material-icons">snooze</i>
-						{{ recipe.waitingDuration }}
-					</div>
-					<div class="col flex align-items-center"
-							 [pTooltip]="recipe.nbSlices ? ('Number of slices' | translate) : ''"
-							 tooltipPosition="bottom">
-						<i *ngIf="recipe.nbSlices" class="material-icons">local_pizza</i>
-						{{ recipe.nbSlices }}
-					</div>
-					<div class="col flex align-items-center" [pTooltip]="'Number of ingredients' | translate"
-							 tooltipPosition="bottom">
-						<i class="material-icons">inventory</i>
-						{{ recipe.recipeIngredients.length }}
-					</div>
-					<a [routerLink]="['/', recipe.slug]" class="p-button-rounded" icon="pi pi-eye" pButton
-						 pRipple [pTooltip]="'View recipe' | translate"
-						 tooltipPosition="bottom"></a>
-				</div>
-			</div>
-		</div>
-		<div *ngIf="loading">
-			<i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-		</div>
-		<div *ngIf="!loading && filteredRecipes.length === 0">
-			{{ 'No recipes found.' | translate }}
-		</div>
-	</div>
+  <div *ngIf="filterSummary.length > 0"
+       class="filter-summary flex flex-row align-items-center justify-content-center flex-wrap">
+    <p-chip *ngFor="let filter of filterSummary" [label]="filter.value" [removable]="true"
+            (onRemove)="removeFilter(filter.key)"></p-chip>
+  </div>
+  <div class="recipes h-full flex flex-row align-items-center justify-content-center flex-wrap">
+    <div *ngFor="let recipe of filteredRecipes" class="recipe">
+      <div class="media">
+        <div *ngIf="recipe.imagePath"
+             [style.background-image]="recipe.imagePath ? 'url(' + recipe.imagePath + ')' : ''"
+             class="center-cropped"><img [src]="recipe.imagePath ? recipe.imagePath : ''"/></div>
+      </div>
+      <div class="informations flex flex-column justify-content-between">
+        <div class="flex flex-row justify-content-between">
+          <div class="flex align-items-center" style="width:80px">
+            <p-tag *ngIf="recipe.diet"
+                   [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
+          </div>
+          <h5 class="text-center flex-grow-1">
+            {{ recipe.name }}
+          </h5>
+          <div class="flex align-items-center">
+            <p-checkbox [value]="recipe.slug" [(ngModel)]="selectedRecipes"></p-checkbox>
+          </div>
+        </div>
+        <div class="details grid">
+          <div class="col info flex align-items-center"
+               [pTooltip]="recipe.preparationDuration ? ('Preparation duration' | translate) : ''"
+               tooltipPosition="bottom">
+            <i *ngIf="recipe.preparationDuration" class="material-icons">av_timer</i>
+            {{ recipe.preparationDuration }}
+          </div>
+          <div class="col flex align-items-center"
+               [pTooltip]="recipe.cookingDuration ? ('Cooking duration' | translate) : ''"
+               tooltipPosition="bottom">
+            <i *ngIf="recipe.cookingDuration" class="material-icons">microwave</i>
+            {{ recipe.cookingDuration }}
+          </div>
+          <div class="col flex align-items-center"
+               [pTooltip]="recipe.waitingDuration ? ('Waiting duration' | translate) : ''"
+               tooltipPosition="bottom">
+            <i *ngIf="recipe.waitingDuration" class="material-icons">snooze</i>
+            {{ recipe.waitingDuration }}
+          </div>
+          <div class="col flex align-items-center"
+               [pTooltip]="recipe.nbSlices ? ('Number of slices' | translate) : ''"
+               tooltipPosition="bottom">
+            <i *ngIf="recipe.nbSlices" class="material-icons">local_pizza</i>
+            {{ recipe.nbSlices }}
+          </div>
+          <div class="col flex align-items-center" [pTooltip]="'Number of ingredients' | translate"
+               tooltipPosition="bottom">
+            <i class="material-icons">inventory</i>
+            {{ recipe.recipeIngredients.length }}
+          </div>
+          <a [routerLink]="['/', recipe.slug]" class="p-button-rounded" icon="pi pi-eye" pButton
+             pRipple [pTooltip]="'View recipe' | translate"
+             tooltipPosition="bottom"></a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="loading">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    </div>
+    <div *ngIf="!loading && filteredRecipes.length === 0">
+      {{ 'No recipes found.' | translate }}
+    </div>
+  </div>
 </div>

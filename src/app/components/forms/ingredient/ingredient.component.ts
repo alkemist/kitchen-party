@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {IngredientModel} from '../../../models/ingredient.model';
 import {KeyObject} from '../../../models/other.model';
+import {IngredientTypeEnum, IngredientTypes} from "../../../enums/ingredient-type.enum";
 
 @Component({
   selector: 'app-form-ingredient',
@@ -21,6 +22,10 @@ export class FormIngredientComponent implements OnInit {
   constructor() {
   }
 
+  get isFruitsOrVegetables(): boolean {
+    return IngredientTypes[this.type.value] === IngredientTypeEnum.fruits_vegetables_mushrooms
+  }
+
   get name(): FormControl {
     return this.form?.get('name') as FormControl;
   }
@@ -31,6 +36,10 @@ export class FormIngredientComponent implements OnInit {
 
   get isLiquid(): FormControl {
     return this.form?.get('isLiquid') as FormControl;
+  }
+
+  get datesSeason(): FormControl {
+    return this.form?.get('datesSeason') as FormControl;
   }
 
   ngOnInit(): void {

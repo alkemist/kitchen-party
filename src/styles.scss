@@ -94,14 +94,14 @@ p-dropdown.ng-touched.p-invalid > div {
 
 
 .mobile-showed {
-  display: none;
+  display: initial;
   @media screen and (max-width: $mobile-tablet-width) {
     display: block;
   }
 }
 
 .mobile-hidden {
-  display: block;
+  display: initial;
   @media screen and (max-width: $mobile-tablet-width) {
     display: none;
   }

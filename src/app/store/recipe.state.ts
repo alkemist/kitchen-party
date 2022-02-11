@@ -51,7 +51,7 @@ export class RecipeState {
   @Action(FillRecipes)
   fill({getState, patchState}: StateContext<RecipeStateModel>, {payload}: FillRecipes) {
     patchState({
-      all: [...payload],
+      all: payload,
       lastUpdated: new Date()
     });
   }
