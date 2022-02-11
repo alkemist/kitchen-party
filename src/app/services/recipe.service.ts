@@ -34,7 +34,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if (this.all.length > 0) {
+    if (this.all.length > 0 || this.refreshed) {
       return this.all;
     }
 

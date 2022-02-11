@@ -1,91 +1,96 @@
 <form (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
-	<p-card #pnl class="ingredient">
-		<ng-template pTemplate="title">
-			<div class="flex flex-row align-items-center">
-				<a *ngIf="!dialogMode" [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text"
-					 icon="pi pi-angle-left" pButton
-					 pRipple
-					 type="button"></a>
-				<h5 class="text-center flex-grow-1">{{ ingredient?.name ?? ('New ingredient' | translate) }}</h5>
-				<button (click)="close()" *ngIf="dialogMode"
-								class="p-button-rounded p-button-text" icon="pi pi-times"
-								pButton
-								pRipple type="button"></button>
-			</div>
-		</ng-template>
+  <p-card #pnl class="ingredient">
+    <ng-template pTemplate="title">
+      <div class="flex flex-row align-items-center">
+        <a *ngIf="!dialogMode" [routerLink]="['/', 'ingredients']" class="p-button-rounded p-button-text"
+           icon="pi pi-angle-left" pButton
+           pRipple
+           type="button"></a>
+        <h5 class="text-center flex-grow-1">{{ ingredient?.name ?? ('New ingredient' | translate) }}</h5>
+        <button (click)="close()" *ngIf="dialogMode"
+                class="p-button-rounded p-button-text" icon="pi pi-times"
+                pButton
+                pRipple type="button"></button>
+      </div>
+    </ng-template>
 
-		<div class="field grid">
-			<label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}"
-						 class="col-12 mb-2 md:col-4 md:mb-0"
-						 for="name" translate="">Name</label>
-			<div class="col-12 md:col-8">
-				<input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
-							 formControlName="name" id="name" pInputText/>
-			</div>
-			<div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-			<div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
-				<small *ngIf="name.errors?.['required']" translate="">
-					Name is required.
-				</small>
-				<small *ngIf="name.errors?.['exist']" translate="">
-					Ingredient already exist.
-				</small>
-			</div>
-		</div>
+    <div class="field grid">
+      <label [ngClass]="{'p-error':name.invalid && (name.dirty || name.touched)}"
+             class="col-12 mb-2 md:col-4 md:mb-0"
+             for="name" translate="">Name</label>
+      <div class="col-12 md:col-8">
+        <input [ngClass]="{'p-invalid':name.invalid && (name.dirty || name.touched)}" class="inputfield w-full"
+               formControlName="name" id="name" pInputText/>
+      </div>
+      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="col-12 md:col-8 p-error">
+        <small *ngIf="name.errors?.['required']" translate="">
+          Name is required.
+        </small>
+        <small *ngIf="name.errors?.['exist']" translate="">
+          Ingredient already exist.
+        </small>
+      </div>
+    </div>
 
-		<div class="field grid">
-			<label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
-						 class="col-12 mb-2 md:col-4 md:mb-0"
-						 for="type" translate="">Type</label>
-			<div class="col-12 md:col-8">
-				<p-dropdown [autoDisplayFirst]="false"
-										[ngClass]="{'p-invalid':type.invalid && (type.dirty || type.touched)}"
-										[options]="ingredientTypes" [placeholder]="'Select a type' | translate"
-										formControlName="type"
-										inputId="type" optionValue="key"
-										styleClass="inputfield w-full"></p-dropdown>
-			</div>
-			<div class="col-12 mb-2 md:col-4 md:mb-0"></div>
-			<div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
-				<small *ngIf="type.errors?.['required']" translate="">
-					Type is required.
-				</small>
-			</div>
-		</div>
+    <div class="field grid">
+      <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
+             class="col-12 mb-2 md:col-4 md:mb-0"
+             for="type" translate="">Type</label>
+      <div class="col-12 md:col-8">
+        <p-dropdown [autoDisplayFirst]="false"
+                    [ngClass]="{'p-invalid':type.invalid && (type.dirty || type.touched)}"
+                    [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
+                    formControlName="type"
+                    inputId="type" optionValue="key"
+                    styleClass="inputfield w-full"></p-dropdown>
+      </div>
+      <div class="col-12 mb-2 md:col-4 md:mb-0"></div>
+      <div *ngIf="type.invalid && (type.dirty || type.touched)" class="col-12 md:col-8 p-error">
+        <small *ngIf="type.errors?.['required']" translate="">
+          Type is required.
+        </small>
+      </div>
+    </div>
 
-		<div class="field grid">
-			<label class="col-12 mb-2 md:col-4 md:mb-0"
-						 for="isLiquid" translate="">Liquid ?</label>
-			<div class="col-12 md:col-8">
-				<p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-times"
-												onIcon="pi pi-check"></p-toggleButton>
-			</div>
-		</div>
+    <div class="field grid">
+      <label class="col-12 mb-2 md:col-4 md:mb-0"
+             for="isLiquid" translate="">Liquid ?</label>
+      <div class="col-12 md:col-8">
+        <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-times"
+                        onIcon="pi pi-check"></p-toggleButton>
+      </div>
+    </div>
 
-		<div class="field grid" *ngIf="isFruitsOrVegetables">
-			<label class="col-12 mb-2 md:col-4 md:mb-0"
-						 translate="">Season</label>
-			<div class="col-6 md:col-8">
-				<p-calendar [locale]="localSettings" formControlName="dateBegin" view="month" dateFormat="MM"></p-calendar>
-			</div>
-			<div class="col-6 md:col-8">
-				<p-calendar [locale]="localSettings" formControlName="dateEnd" view="month" dateFormat="MM"></p-calendar>
-			</div>
-		</div>
+    <div class="field grid" *ngIf="isFruitsOrVegetables">
+      <label class="col-12 mb-2 md:col-4 md:mb-0"
+             translate="">Season</label>
+      <div class="col-12 md:col-8">
+        <p-calendar selectionMode="range" formControlName="datesSeason" view="month"
+                    dateFormat="MM" [showIcon]="true"
+                    [ngClass]="{'p-invalid':datesSeason.invalid && (datesSeason.dirty || datesSeason.touched)}"
+                    styleClass="inputfield w-full"></p-calendar>
+      </div>
+      <div *ngIf="datesSeason.invalid && (datesSeason.dirty || datesSeason.touched)" class="col-12 md:col-8 p-error">
+        <small *ngIf="datesSeason.errors?.['lengthArray']" translate="">
+          Two months required.
+        </small>
+      </div>
+    </div>
 
-		<ng-template pTemplate="footer">
-			<div class="flex flex-row">
-				<button (click)="remove()" *ngIf="ingredient?.id" [label]="('Delete' | translate)"
-								class="p-button-danger"
-								icon="pi pi-trash" pButton pRipple
-								type="button"></button>
-				<div class="flex-grow-1"></div>
-				<button [label]="(ingredient?.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
-								type="submit"></button>
-			</div>
-		</ng-template>
-	</p-card>
+    <ng-template pTemplate="footer">
+      <div class="flex flex-row">
+        <button (click)="remove()" *ngIf="ingredient?.id" [label]="('Delete' | translate)"
+                class="p-button-danger"
+                icon="pi pi-trash" pButton pRipple
+                type="button"></button>
+        <div class="flex-grow-1"></div>
+        <button [label]="(ingredient?.id ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton pRipple
+                type="submit"></button>
+      </div>
+    </ng-template>
+  </p-card>
 </form>
 <p-blockUI [blocked]="loading" [target]="pnl">
-	<i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>

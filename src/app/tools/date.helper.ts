@@ -7,8 +7,17 @@ export abstract class DateHelper {
     return date;
   }
 
-  static clearDayAndTime(date: Date): Date {
+  static monthBegin(date: Date): Date {
     const firstDayOnMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     return DateHelper.clearTime(firstDayOnMonth);
+  }
+
+  static monthEnd(date: Date): Date {
+    const lastDayOnMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    lastDayOnMonth.setHours(23);
+    lastDayOnMonth.setMinutes(59);
+    lastDayOnMonth.setSeconds(59);
+    lastDayOnMonth.setMilliseconds(59);
+    return lastDayOnMonth;
   }
 }

@@ -1,15 +1,15 @@
 <div class="page-container__content">
-	<app-form-ingredient (onRemove)="remove()" (onSubmit)="handleSubmit()" [form]="form"
-											 [localSettings]="localSettings" [ingredientTypes]="ingredientTypes" [ingredient]="ingredient"
-											 [loading]="loading"></app-form-ingredient>
-	<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
-		<p-footer>
-			<button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
-							pRipple
-							type="button"></button>
-			<button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
-							pRipple
-							type="button"></button>
-		</p-footer>
-	</p-confirmDialog>
+  <app-form-ingredient (onRemove)="remove()" (onSubmit)="handleSubmit()" [form]="form"
+                       [ingredientTypes]="ingredientTypes" [ingredient]="ingredient"
+                       [loading]="loading"></app-form-ingredient>
+  <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+    <p-footer>
+      <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+              pRipple
+              type="button"></button>
+      <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+              pRipple
+              type="button"></button>
+    </p-footer>
+  </p-confirmDialog>
 </div>

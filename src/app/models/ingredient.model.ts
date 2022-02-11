@@ -23,8 +23,7 @@ export interface IngredientInterface extends DataObject {
 }
 
 export interface IngredientFormInterface extends IngredientInterface {
-  dateBegin: Date;
-  dateEnd: Date;
+  datesSeason: Date[];
 }
 
 export class IngredientModel implements IngredientInterface {
@@ -161,10 +160,18 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isSeason(): boolean {
-    const date = new Date();
+
     if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
-      console.log(date.getMonth(), this.monthBegin, this.monthEnd);
-      return false;
+      const date = new Date();
+
+      let dateBegin = new Date(date.getFullYear(), this.monthBegin - 1, 1);
+      dateBegin = DateHelper.monthBegin(dateBegin);
+
+      let dateEnd = new Date(date.getFullYear(), this.monthEnd - 1, 1);
+      dateEnd = DateHelper.monthEnd(dateEnd);
+
+
+      return date.getTime() > dateBegin.getTime() && date.getTime() < dateEnd.getTime();
     }
 
     return true;
@@ -172,8 +179,14 @@ export class IngredientModel implements IngredientInterface {
 
   static format(ingredientForm: IngredientFormInterface) {
     const ingredient = new IngredientModel(ingredientForm);
-    ingredient.monthBegin = ingredientForm.dateBegin ? DateHelper.clearDayAndTime(ingredientForm.dateBegin).getMonth() + 1 : null;
-    ingredient.monthEnd = ingredientForm.dateEnd ? DateHelper.clearDayAndTime(ingredientForm.dateEnd).getMonth() + 1 : null;
+    if (ingredientForm.datesSeason && ingredientForm.datesSeason.length === 2) {
+      ingredient.monthBegin = ingredientForm.datesSeason[0]
+        ? DateHelper.monthBegin(ingredientForm.datesSeason[0]).getMonth() + 1
+        : null;
+      ingredient.monthEnd = ingredientForm.datesSeason[1]
+        ? DateHelper.monthEnd(ingredientForm.datesSeason[1]).getMonth() + 1
+        : null;
+    }
     return ingredient;
   }
 }
@@ -188,7 +201,7 @@ export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = 
     if (!ingredientFields.monthEnd) {
       ingredientFields.monthEnd = null;
     }
-    
+
     delete ingredientFields.id;
     delete ingredientFields.recipe;
     return ingredientFields;

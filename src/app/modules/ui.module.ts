@@ -27,6 +27,7 @@ import {ImageModule} from "primeng/image";
 import {TooltipModule} from "primeng/tooltip";
 import {CheckboxModule} from "primeng/checkbox";
 import {CalendarModule} from "primeng/calendar";
+import {ChipModule} from "primeng/chip";
 
 const modules = [
   ToolbarModule,
@@ -55,7 +56,8 @@ const modules = [
   ImageModule,
   TooltipModule,
   CheckboxModule,
-  CalendarModule
+  CalendarModule,
+  ChipModule
 ];
 
 @NgModule({

@@ -12,7 +12,7 @@ export class IngredientResolver implements Resolve<IngredientModel> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<IngredientModel> {
-    const ingredient = await this.service.get(route.paramMap.get('slug') ?? '', true);
+    const ingredient = await this.service.get(route.paramMap.get('slug') ?? '');
     if (ingredient) {
       return ingredient;
     }

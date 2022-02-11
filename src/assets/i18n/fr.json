@@ -121,15 +121,40 @@
   "Sweet": "Sucré",
   "Salty": "Salé",
   "Season": "Saison",
+  "In season": "De saison",
   "Sweet / Salty": "Sucré / Salé",
   "Ingredient already in kitchen.": "L'ingrédient est déjà dans la cuisine.",
-  "Feb": "Fev",
-  "monthNames": {
-    "February": "Fevrier"
-  },
-  "monthNamesShort": {
-    "Feb": "Fev"
-  },
+  "Two months required.": "2 mois sont requis.",
+  "Home": "Accueil",
+  "Name contain": "Le nom contient",
   "primeng": {
+    "monthNamesShort": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ],
+    "monthNames": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ]
   }
 }
