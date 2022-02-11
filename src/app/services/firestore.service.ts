@@ -70,6 +70,7 @@ export abstract class FirestoreService<T extends DataObject> {
   protected all$?: Observable<T[]>;
   protected lastUpdated?: Date;
   protected refreshed = false;
+  protected promise: Promise<T[]> | null = null;
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
@@ -112,6 +113,18 @@ export abstract class FirestoreService<T extends DataObject> {
   }
 
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+    if (!this.promise) {
+      this.promise = this.refresh(...queryConstraints);
+    }
+
+    return new Promise<T[]>(resolve => {
+      this.promise?.then(documents => {
+        resolve(documents);
+      })
+    });
+  }
+
+  private async refresh(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];
     try {
@@ -128,7 +141,6 @@ export abstract class FirestoreService<T extends DataObject> {
       }
     }
     this.refreshed = true;
-
     return documents;
   }
 
