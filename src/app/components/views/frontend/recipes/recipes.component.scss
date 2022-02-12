@@ -14,9 +14,11 @@ $informationHeight: 115px;
   }
 
   .recipes {
+    padding: 0 0 20px 0;
+
     .recipe {
       width: 420px;
-      margin: 10px;
+      margin: 20px 10px 0 10px;
 
       .media {
         z-index: -1;
