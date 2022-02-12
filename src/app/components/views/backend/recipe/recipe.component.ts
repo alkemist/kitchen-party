@@ -20,11 +20,12 @@ import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
+import {ScanService} from '../../../../services/scan.service';
 import {SearchService} from '../../../../services/search.service';
+import {UploadService} from '../../../../services/upload.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
-import {UploadService} from "../../../../services/upload.service";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -52,11 +53,12 @@ export class RecipeComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   loading = true;
   uploading = false;
+  scanning = false;
   error: string = '';
   indexRecipeIngredient = 0;
-
+  coverFiles: File[] = [];
+  scanFiles: File[] = [];
   private ingredientTranslation: string = 'Ingredient';
-  files: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -70,6 +72,7 @@ export class RecipeComponent implements OnInit {
     private dialogService: DialogService,
     private filterService: FilterService,
     private uploadService: UploadService,
+    private scanService: ScanService,
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -305,7 +308,7 @@ export class RecipeComponent implements OnInit {
       this.uploadService.upload($event.files[0]).then(async (image) => {
         this.uploading = false;
         if (image) {
-          this.files = [];
+          this.coverFiles = [];
           this.image.patchValue(image.name);
           this.imagePath.patchValue(image.path);
         }
@@ -313,8 +316,14 @@ export class RecipeComponent implements OnInit {
     }
   }
 
+  scanImage($event: any) {
+    if ($event.files.length > 0) {
+
+    }
+  }
+
   removeCurrentImage() {
-    this.image.patchValue('')
-    this.imagePath.patchValue('')
+    this.image.patchValue('');
+    this.imagePath.patchValue('');
   }
 }

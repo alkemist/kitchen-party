@@ -9,7 +9,7 @@
       Kitchen Party
     </a>
     <span *ngIf="title">
-      <span style="margin: 0 10px;" class="mobile-hidden">/</span>{{ title | translate }}
+      <span class="mobile-hidden" style="margin: 0 10px;">/</span>{{ title | translate }}
     </span>
   </div>
   <!-- End Toolbar Left -->
@@ -56,10 +56,10 @@
       <label for="float-input" translate="">Ingredients</label>
     </span>
     <span class="p-float-label">
-      <p-toggleButton formControlName="isSeason" [offLabel]="'In season' | translate"
-                      [onLabel]="'In season' | translate"></p-toggleButton>
+      <p-toggleButton [offLabel]="'In season' | translate" [onLabel]="'In season' | translate"
+                      formControlName="isSeason"></p-toggleButton>
     </span>
-    <div class="flex flex-row justify-content-between" style="padding: 40px 0 20px;">
+    <div class="flex flex-row justify-content-between" style="padding: 20px 0 20px;">
       <button (click)="resetFilters()" [label]="'Clear filters' | translate"
               class="p-button-rounded p-button-text"
               icon="pi pi-times" pButton
@@ -68,6 +68,10 @@
               class="p-button-rounded p-button-text"
               icon="pi pi-shopping-cart" pButton
               pRipple type="button"></button>
+    </div>
+    <div class="flex flex-row justify-content-between" style="padding:0;">
+      <a (click)="menuShowed = false" [label]="'About' | translate"
+         [routerLink]="['/', 'about']" class="p-button-rounded p-button-text" icon="pi pi-user" pButton pRipple></a>
     </div>
   </p-sidebar>
   <!-- End Sidebar -->

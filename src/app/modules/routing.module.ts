@@ -3,9 +3,12 @@ import {RouterModule, Routes} from '@angular/router';
 import {IngredientComponent} from '../components/views/backend/ingredient/ingredient.component';
 import {IngredientsComponent} from '../components/views/backend/ingredients/ingredients.component';
 import {KitchenIngredientComponent} from '../components/views/backend/kitchen-ingredient/kitchen-ingredient.component';
-import {KitchenIngredientsComponent} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
+import {
+  KitchenIngredientsComponent
+} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
 import {RecipeComponent} from '../components/views/backend/recipe/recipe.component';
 import {RecipesComponent} from '../components/views/backend/recipes/recipes.component';
+import {AboutComponent} from '../components/views/frontend/about/about.component';
 import {FrontRecipeComponent} from '../components/views/frontend/recipe/recipe.component';
 import {FrontRecipesComponent} from '../components/views/frontend/recipes/recipes.component';
 import {ShoppingComponent} from '../components/views/frontend/shopping/shopping.component';
@@ -20,6 +23,7 @@ import {UserService} from '../services/user.service';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [LoginGuard], data: {title: 'Login'}},
+  {path: 'about', component: AboutComponent, data: {title: 'About'}},
   {path: 'logged', redirectTo: '/ingredients', pathMatch: 'full'},
   {
     path: 'ingredients',
