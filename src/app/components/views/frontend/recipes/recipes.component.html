@@ -4,7 +4,7 @@
     <p-chip (onRemove)="removeFilter(filter.key)" *ngFor="let filter of filterSummary" [label]="filter.value"
             [removable]="true"></p-chip>
   </div>
-  <div class="recipes h-full flex flex-row align-items-center justify-content-center flex-wrap">
+  <div class="recipes flex-grow-1 flex flex-row align-items-center justify-content-center flex-wrap">
     <div *ngFor="let recipe of filteredRecipes" class="recipe">
       <div class="media">
         <div *ngIf="recipe.imagePath"

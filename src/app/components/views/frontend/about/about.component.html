@@ -1,7 +1,12 @@
 <div class="page-container__content h-full">
   <p-card>
     <ng-template pTemplate="title">
-      <h5 translate="">About</h5>
+      <div class="flex flex-row align-items-center">
+        <a [routerLink]="['/']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+           pRipple
+           type="button"></a>
+        <h5 class="text-center flex-grow-1" translate="">About</h5>
+      </div>
     </ng-template>
 
     <div class="content">
