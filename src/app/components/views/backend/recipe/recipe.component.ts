@@ -45,8 +45,8 @@ function recipeIngredientFormValidator(): ValidatorFn {
 })
 export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
-  recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
-  measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+  recipeTypes: KeyObject[] = [];
+  measureUnits: KeyObject[] = [];
   unitsOrMeasures: KeyObject[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   form: FormGroup = new FormGroup({});
@@ -82,8 +82,8 @@ export class RecipeComponent implements OnInit {
       preparationDuration: new FormControl('', []),
       waitingDuration: new FormControl('', []),
       nbSlices: new FormControl('', []),
-      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()], [Validators.required]),
-      instructions: new FormArray([RecipeComponent.createInstructionRow()], [Validators.required])
+      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()], []),
+      instructions: new FormArray([RecipeComponent.createInstructionRow()], [])
     });
   }
 
@@ -128,27 +128,27 @@ export class RecipeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(
-      (data => {
-        if (data && data['recipe']) {
-          this.loadTranslations(() => {
+      ((data) => {
+        this.loadTranslations(() => {
+          if (data && data['recipe']) {
             this.loadData(data['recipe']);
-          });
-        } else {
+          }
           this.loading = false;
-        }
+        });
       }));
   }
 
   loadTranslations(callback: () => void) {
     this.translateService.getTranslation('fr').subscribe(() => {
       this.ingredientTranslation = this.translateService.instant('Ingredient');
-      this.recipeTypes = this.recipeTypes.map(item => {
+      this.recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum).map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.measureUnits = this.measureUnits.map(item => {
+      let measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+      measureUnits = measureUnits.map(item => {
         return {...item, label: this.translateService.instant(item.label)};
       });
-      this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
+      this.measureUnits = measureUnits.concat(this.recipeService.customMeasures);
       callback();
     });
   }
@@ -177,7 +177,6 @@ export class RecipeComponent implements OnInit {
 
       this.instructionRows.at(i).patchValue(instruction);
     });
-    this.loading = false;
   }
 
   addRecipeIngredient(): void {
@@ -246,23 +245,21 @@ export class RecipeComponent implements OnInit {
     if (this.recipe.id) {
       this.loading = true;
       this.recipeService.update(localDocument).then(async recipe => {
-        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         await this.messageService.add({
           severity: 'success',
           detail: this.translateService.instant(`Updated recipe`)
         });
-        await this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
+        await this.routerService.navigate(['/', 'recipe', recipe!.slug]);
       });
     } else {
       this.recipeService.add(localDocument).then(recipe => {
-        this.recipe = new RecipeModel(recipe!);
         this.loading = false;
         this.messageService.add({
           severity: 'success',
           detail: this.translateService.instant(`Added recipe`)
         });
-        this.routerService.navigate(['/', 'recipe', this.recipe.slug]);
+        this.routerService.navigate(['/', 'recipe', recipe!.slug]);
       });
     }
   }

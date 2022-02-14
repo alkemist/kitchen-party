@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
+import {orderBy} from 'firebase/firestore';
 import {Observable, Subscription} from 'rxjs';
 import {
   kitchenIngredientConverter,
@@ -18,7 +19,6 @@ import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
 import {RecipeService} from './recipe.service';
-import {orderBy} from "firebase/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if (this.all.length > 0 || this.refreshed) {
+    if ((this.all.length > 0 || this.refreshed) && !this.updated) {
       return this.all;
     }
 

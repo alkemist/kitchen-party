@@ -191,13 +191,12 @@
                         pButton pRipple
                         type="button"></button>
               </ng-template>
-              <app-form-kitchen-ingredient
-                (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
-                [form]="getFormGroupRecipeIngredient(i)"
-                [i]="i"
-                [ingredientsOrRecipes]="ingredientsOrRecipes"
-                [isKitchen]="false"
-                [measureUnits]="measureUnits"
+              <app-form-kitchen-ingredient (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
+                                           [form]="getFormGroupRecipeIngredient(i)"
+                                           [i]="i"
+                                           [ingredientsOrRecipes]="ingredientsOrRecipes"
+                                           [isKitchen]="false"
+                                           [measureUnits]="measureUnits"
               ></app-form-kitchen-ingredient>
             </p-accordionTab>
           </p-accordion>

@@ -6,10 +6,10 @@ import {KeyObject} from '../models/other.model';
 import {recipeConverter, RecipeInterface, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
 import {RecipeState} from '../store/recipe.state';
+import {ArrayHelper} from '../tools/array.helper';
 import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
-import {ArrayHelper} from "../tools/array.helper";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if (this.all.length > 0 || this.refreshed) {
+    if ((this.all.length > 0 || this.refreshed) && !this.updated) {
       return this.all;
     }
 

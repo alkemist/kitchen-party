@@ -27,7 +27,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if (this.all.length > 0 || this.refreshed) {
+    if ((this.all.length > 0 || this.refreshed) && !this.updated) {
       return this.all;
     }
 

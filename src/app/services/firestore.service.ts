@@ -70,6 +70,7 @@ export abstract class FirestoreService<T extends DataObject> {
   protected all$?: Observable<T[]>;
   protected lastUpdated?: Date;
   protected refreshed = false;
+  protected updated = false;
   protected promise: Promise<T[]> | null = null;
 
   private readonly collectionName: string;
@@ -120,28 +121,8 @@ export abstract class FirestoreService<T extends DataObject> {
     return new Promise<T[]>(resolve => {
       this.promise?.then(documents => {
         resolve(documents);
-      })
-    });
-  }
-
-  private async refresh(...queryConstraints: QueryConstraint[]): Promise<T[]> {
-    const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
-    const documents: T[] = [];
-    try {
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const document = doc.data();
-        document.id = doc.id;
-        documents.push(document);
       });
-    } catch (e) {
-      const er = e as Error;
-      if (er.message === 'Quota exceeded.') {
-        this.loggerService.error(new QuotaExceededError());
-      }
-    }
-    this.refreshed = true;
-    return documents;
+    });
   }
 
   protected async findOneById(id: string): Promise<T> {
@@ -184,6 +165,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, id).withConverter(this.converter);
       await setDoc(ref, document);
+      this.updated = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -199,6 +181,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await setDoc(ref, document);
+      this.updated = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -212,10 +195,31 @@ export abstract class FirestoreService<T extends DataObject> {
 
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
-      return deleteDoc(ref);
+      await deleteDoc(ref);
+      this.updated = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
+  }
+
+  private async refresh(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+    const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
+    const documents: T[] = [];
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const document = doc.data();
+        document.id = doc.id;
+        documents.push(document);
+      });
+    } catch (e) {
+      const er = e as Error;
+      if (er.message === 'Quota exceeded.') {
+        this.loggerService.error(new QuotaExceededError());
+      }
+    }
+    this.refreshed = true;
+    return documents;
   }
 
   private updateSlug(document: T) {

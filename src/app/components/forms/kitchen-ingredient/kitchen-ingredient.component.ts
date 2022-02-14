@@ -8,7 +8,7 @@ import {RecipeModel} from '../../../models/recipe.model';
 @Component({
   selector: 'app-form-kitchen-ingredient',
   templateUrl: './kitchen-ingredient.component.html',
-  styleUrls: ['./kitchen-ingredient.component.scss']
+  styleUrls: ['./kitchen-ingredient.component.scss'],
 })
 export class FormKitchenIngredientComponent implements OnInit {
   @Input() i: number = 0;
