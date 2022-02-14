@@ -8,11 +8,11 @@
   }
 }
 
-.recipe ::ng-deep p-card.ingredient .p-card-body {
-  padding: 0 !important;
-  overflow: initial;
-}
-
 textarea {
   height: 90px;
+}
+
+::ng-deep .p-dialog.ingredient .p-dialog-content {
+  padding: 0 !important;
+  overflow: initial;
 }

@@ -284,7 +284,8 @@ export class RecipeComponent implements OnInit {
   showNewIngredientModal() {
     this.dialogService.open(DialogIngredientComponent, {
       showHeader: false,
-      width: '70%'
+      width: '70%',
+      styleClass: 'ingredient'
     });
   }
 
