@@ -1,49 +1,49 @@
 <div class="page-container__content">
-	<form (submit)="handleSubmit()" [formGroup]="form">
-		<p-card #pnl class="recipe">
-			<ng-template pTemplate="title">
-				<div class="flex flex-row align-items-center">
-					<a [routerLink]="['/', 'kitchen-ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left"
-						 pButton
-						 pRipple
-						 type="button"></a>
-					<h5
-						class="text-center flex-grow-1">{{ kitchenIngredient.ingredient?.name ?? ('New ingredient in kitchen' | translate) }}</h5>
-				</div>
-			</ng-template>
+  <form (submit)="handleSubmit()" [formGroup]="form">
+    <p-card #pnl class="recipe">
+      <ng-template pTemplate="title">
+        <div class="flex flex-row align-items-center">
+          <a [routerLink]="['/', 'kitchen-ingredients']" class="p-button-rounded p-button-text" icon="pi pi-angle-left"
+             pButton
+             pRipple
+             type="button"></a>
+          <h5
+            class="text-center flex-grow-1">{{ kitchenIngredient.ingredient?.name ?? ('New ingredient in kitchen' | translate) }}</h5>
+        </div>
+      </ng-template>
 
-			<app-form-kitchen-ingredient
-				(searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
-				[ingredientsOrRecipes]="ingredientsOrRecipes"
-				[form]="form" [kitchenIngredient]="kitchenIngredient" [measureUnits]="measureUnits" [loading]="loading"
-			></app-form-kitchen-ingredient>
+      <app-form-kitchen-ingredient
+        (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
+        [form]="form" [ingredientsOrRecipes]="ingredientsOrRecipes"
+        [isKitchen]="true" [kitchenIngredient]="kitchenIngredient" [loading]="loading" [measureUnits]="measureUnits"
+      ></app-form-kitchen-ingredient>
 
-			<ng-template pTemplate="footer">
-				<div class="flex flex-row">
-					<button (click)="remove()" *ngIf="kitchenIngredient.id" [label]="('Delete' | translate)"
-									class="p-button-danger"
-									icon="pi pi-trash" pButton pRipple
-									type="button"></button>
-					<div class="flex-grow-1"></div>
-					<button [label]="((kitchenIngredient.id ? 'Update' : 'Add') + ' ingredient in kitchen') | translate"
-									icon="pi pi-check"
-									pButton pRipple
-									type="submit"></button>
-				</div>
-			</ng-template>
-		</p-card>
-	</form>
+      <ng-template pTemplate="footer">
+        <div class="flex flex-row">
+          <button (click)="remove()" *ngIf="kitchenIngredient.id" [label]="('Delete' | translate)"
+                  class="p-button-danger"
+                  icon="pi pi-trash" pButton pRipple
+                  type="button"></button>
+          <div class="flex-grow-1"></div>
+          <button [label]="((kitchenIngredient.id ? 'Update' : 'Add') + ' ingredient in kitchen') | translate"
+                  icon="pi pi-check"
+                  pButton pRipple
+                  type="submit"></button>
+        </div>
+      </ng-template>
+    </p-card>
+  </form>
 </div>
 <p-blockUI [blocked]="loading" [target]="pnl">
-	<i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>
 <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
-	<p-footer>
-		<button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
-						pRipple
-						type="button"></button>
-		<button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
-						pRipple
-						type="button"></button>
-	</p-footer>
+  <p-footer>
+    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+            pRipple
+            type="button"></button>
+    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+            pRipple
+            type="button"></button>
+  </p-footer>
 </p-confirmDialog>

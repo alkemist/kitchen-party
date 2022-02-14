@@ -14,6 +14,7 @@ export class FormKitchenIngredientComponent implements OnInit {
   @Input() i: number = 0;
   @Input() kitchenIngredient: KitchenIngredientModel | undefined = undefined;
   @Input() loading = true;
+  @Input() isKitchen = true;
   @Input() measureUnits: KeyObject[] = [];
   @Input() form: FormGroup = new FormGroup({});
   @Input() ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
@@ -23,6 +24,7 @@ export class FormKitchenIngredientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   searchIngredientOrRecipe(event: { query: string }): void {

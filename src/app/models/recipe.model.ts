@@ -177,6 +177,68 @@ export class RecipeModel implements RecipeInterface {
     return false;
   }
 
+  recipeIngredientsOption(option?: string): RecipeIngredientModel[] {
+    const recipeIngredients = [];
+
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (option === DietTypeEnum.meat && recipeIngredient.optionCarne) {
+        recipeIngredients.push(recipeIngredient);
+      }
+
+      if (option === DietTypeEnum.vege && recipeIngredient.optionVege) {
+        recipeIngredients.push(recipeIngredient);
+      }
+
+      if (option === DietTypeEnum.vegan && recipeIngredient.optionVegan) {
+        recipeIngredients.push(recipeIngredient);
+      }
+
+      if (!recipeIngredient.optionCarne && !recipeIngredient.optionVege && !recipeIngredient.optionVegan) {
+        recipeIngredients.push(recipeIngredient);
+      }
+    }
+
+    return recipeIngredients;
+  }
+
+  getOptions(): RecipeModel[] {
+    const options: RecipeModel[] = [];
+    const optionsCarn: RecipeIngredientModel[] = [];
+    const optionsVege: RecipeIngredientModel[] = [];
+    const optionsVegan: RecipeIngredientModel[] = [];
+    const optionsOther: RecipeIngredientModel[] = [];
+
+    for (const recipeIngredient of this.recipeIngredients) {
+      if (recipeIngredient.optionCarne) {
+        optionsCarn.push(recipeIngredient);
+      } else if (recipeIngredient.optionVege) {
+        optionsVege.push(recipeIngredient);
+      } else if (recipeIngredient.optionVegan) {
+        optionsVegan.push(recipeIngredient);
+      } else {
+        optionsOther.push(recipeIngredient);
+      }
+    }
+
+    if (optionsCarn.length > 0) {
+      const recipeCarn = new RecipeModel(this);
+      recipeCarn.recipeIngredients = optionsOther.concat(optionsCarn);
+      options.push(recipeCarn);
+    }
+    if (optionsVege.length > 0) {
+      const recipeVege = new RecipeModel(this);
+      recipeVege.recipeIngredients = optionsOther.concat(optionsVege);
+      options.push(recipeVege);
+    }
+    if (optionsVegan.length > 0) {
+      const recipeVegan = new RecipeModel(this);
+      recipeVegan.recipeIngredients = optionsOther.concat(optionsVegan);
+      options.push(recipeVegan);
+    }
+
+    return options;
+  }
+
   isSweet(): boolean | null {
     if (this.type && RecipeTypes[this.type] === RecipeTypeEnum.ingredient) {
       const name = this.name.toLowerCase();

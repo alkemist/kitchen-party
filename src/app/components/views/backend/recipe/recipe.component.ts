@@ -116,6 +116,9 @@ export class RecipeComponent implements OnInit {
       quantity: new FormControl('', []),
       unitOrMeasure: new FormControl('', []),
       ingredientOrRecipe: new FormControl('', [Validators.required]),
+      optionCarne: new FormControl('', []),
+      optionVege: new FormControl('', []),
+      optionVegan: new FormControl('', []),
     }, [recipeIngredientFormValidator()]);
   }
 

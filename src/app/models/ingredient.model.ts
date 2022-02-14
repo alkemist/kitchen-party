@@ -2,9 +2,9 @@ import {FirestoreDataConverter} from '@firebase/firestore';
 import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
 import {DataObject} from '../services/firestore.service';
+import {DateHelper} from '../tools/date.helper';
 import {slugify} from '../tools/slugify';
 import {RecipeInterface, RecipeModel} from './recipe.model';
-import {DateHelper} from "../tools/date.helper";
 
 
 export interface IngredientInterface extends DataObject {
@@ -105,6 +105,15 @@ export class IngredientModel implements IngredientInterface {
     return '';
   }
 
+  static format(ingredientForm: IngredientFormInterface) {
+    const ingredient = new IngredientModel(ingredientForm);
+    if (ingredientForm.dateBegin && ingredientForm.dateEnd) {
+      ingredient.monthBegin = ingredientForm.dateBegin.getMonth() + 1;
+      ingredient.monthEnd = ingredientForm.dateEnd.getMonth() + 1;
+    }
+    return ingredient;
+  }
+
   nameContain(search: string): boolean {
     const regexName = new RegExp(search, 'gi');
     const regexSlug = new RegExp(slugify(search), 'gi');
@@ -182,16 +191,6 @@ export class IngredientModel implements IngredientInterface {
     }
 
     return true;
-  }
-
-  static format(ingredientForm: IngredientFormInterface) {
-    const ingredient = new IngredientModel(ingredientForm);
-    if (ingredientForm.dateBegin && ingredientForm.dateEnd) {
-      ingredient.monthBegin = ingredientForm.dateBegin.getMonth() + 1;
-      ingredient.monthEnd = ingredientForm.dateEnd.getMonth() + 1;
-    }
-    console.log(ingredient.isSeason());
-    return ingredient;
   }
 }
 

@@ -1,3 +1,4 @@
+import {DietTypeEnum} from '../enums/diet-type.enum';
 import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
 import {IngredientInterface, IngredientModel} from './ingredient.model';
@@ -18,6 +19,10 @@ export interface RecipeIngredientInterface extends HasIngredient {
   ingredientId?: string,
   recipe?: RecipeInterface,
   recipeId?: string,
+
+  optionCarne: boolean,
+  optionVege: boolean,
+  optionVegan: boolean,
 }
 
 export interface RecipeIngredientFormInterface extends RecipeIngredientInterface {
@@ -38,11 +43,19 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   recipe?: RecipeModel;
   recipeId?: string;
 
+  optionCarne: boolean;
+  optionVege: boolean;
+  optionVegan: boolean;
+
   constructor(recipeIngredient: RecipeIngredientInterface) {
     this.id = recipeIngredient.id;
     this.quantity = parseInt(recipeIngredient.quantity?.toString()!) || null;
     this.measure = recipeIngredient.measure?.trim() || '';
     this.unit = recipeIngredient.unit || null;
+
+    this.optionCarne = recipeIngredient.optionCarne || false;
+    this.optionVege = recipeIngredient.optionVege || false;
+    this.optionVegan = recipeIngredient.optionVegan || false;
 
     this.ingredientId = recipeIngredient.ingredientId;
     if (recipeIngredient.ingredient) {
@@ -167,7 +180,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
 
   static orderRecipeIngredients(recipeIngredients: HasIngredient[]): HasIngredient[] {
     return recipeIngredients.sort((a, b) => {
-      return RecipeIngredientModel.orderTwoRecipeIngredients(a, b)
+      return RecipeIngredientModel.orderTwoRecipeIngredients(a, b);
     });
   }
 
@@ -181,8 +194,21 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
 
       return (aString > bString) ? 1 : ((bString > aString) ? -1 : 0);
     }
-    
+
     return (aNumber > bNumber) ? 1 : ((bNumber > aNumber) ? -1 : 0);
+  }
+
+  hasOption(option: string): boolean {
+    if (option === DietTypeEnum.meat && this.optionCarne) {
+      return true;
+    }
+    if (option === DietTypeEnum.vege && this.optionVege) {
+      return true;
+    }
+    if (option === DietTypeEnum.vegan && this.optionVegan) {
+      return true;
+    }
+    return false;
   }
 }
 

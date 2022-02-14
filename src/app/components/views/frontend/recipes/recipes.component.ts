@@ -1,15 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {DietTypes} from '../../../../enums/diet-type.enum';
+import {RecipeTypes} from '../../../../enums/recipe-type.enum';
+import {SweetSalty, SweetSaltyEnum} from '../../../../enums/sweet-salty.enum';
+import {IngredientModel} from '../../../../models/ingredient.model';
 import {RecipeModel} from '../../../../models/recipe.model';
+import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
-import {SweetSalty, SweetSaltyEnum} from "../../../../enums/sweet-salty.enum";
-import {TranslateService} from "@ngx-translate/core";
-import {IngredientService} from "../../../../services/ingredient.service";
-import {RecipeTypes} from "../../../../enums/recipe-type.enum";
-import {IngredientModel} from "../../../../models/ingredient.model";
-import {ToolbarFilters} from "../../../layouts/header/header.component";
+import {ToolbarFilters} from '../../../layouts/header/header.component';
 
 @Component({
   selector: 'app-front-recipes',
@@ -54,8 +54,17 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
 
   filter(filters: ToolbarFilters) {
     this.fillFilterSummary(filters);
+    let recipes: RecipeModel[] = this.recipes;
 
-    this.filteredRecipes = this.recipes.filter((recipe: RecipeModel) => {
+    if (filters.diet) {
+      recipes = recipes.map(recipe => {
+        const recipeWithOption = new RecipeModel(recipe);
+        recipeWithOption.recipeIngredients = recipeWithOption.recipeIngredientsOption(filters.diet);
+        return recipeWithOption;
+      });
+    }
+
+    this.filteredRecipes = recipes.filter((recipe: RecipeModel) => {
       let valid: boolean | null = true;
 
       if (valid && filters.name) {
@@ -69,7 +78,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       }
       if (valid && filters.sweetOrSalty) {
         valid = recipe.isSweet() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.sweet
-          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.salty
+          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.salty;
       }
       if (valid && filters.ingredients) {
         valid = filters.ingredients.every((filterIngredientId: string) => recipe.ingredientIds.some(recipeIngredientId => filterIngredientId === recipeIngredientId));
