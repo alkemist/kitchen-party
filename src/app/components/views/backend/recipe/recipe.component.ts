@@ -20,7 +20,6 @@ import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
-import {ScanService} from '../../../../services/scan.service';
 import {SearchService} from '../../../../services/search.service';
 import {UploadService} from '../../../../services/upload.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
@@ -53,11 +52,9 @@ export class RecipeComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   loading = true;
   uploading = false;
-  scanning = false;
   error: string = '';
   indexRecipeIngredient = 0;
   coverFiles: File[] = [];
-  scanFiles: File[] = [];
   private ingredientTranslation: string = 'Ingredient';
 
   constructor(
@@ -72,7 +69,6 @@ export class RecipeComponent implements OnInit {
     private dialogService: DialogService,
     private filterService: FilterService,
     private uploadService: UploadService,
-    private scanService: ScanService,
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -313,12 +309,6 @@ export class RecipeComponent implements OnInit {
           this.imagePath.patchValue(image.path);
         }
       });
-    }
-  }
-
-  scanImage($event: any) {
-    if ($event.files.length > 0) {
-
     }
   }
 

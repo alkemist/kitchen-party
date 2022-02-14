@@ -31,12 +31,10 @@
     "firebase": "^9.6.3",
     "material-icons": "^1.10.6",
     "nosleep.js": "^0.12.0",
-    "ocrad.js": "^0.0.1",
     "primeflex": "^3.1.2",
     "primeicons": "^5.0.0",
     "primeng": "^13.1.0",
     "rxjs": "~7.4.0",
-    "tesseract.js": "^2.1.5",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
     "zone.js": "~0.11.4"

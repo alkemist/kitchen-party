@@ -94,23 +94,6 @@
             </div>
           </div>
 
-          <div class="field grid">
-            <label class="col-12 mb-2 md:col-4 md:mb-0"
-                   translate="">Import</label>
-            <div class="col-12 md:col-8">
-              <p-fileUpload (uploadHandler)="scanImage($event)" *ngIf="!scanning"
-                            [chooseLabel]="'Choose a image' | translate"
-                            [customUpload]="true"
-                            [disabled]="scanning"
-                            [files]="scanFiles"
-                            [showCancelButton]="false" [uploadLabel]="'Scan' | translate"
-                            accept="image/*"></p-fileUpload>
-              <div *ngIf="scanning" class="flex flex-row justify-content-center" style="padding: 10px;">
-                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-              </div>
-            </div>
-          </div>
-
           <h5 class="flex flex-row align-items-center">
             <span translate="">Duration</span>
             <div class="flex-grow-1"></div>
