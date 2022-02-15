@@ -118,7 +118,9 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       dataObjectDocument = await this.findOneBySlug(slug);
     } catch (e) {
-
+      if (!(e instanceof DocumentNotFound)) {
+        this.loggerService.error(new DatabaseError((e as Error).message, {slug}))
+      }
     }
     return !!dataObjectDocument;
   }
@@ -130,6 +132,7 @@ export abstract class FirestoreService<T extends DataObject> {
 
     return new Promise<T[]>(resolve => {
       this.promise?.then(documents => {
+        this.promise = null;
         resolve(documents);
       });
     });
@@ -175,7 +178,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.synchronized = true;
+      this.synchronized = false;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -191,7 +194,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.synchronized = true;
+      this.synchronized = false;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -206,7 +209,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await deleteDoc(ref);
-      this.synchronized = true;
+      this.synchronized = false;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
