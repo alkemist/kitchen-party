@@ -4,6 +4,10 @@ import {KitchenIngredientService} from '../services/kitchen.service';
 import {RecipeService} from '../services/recipe.service';
 import {UploadService} from '../services/upload.service';
 import {UserService} from '../services/user.service';
+import {SearchService} from "../services/search.service";
+import {ShoppingService} from "../services/shopping.service";
+import {FilterService} from "primeng/api";
+import {TranslatorService} from "../services/translator.service";
 
 @NgModule({
   providers: [
@@ -11,6 +15,10 @@ import {UserService} from '../services/user.service';
     IngredientService,
     RecipeService,
     UploadService,
+    SearchService,
+    ShoppingService,
+    FilterService,
+    TranslatorService,
     KitchenIngredientService
   ],
 })

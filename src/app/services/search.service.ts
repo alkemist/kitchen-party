@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {FormGroup} from '@angular/forms';
 import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
 import {IngredientModel} from '../models/ingredient.model';
 import {RecipeModel} from '../models/recipe.model';
@@ -10,16 +9,13 @@ import {RecipeService} from './recipe.service';
   providedIn: 'root'
 })
 export class SearchService {
-  filters: FormGroup = new FormGroup({});
-  selectedRecipes: RecipeModel[] = [];
-
   constructor(
     private ingredientService: IngredientService,
     private recipeService: RecipeService,
   ) {
   }
 
-  async searchIngredients(query: string): Promise<(RecipeModel | IngredientModel)[]> {
+  async searchIngredientsOrRecipes(query: string): Promise<(RecipeModel | IngredientModel)[]> {
     const ingredientsOrRecipes: (RecipeModel | IngredientModel)[] = [];
     const ingredients = await this.ingredientService.search(query);
     const recipes = (await this.recipeService.search(query))

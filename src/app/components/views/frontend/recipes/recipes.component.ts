@@ -8,9 +8,11 @@ import {IngredientModel} from '../../../../models/ingredient.model';
 import {RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
-import {SearchService} from '../../../../services/search.service';
 import {ToolbarFilters} from '../../../layouts/header/header.component';
 import {Router} from "@angular/router";
+import {FilterService} from "../../../../services/filter.service";
+import {ShoppingService} from "../../../../services/shopping.service";
+import {TranslatorService} from "../../../../services/translator.service";
 
 @Component({
   selector: 'app-front-recipes',
@@ -31,8 +33,10 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private ingredientService: IngredientService,
-    private searchService: SearchService,
+    private filterService: FilterService,
+    private shoppingService: ShoppingService,
     private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private router: Router
   ) {
     this.recipeService.getListOrRefresh().then(recipes => {
@@ -41,17 +45,17 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.loading = false;
     });
     this.ingredientService.getListOrRefresh();
-    this.subscription = this.searchService.filters.valueChanges.subscribe((filters) => {
+    this.subscription = this.filterService.filters.valueChanges.subscribe((filters) => {
       this.filter(filters);
     });
   }
 
   get selectedRecipes() {
-    return this.searchService.selectedRecipes;
+    return this.shoppingService.selectedRecipes;
   }
 
   set selectedRecipes(selectedRecipes) {
-    this.searchService.selectedRecipes = selectedRecipes;
+    this.shoppingService.selectedRecipes = selectedRecipes;
   }
 
   filter(filters: ToolbarFilters) {
@@ -94,11 +98,13 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   }
 
   removeFilter(key: string) {
-    this.searchService.filters.get(key)?.patchValue('');
+    this.filterService.filters.get(key)?.patchValue('');
   }
 
-  ngOnInit(): void {
-    this.filter(this.searchService.filters.value);
+  async ngOnInit(): Promise<void> {
+    this.filter(this.filterService.filters.value);
+    console.log('-- translation', await this.translatorService.instant('Meat'));
+    console.log('-- translation', await this.translatorService.instant('test'));
   }
 
   ngOnDestroy() {
@@ -155,8 +161,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
 
   gotoRecipe(recipe: RecipeModel) {
     const route = ['/', recipe.slug];
-    if (this.searchService.filters.get('diet')?.value) {
-      route.push(this.searchService.filters.get('diet')?.value);
+    if (this.filterService.filters.get('diet')?.value) {
+      route.push(this.filterService.filters.get('diet')?.value);
     }
 
     this.router.navigate(route)

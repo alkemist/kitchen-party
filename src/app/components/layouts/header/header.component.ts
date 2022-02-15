@@ -3,7 +3,6 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {Select} from '@ngxs/store';
-import {User} from 'firebase/auth';
 import NoSleep from 'nosleep.js';
 import {MenuItem} from 'primeng/api';
 import {Observable} from 'rxjs';
@@ -11,11 +10,13 @@ import {DietTypeEnum} from '../../../enums/diet-type.enum';
 import {RecipeTypeEnum} from '../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../models/ingredient.model';
 import {IngredientService} from '../../../services/ingredient.service';
-import {SearchService} from '../../../services/search.service';
 import {UserService} from '../../../services/user.service';
 import {IngredientState} from '../../../store/ingredient.state';
 import {EnumHelper} from '../../../tools/enum.helper';
 import {SweetSaltyEnum} from "../../../enums/sweet-salty.enum";
+import {FilterService} from "../../../services/filter.service";
+import {ShoppingService} from "../../../services/shopping.service";
+import {UserInterface} from "../../../store/user.state";
 
 export interface ToolbarFilters {
   diet: string,
@@ -33,7 +34,7 @@ export interface ToolbarFilters {
 })
 export class HeaderComponent implements OnInit {
   ingredients: IngredientModel[] = [];
-  loggedUser?: User;
+  loggedUser?: UserInterface;
   menuItems: MenuItem[] = [
     {
       label: 'Ingredients',
@@ -115,7 +116,8 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private translateService: TranslateService,
     private ingredientService: IngredientService,
-    private searchService: SearchService,
+    private filterService: FilterService,
+    private shoppingService: ShoppingService,
   ) {
     this.ingredients$?.subscribe(ingredients => {
       this.ingredients = ingredients;
@@ -172,7 +174,7 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
-    this.searchService.filters = new FormGroup({
+    this.filterService.filters = new FormGroup({
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
       name: new FormControl(null, []),
@@ -183,11 +185,11 @@ export class HeaderComponent implements OnInit {
   }
 
   get form() {
-    return this.searchService.filters;
+    return this.filterService.filters;
   }
 
   get selectedRecipes() {
-    return this.searchService.selectedRecipes;
+    return this.shoppingService.selectedRecipes;
   }
 
   async ngOnInit(): Promise<void> {

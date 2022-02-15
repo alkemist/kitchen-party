@@ -79,7 +79,7 @@ export class KitchenIngredientComponent implements OnInit {
   }
 
   searchIngredientOrRecipe(event: { query: string }): void {
-    this.searchService.searchIngredients(event.query).then(ingredientsOrRecipes => {
+    this.searchService.searchIngredientsOrRecipes(event.query).then(ingredientsOrRecipes => {
       this.ingredientsOrRecipes = ingredientsOrRecipes;
     });
   }

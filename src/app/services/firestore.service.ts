@@ -16,6 +16,7 @@ import {Observable} from 'rxjs';
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
 import {LoggedError, LoggerService} from './logger.service';
+import {TimeHelper} from "../tools/time.helper";
 
 export interface DataObject {
   id?: string;
@@ -106,9 +107,7 @@ export abstract class FirestoreService<T extends DataObject> {
     if (this.lastUpdated === undefined) {
       return true;
     }
-    const dateTime = new Date().getTime();
-    const lastUpdatedTime = new Date(this.lastUpdated).getTime();
-    const nbHours = (dateTime - lastUpdatedTime) / (1000 * 60 * 60);
+    const nbHours = TimeHelper.calcHoursAfter(this.lastUpdated);
     return nbHours > 24;
   }
 

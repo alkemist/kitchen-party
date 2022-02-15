@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {User} from 'firebase/auth';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {UserService} from '../../../../services/user.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
+import {UserInterface} from "../../../../store/user.state";
 
 @Component({
   selector: 'app-front-recipe',
@@ -23,7 +23,7 @@ export class FrontRecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   diet: string = '';
   loading = true;
-  loggedUser?: User;
+  loggedUser?: UserInterface;
 
   constructor(
     private route: ActivatedRoute,
