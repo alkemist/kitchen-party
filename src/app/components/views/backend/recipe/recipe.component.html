@@ -180,6 +180,12 @@
                 <span
                   [ngClass]="{'p-error':recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)}">{{ recipeIngredientToString(i) }}</span>
                 <div class="flex-grow-1"></div>
+                <p-tag
+                  *ngIf="recipeIngredients.at(i).get('optionCarne')?.value">{{ DietTypeEnum.meat | translate }}</p-tag>
+                <p-tag
+                  *ngIf="recipeIngredients.at(i).get('optionVege')?.value">{{ DietTypeEnum.vege | translate }}</p-tag>
+                <p-tag
+                  *ngIf="recipeIngredients.at(i).get('optionVegan')?.value">{{ DietTypeEnum.vegan | translate }}</p-tag>
                 <button
                   *ngIf="recipeIngredients.at(i).invalid && (recipeIngredients.at(i).dirty || recipeIngredients.at(i).touched)"
                   class="p-button-rounded p-button-text p-button-danger"

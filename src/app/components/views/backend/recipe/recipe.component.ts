@@ -25,6 +25,7 @@ import {UploadService} from '../../../../services/upload.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
+import {DietTypeEnum} from "../../../../enums/diet-type.enum";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -45,6 +46,7 @@ function recipeIngredientFormValidator(): ValidatorFn {
 })
 export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
+  DietTypeEnum = DietTypeEnum;
   recipeTypes: KeyObject[] = [];
   measureUnits: KeyObject[] = [];
   unitsOrMeasures: KeyObject[] = [];
