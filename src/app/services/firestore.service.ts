@@ -69,8 +69,18 @@ export abstract class FirestoreService<T extends DataObject> {
   protected lastUpdated$?: Observable<Date>;
   protected all$?: Observable<T[]>;
   protected lastUpdated?: Date;
+  /**
+   * True : La liste a été mis à jour
+   * False : la liste n'a pas été encore mis à jour
+   * @protected
+   */
   protected refreshed = false;
-  protected updated = false;
+  /**
+   * True : Un élément a été modifié, la liste doit être mise à jour
+   * False : La liste est synchronisé
+   * @protected
+   */
+  protected synchronized = false;
   protected promise: Promise<T[]> | null = null;
 
   private readonly collectionName: string;
@@ -165,7 +175,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.updated = true;
+      this.synchronized = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -181,7 +191,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.updated = true;
+      this.synchronized = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -196,7 +206,7 @@ export abstract class FirestoreService<T extends DataObject> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await deleteDoc(ref);
-      this.updated = true;
+      this.synchronized = true;
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }

@@ -54,10 +54,10 @@
             <i class="material-icons">inventory</i>
             {{ recipe.recipeIngredients.length }}
           </div>
-          <a [pTooltip]="'View recipe' | translate" [routerLink]="['/', recipe.slug]" class="p-button-rounded"
-             icon="pi pi-eye"
-             pButton pRipple
-             tooltipPosition="bottom"></a>
+          <button [pTooltip]="'View recipe' | translate" (click)="gotoRecipe(recipe)" class="p-button-rounded"
+                  icon="pi pi-eye"
+                  pButton pRipple
+                  tooltipPosition="bottom"></button>
         </div>
       </div>
     </div>

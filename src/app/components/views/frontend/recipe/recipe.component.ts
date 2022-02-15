@@ -21,6 +21,7 @@ export class FrontRecipeComponent implements OnInit {
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
   recipe = new RecipeModel({} as RecipeInterface);
+  diet: string = '';
   loading = true;
   loggedUser?: User;
 
@@ -35,6 +36,12 @@ export class FrontRecipeComponent implements OnInit {
       (data => {
         if (data && data['recipe']) {
           this.recipe = data['recipe'];
+
+          if (data['diet']) {
+            this.diet = data['diet'];
+            this.recipe.recipeIngredients = this.recipe.recipeIngredientsOption(this.diet);
+          }
+
           this.loading = false;
         }
       }));

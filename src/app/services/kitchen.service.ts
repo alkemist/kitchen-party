@@ -41,7 +41,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if ((this.all.length > 0 || this.refreshed) && !this.updated) {
+    if ((this.all.length > 0 || this.refreshed) && !this.synchronized) {
       return this.all;
     }
 
@@ -58,6 +58,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
           this.all.push(kitchenIngredientModel);
         }
         this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
+        this.synchronized = true;
         resolve(this.all);
       });
     });

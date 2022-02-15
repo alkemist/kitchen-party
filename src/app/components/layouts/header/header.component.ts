@@ -160,9 +160,13 @@ export class HeaderComponent implements OnInit {
           }
 
           if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
-            this.noSleep.enable();
+            if (!this.noSleep.isEnabled) {
+              this.noSleep.enable();
+            }
           } else {
-            this.noSleep.disable();
+            if (this.noSleep.isEnabled) {
+              this.noSleep.disable();
+            }
           }
 
         }

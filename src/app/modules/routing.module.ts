@@ -3,9 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {IngredientComponent} from '../components/views/backend/ingredient/ingredient.component';
 import {IngredientsComponent} from '../components/views/backend/ingredients/ingredients.component';
 import {KitchenIngredientComponent} from '../components/views/backend/kitchen-ingredient/kitchen-ingredient.component';
-import {
-  KitchenIngredientsComponent
-} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
+import {KitchenIngredientsComponent} from '../components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
 import {RecipeComponent} from '../components/views/backend/recipe/recipe.component';
 import {RecipesComponent} from '../components/views/backend/recipes/recipes.component';
 import {AboutComponent} from '../components/views/frontend/about/about.component';
@@ -20,6 +18,7 @@ import {KitchenResolver} from '../resolvers/kitchen.resolver';
 import {RecipeResolver} from '../resolvers/recipe.resolver';
 import {RecipesResolver} from '../resolvers/recipes.resolver';
 import {UserService} from '../services/user.service';
+import {DietResolver} from "../resolvers/diet.resolver";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [LoginGuard], data: {title: 'Login'}},
@@ -97,6 +96,14 @@ const routes: Routes = [
     path: ':slug', component: FrontRecipeComponent,
     resolve: {
       recipe: RecipeResolver
+    },
+    data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
+  },
+  {
+    path: ':slug/:diet', component: FrontRecipeComponent,
+    resolve: {
+      recipe: RecipeResolver,
+      diet: DietResolver,
     },
     data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
   },

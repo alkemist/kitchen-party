@@ -10,6 +10,7 @@ import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
 import {ToolbarFilters} from '../../../layouts/header/header.component';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-front-recipes',
@@ -31,7 +32,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private ingredientService: IngredientService,
     private searchService: SearchService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private router: Router
   ) {
     this.recipeService.getListOrRefresh().then(recipes => {
       this.recipes = recipes;
@@ -149,5 +151,14 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
         value: this.translateService.instant('In season')
       });
     }
+  }
+
+  gotoRecipe(recipe: RecipeModel) {
+    const route = ['/', recipe.slug];
+    if (this.searchService.filters.get('diet')?.value) {
+      route.push(this.searchService.filters.get('diet')?.value);
+    }
+
+    this.router.navigate(route)
   }
 }

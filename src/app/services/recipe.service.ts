@@ -34,7 +34,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     if (this.allSubscription) {
       this.allSubscription.unsubscribe();
     }
-    if ((this.all.length > 0 || this.refreshed) && !this.updated) {
+    if ((this.all.length > 0 || this.refreshed) && !this.synchronized) {
       return this.all;
     }
 
@@ -51,6 +51,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
           this.all.push(recipeModel);
         }
         this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
+        this.synchronized = true;
         resolve(this.all);
       });
     });
