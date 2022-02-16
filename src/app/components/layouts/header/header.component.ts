@@ -101,8 +101,11 @@ export class HeaderComponent implements OnInit {
     }
   ];
   title: string = '';
+
   showFilters = false;
+  showAppName = false;
   @HostBinding('class.hideHeader') hideHeader = false;
+
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   sweetOrSalty = EnumHelper.enumToObject(SweetSaltyEnum);
@@ -142,6 +145,12 @@ export class HeaderComponent implements OnInit {
             this.hideHeader = routeData['hideHeader'];
           } else {
             this.hideHeader = false;
+          }
+
+          if (typeof routeData['showAppName'] === 'boolean') {
+            this.showAppName = routeData['showAppName'];
+          } else {
+            this.showAppName = false;
           }
 
           if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {

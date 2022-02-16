@@ -1,0 +1,12 @@
+<div class="page-container__content h-full">
+  <div class="grid align-items-stretch">
+    <div *ngFor="let month of months" class="col-2 month">
+      <h5 class="title">{{ month.name }}</h5>
+      <ul>
+        <li *ngFor="let ingredient of month.ingredients">
+          {{ ingredient?.name || '&nbsp;' }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

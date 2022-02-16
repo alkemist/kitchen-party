@@ -57,6 +57,7 @@ export class RecipeComponent implements OnInit {
   error: string = '';
   indexRecipeIngredient = 0;
   coverFiles: File[] = [];
+  uploadClass: string = '';
   private ingredientTranslation: string = '';
 
   constructor(
@@ -288,6 +289,16 @@ export class RecipeComponent implements OnInit {
 
   getFormGroupRecipeIngredient(i: number): FormGroup {
     return this.recipeIngredients.at(i) as FormGroup;
+  }
+
+  selectImage($event: { files: File[], currentFiles: File[] }) {
+    console.log('select', $event, $event.currentFiles.length);
+    this.uploadClass = $event.currentFiles.length > 0 ? 'withFiles' : '';
+  }
+
+  removeImage() {
+    console.log('remove');
+    this.uploadClass = '';
   }
 
   async uploadImage($event: { files: File[] }) {

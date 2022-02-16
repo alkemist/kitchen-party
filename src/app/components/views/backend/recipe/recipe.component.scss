@@ -16,3 +16,22 @@ textarea {
   padding: 0 !important;
   overflow: initial;
 }
+
+
+.recipe ::ng-deep .p-fileupload {
+  border: 1px solid #0b213f;
+
+  .p-fileupload-buttonbar {
+    border: none;
+  }
+
+  .p-fileupload-content {
+    display: none;
+  }
+
+  &.withFiles {
+    .p-fileupload-content {
+      display: block;
+    }
+  }
+}

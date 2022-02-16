@@ -42,7 +42,6 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.filteredRecipes = recipes;
       this.loading = false;
     });
-    this.ingredientService.getListOrRefresh();
     this.subscription = this.filterService.filters.valueChanges.subscribe((filters) => {
       this.filter(filters);
     });
