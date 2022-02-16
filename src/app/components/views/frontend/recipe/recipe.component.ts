@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
+import {TranslatorService} from '../../../../services/translator.service';
 import {UserService} from '../../../../services/user.service';
+import {UserInterface} from '../../../../store/user.state';
 import {EnumHelper} from '../../../../tools/enum.helper';
-import {UserInterface} from "../../../../store/user.state";
 
 @Component({
   selector: 'app-front-recipe',
@@ -27,7 +27,7 @@ export class FrontRecipeComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private userService: UserService) {
   }
 
@@ -46,14 +46,8 @@ export class FrontRecipeComponent implements OnInit {
         }
       }));
 
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.recipeTypes = this.recipeTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      this.measureUnits = this.measureUnits.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-    });
+    this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
+    this.measureUnits = await this.translatorService.translateLabels(this.measureUnits);
 
     await this.userService.getLoggedUser((loggedUser) => {
       this.loggedUser = loggedUser;

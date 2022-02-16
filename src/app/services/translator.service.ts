@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
-import {Select, Store} from "@ngxs/store";
-import {first, Observable} from "rxjs";
-import {Translation, TranslationState} from "../store/translation.state";
-import {TimeHelper} from "../tools/time.helper";
-import {FillTranslations} from "../store/translation.action";
-import {LoggedError, LoggerService} from "./logger.service";
-import {KeyObject} from "../models/other.model";
+import {TranslateService} from '@ngx-translate/core';
+import {Select, Store} from '@ngxs/store';
+import {first, Observable} from 'rxjs';
+import {KeyObject} from '../models/other.model';
+import {FillTranslations} from '../store/translation.action';
+import {Translation, TranslationState} from '../store/translation.state';
+import {TimeHelper} from '../tools/time.helper';
+import {LoggedError, LoggerService} from './logger.service';
 
 export class TranslationError extends LoggedError<string> {
   override type = 'Translation';
@@ -23,8 +23,8 @@ export class TranslationError extends LoggedError<string> {
 export class TranslatorService {
   @Select(TranslationState.lastUpdated) lastUpdated$?: Observable<Date>;
   @Select(TranslationState.all) protected all$?: Observable<Translation[]>;
-  private all: Translation[] = [];
   protected lastUpdated?: Date;
+  private all: Translation[] = [];
   private lang = 'fr';
   private promise: Promise<void> | undefined;
 
@@ -53,6 +53,10 @@ export class TranslatorService {
     if (this.all.length === 0) {
       await this.refresh();
     }
+    return this.translate(key);
+  }
+
+  translate(key: string): string {
     const value = this.all.find(translation => translation.key === key)?.value || '';
     if (!value) {
       this.logger.error(new TranslationError(key));
@@ -61,10 +65,10 @@ export class TranslatorService {
     return value;
   }
 
-  translateLabels(keyObjects: KeyObject[]) {
-    return keyObjects.map(item => {
-      return {...item, label: this.translateService.instant(item.label)};
-    });
+  async translateLabels(keyObjects: KeyObject[]): Promise<KeyObject[]> {
+    return Promise.all(keyObjects.map(async item => {
+      return {...item, label: await this.instant(item.label)};
+    }));
   }
 
   async refresh() {
@@ -80,11 +84,10 @@ export class TranslatorService {
           return {key: value, value: values[index]} as Translation;
         });
 
-        console.log(translations);
         this.store.dispatch(new FillTranslations(this.all));
         this.promise = undefined;
         resolve();
-      })
-    })
+      });
+    });
   }
 }

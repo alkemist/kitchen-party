@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
 import {IngredientService} from '../../../../services/ingredient.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 
 @Component({
@@ -19,7 +19,7 @@ export class IngredientsComponent implements OnInit {
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
   loading = true;
 
-  constructor(private ingredientService: IngredientService, private router: Router, private translateService: TranslateService) {
+  constructor(private ingredientService: IngredientService, private router: Router, private translatorService: TranslatorService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -27,10 +27,6 @@ export class IngredientsComponent implements OnInit {
       this.ingredients = ingredients;
       this.loading = false;
     });
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTypes = this.ingredientTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-    });
+    this.ingredientTypes = await this.translatorService.translateLabels(this.ingredientTypes);
   }
 }

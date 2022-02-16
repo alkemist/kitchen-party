@@ -1,22 +1,22 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {Select} from '@ngxs/store';
 import NoSleep from 'nosleep.js';
 import {MenuItem} from 'primeng/api';
 import {Observable} from 'rxjs';
 import {DietTypeEnum} from '../../../enums/diet-type.enum';
 import {RecipeTypeEnum} from '../../../enums/recipe-type.enum';
+import {SweetSaltyEnum} from '../../../enums/sweet-salty.enum';
 import {IngredientModel} from '../../../models/ingredient.model';
+import {FilterService} from '../../../services/filter.service';
 import {IngredientService} from '../../../services/ingredient.service';
+import {ShoppingService} from '../../../services/shopping.service';
+import {TranslatorService} from '../../../services/translator.service';
 import {UserService} from '../../../services/user.service';
 import {IngredientState} from '../../../store/ingredient.state';
+import {UserInterface} from '../../../store/user.state';
 import {EnumHelper} from '../../../tools/enum.helper';
-import {SweetSaltyEnum} from "../../../enums/sweet-salty.enum";
-import {FilterService} from "../../../services/filter.service";
-import {ShoppingService} from "../../../services/shopping.service";
-import {UserInterface} from "../../../store/user.state";
 
 export interface ToolbarFilters {
   diet: string,
@@ -114,30 +114,13 @@ export class HeaderComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private ingredientService: IngredientService,
     private filterService: FilterService,
     private shoppingService: ShoppingService,
   ) {
     this.ingredients$?.subscribe(ingredients => {
       this.ingredients = ingredients;
-    });
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.menuItems.forEach(item => {
-        item.label = this.translateService.instant(item.label!);
-        item.items?.forEach(item => {
-          item.label = this.translateService.instant(item.label!);
-        });
-      });
-      this.dietTypes = this.dietTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      this.recipeTypes = this.recipeTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      this.sweetOrSalty = this.sweetOrSalty.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
     });
     this.router.events.subscribe((data) => {
       if (data instanceof RoutesRecognized) {
@@ -193,6 +176,19 @@ export class HeaderComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.dietTypes = await this.translatorService.translateLabels(this.dietTypes);
+    this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
+    this.sweetOrSalty = await this.translatorService.translateLabels(this.sweetOrSalty);
+
+    for (const item of this.menuItems) {
+      item.label = await this.translatorService.instant(item.label!);
+      if (item.items) {
+        for (const subItem of item.items) {
+          subItem.label = await this.translatorService.instant(subItem.label!);
+        }
+      }
+    }
+
     await this.userService.getLoggedUser((loggedUser) => {
       this.loading = false;
       this.loggedUser = loggedUser;

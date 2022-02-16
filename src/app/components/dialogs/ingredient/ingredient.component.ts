@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {TranslateService} from '@ngx-translate/core';
 import {MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {IngredientTypeEnum} from '../../../enums/ingredient-type.enum';
 import {IngredientInterface, IngredientModel} from '../../../models/ingredient.model';
 import {IngredientService} from '../../../services/ingredient.service';
+import {TranslatorService} from '../../../services/translator.service';
 import {EnumHelper} from '../../../tools/enum.helper';
-import {slugify} from "../../../tools/slugify";
+import {slugify} from '../../../tools/slugify';
 
 @Component({
   selector: 'app-dialog-ingredient',
@@ -24,7 +24,7 @@ export class DialogIngredientComponent implements OnInit {
 
   constructor(
     private ingredientService: IngredientService,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private messageService: MessageService,
     private ref: DynamicDialogRef
   ) {
@@ -46,12 +46,8 @@ export class DialogIngredientComponent implements OnInit {
     return this.form?.get('name') as FormControl;
   }
 
-  ngOnInit() {
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTypes = this.ingredientTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-    });
+  async ngOnInit() {
+    this.ingredientTypes = await this.translatorService.translateLabels(this.ingredientTypes);
   }
 
   async handleSubmit(): Promise<void> {
@@ -87,12 +83,12 @@ export class DialogIngredientComponent implements OnInit {
 
   async submit(localDocument: IngredientInterface): Promise<void> {
     this.loading = true;
-    await this.ingredientService.add(localDocument).then(ingredient => {
+    await this.ingredientService.add(localDocument).then(async ingredient => {
       this.ingredient = new IngredientModel(ingredient!);
       this.loading = false;
       this.messageService.add({
         severity: 'success',
-        detail: this.translateService.instant(`Added ingredient`),
+        detail: await this.translatorService.instant(`Added ingredient`),
       });
       this.close();
     });

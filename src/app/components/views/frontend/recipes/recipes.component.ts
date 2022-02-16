@@ -1,18 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DietTypes} from '../../../../enums/diet-type.enum';
 import {RecipeTypes} from '../../../../enums/recipe-type.enum';
 import {SweetSalty, SweetSaltyEnum} from '../../../../enums/sweet-salty.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
 import {RecipeModel} from '../../../../models/recipe.model';
+import {FilterService} from '../../../../services/filter.service';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
+import {ShoppingService} from '../../../../services/shopping.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {ToolbarFilters} from '../../../layouts/header/header.component';
-import {Router} from "@angular/router";
-import {FilterService} from "../../../../services/filter.service";
-import {ShoppingService} from "../../../../services/shopping.service";
-import {TranslatorService} from "../../../../services/translator.service";
 
 @Component({
   selector: 'app-front-recipes',
@@ -35,7 +34,6 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     private ingredientService: IngredientService,
     private filterService: FilterService,
     private shoppingService: ShoppingService,
-    private translateService: TranslateService,
     private translatorService: TranslatorService,
     private router: Router
   ) {
@@ -101,10 +99,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.filterService.filters.get(key)?.patchValue('');
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.filter(this.filterService.filters.value);
-    console.log('-- translation', await this.translatorService.instant('Meat'));
-    console.log('-- translation', await this.translatorService.instant('test'));
   }
 
   ngOnDestroy() {
@@ -113,31 +109,40 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     }
   }
 
+  gotoRecipe(recipe: RecipeModel) {
+    const route = ['/', recipe.slug];
+    if (this.filterService.filters.get('diet')?.value) {
+      route.push(this.filterService.filters.get('diet')?.value);
+    }
+
+    this.router.navigate(route);
+  }
+
   private async fillFilterSummary(filters: ToolbarFilters) {
     this.filterSummary = [];
 
     if (filters.name) {
       this.filterSummary.push({
         key: 'name',
-        value: `${this.translateService.instant('Name contain')} "${filters.name}"`
+        value: `${await this.translatorService.instant('Name contain')} "${filters.name}"`
       });
     }
     if (filters.diet) {
       this.filterSummary.push({
         key: 'diet',
-        value: this.translateService.instant(DietTypes[filters.diet])
+        value: await this.translatorService.instant(DietTypes[filters.diet])
       });
     }
     if (filters.type) {
       this.filterSummary.push({
         key: 'type',
-        value: this.translateService.instant(RecipeTypes[filters.type])
+        value: await this.translatorService.instant(RecipeTypes[filters.type])
       });
     }
     if (filters.sweetOrSalty) {
       this.filterSummary.push({
         key: 'sweetOrSalty',
-        value: this.translateService.instant(SweetSalty[filters.sweetOrSalty])
+        value: await this.translatorService.instant(SweetSalty[filters.sweetOrSalty])
       });
     }
     if (filters.ingredients && filters.ingredients.length > 0) {
@@ -154,17 +159,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     if (filters.isSeason) {
       this.filterSummary.push({
         key: 'isSeason',
-        value: this.translateService.instant('In season')
+        value: await this.translatorService.instant('In season')
       });
     }
-  }
-
-  gotoRecipe(recipe: RecipeModel) {
-    const route = ['/', recipe.slug];
-    if (this.filterService.filters.get('diet')?.value) {
-      route.push(this.filterService.filters.get('diet')?.value);
-    }
-
-    this.router.navigate(route)
   }
 }
