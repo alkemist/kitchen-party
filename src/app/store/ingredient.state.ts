@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
+import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
 import {IngredientInterface} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from './ingredient.action';
 
@@ -27,6 +28,14 @@ export class IngredientState {
   @Selector()
   static all(state: IngredientStateModel): IngredientInterface[] {
     return state.all;
+  }
+
+  @Selector()
+  static fruitsOrVegetables(state: IngredientStateModel): IngredientInterface[] {
+    return state.all.filter(ingredient =>
+      IngredientTypes[ingredient.type] === IngredientTypeEnum.fruits_vegetables_mushrooms
+      && ingredient.monthBegin && ingredient.monthEnd
+    );
   }
 
   @Selector()

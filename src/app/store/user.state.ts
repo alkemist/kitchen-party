@@ -1,10 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {User} from 'firebase/auth';
 import {UserLogin, UserLogout} from './user.action';
 
+export interface UserInterface {
+  email: string;
+  createdAt: string;
+  lastLoginAt: string;
+}
+
 export class UserStateModel {
-  logged: User | undefined = undefined;
+  logged: UserInterface | undefined = undefined;
 }
 
 @Injectable()

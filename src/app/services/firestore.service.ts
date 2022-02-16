@@ -16,6 +16,7 @@ import {Observable} from 'rxjs';
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
 import {LoggedError, LoggerService} from './logger.service';
+import {TimeHelper} from "../tools/time.helper";
 
 export interface DataObject {
   id?: string;
@@ -81,7 +82,11 @@ export abstract class FirestoreService<T extends DataObject> {
    * @protected
    */
   protected synchronized = false;
-  protected promise: Promise<T[]> | null = null;
+  /**
+   * Liste des requètes en cours, la clé étant la signature de la requète
+   * @protected
+   */
+  protected promises: { [key: string]: Promise<T[]> | null } = {}
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
@@ -102,9 +107,7 @@ export abstract class FirestoreService<T extends DataObject> {
     if (this.lastUpdated === undefined) {
       return true;
     }
-    const dateTime = new Date().getTime();
-    const lastUpdatedTime = new Date(this.lastUpdated).getTime();
-    const nbHours = (dateTime - lastUpdatedTime) / (1000 * 60 * 60);
+    const nbHours = TimeHelper.calcHoursAfter(this.lastUpdated);
     return nbHours > 24;
   }
 
@@ -126,13 +129,14 @@ export abstract class FirestoreService<T extends DataObject> {
   }
 
   protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
-    if (!this.promise) {
-      this.promise = this.refresh(...queryConstraints);
+    const sign = JSON.stringify(queryConstraints);
+    if (!this.promises[sign]) {
+      this.promises[sign] = this.refresh(...queryConstraints);
     }
 
     return new Promise<T[]>(resolve => {
-      this.promise?.then(documents => {
-        this.promise = null;
+      this.promises[sign]?.then(documents => {
+        delete this.promises[sign];
         resolve(documents);
       });
     });

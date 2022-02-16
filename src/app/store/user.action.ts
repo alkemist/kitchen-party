@@ -1,9 +1,9 @@
-import {User} from 'firebase/auth';
+import {UserInterface} from "./user.state";
 
 export class UserLogin {
   static readonly type = '[User] Login';
 
-  constructor(public payload: User) {
+  constructor(public payload: UserInterface) {
   }
 }
 

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {RecipeModel} from '../../../../models/recipe.model';
 import {RecipeService} from '../../../../services/recipe.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 
 @Component({
@@ -19,22 +19,12 @@ export class RecipesComponent implements OnInit {
   recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
   loading = true;
 
-  constructor(private recipeService: RecipeService, private router: Router, private translateService: TranslateService) {
+  constructor(private recipeService: RecipeService, private router: Router, private translatorService: TranslatorService) {
   }
 
   async ngOnInit(): Promise<void> {
-    this.loadTranslations(() => {
-      this.loadData();
-    });
-  }
-
-  loadTranslations(callback: () => void) {
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.recipeTypes = this.recipeTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      callback();
-    });
+    this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
+    this.loadData();
   }
 
   loadData() {

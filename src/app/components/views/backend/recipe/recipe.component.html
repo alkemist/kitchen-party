@@ -80,13 +80,16 @@
                         pButton pRipple
                         type="button"></button>
               </div>
-              <p-fileUpload (uploadHandler)="uploadImage($event)" *ngIf="!uploading"
+              <p-fileUpload (onRemove)="removeImage()" (onSelect)="selectImage($event)"
+                            (uploadHandler)="uploadImage($event)"
+                            *ngIf="!uploading"
                             [chooseLabel]="'Choose a image' | translate"
                             [customUpload]="true"
                             [disabled]="uploading"
                             [files]="coverFiles"
                             [maxFileSize]="5000000"
-                            [showCancelButton]="false" [uploadLabel]="'Upload' | translate"
+                            [showCancelButton]="false"
+                            [styleClass]="uploadClass" [uploadLabel]="'Upload' | translate"
                             accept="image/*"></p-fileUpload>
               <div *ngIf="uploading" class="flex flex-row justify-content-center" style="padding: 10px;">
                 <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
@@ -100,20 +103,25 @@
             <button class="p-button-rounded p-button-text" pButton type="button"></button>
           </h5>
           <div class="formgrid grid">
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
               <label for="preparationDuration" translate="">Preparation</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
                              inputId="preparationDuration" suffix=" min"></p-inputNumber>
             </div>
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
               <label for="cookingDuration" translate="">Cooking</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
                              inputId="cookingDuration" suffix=" min"></p-inputNumber>
             </div>
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
               <label for="waitingDuration" translate="">Waiting</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
                              inputId="waitingDuration" suffix=" min"></p-inputNumber>
+            </div>
+            <div class="field col-12 md:col-3">
+              <label for="nbSlices" translate="">Slices</label>
+              <p-inputNumber [min]="0" class="inputfield w-full" formControlName="nbSlices"
+                             inputId="nbSlices"></p-inputNumber>
             </div>
           </div>
 

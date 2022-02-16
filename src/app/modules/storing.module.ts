@@ -8,12 +8,14 @@ import {IngredientState} from '../store/ingredient.state';
 import {KitchenIngredientState} from '../store/kitchen.state';
 import {RecipeState} from '../store/recipe.state';
 import {UserState} from '../store/user.state';
+import {TranslationState} from "../store/translation.state";
 
 const states = [
   UserState,
   IngredientState,
   RecipeState,
   KitchenIngredientState,
+  TranslationState,
 ];
 
 @NgModule({

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {EnumHelper} from "../../../../tools/enum.helper";
-import {IngredientTypeEnum} from "../../../../enums/ingredient-type.enum";
-import {Router} from "@angular/router";
-import {TranslateService} from "@ngx-translate/core";
-import {KitchenIngredientService} from "../../../../services/kitchen.service";
-import {KitchenIngredientModel} from "../../../../models/kitchen-ingredient.model";
+import {Router} from '@angular/router';
+import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
+import {KitchenIngredientModel} from '../../../../models/kitchen-ingredient.model';
+import {KitchenIngredientService} from '../../../../services/kitchen.service';
+import {TranslatorService} from '../../../../services/translator.service';
+import {EnumHelper} from '../../../../tools/enum.helper';
 
 @Component({
   selector: 'app-kitchen-ingredients',
@@ -19,7 +19,7 @@ export class KitchenIngredientsComponent implements OnInit {
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
   loading = true;
 
-  constructor(private kitchenIngredientService: KitchenIngredientService, private router: Router, private translateService: TranslateService) {
+  constructor(private kitchenIngredientService: KitchenIngredientService, private router: Router, private translatorService: TranslatorService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -27,10 +27,6 @@ export class KitchenIngredientsComponent implements OnInit {
       this.kitchenIngredients = kitchenIngredients;
       this.loading = false;
     });
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTypes = this.ingredientTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-    });
+    this.ingredientTypes = await this.translatorService.translateLabels(this.ingredientTypes);
   }
 }

@@ -17,6 +17,7 @@ import {
 import {RecipeComponent} from './components/views/backend/recipe/recipe.component';
 import {RecipesComponent} from './components/views/backend/recipes/recipes.component';
 import {AboutComponent} from './components/views/frontend/about/about.component';
+import {CalendarComponent} from './components/views/frontend/calendar/calendar.component';
 import {FrontRecipeComponent} from './components/views/frontend/recipe/recipe.component';
 import {FrontRecipesComponent} from './components/views/frontend/recipes/recipes.component';
 import {ShoppingComponent} from './components/views/frontend/shopping/shopping.component';
@@ -28,6 +29,7 @@ import {ServicesModule} from './modules/services.module';
 import {StoringModule} from './modules/storing.module';
 import {TranslatingModule} from './modules/translating.module';
 import {UiModule} from './modules/ui.module';
+import {TranslatorPipe} from './pipes/translator.pipe';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import {UiModule} from './modules/ui.module';
     KitchenIngredientsComponent,
     FormKitchenIngredientComponent,
     ShoppingComponent,
-    AboutComponent
+    AboutComponent,
+    TranslatorPipe,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
 import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeModel} from '../../../../models/recipe.model';
 import {KitchenIngredientService} from '../../../../services/kitchen.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 
 interface CartElement {
@@ -33,15 +33,9 @@ export class ShoppingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private kitchenService: KitchenIngredientService
   ) {
-  }
-
-  ngOnInit(): void {
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.loadData();
-    });
   }
 
   get cartOrderedByChecked(): CartElement[] {
@@ -52,7 +46,7 @@ export class ShoppingComponent implements OnInit {
     });
   }
 
-  loadData() {
+  ngOnInit(): void {
     this.route.data.subscribe(
       (async data => {
         if (data && data['recipes']) {
@@ -65,11 +59,15 @@ export class ShoppingComponent implements OnInit {
 
           RecipeIngredientModel.orderRecipeIngredients(this.cart);
 
-          this.mergeCart();
+          await this.mergeCart();
 
           this.loading = false;
         }
       }));
+  }
+
+  loadData() {
+
   }
 
   initCart() {
@@ -130,7 +128,7 @@ export class ShoppingComponent implements OnInit {
     }
   }
 
-  mergeCart() {
+  async mergeCart() {
     for (const cartElement of this.cart) {
       if (this.kitchenIndexes.indexOf(cartElement.ingredient?.id!) > -1) {
         cartElement.inKitchen = true;
@@ -140,7 +138,7 @@ export class ShoppingComponent implements OnInit {
       for (let quantityType in cartElement.quantities) {
         const count = cartElement.quantities[quantityType];
         if (quantityType === MeasureUnitEnum.gram || quantityType === MeasureUnitEnum.milliliter) {
-          quantityType = this.translateService.instant(quantityType);
+          quantityType = await this.translatorService.instant(quantityType);
         }
 
         if (count) {

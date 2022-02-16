@@ -7,8 +7,8 @@
         translate="">Quantity</label>
       <p-inputNumber
         [inputId]="'quantity' + i"
-        [min]="0"
-        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [min]="0" [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [step]="0.1"
         class="inputfield w-full"
         formControlName="quantity"></p-inputNumber>
       <div

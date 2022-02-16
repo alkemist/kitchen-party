@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {UserLogin, UserLogout} from '../store/user.action';
 import {OfflineError, TooManyRequestError} from './firestore.service';
 import {LoggedError} from "./logger.service";
+import {UserInterface} from "../store/user.state";
 
 export class InvalidEmailError extends Error {
   override message = 'Invalid email';
@@ -32,21 +33,29 @@ export class UserService {
     return this.store.selectOnce<User>(state => state.users.loggedUser);
   }
 
-  getLoggedUser(event?: (user?: User) => void): Promise<User | undefined> {
-    return new Promise<User | undefined>((resolve) => {
-      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+  getLoggedUser(event?: (user?: UserInterface) => void): Promise<UserInterface | undefined> {
+    return new Promise<UserInterface | undefined>((resolve) => {
+      const unsubscribe = onAuthStateChanged(this.auth, (userFirebase) => {
+        const userData = userFirebase as unknown as UserInterface;
+        const user: UserInterface = {
+          email: userData.email!,
+          createdAt: userData.createdAt!,
+          lastLoginAt: userData.lastLoginAt!,
+        };
+
         if (!event) {
           unsubscribe();
         } else {
-          return event(user ? user : undefined);
+          return event(userData ? user : undefined);
         }
 
-        if (!user) {
+        if (!userData) {
           this.store.dispatch(new UserLogout());
           resolve(undefined);
         }
-        this.store.dispatch(new UserLogin(user as User));
-        resolve(user as User);
+
+        this.store.dispatch(new UserLogin(user));
+        resolve(user);
       });
     });
   }

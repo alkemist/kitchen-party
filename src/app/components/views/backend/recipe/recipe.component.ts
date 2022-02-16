@@ -9,9 +9,9 @@ import {
   Validators
 } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
+import {DietTypeEnum} from '../../../../enums/diet-type.enum';
 import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
@@ -21,11 +21,11 @@ import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {UploadService} from '../../../../services/upload.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
-import {DietTypeEnum} from "../../../../enums/diet-type.enum";
 
 function recipeIngredientFormValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -57,7 +57,8 @@ export class RecipeComponent implements OnInit {
   error: string = '';
   indexRecipeIngredient = 0;
   coverFiles: File[] = [];
-  private ingredientTranslation: string = 'Ingredient';
+  uploadClass: string = '';
+  private ingredientTranslation: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -65,7 +66,7 @@ export class RecipeComponent implements OnInit {
     private ingredientService: IngredientService,
     private searchService: SearchService,
     private routerService: Router,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private dialogService: DialogService,
@@ -130,49 +131,38 @@ export class RecipeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(
-      ((data) => {
-        this.loadTranslations(() => {
-          if (data && data['recipe']) {
-            this.loadData(data['recipe']);
-          }
-          this.loading = false;
-        });
+      (async (data) => {
+        this.ingredientTranslation = await this.translatorService.instant('Ingredients');
+        this.recipeTypes = await this.translatorService.translateLabels(EnumHelper.enumToObject(RecipeTypeEnum));
+        this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitEnum));
+        this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
+
+        if (data && data['recipe']) {
+          this.loadData(data['recipe']);
+        }
+        this.loading = false;
       }));
   }
 
-  loadTranslations(callback: () => void) {
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTranslation = this.translateService.instant('Ingredient');
-      this.recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum).map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      let measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
-      measureUnits = measureUnits.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      this.measureUnits = measureUnits.concat(this.recipeService.customMeasures);
-      callback();
-    });
-  }
-
-  loadData(recipe: RecipeModel) {
+  async loadData(recipe: RecipeModel) {
     this.recipe = recipe;
 
     this.form.patchValue(this.recipe);
     this.recipeIngredients.removeAt(0);
     this.instructionRows.removeAt(0);
 
-    this.recipe.orderedRecipeIngredients.forEach((recipeIngredient, i) => {
+    for (const recipeIngredient of this.recipe.orderedRecipeIngredients) {
+      const i = this.recipe.orderedRecipeIngredients.indexOf(recipeIngredient);
       this.addRecipeIngredient();
 
       const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
       recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
       recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
-        ? MeasureUnits[recipeIngredient.unit] ? this.translateService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.unit
+        ? MeasureUnits[recipeIngredient.unit] ? await this.translatorService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.unit
         : recipeIngredient.measure;
 
       this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
-    });
+    }
 
     this.recipe.instructions?.forEach((instruction, i) => {
       this.addInstructionRow();
@@ -199,7 +189,7 @@ export class RecipeComponent implements OnInit {
   }
 
   searchIngredientOrRecipe(event: { query: string }): void {
-    this.searchService.searchIngredients(event.query).then(ingredientsOrRecipes => {
+    this.searchService.searchIngredientsOrRecipes(event.query).then(ingredientsOrRecipes => {
       this.ingredientsOrRecipes = ingredientsOrRecipes;
     });
   }
@@ -250,16 +240,16 @@ export class RecipeComponent implements OnInit {
         this.loading = false;
         await this.messageService.add({
           severity: 'success',
-          detail: this.translateService.instant(`Updated recipe`)
+          detail: await this.translatorService.instant(`Updated recipe`)
         });
         await this.routerService.navigate(['/', 'recipe', recipe!.slug]);
       });
     } else {
-      this.recipeService.add(localDocument).then(recipe => {
+      this.recipeService.add(localDocument).then(async recipe => {
         this.loading = false;
         this.messageService.add({
           severity: 'success',
-          detail: this.translateService.instant(`Added recipe`)
+          detail: await this.translatorService.instant(`Added recipe`)
         });
         this.routerService.navigate(['/', 'recipe', recipe!.slug]);
       });
@@ -268,14 +258,14 @@ export class RecipeComponent implements OnInit {
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
-      message: this.translateService.instant('Are you sure you want to delete it ?'),
+      message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
         this.loading = true;
-        this.recipeService.remove(this.recipe).then(() => {
+        this.recipeService.remove(this.recipe).then(async () => {
           this.loading = false;
           this.messageService.add({
             severity: 'success',
-            detail: this.translateService.instant(`Deleted recipe`)
+            detail: await this.translatorService.instant(`Deleted recipe`)
           });
           this.routerService.navigate(['/', 'recipes']);
         });
@@ -299,6 +289,16 @@ export class RecipeComponent implements OnInit {
 
   getFormGroupRecipeIngredient(i: number): FormGroup {
     return this.recipeIngredients.at(i) as FormGroup;
+  }
+
+  selectImage($event: { files: File[], currentFiles: File[] }) {
+    console.log('select', $event, $event.currentFiles.length);
+    this.uploadClass = $event.currentFiles.length > 0 ? 'withFiles' : '';
+  }
+
+  removeImage() {
+    console.log('remove');
+    this.uploadClass = '';
   }
 
   async uploadImage($event: { files: File[] }) {

@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
 import {IngredientInterface, IngredientModel} from '../../../../models/ingredient.model';
 import {IngredientService} from '../../../../services/ingredient.service';
+import {TranslatorService} from '../../../../services/translator.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
-import {slugify} from "../../../../tools/slugify";
+import {slugify} from '../../../../tools/slugify';
 
 @Component({
   selector: 'app-back-ingredient',
@@ -29,7 +29,7 @@ export class IngredientComponent implements OnInit {
     private route: ActivatedRoute,
     private ingredientService: IngredientService,
     private routerService: Router,
-    private translateService: TranslateService,
+    private translatorService: TranslatorService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
   ) {
@@ -52,18 +52,8 @@ export class IngredientComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.loadTranslations(() => {
-      this.loadData();
-    });
-  }
-
-  loadTranslations(callback: () => void) {
-    this.translateService.getTranslation('fr').subscribe(() => {
-      this.ingredientTypes = this.ingredientTypes.map(item => {
-        return {...item, label: this.translateService.instant(item.label)};
-      });
-      callback();
-    });
+    this.ingredientTypes = await this.translatorService.translateLabels(this.ingredientTypes);
+    this.loadData();
   }
 
   loadData() {
@@ -74,7 +64,7 @@ export class IngredientComponent implements OnInit {
           this.form.patchValue(this.ingredient);
           this.form.get('dateBegin')?.patchValue(this.ingredient.monthBegin
             ? new Date(new Date().getFullYear(), this.ingredient.monthBegin - 1, 1)
-            : null)
+            : null);
           this.form.get('dateEnd')?.patchValue(this.ingredient.monthEnd
             ? new Date(new Date().getFullYear(), this.ingredient.monthEnd - 1, 1)
             : null);
@@ -113,39 +103,39 @@ export class IngredientComponent implements OnInit {
   async submit(localDocument: IngredientInterface): Promise<void> {
     this.loading = true;
     if (this.ingredient.id) {
-      this.ingredientService.update(localDocument).then(ingredient => {
+      this.ingredientService.update(localDocument).then(async ingredient => {
         this.ingredient = new IngredientModel(ingredient!);
         this.loading = false;
         this.messageService.add({
           severity: 'success',
-          detail: this.translateService.instant(`Updated ingredient`)
+          detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
+        await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
       });
     } else {
-      await this.ingredientService.add(localDocument).then(ingredient => {
+      await this.ingredientService.add(localDocument).then(async ingredient => {
         this.ingredient = new IngredientModel(ingredient!);
         this.loading = false;
         this.messageService.add({
           severity: 'success',
-          detail: this.translateService.instant(`Added ingredient`),
+          detail: await this.translatorService.instant(`Added ingredient`),
         });
-        this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
+        await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
       });
     }
   }
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
-      message: this.translateService.instant('Are you sure you want to delete it ?'),
+      message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
-        this.ingredientService.remove(this.ingredient).then(() => {
+        this.ingredientService.remove(this.ingredient).then(async () => {
           this.loading = false;
           this.messageService.add({
             severity: 'success',
-            detail: this.translateService.instant(`Deleted ingredient`)
+            detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          this.routerService.navigate(['/', 'ingredients']);
+          await this.routerService.navigate(['/', 'ingredients']);
         });
       }
     });

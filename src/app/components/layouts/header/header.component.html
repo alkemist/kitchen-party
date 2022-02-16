@@ -5,11 +5,11 @@
             icon="pi pi-chevron-right"
             pButton
             pRipple></button>
-    <a [class.showFilters]="showFilters" [routerLink]="['/']" class="header__logo mobile-hidden">
+    <a [class.mobile-hidden]="!showAppName" [class.showFilters]="showFilters" [routerLink]="['/']" class="header__logo">
       Kitchen Party
     </a>
     <span *ngIf="title">
-      <span class="mobile-hidden" style="margin: 0 10px;">/</span>{{ title | translate }}
+      <span [class.mobile-hidden]="!showAppName" style="margin: 0 10px;">/</span>{{ title | translate }}
     </span>
   </div>
   <!-- End Toolbar Left -->
@@ -72,6 +72,10 @@
     <div class="flex flex-row justify-content-between" style="padding:0;">
       <a (click)="menuShowed = false" [label]="'About' | translate"
          [routerLink]="['/', 'about']" class="p-button-rounded p-button-text" icon="pi pi-user" pButton pRipple></a>
+    </div>
+    <div class="flex flex-row justify-content-between" style="padding:0;">
+      <a (click)="menuShowed = false" [label]="'Calendar' | translate"
+         [routerLink]="['/', 'calendar']" class="p-button-rounded p-button-text" icon="pi pi-user" pButton pRipple></a>
     </div>
   </p-sidebar>
   <!-- End Sidebar -->
