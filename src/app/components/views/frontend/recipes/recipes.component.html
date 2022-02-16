@@ -54,7 +54,7 @@
             <i class="material-icons">inventory</i>
             {{ recipe.recipeIngredients.length }}
           </div>
-          <button [pTooltip]="'View recipe' | translate" (click)="gotoRecipe(recipe)" class="p-button-rounded"
+          <button (click)="gotoRecipe(recipe)" [pTooltip]="'View recipe' | translate" class="p-button-rounded"
                   icon="pi pi-eye"
                   pButton pRipple
                   tooltipPosition="bottom"></button>
@@ -62,8 +62,8 @@
       </div>
     </div>
     <div *ngIf="!loading && filteredRecipes.length > 0" style="height: 20px;width: 100%;"></div>
-    <div *ngIf="loading">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <div *ngIf="loading" class="loader">
+      <i class="pi pi-spin pi-spinner" style=""></i>
     </div>
     <div *ngIf="!loading && filteredRecipes.length === 0">
       {{ 'No recipes found.' | translate }}

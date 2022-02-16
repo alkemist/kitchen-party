@@ -71,11 +71,12 @@
     </div>
     <div class="flex flex-row justify-content-between" style="padding:0;">
       <a (click)="menuShowed = false" [label]="'About' | translate"
-         [routerLink]="['/', 'about']" class="p-button-rounded p-button-text" icon="pi pi-user" pButton pRipple></a>
+         [routerLink]="['/', 'about']" class="p-button-rounded p-button-text" icon="pi pi-question" pButton pRipple></a>
     </div>
-    <div class="flex flex-row justify-content-between" style="padding:0;">
+    <div class="flex flex-row justify-content-between" style="padding:0;margin-top: 10px;">
       <a (click)="menuShowed = false" [label]="'Calendar' | translate"
-         [routerLink]="['/', 'calendar']" class="p-button-rounded p-button-text" icon="pi pi-user" pButton pRipple></a>
+         [routerLink]="['/', 'calendar']" class="p-button-rounded p-button-text" icon="pi pi-calendar" pButton
+         pRipple></a>
     </div>
   </p-sidebar>
   <!-- End Sidebar -->
