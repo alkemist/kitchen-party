@@ -1,4 +1,4 @@
-import {UserInterface} from "./user.state";
+import {UserInterface} from "../interfaces/user.interface";
 
 export class UserLogin {
   static readonly type = '[User] Login';

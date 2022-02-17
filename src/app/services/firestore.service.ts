@@ -15,58 +15,16 @@ import {
 import {Observable} from 'rxjs';
 import {generatePushID} from '../tools/generate-pushid';
 import {slugify} from '../tools/slugify';
-import {LoggedError, LoggerService} from './logger.service';
+import {LoggerService} from './logger.service';
 import {TimeHelper} from "../tools/time.helper";
+import {DataObjectInterface} from "../interfaces/data-object.interface";
+import {EmptyDocument} from "../errors/not-logged/empty-document.error";
+import {DatabaseError} from "../errors/logged/database.error";
+import {QuotaExceededError} from "../errors/logged/quota-exceeded.error";
+import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
 
-export interface DataObject {
-  id?: string;
-  name?: string;
-  slug?: string;
-}
 
-export class DocumentNotFound<T extends DataObject> extends Error {
-  private readonly collectionName: string;
-
-  constructor(collectionName: string, document?: T) {
-    super();
-    this.collectionName = collectionName;
-    this.message = `Document ["${this.collectionName}"] not found ${document ? `with id ${document.id}` : ''}`;
-  }
-}
-
-export class EmptyDocument<T extends DataObject> extends Error {
-  private readonly collectionName: string;
-
-  constructor(collectionName: string) {
-    super();
-    this.collectionName = collectionName;
-    this.message = `Document ["${this.collectionName}"] is empty`;
-  }
-}
-
-export class TooManyRequestError extends LoggedError<any> {
-  override type = 'Database';
-  override message = 'Too many request';
-}
-
-export class QuotaExceededError extends LoggedError<any> {
-  override type = 'Database';
-  override message = 'Quota exceeded';
-}
-
-export class OfflineError extends Error {
-  override message = 'You are offline';
-}
-
-export class DatabaseError extends LoggedError<DataObject> {
-  override type = 'Database';
-
-  constructor(public override message: string, public override context: DataObject) {
-    super();
-  }
-}
-
-export abstract class FirestoreService<T extends DataObject> {
+export abstract class FirestoreService<T extends DataObjectInterface> {
   protected lastUpdated$?: Observable<Date>;
   protected all$?: Observable<T[]>;
   protected lastUpdated?: Date;

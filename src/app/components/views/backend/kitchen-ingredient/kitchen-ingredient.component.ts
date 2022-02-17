@@ -4,8 +4,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
-import {KitchenIngredientInterface, KitchenIngredientModel} from '../../../../models/kitchen-ingredient.model';
-import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
 import {RecipeModel} from '../../../../models/recipe.model';
 import {KitchenIngredientService} from '../../../../services/kitchen.service';
 import {RecipeService} from '../../../../services/recipe.service';
@@ -13,6 +11,10 @@ import {SearchService} from '../../../../services/search.service';
 import {TranslatorService} from '../../../../services/translator.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
+import {RecipeIngredientFormInterface} from "../../../../interfaces/recipe-ingredient-form.interface";
+import {KitchenIngredientInterface} from "../../../../interfaces/kitchen-ingredient.interface";
+import {KitchenIngredientModel} from "../../../../models/kitchen-ingredient.model";
+import {RecipeIngredientModel} from "../../../../models/recipe-ingredient.model";
 
 @Component({
   selector: 'app-kitchen-ingredient',

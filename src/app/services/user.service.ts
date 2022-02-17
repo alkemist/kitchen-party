@@ -3,21 +3,12 @@ import {Store} from '@ngxs/store';
 import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, User} from 'firebase/auth';
 import {Observable} from 'rxjs';
 import {UserLogin, UserLogout} from '../store/user.action';
-import {OfflineError, TooManyRequestError} from './firestore.service';
-import {LoggedError} from "./logger.service";
-import {UserInterface} from "../store/user.state";
-
-export class InvalidEmailError extends Error {
-  override message = 'Invalid email';
-}
-
-export class WrongPasswordError extends Error {
-  override message = 'Wrong password';
-}
-
-export class WrongApiKeyError extends LoggedError<void> {
-  override message = 'Wrong Api Key';
-}
+import {WrongApiKeyError} from "../errors/logged/wrong-api-key.error";
+import {WrongPasswordError} from "../errors/not-logged/wrong-password.error";
+import {InvalidEmailError} from "../errors/not-logged/invalid-email.error";
+import {OfflineError} from "../errors/not-logged/offline.error";
+import {TooManyRequestError} from "../errors/logged/too-many-request.error";
+import {UserInterface} from "../interfaces/user.interface";
 
 @Injectable({
   providedIn: 'root'

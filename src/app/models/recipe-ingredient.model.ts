@@ -1,34 +1,13 @@
 import {DietTypeEnum} from '../enums/diet-type.enum';
 import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
 import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
-import {IngredientInterface, IngredientModel} from './ingredient.model';
 import {KeyObject} from './other.model';
-import {RecipeInterface, RecipeModel} from './recipe.model';
+import {RecipeModel} from './recipe.model';
+import {RecipeIngredientInterface} from "../interfaces/recipe-ingredient.interface";
+import {HasIngredient} from "../interfaces/has-ingredient.interface";
+import {RecipeIngredientFormInterface} from "../interfaces/recipe-ingredient-form.interface";
+import {IngredientModel} from "./ingredient.model";
 
-export interface HasIngredient {
-  ingredient?: IngredientInterface;
-}
-
-export interface RecipeIngredientInterface extends HasIngredient {
-  id?: string,
-  quantity?: number | null,
-  measure?: string,
-  unit?: MeasureUnitEnum | null,
-
-  ingredient?: IngredientInterface,
-  ingredientId?: string,
-  recipe?: RecipeInterface,
-  recipeId?: string,
-
-  optionCarne: boolean,
-  optionVege: boolean,
-  optionVegan: boolean,
-}
-
-export interface RecipeIngredientFormInterface extends RecipeIngredientInterface {
-  unitOrMeasure: MeasureUnitEnum | string;
-  ingredientOrRecipe: IngredientModel | RecipeModel;
-}
 
 export class RecipeIngredientModel implements RecipeIngredientInterface {
   static ingredientTypes = Object.keys(IngredientTypeEnum);

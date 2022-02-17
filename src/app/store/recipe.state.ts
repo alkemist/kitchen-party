@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
 import {KeyObject} from '../models/other.model';
-import {RecipeInterface} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
+import {RecipeInterface} from "../interfaces/recipe.interface";
 
 export class RecipeStateModel {
   all: RecipeInterface[] = [];

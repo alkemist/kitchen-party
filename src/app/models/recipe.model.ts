@@ -1,29 +1,8 @@
-import {FirestoreDataConverter} from '@firebase/firestore';
-import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {DietTypeEnum} from '../enums/diet-type.enum';
 import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
-import {DataObject} from '../services/firestore.service';
 import {slugify} from '../tools/slugify';
-import {RecipeIngredientInterface, RecipeIngredientModel} from './recipe-ingredient.model';
-
-export interface RecipeInterface extends DataObject {
-  id?: string,
-  name: string,
-  slug: string,
-
-  cookingDuration?: number,
-  preparationDuration?: number,
-  waitingDuration?: number,
-
-  nbSlices?: number,
-  instructions?: string[],
-  type?: RecipeTypeEnum | null,
-  image?: string,
-  imagePath?: string,
-  source?: string,
-
-  recipeIngredients: RecipeIngredientInterface[],
-}
+import {RecipeIngredientModel} from './recipe-ingredient.model';
+import {RecipeInterface} from "../interfaces/recipe.interface";
 
 export class RecipeModel implements RecipeInterface {
   static saltyNames = [
@@ -295,32 +274,4 @@ export class RecipeModel implements RecipeInterface {
     return null;
   }
 }
-
-export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
-  toFirestore: (recipe: RecipeModel): RecipeInterface => {
-    const recipeFields = {...recipe} as RecipeInterface;
-    delete recipeFields.id;
-    recipeFields.recipeIngredients = [];
-
-    recipe.recipeIngredients.forEach(recipeIngredient => {
-      const recipeIngredientField = {...recipeIngredient};
-      delete recipeIngredientField.id;
-
-      recipeIngredientField.ingredientId = recipeIngredient.ingredient?.id! || '';
-      delete recipeIngredientField.ingredient;
-
-      recipeIngredientField.recipeId = recipeIngredient.recipe?.id! || '';
-      delete recipeIngredientField.recipe;
-
-      recipeFields.recipeIngredients.push({
-        ...recipeIngredientField
-      });
-    });
-
-    return recipeFields;
-  },
-  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    return snapshot.data(options) as RecipeInterface;
-  }
-};
 

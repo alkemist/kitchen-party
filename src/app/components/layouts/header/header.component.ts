@@ -15,8 +15,8 @@ import {ShoppingService} from '../../../services/shopping.service';
 import {TranslatorService} from '../../../services/translator.service';
 import {UserService} from '../../../services/user.service';
 import {IngredientState} from '../../../store/ingredient.state';
-import {UserInterface} from '../../../store/user.state';
 import {EnumHelper} from '../../../tools/enum.helper';
+import {UserInterface} from "../../../interfaces/user.interface";
 
 export interface ToolbarFilters {
   diet: string,

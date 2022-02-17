@@ -2,11 +2,7 @@ import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {first, Observable} from 'rxjs';
-import {
-  kitchenIngredientConverter,
-  KitchenIngredientInterface,
-  KitchenIngredientModel
-} from '../models/kitchen-ingredient.model';
+import {KitchenIngredientModel} from '../models/kitchen-ingredient.model';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -15,10 +11,13 @@ import {
 } from '../store/kitchen.action';
 import {KitchenIngredientState} from '../store/kitchen.state';
 import {ArrayHelper} from '../tools/array.helper';
-import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {IngredientService} from './ingredient.service';
 import {LoggerService} from './logger.service';
 import {RecipeService} from './recipe.service';
+import {FirestoreService} from "./firestore.service";
+import {kitchenIngredientConverter} from "../converters/kitchen-ingredient.converter";
+import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
+import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
 
 @Injectable({
   providedIn: 'root'

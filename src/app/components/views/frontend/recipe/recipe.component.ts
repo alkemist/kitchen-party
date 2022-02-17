@@ -3,11 +3,12 @@ import {ActivatedRoute} from '@angular/router';
 import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
-import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
+import {RecipeModel} from '../../../../models/recipe.model';
 import {TranslatorService} from '../../../../services/translator.service';
 import {UserService} from '../../../../services/user.service';
-import {UserInterface} from '../../../../store/user.state';
 import {EnumHelper} from '../../../../tools/enum.helper';
+import {UserInterface} from "../../../../interfaces/user.interface";
+import {RecipeInterface} from "../../../../interfaces/recipe.interface";
 
 @Component({
   selector: 'app-front-recipe',

@@ -1,13 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
@@ -16,8 +8,6 @@ import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum
 import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
 import {IngredientModel} from '../../../../models/ingredient.model';
 import {KeyObject} from '../../../../models/other.model';
-import {RecipeIngredientFormInterface, RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
-import {RecipeInterface, RecipeModel} from '../../../../models/recipe.model';
 import {IngredientService} from '../../../../services/ingredient.service';
 import {RecipeService} from '../../../../services/recipe.service';
 import {SearchService} from '../../../../services/search.service';
@@ -26,15 +16,11 @@ import {UploadService} from '../../../../services/upload.service';
 import {EnumHelper} from '../../../../tools/enum.helper';
 import {slugify} from '../../../../tools/slugify';
 import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
-
-function recipeIngredientFormValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const recipeIngredientForm: RecipeIngredientFormInterface = control.value;
-    const isValid = !recipeIngredientForm.unitOrMeasure
-      || recipeIngredientForm.quantity && recipeIngredientForm.unitOrMeasure;
-    return isValid ? null : {invalid: {value: control.value}};
-  };
-}
+import {RecipeIngredientFormInterface} from "../../../../interfaces/recipe-ingredient-form.interface";
+import {RecipeModel} from "../../../../models/recipe.model";
+import {RecipeInterface} from "../../../../interfaces/recipe.interface";
+import {RecipeIngredientModel} from "../../../../models/recipe-ingredient.model";
+import {recipeIngredientValidator} from "../../../../validators/recipeIngredient.validator";
 
 @Component({
   selector: 'app-back-recipe',
@@ -122,7 +108,7 @@ export class RecipeComponent implements OnInit {
       optionCarne: new FormControl('', []),
       optionVege: new FormControl('', []),
       optionVegan: new FormControl('', []),
-    }, [recipeIngredientFormValidator()]);
+    }, [recipeIngredientValidator()]);
   }
 
   private static createInstructionRow(): FormControl {

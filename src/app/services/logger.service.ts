@@ -1,13 +1,5 @@
 import {Injectable} from '@angular/core';
-
-export class LoggedError<T> extends Error {
-  type: string = 'Unknown';
-  context?: T;
-
-  constructor() {
-    super();
-  }
-}
+import {LoggedError} from "../errors/logged.error";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +9,7 @@ export class LoggerService {
   constructor() {
   }
 
-  error(error: LoggedError<any>) {
+  error<T>(error: LoggedError<T>) {
     console.error(`-- Error [${error.type}]`, error.message, error.context);
   }
 }

@@ -2,12 +2,15 @@ import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
 import {first, Observable} from 'rxjs';
-import {ingredientConverter, IngredientInterface, IngredientModel} from '../models/ingredient.model';
 import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from '../store/ingredient.action';
 import {IngredientState} from '../store/ingredient.state';
 import {ArrayHelper} from '../tools/array.helper';
-import {DocumentNotFound, FirestoreService} from './firestore.service';
 import {LoggerService} from './logger.service';
+import {FirestoreService} from "./firestore.service";
+import {ingredientConverter} from "../converters/ingredient.converter";
+import {IngredientInterface} from "../interfaces/ingredient.interface";
+import {IngredientModel} from "../models/ingredient.model";
+import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
 
 @Injectable({
   providedIn: 'root'
