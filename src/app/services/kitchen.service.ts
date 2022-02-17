@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {Observable, Subscription} from 'rxjs';
+import {first, Observable} from 'rxjs';
 import {
   kitchenIngredientConverter,
   KitchenIngredientInterface,
@@ -27,8 +27,8 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
   @Select(KitchenIngredientState.lastUpdated) override lastUpdated$?: Observable<Date>;
   @Select(KitchenIngredientState.all) protected override all$?: Observable<KitchenIngredientInterface[]>;
 
-  private allSubscription?: Subscription;
   private all: KitchenIngredientModel[] = [];
+  private promise: Promise<KitchenIngredientModel[]> | undefined;
 
   constructor(private logger: LoggerService, private store: Store,
               private ingredientService: IngredientService,
@@ -38,17 +38,18 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
   }
 
   async getListOrRefresh(): Promise<KitchenIngredientModel[]> {
-    if (this.allSubscription) {
-      this.allSubscription.unsubscribe();
+    if (this.promise) {
+      return this.promise;
     }
+
     if ((this.all.length > 0 || this.refreshed) && this.synchronized) {
       return this.all;
     }
 
-    return new Promise<KitchenIngredientModel[]>(resolve => {
-      this.all$?.subscribe(async kitchenIngredients => {
+    this.promise = new Promise<KitchenIngredientModel[]>(resolve => {
+      this.all$?.pipe(first()).subscribe(async kitchenIngredients => {
         if (kitchenIngredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          return await this.refreshList();
+          kitchenIngredients = await this.refreshList();
         }
 
         this.all = [];
@@ -62,6 +63,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
         resolve(this.all);
       });
     });
+    return this.promise;
   }
 
   async search(query: string): Promise<KitchenIngredientModel[]> {
@@ -126,10 +128,11 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     return await super.exist(name);
   }
 
-  private async refreshList(): Promise<void> {
+  private async refreshList(): Promise<KitchenIngredientInterface[]> {
     const kitchenIngredients = await super.select(orderBy('slug'));
 
     this.store.dispatch(new FillKitchenIngredients(kitchenIngredients));
+    return kitchenIngredients;
   }
 
   private addToStore(kitchenIngredient: KitchenIngredientInterface): KitchenIngredientInterface {

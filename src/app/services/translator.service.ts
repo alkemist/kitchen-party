@@ -36,7 +36,7 @@ export class TranslatorService {
       }
     });
 
-    this.all$?.subscribe(translations => {
+    this.all$?.pipe(first()).subscribe(translations => {
       this.all = translations;
     });
   }
@@ -71,7 +71,7 @@ export class TranslatorService {
     }));
   }
 
-  async refresh() {
+  async refresh(): Promise<void> {
     if (this.promise) {
       return this.promise;
     }
@@ -89,5 +89,6 @@ export class TranslatorService {
         resolve();
       });
     });
+    return this.promise;
   }
 }

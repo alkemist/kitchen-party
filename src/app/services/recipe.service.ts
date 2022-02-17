@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {orderBy} from 'firebase/firestore';
-import {Observable, Subscription} from 'rxjs';
+import {first, Observable} from 'rxjs';
 import {KeyObject} from '../models/other.model';
 import {recipeConverter, RecipeInterface, RecipeModel} from '../models/recipe.model';
 import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
@@ -20,8 +20,9 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   @Select(RecipeState.all) protected override all$?: Observable<RecipeInterface[]>;
 
   @Select(RecipeState.customMeasure) private customMeasures$?: Observable<KeyObject[]>;
-  private allSubscription?: Subscription;
+
   private all: RecipeModel[] = [];
+  private promise: Promise<RecipeModel[]> | undefined;
 
   constructor(private logger: LoggerService, private store: Store, private ingredientService: IngredientService) {
     super(logger, 'recipe', recipeConverter);
@@ -31,17 +32,18 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   }
 
   async getListOrRefresh(): Promise<RecipeModel[]> {
-    if (this.allSubscription) {
-      this.allSubscription.unsubscribe();
+    if (this.promise) {
+      return this.promise;
     }
+
     if ((this.all.length > 0 || this.refreshed) && this.synchronized) {
       return this.all;
     }
 
-    return new Promise<RecipeModel[]>((resolve) => {
-      this.all$?.subscribe(async recipes => {
+    this.promise = new Promise<RecipeModel[]>((resolve) => {
+      this.all$?.pipe(first()).subscribe(async recipes => {
         if (recipes.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          return await this.refreshList();
+          recipes = await this.refreshList();
         }
 
         this.all = [];
@@ -55,6 +57,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         resolve(this.all);
       });
     });
+    return this.promise;
   }
 
   async search(query: string): Promise<RecipeModel[]> {
@@ -119,10 +122,11 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     return await super.exist(name);
   }
 
-  private async refreshList(): Promise<void> {
+  private async refreshList(): Promise<RecipeInterface[]> {
     const recipes = await super.select(orderBy('name'));
 
     this.store.dispatch(new FillRecipes(recipes));
+    return recipes;
   }
 
   private addToStore(recipe: RecipeInterface): RecipeInterface {

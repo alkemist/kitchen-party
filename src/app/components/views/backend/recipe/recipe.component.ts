@@ -292,12 +292,10 @@ export class RecipeComponent implements OnInit {
   }
 
   selectImage($event: { files: File[], currentFiles: File[] }) {
-    console.log('select', $event, $event.currentFiles.length);
     this.uploadClass = $event.currentFiles.length > 0 ? 'withFiles' : '';
   }
 
   removeImage() {
-    console.log('remove');
     this.uploadClass = '';
   }
 
