@@ -7,10 +7,12 @@
       "jest",
       "jasmine"
     ],
-    "module": "commonjs"
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true
   },
   "files": [
-    "src/test.ts",
+    "src/setup-jest.ts",
     "src/polyfills.ts"
   ],
   "include": [
