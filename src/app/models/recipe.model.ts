@@ -1,8 +1,8 @@
-import {DietTypeEnum} from '../enums/diet-type.enum';
-import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
-import {slugify} from '../tools/slugify';
-import {RecipeIngredientModel} from './recipe-ingredient.model';
-import {RecipeInterface} from "../interfaces/recipe.interface";
+import { DietTypeEnum } from '../enums/diet-type.enum';
+import { RecipeTypeEnum, RecipeTypes } from '../enums/recipe-type.enum';
+import { RecipeInterface } from '../interfaces/recipe.interface';
+import { slugify } from '../tools/slugify';
+import { RecipeIngredientModel } from './recipe-ingredient.model';
 
 export class RecipeModel implements RecipeInterface {
   static saltyNames = [

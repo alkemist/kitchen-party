@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {RecipeTypeEnum, RecipeTypes} from '../enums/recipe-type.enum';
-import {IngredientModel} from '../models/ingredient.model';
-import {RecipeModel} from '../models/recipe.model';
-import {IngredientService} from './ingredient.service';
-import {RecipeService} from './recipe.service';
+import { Injectable } from '@angular/core';
+import { RecipeTypeEnum, RecipeTypes } from '../enums/recipe-type.enum';
+import { IngredientModel } from '../models/ingredient.model';
+import { RecipeModel } from '../models/recipe.model';
+import { IngredientService } from './ingredient.service';
+import { RecipeService } from './recipe.service';
 
 @Injectable({
   providedIn: 'root'

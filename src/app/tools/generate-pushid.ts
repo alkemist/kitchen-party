@@ -13,7 +13,7 @@ export const generatePushID = function () {
   const PUSH_CHARS = '-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
 
   // We generate 72-bits of randomness which get turned into 12 characters and appended to the
-  // timestamp to prevent collisions with other clients.  We store the last characters we
+  // timestamp to prevent collisions with other clients.  We stores the last characters we
   // generated because in the event of a collision, we'll use those same characters except
   // "incremented" by one.
   const lastRandChars: number[] = [];

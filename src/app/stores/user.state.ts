@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {UserLogin, UserLogout} from './user.action';
-import {UserInterface} from "../interfaces/user.interface";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { UserInterface } from '../interfaces/user.interface';
+import { UserLogin, UserLogout } from './user.action';
 
 export class UserStateModel {
   logged: UserInterface | undefined = undefined;

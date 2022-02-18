@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {KitchenIngredientModel} from "../models/kitchen-ingredient.model";
-import {KitchenIngredientService} from "../services/kitchen.service";
-import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
+import { KitchenIngredientModel } from '../models/kitchen-ingredient.model';
+import { KitchenIngredientService } from '../services/kitchen.service';
 
 @Injectable({providedIn: 'root'})
 export class KitchenResolver implements Resolve<KitchenIngredientModel> {

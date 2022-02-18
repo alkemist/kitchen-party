@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {IngredientModel} from '../../../models/ingredient.model';
-import {KeyObject} from '../../../models/other.model';
-import {IngredientTypeEnum, IngredientTypes} from "../../../enums/ingredient-type.enum";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { IngredientTypeEnum, IngredientTypes } from '../../../enums/ingredient-type.enum';
+import { IngredientModel } from '../../../models/ingredient.model';
+import { KeyObject } from '../../../models/other.model';
 
 @Component({
   selector: 'app-form-ingredient',
   templateUrl: './ingredient.component.html',
-  styleUrls: ['./ingredient.component.scss']
+  styleUrls: [ './ingredient.component.scss' ]
 })
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
@@ -23,7 +23,7 @@ export class FormIngredientComponent implements OnInit {
   }
 
   get isFruitsOrVegetables(): boolean {
-    return IngredientTypes[this.type.value] === IngredientTypeEnum.fruits_vegetables_mushrooms
+    return IngredientTypes[this.type.value] === IngredientTypeEnum.fruits_vegetables_mushrooms;
   }
 
   get name(): FormControl {

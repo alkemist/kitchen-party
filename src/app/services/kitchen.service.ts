@@ -1,23 +1,23 @@
-import {Injectable} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
-import {orderBy} from 'firebase/firestore';
-import {first, Observable} from 'rxjs';
-import {KitchenIngredientModel} from '../models/kitchen-ingredient.model';
+import { Injectable } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
+import { kitchenIngredientConverter } from '../converters/kitchen-ingredient.converter';
+import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
+import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
+import { KitchenIngredientModel } from '../models/kitchen-ingredient.model';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
-} from '../store/kitchen.action';
-import {KitchenIngredientState} from '../store/kitchen.state';
-import {ArrayHelper} from '../tools/array.helper';
-import {IngredientService} from './ingredient.service';
-import {LoggerService} from './logger.service';
-import {RecipeService} from './recipe.service';
-import {FirestoreService} from "./firestore.service";
-import {kitchenIngredientConverter} from "../converters/kitchen-ingredient.converter";
-import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
-import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
+} from '../stores/kitchen.action';
+import { KitchenIngredientState } from '../stores/kitchen.state';
+import { ArrayHelper } from '../tools/array.helper';
+import { FirestoreService } from './firestore.service';
+import { IngredientService } from './ingredient.service';
+import { LoggerService } from './logger.service';
+import { RecipeService } from './recipe.service';
 
 @Injectable({
   providedIn: 'root'

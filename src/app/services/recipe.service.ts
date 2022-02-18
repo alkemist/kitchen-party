@@ -1,18 +1,18 @@
-import {Injectable} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
-import {orderBy} from 'firebase/firestore';
-import {first, Observable} from 'rxjs';
-import {KeyObject} from '../models/other.model';
-import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from '../store/recipe.action';
-import {RecipeState} from '../store/recipe.state';
-import {ArrayHelper} from '../tools/array.helper';
-import {IngredientService} from './ingredient.service';
-import {LoggerService} from './logger.service';
-import {FirestoreService} from "./firestore.service";
-import {RecipeModel} from "../models/recipe.model";
-import {RecipeInterface} from "../interfaces/recipe.interface";
-import {recipeConverter} from "../converters/recipe.converter";
-import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
+import { Injectable } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
+import { recipeConverter } from '../converters/recipe.converter';
+import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
+import { RecipeInterface } from '../interfaces/recipe.interface';
+import { KeyObject } from '../models/other.model';
+import { RecipeModel } from '../models/recipe.model';
+import { AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe } from '../stores/recipe.action';
+import { RecipeState } from '../stores/recipe.state';
+import { ArrayHelper } from '../tools/array.helper';
+import { FirestoreService } from './firestore.service';
+import { IngredientService } from './ingredient.service';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'

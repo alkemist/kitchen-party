@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {Select, Store} from '@ngxs/store';
-import {first, Observable} from 'rxjs';
-import {KeyObject} from '../models/other.model';
-import {FillTranslations} from '../store/translation.action';
-import {TranslationState} from '../store/translation.state';
-import {TimeHelper} from '../tools/time.helper';
-import {LoggerService} from './logger.service';
-import {TranslationError} from "../errors/logged/translation-error.service";
-import {KeyValueInterface} from "../interfaces/key-value.interface";
+import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { Select, Store } from '@ngxs/store';
+import { first, Observable } from 'rxjs';
+import { TranslationError } from '../errors/logged/translation-error.service';
+import { KeyValueInterface } from '../interfaces/key-value.interface';
+import { KeyObject } from '../models/other.model';
+import { FillTranslations } from '../stores/translation.action';
+import { TranslationState } from '../stores/translation.state';
+import { TimeHelper } from '../tools/time.helper';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'

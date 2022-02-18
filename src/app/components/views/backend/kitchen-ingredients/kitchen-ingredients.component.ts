@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
-import {KitchenIngredientModel} from '../../../../models/kitchen-ingredient.model';
-import {KitchenIngredientService} from '../../../../services/kitchen.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IngredientTypeEnum } from '../../../../enums/ingredient-type.enum';
+import { KitchenIngredientModel } from '../../../../models/kitchen-ingredient.model';
+import { KitchenIngredientService } from '../../../../services/kitchen.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
 
 @Component({
   selector: 'app-kitchen-ingredients',
   templateUrl: './kitchen-ingredients.component.html',
-  styleUrls: ['./kitchen-ingredients.component.scss'],
+  styleUrls: [ './kitchen-ingredients.component.scss' ],
   host: {
     class: 'page-container'
   }

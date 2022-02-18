@@ -1,5 +1,5 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {DialogIngredientComponent} from "./ingredient.component";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DialogIngredientComponent } from './ingredient.component';
 
 describe('DialogIngredientComponent', () => {
   let component: DialogIngredientComponent;
@@ -7,7 +7,7 @@ describe('DialogIngredientComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DialogIngredientComponent]
+      declarations: [ DialogIngredientComponent ]
     })
       .compileComponents();
   });

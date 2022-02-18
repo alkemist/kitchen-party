@@ -1,4 +1,4 @@
-import {EnumHelper} from '../tools/enum.helper';
+import { EnumHelper } from '../tools/enum.helper';
 
 export enum SweetSaltyEnum {
   sweet = 'Sweet', // Sucré

@@ -1,31 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
-import {DialogService} from 'primeng/dynamicdialog';
-import {DietTypeEnum} from '../../../../enums/diet-type.enum';
-import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
-import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {KeyObject} from '../../../../models/other.model';
-import {IngredientService} from '../../../../services/ingredient.service';
-import {RecipeService} from '../../../../services/recipe.service';
-import {SearchService} from '../../../../services/search.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {UploadService} from '../../../../services/upload.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
-import {slugify} from '../../../../tools/slugify';
-import {DialogIngredientComponent} from '../../../dialogs/ingredient/ingredient.component';
-import {RecipeIngredientFormInterface} from "../../../../interfaces/recipe-ingredient-form.interface";
-import {RecipeModel} from "../../../../models/recipe.model";
-import {RecipeInterface} from "../../../../interfaces/recipe.interface";
-import {RecipeIngredientModel} from "../../../../models/recipe-ingredient.model";
-import {recipeIngredientValidator} from "../../../../validators/recipeIngredient.validator";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { DietTypeEnum } from '../../../../enums/diet-type.enum';
+import { MeasureUnitEnum, MeasureUnits } from '../../../../enums/measure-unit.enum';
+import { RecipeTypeEnum } from '../../../../enums/recipe-type.enum';
+import { RecipeIngredientFormInterface } from '../../../../interfaces/recipe-ingredient-form.interface';
+import { RecipeInterface } from '../../../../interfaces/recipe.interface';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { KeyObject } from '../../../../models/other.model';
+import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { IngredientService } from '../../../../services/ingredient.service';
+import { RecipeService } from '../../../../services/recipe.service';
+import { SearchService } from '../../../../services/search.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { UploadService } from '../../../../services/upload.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
+import { slugify } from '../../../../tools/slugify';
+import { recipeIngredientValidator } from '../../../../validators/recipeIngredient.validator';
+import { DialogIngredientComponent } from '../../../dialogs/ingredient/ingredient.component';
 
 @Component({
   selector: 'app-back-recipe',
   templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.scss'],
+  styleUrls: [ './recipe.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -71,8 +71,8 @@ export class RecipeComponent implements OnInit {
       preparationDuration: new FormControl('', []),
       waitingDuration: new FormControl('', []),
       nbSlices: new FormControl('', []),
-      recipeIngredientForms: new FormArray([RecipeComponent.createRecipeIngredient()], []),
-      instructions: new FormArray([RecipeComponent.createInstructionRow()], [])
+      recipeIngredientForms: new FormArray([ RecipeComponent.createRecipeIngredient() ], []),
+      instructions: new FormArray([ RecipeComponent.createInstructionRow() ], [])
     });
   }
 
@@ -104,20 +104,20 @@ export class RecipeComponent implements OnInit {
     return new FormGroup({
       quantity: new FormControl('', []),
       unitOrMeasure: new FormControl('', []),
-      ingredientOrRecipe: new FormControl('', [Validators.required]),
+      ingredientOrRecipe: new FormControl('', [ Validators.required ]),
       optionCarne: new FormControl('', []),
       optionVege: new FormControl('', []),
       optionVegan: new FormControl('', []),
-    }, [recipeIngredientValidator()]);
+    }, [ recipeIngredientValidator() ]);
   }
 
   private static createInstructionRow(): FormControl {
-    return new FormControl('', [Validators.required]);
+    return new FormControl('', [ Validators.required ]);
   }
 
   ngOnInit(): void {
     this.route.data.subscribe(
-      (async (data) => {
+      (async (data: any) => {
         this.ingredientTranslation = await this.translatorService.instant('Ingredients');
         this.recipeTypes = await this.translatorService.translateLabels(EnumHelper.enumToObject(RecipeTypeEnum));
         this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitEnum));
@@ -184,7 +184,7 @@ export class RecipeComponent implements OnInit {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
     const recipeIngredient = RecipeIngredientModel.format(recipeIngredientData, this.measureUnits);
     const recipeIngredientString = RecipeIngredientModel.recipeIngredientToString(recipeIngredient, this.measureUnits);
-    return recipeIngredientString !== '' ? recipeIngredientString : `${this.ingredientTranslation} ${i + 1}`;
+    return recipeIngredientString !== '' ? recipeIngredientString : `${ this.ingredientTranslation } ${ i + 1 }`;
   }
 
   async handleSubmit(): Promise<void> {
@@ -228,7 +228,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated recipe`)
         });
-        await this.routerService.navigate(['/', 'recipe', recipe!.slug]);
+        await this.routerService.navigate([ '/', 'recipe', recipe!.slug ]);
       });
     } else {
       this.recipeService.add(localDocument).then(async recipe => {
@@ -237,7 +237,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added recipe`)
         });
-        this.routerService.navigate(['/', 'recipe', recipe!.slug]);
+        this.routerService.navigate([ '/', 'recipe', recipe!.slug ]);
       });
     }
   }
@@ -253,7 +253,7 @@ export class RecipeComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          this.routerService.navigate(['/', 'recipes']);
+          this.routerService.navigate([ '/', 'recipes' ]);
         });
       }
     });

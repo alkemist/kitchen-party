@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
-import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
-import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
-import {RecipeModel} from '../../../../models/recipe.model';
-import {TranslatorService} from '../../../../services/translator.service';
-import {UserService} from '../../../../services/user.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
-import {UserInterface} from "../../../../interfaces/user.interface";
-import {RecipeInterface} from "../../../../interfaces/recipe.interface";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MeasureUnitEnum } from '../../../../enums/measure-unit.enum';
+import { RecipeTypeEnum } from '../../../../enums/recipe-type.enum';
+import { RecipeInterface } from '../../../../interfaces/recipe.interface';
+import { UserInterface } from '../../../../interfaces/user.interface';
+import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { TranslatorService } from '../../../../services/translator.service';
+import { UserService } from '../../../../services/user.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
 
 @Component({
   selector: 'app-front-recipe',
   templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.scss'],
+  styleUrls: [ './recipe.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -34,7 +34,7 @@ export class FrontRecipeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.route.data.subscribe(
-      (data => {
+      ((data: any) => {
         if (data && data['recipe']) {
           this.recipe = data['recipe'];
 

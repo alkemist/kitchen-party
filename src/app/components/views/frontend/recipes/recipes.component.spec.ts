@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {FrontRecipesComponent} from './recipes.component';
+import { FrontRecipesComponent } from './recipes.component';
 
 describe('FrontRecipesComponent', () => {
   let component: FrontRecipesComponent;
@@ -8,7 +8,7 @@ describe('FrontRecipesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FrontRecipesComponent]
+      declarations: [ FrontRecipesComponent ]
     })
       .compileComponents();
   });

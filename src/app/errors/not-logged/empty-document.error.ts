@@ -1,4 +1,4 @@
-import {DataObjectInterface} from "../../interfaces/data-object.interface";
+import { DataObjectInterface } from '../../interfaces/data-object.interface';
 
 export class EmptyDocument<T extends DataObjectInterface> extends Error {
   private readonly collectionName: string;
@@ -6,6 +6,6 @@ export class EmptyDocument<T extends DataObjectInterface> extends Error {
   constructor(collectionName: string) {
     super();
     this.collectionName = collectionName;
-    this.message = `Document ["${this.collectionName}"] is empty`;
+    this.message = `Document ["${ this.collectionName }"] is empty`;
   }
 }

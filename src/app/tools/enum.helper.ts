@@ -1,5 +1,5 @@
-import {KeyObject} from '../models/other.model';
-import {ArrayHelper} from './array.helper';
+import { KeyObject } from '../models/other.model';
+import { ArrayHelper } from './array.helper';
 
 export abstract class EnumHelper {
   static enumToAssociativArray(enumValue: any): { [key: string]: string } {

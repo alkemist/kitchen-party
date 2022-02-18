@@ -1,6 +1,6 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import {DataObjectInterface, FirestoreService} from './firestore.service';
+import { DataObjectInterface, FirestoreService } from './firestore.service';
 
 describe('FirestoreService', () => {
   let service: FirestoreService<DataObject>;

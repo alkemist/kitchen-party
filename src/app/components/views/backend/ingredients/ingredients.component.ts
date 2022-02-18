@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {IngredientService} from '../../../../services/ingredient.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IngredientTypeEnum } from '../../../../enums/ingredient-type.enum';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { IngredientService } from '../../../../services/ingredient.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
 
 @Component({
   selector: 'app-back-ingredients',
   templateUrl: './ingredients.component.html',
-  styleUrls: ['./ingredients.component.scss'],
+  styleUrls: [ './ingredients.component.scss' ],
   host: {
     class: 'page-container'
   }

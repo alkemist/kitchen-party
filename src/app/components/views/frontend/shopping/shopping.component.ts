@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MeasureUnitEnum} from '../../../../enums/measure-unit.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {RecipeIngredientModel} from '../../../../models/recipe-ingredient.model';
-import {RecipeModel} from '../../../../models/recipe.model';
-import {KitchenIngredientService} from '../../../../services/kitchen.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MeasureUnitEnum } from '../../../../enums/measure-unit.enum';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { KitchenIngredientService } from '../../../../services/kitchen.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
 
 interface CartElement {
   inKitchen: boolean,
@@ -18,7 +18,7 @@ interface CartElement {
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: ['./shopping.component.scss'],
+  styleUrls: [ './shopping.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -48,7 +48,7 @@ export class ShoppingComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(
-      (async data => {
+      (async (data: any) => {
         if (data && data['recipes']) {
           this.recipes = data['recipes'];
 
@@ -143,11 +143,11 @@ export class ShoppingComponent implements OnInit {
 
         if (count) {
           if (quantityType == '') {
-            quantities.push(`${count}`);
+            quantities.push(`${ count }`);
           } else if (quantityType == 'undefined') {
             quantities.push(`∞`);
           } else {
-            quantities.push(`${count} ${quantityType}`);
+            quantities.push(`${ count } ${ quantityType }`);
           }
         }
       }

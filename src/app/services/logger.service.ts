@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {LoggedError} from "../errors/logged.error";
-import {environment} from "../../environments/environment";
-import StackdriverErrorReporter from "stackdriver-errors-js"
+import { Injectable } from '@angular/core';
+import StackdriverErrorReporter from 'stackdriver-errors-js';
+import { environment } from '../../environments/environment';
+import { LoggedError } from '../errors/logged.error';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class LoggerService {
     if (environment.production) {
       this.errorHandler.report(error);
     } else {
-      console.error(`-- Error [${error.type}]`, error.message, error.context);
+      console.error(`-- Error [${ error.type }]`, error.message, error.context);
     }
   }
 }

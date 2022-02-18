@@ -1,7 +1,7 @@
-import {FirestoreDataConverter} from "@firebase/firestore";
-import {DocumentSnapshot, SnapshotOptions} from "firebase/firestore";
-import {KitchenIngredientModel} from "../models/kitchen-ingredient.model";
-import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
+import { FirestoreDataConverter } from '@firebase/firestore';
+import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
+import { KitchenIngredientModel } from '../models/kitchen-ingredient.model';
 
 export const kitchenIngredientConverter: FirestoreDataConverter<KitchenIngredientModel> = {
   toFirestore: (kitchenIngredient: KitchenIngredientModel) => {

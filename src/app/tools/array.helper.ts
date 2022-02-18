@@ -1,4 +1,4 @@
-import {slugify} from "./slugify";
+import { slugify } from './slugify';
 
 export abstract class ArrayHelper {
   static sortBy<T>(array: T[], field: string): T[] {

@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {FrontRecipeComponent} from './recipe.component';
+import { FrontRecipeComponent } from './recipe.component';
 
 describe('FrontRecipeComponent', () => {
   let component: FrontRecipeComponent;
@@ -8,7 +8,7 @@ describe('FrontRecipeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FrontRecipeComponent]
+      declarations: [ FrontRecipeComponent ]
     })
       .compileComponents();
   });

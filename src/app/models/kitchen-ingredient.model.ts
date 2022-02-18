@@ -1,5 +1,5 @@
-import {RecipeIngredientModel} from "./recipe-ingredient.model";
-import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
+import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
+import { RecipeIngredientModel } from './recipe-ingredient.model';
 
 
 export class KitchenIngredientModel extends RecipeIngredientModel implements KitchenIngredientInterface {

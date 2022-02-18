@@ -1,7 +1,7 @@
-import {FirestoreDataConverter} from "@firebase/firestore";
-import {DocumentSnapshot, SnapshotOptions} from "firebase/firestore";
-import {RecipeModel} from "../models/recipe.model";
-import {RecipeInterface} from "../interfaces/recipe.interface";
+import { FirestoreDataConverter } from '@firebase/firestore';
+import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import { RecipeInterface } from '../interfaces/recipe.interface';
+import { RecipeModel } from '../models/recipe.model';
 
 export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
   toFirestore: (recipe: RecipeModel): RecipeInterface => {

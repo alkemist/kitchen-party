@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {Select} from '@ngxs/store';
-import {first, Observable} from 'rxjs';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {TranslatorService} from '../../../../services/translator.service';
-import {IngredientState} from '../../../../store/ingredient.state';
-import {MonthCalendarInterface} from "../../../../interfaces/month-calendar.interface";
-import {IngredientInterface} from "../../../../interfaces/ingredient.interface";
+import { Component, OnInit } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { first, Observable } from 'rxjs';
+import { IngredientInterface } from '../../../../interfaces/ingredient.interface';
+import { MonthCalendarInterface } from '../../../../interfaces/month-calendar.interface';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { TranslatorService } from '../../../../services/translator.service';
+import { IngredientState } from '../../../../stores/ingredient.state';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+  styleUrls: [ './calendar.component.scss' ],
   host: {
     class: 'page-container'
   }

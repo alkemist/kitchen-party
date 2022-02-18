@@ -1,4 +1,4 @@
-import {LoggedError} from "../logged.error";
+import { LoggedError } from '../logged.error';
 
 export class NotFoundUploadError extends LoggedError<string> {
   override type = 'Upload';

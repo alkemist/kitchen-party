@@ -1,4 +1,4 @@
-import {TranslatorPipe} from './translator.pipe';
+import { TranslatorPipe } from './translator.pipe';
 
 describe('TranslatorPipe', () => {
   it('create an instance', () => {

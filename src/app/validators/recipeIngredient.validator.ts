@@ -1,5 +1,5 @@
-import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
-import {RecipeIngredientFormInterface} from "../interfaces/recipe-ingredient-form.interface";
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { RecipeIngredientFormInterface } from '../interfaces/recipe-ingredient-form.interface';
 
 export function recipeIngredientValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

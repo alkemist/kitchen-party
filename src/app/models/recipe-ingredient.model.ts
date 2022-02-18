@@ -1,12 +1,12 @@
-import {DietTypeEnum} from '../enums/diet-type.enum';
-import {IngredientTypeEnum} from '../enums/ingredient-type.enum';
-import {MeasureUnitEnum, MeasureUnits} from '../enums/measure-unit.enum';
-import {KeyObject} from './other.model';
-import {RecipeModel} from './recipe.model';
-import {RecipeIngredientInterface} from "../interfaces/recipe-ingredient.interface";
-import {HasIngredient} from "../interfaces/has-ingredient.interface";
-import {RecipeIngredientFormInterface} from "../interfaces/recipe-ingredient-form.interface";
-import {IngredientModel} from "./ingredient.model";
+import { DietTypeEnum } from '../enums/diet-type.enum';
+import { IngredientTypeEnum } from '../enums/ingredient-type.enum';
+import { MeasureUnitEnum, MeasureUnits } from '../enums/measure-unit.enum';
+import { HasIngredient } from '../interfaces/has-ingredient.interface';
+import { RecipeIngredientFormInterface } from '../interfaces/recipe-ingredient-form.interface';
+import { RecipeIngredientInterface } from '../interfaces/recipe-ingredient.interface';
+import { IngredientModel } from './ingredient.model';
+import { KeyObject } from './other.model';
+import { RecipeModel } from './recipe.model';
 
 
 export class RecipeIngredientModel implements RecipeIngredientInterface {
@@ -133,7 +133,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     return recipeIngredient.quantity && unitOrMeasure
-      ? `${recipeIngredient.quantity} ${unitOrMeasure}`
+      ? `${ recipeIngredient.quantity } ${ unitOrMeasure }`
       : recipeIngredient.quantity?.toString();
   }
 
@@ -149,9 +149,9 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     if (quantityDescription && ingredientOrRecipe) {
-      str = `${ingredientOrRecipe}:  ${quantityDescription}`;
+      str = `${ ingredientOrRecipe }:  ${ quantityDescription }`;
     } else if (ingredientOrRecipe) {
-      str = `${ingredientOrRecipe}`;
+      str = `${ ingredientOrRecipe }`;
     }
 
     return str;

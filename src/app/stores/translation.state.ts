@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {FillTranslations} from "./translation.action";
-import {KeyValueInterface} from "../interfaces/key-value.interface";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { KeyValueInterface } from '../interfaces/key-value.interface';
+import { FillTranslations } from './translation.action';
 
 
 export class TranslationStateModel {

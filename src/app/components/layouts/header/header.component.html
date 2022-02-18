@@ -1,8 +1,8 @@
 <p-toolbar *ngIf="!hideHeader" [formGroup]="form" class="header">
   <!-- Begin Toolbar Left -->
   <div class="p-toolbar-group-left">
-    <button *ngIf="loading" class="p-button-rounded p-button-text"
-            [disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
+    <button *ngIf="loading" [disabled]="true"
+            class="p-button-rounded p-button-text" icon="pi pi-spin pi-spinner" pButton></button>
     <button (click)="menu.toggle($event)" *ngIf="!loading" class="p-button-rounded p-button-text"
             icon="pi pi-align-justify" pButton pRipple
             type="button"></button>
@@ -30,7 +30,7 @@
   <!-- End Toolbar Middle -->
 
   <!-- Begin Sidebar -->
-  <p-sidebar [(visible)]="sidebarShowed" position="right" [fullScreen]="true">
+  <p-sidebar [(visible)]="sidebarShowed" [fullScreen]="true" position="right">
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
                   [showClear]="true" formControlName="diet"
@@ -76,7 +76,7 @@
   <!-- End Sidebar -->
 
   <!-- Begin Toolbar Right -->
-  <div class="p-toolbar-group-right" *ngIf="showFilters">
+  <div *ngIf="showFilters" class="p-toolbar-group-right">
     <button (click)="sidebarShowed = true" class="p-button-rounded p-button-text"
             icon="pi pi-chevron-left"
             pButton
@@ -84,4 +84,4 @@
   </div>
   <!-- End Toolbar Right -->
 </p-toolbar>
-<p-tieredMenu #menu [model]="menuItems" [popup]="true" [autoDisplay]="true"></p-tieredMenu>
+<p-tieredMenu #menu [autoDisplay]="true" [model]="menuItems" [popup]="true"></p-tieredMenu>

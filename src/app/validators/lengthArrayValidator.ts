@@ -1,4 +1,4 @@
-import {AbstractControl, ValidatorFn} from "@angular/forms";
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export function lengthArrayValidator(length: number): ValidatorFn {
   return (c: AbstractControl): { [p: string]: any } | null => {
@@ -16,5 +16,5 @@ export function lengthArrayValidator(length: number): ValidatorFn {
     }
 
     return {'lengthArray': {valid: false}};
-  }
+  };
 }

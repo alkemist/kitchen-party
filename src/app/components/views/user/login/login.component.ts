@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {UserService} from '../../../../services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: [ './login.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       try {
         await this.userService.login(this.form.value.email, this.form.value.password)
           .then(() => {
-            this.router.navigate(['/', 'logged']);
+            this.router.navigate([ '/', 'logged' ]);
           });
       } catch (error) {
         this.error = (error as Error).message;

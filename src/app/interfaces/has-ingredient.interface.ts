@@ -1,4 +1,4 @@
-import {IngredientInterface} from "./ingredient.interface";
+import { IngredientInterface } from './ingredient.interface';
 
 export interface HasIngredient {
   ingredient?: IngredientInterface;

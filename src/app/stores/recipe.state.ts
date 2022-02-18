@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {KeyObject} from '../models/other.model';
-import {AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe} from './recipe.action';
-import {RecipeInterface} from "../interfaces/recipe.interface";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
+import { RecipeInterface } from '../interfaces/recipe.interface';
+import { KeyObject } from '../models/other.model';
+import { AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe } from './recipe.action';
 
 export class RecipeStateModel {
   all: RecipeInterface[] = [];
@@ -60,7 +60,7 @@ export class RecipeState {
   add({setState}: StateContext<RecipeStateModel>, {payload}: AddRecipe) {
     setState(
       patch({
-        all: append([payload])
+        all: append([ payload ])
       })
     );
   }

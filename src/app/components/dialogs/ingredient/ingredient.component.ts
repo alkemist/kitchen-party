@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from 'primeng/api';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {IngredientTypeEnum} from '../../../enums/ingredient-type.enum';
-import {IngredientModel} from '../../../models/ingredient.model';
-import {IngredientService} from '../../../services/ingredient.service';
-import {TranslatorService} from '../../../services/translator.service';
-import {EnumHelper} from '../../../tools/enum.helper';
-import {slugify} from '../../../tools/slugify';
-import {IngredientInterface} from "../../../interfaces/ingredient.interface";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { IngredientTypeEnum } from '../../../enums/ingredient-type.enum';
+import { IngredientInterface } from '../../../interfaces/ingredient.interface';
+import { IngredientModel } from '../../../models/ingredient.model';
+import { IngredientService } from '../../../services/ingredient.service';
+import { TranslatorService } from '../../../services/translator.service';
+import { EnumHelper } from '../../../tools/enum.helper';
+import { slugify } from '../../../tools/slugify';
 
 @Component({
   selector: 'app-dialog-ingredient',
   templateUrl: './ingredient.component.html',
-  styleUrls: ['./ingredient.component.scss']
+  styleUrls: [ './ingredient.component.scss' ]
 })
 export class DialogIngredientComponent implements OnInit {
   ingredient = new IngredientModel({} as IngredientInterface);

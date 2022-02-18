@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {IngredientTypeEnum} from '../../../../enums/ingredient-type.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {IngredientService} from '../../../../services/ingredient.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
-import {slugify} from '../../../../tools/slugify';
-import {IngredientInterface} from "../../../../interfaces/ingredient.interface";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { IngredientTypeEnum } from '../../../../enums/ingredient-type.enum';
+import { IngredientInterface } from '../../../../interfaces/ingredient.interface';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { IngredientService } from '../../../../services/ingredient.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
+import { slugify } from '../../../../tools/slugify';
 
 @Component({
   selector: 'app-back-ingredient',
   templateUrl: './ingredient.component.html',
-  styleUrls: ['./ingredient.component.scss'],
+  styleUrls: [ './ingredient.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -59,7 +59,7 @@ export class IngredientComponent implements OnInit {
 
   loadData() {
     this.route.data.subscribe(
-      (data => {
+      ((data: any) => {
         if (data && data['ingredient']) {
           this.ingredient = data['ingredient'];
           this.form.patchValue(this.ingredient);
@@ -111,7 +111,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
+        await this.routerService.navigate([ '/', 'ingredient', this.ingredient.slug ]);
       });
     } else {
       await this.ingredientService.add(localDocument).then(async ingredient => {
@@ -121,7 +121,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate(['/', 'ingredient', this.ingredient.slug]);
+        await this.routerService.navigate([ '/', 'ingredient', this.ingredient.slug ]);
       });
     }
   }
@@ -136,7 +136,7 @@ export class IngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate(['/', 'ingredients']);
+          await this.routerService.navigate([ '/', 'ingredients' ]);
         });
       }
     });

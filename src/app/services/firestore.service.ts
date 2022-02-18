@@ -1,4 +1,4 @@
-import {FirestoreDataConverter} from '@firebase/firestore';
+import { FirestoreDataConverter } from '@firebase/firestore';
 import {
   collection,
   CollectionReference,
@@ -12,16 +12,16 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import {Observable} from 'rxjs';
-import {generatePushID} from '../tools/generate-pushid';
-import {slugify} from '../tools/slugify';
-import {LoggerService} from './logger.service';
-import {TimeHelper} from "../tools/time.helper";
-import {DataObjectInterface} from "../interfaces/data-object.interface";
-import {EmptyDocument} from "../errors/not-logged/empty-document.error";
-import {DatabaseError} from "../errors/logged/database.error";
-import {QuotaExceededError} from "../errors/logged/quota-exceeded.error";
-import {DocumentNotFound} from "../errors/not-logged/document-not-found.error";
+import { Observable } from 'rxjs';
+import { DatabaseError } from '../errors/logged/database.error';
+import { QuotaExceededError } from '../errors/logged/quota-exceeded.error';
+import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
+import { EmptyDocument } from '../errors/not-logged/empty-document.error';
+import { DataObjectInterface } from '../interfaces/data-object.interface';
+import { generatePushID } from '../tools/generate-pushid';
+import { slugify } from '../tools/slugify';
+import { TimeHelper } from '../tools/time.helper';
+import { LoggerService } from './logger.service';
 
 
 export abstract class FirestoreService<T extends DataObjectInterface> {
@@ -44,7 +44,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
    * Liste des requètes en cours, la clé étant la signature de la requète
    * @protected
    */
-  protected promises: { [key: string]: Promise<T[]> | null } = {}
+  protected promises: { [key: string]: Promise<T[]> | null } = {};
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
@@ -80,7 +80,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       dataObjectDocument = await this.findOneBySlug(slug);
     } catch (e) {
       if (!(e instanceof DocumentNotFound)) {
-        this.loggerService.error(new DatabaseError((e as Error).message, {slug}))
+        this.loggerService.error(new DatabaseError((e as Error).message, {slug}));
       }
     }
     return !!dataObjectDocument;

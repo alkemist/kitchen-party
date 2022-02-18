@@ -1,22 +1,22 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
-import {Select} from '@ngxs/store';
+import { Component, HostBinding, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router, RoutesRecognized } from '@angular/router';
+import { Select } from '@ngxs/store';
 import NoSleep from 'nosleep.js';
-import {MenuItem} from 'primeng/api';
-import {Observable} from 'rxjs';
-import {DietTypeEnum} from '../../../enums/diet-type.enum';
-import {RecipeTypeEnum} from '../../../enums/recipe-type.enum';
-import {SweetSaltyEnum} from '../../../enums/sweet-salty.enum';
-import {IngredientModel} from '../../../models/ingredient.model';
-import {FilterService} from '../../../services/filter.service';
-import {IngredientService} from '../../../services/ingredient.service';
-import {ShoppingService} from '../../../services/shopping.service';
-import {TranslatorService} from '../../../services/translator.service';
-import {UserService} from '../../../services/user.service';
-import {IngredientState} from '../../../store/ingredient.state';
-import {EnumHelper} from '../../../tools/enum.helper';
-import {UserInterface} from "../../../interfaces/user.interface";
+import { MenuItem } from 'primeng/api';
+import { Observable } from 'rxjs';
+import { DietTypeEnum } from '../../../enums/diet-type.enum';
+import { RecipeTypeEnum } from '../../../enums/recipe-type.enum';
+import { SweetSaltyEnum } from '../../../enums/sweet-salty.enum';
+import { UserInterface } from '../../../interfaces/user.interface';
+import { IngredientModel } from '../../../models/ingredient.model';
+import { FilterService } from '../../../services/filter.service';
+import { IngredientService } from '../../../services/ingredient.service';
+import { ShoppingService } from '../../../services/shopping.service';
+import { TranslatorService } from '../../../services/translator.service';
+import { UserService } from '../../../services/user.service';
+import { IngredientState } from '../../../stores/ingredient.state';
+import { EnumHelper } from '../../../tools/enum.helper';
 
 export interface ToolbarFilters {
   diet: string,
@@ -30,7 +30,7 @@ export interface ToolbarFilters {
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
   ingredients: IngredientModel[] = [];
@@ -77,10 +77,10 @@ export class HeaderComponent implements OnInit {
     private filterService: FilterService,
     private shoppingService: ShoppingService,
   ) {
-    this.ingredients$?.subscribe(ingredients => {
+    this.ingredients$?.subscribe((ingredients: IngredientModel[]) => {
       this.ingredients = ingredients;
     });
-    this.router.events.subscribe((data) => {
+    this.router.events.subscribe((data: any) => {
       if (data instanceof RoutesRecognized) {
         const routeData = data.state.root.firstChild?.data;
         if (routeData && typeof routeData !== 'undefined') {
@@ -149,7 +149,7 @@ export class HeaderComponent implements OnInit {
       this.loggedUser = loggedUser;
 
       if (loggedUser) {
-        this.menuItems = this.menuItems.concat([{
+        this.menuItems = this.menuItems.concat([ {
           label: 'Ingredients',
           items: [
             {
@@ -202,10 +202,10 @@ export class HeaderComponent implements OnInit {
             icon: 'pi pi-sign-out',
             command: () => {
               this.userService.logout().then(() => {
-                this.router.navigate(['/']);
+                this.router.navigate([ '/' ]);
               });
             }
-          }]);
+          } ]);
       } else {
         this.menuItems = this.menuItems.concat([
           {
@@ -216,7 +216,7 @@ export class HeaderComponent implements OnInit {
             icon: 'pi pi-user',
             routerLink: '/login',
           }
-        ])
+        ]);
       }
 
 
@@ -254,6 +254,6 @@ export class HeaderComponent implements OnInit {
 
   gotoShopping() {
     this.sidebarShowed = false;
-    this.router.navigate(['/', 'shopping', this.selectedRecipes.join(',')]);
+    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]);
   }
 }

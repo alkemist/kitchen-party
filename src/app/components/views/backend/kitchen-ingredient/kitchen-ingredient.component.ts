@@ -1,25 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {MeasureUnitEnum, MeasureUnits} from '../../../../enums/measure-unit.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {RecipeModel} from '../../../../models/recipe.model';
-import {KitchenIngredientService} from '../../../../services/kitchen.service';
-import {RecipeService} from '../../../../services/recipe.service';
-import {SearchService} from '../../../../services/search.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
-import {slugify} from '../../../../tools/slugify';
-import {RecipeIngredientFormInterface} from "../../../../interfaces/recipe-ingredient-form.interface";
-import {KitchenIngredientInterface} from "../../../../interfaces/kitchen-ingredient.interface";
-import {KitchenIngredientModel} from "../../../../models/kitchen-ingredient.model";
-import {RecipeIngredientModel} from "../../../../models/recipe-ingredient.model";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { MeasureUnitEnum, MeasureUnits } from '../../../../enums/measure-unit.enum';
+import { KitchenIngredientInterface } from '../../../../interfaces/kitchen-ingredient.interface';
+import { RecipeIngredientFormInterface } from '../../../../interfaces/recipe-ingredient-form.interface';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { KitchenIngredientModel } from '../../../../models/kitchen-ingredient.model';
+import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { KitchenIngredientService } from '../../../../services/kitchen.service';
+import { RecipeService } from '../../../../services/recipe.service';
+import { SearchService } from '../../../../services/search.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
+import { slugify } from '../../../../tools/slugify';
 
 @Component({
   selector: 'app-kitchen-ingredient',
   templateUrl: './kitchen-ingredient.component.html',
-  styleUrls: ['./kitchen-ingredient.component.scss'],
+  styleUrls: [ './kitchen-ingredient.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -46,13 +46,13 @@ export class KitchenIngredientComponent implements OnInit {
     this.form = new FormGroup({
       quantity: new FormControl('', []),
       unitOrMeasure: new FormControl('', []),
-      ingredientOrRecipe: new FormControl('', [Validators.required]),
+      ingredientOrRecipe: new FormControl('', [ Validators.required ]),
     });
   }
 
   ngOnInit() {
     this.route.data.subscribe(
-      async data => {
+      async (data: any) => {
         this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitEnum));
         this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
 
@@ -116,7 +116,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate(['/', 'kitchen-ingredient', this.kitchenIngredient.slug]);
+        await this.routerService.navigate([ '/', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     } else {
       await this.kitchenIngredientService.add(localDocument).then(async ingredient => {
@@ -126,7 +126,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate(['/', 'kitchen-ingredient', this.kitchenIngredient.slug]);
+        await this.routerService.navigate([ '/', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     }
   }
@@ -141,7 +141,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate(['/', 'kitchen-ingredients']);
+          await this.routerService.navigate([ '/', 'kitchen-ingredients' ]);
         });
       }
     });

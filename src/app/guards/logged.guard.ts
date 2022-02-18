@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {UserService} from '../services/user.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class LoggedGuard implements CanActivate {
     if (await this.userService.getLoggedUser() !== undefined) {
       return true;
     } else {
-      return this.router.navigate(['/', 'login']);
+      return this.router.navigate([ '/', 'login' ]);
     }
   }
 

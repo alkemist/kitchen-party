@@ -1,12 +1,12 @@
-import {Component, OnDestroy} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {PrimeNGConfig} from 'primeng/api';
-import {Subscription} from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { PrimeNGConfig } from 'primeng/api';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnDestroy {
   subscription: Subscription;

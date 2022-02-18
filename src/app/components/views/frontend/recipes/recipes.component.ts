@@ -1,22 +1,22 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {DietTypes} from '../../../../enums/diet-type.enum';
-import {RecipeTypes} from '../../../../enums/recipe-type.enum';
-import {SweetSalty, SweetSaltyEnum} from '../../../../enums/sweet-salty.enum';
-import {IngredientModel} from '../../../../models/ingredient.model';
-import {RecipeModel} from '../../../../models/recipe.model';
-import {FilterService} from '../../../../services/filter.service';
-import {IngredientService} from '../../../../services/ingredient.service';
-import {RecipeService} from '../../../../services/recipe.service';
-import {ShoppingService} from '../../../../services/shopping.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {ToolbarFilters} from '../../../layouts/header/header.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { DietTypes } from '../../../../enums/diet-type.enum';
+import { RecipeTypes } from '../../../../enums/recipe-type.enum';
+import { SweetSalty, SweetSaltyEnum } from '../../../../enums/sweet-salty.enum';
+import { IngredientModel } from '../../../../models/ingredient.model';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { FilterService } from '../../../../services/filter.service';
+import { IngredientService } from '../../../../services/ingredient.service';
+import { RecipeService } from '../../../../services/recipe.service';
+import { ShoppingService } from '../../../../services/shopping.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { ToolbarFilters } from '../../../layouts/header/header.component';
 
 @Component({
   selector: 'app-front-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.scss'],
+  styleUrls: [ './recipes.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -109,7 +109,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   }
 
   gotoRecipe(recipe: RecipeModel) {
-    const route = ['/', recipe.slug];
+    const route = [ '/', recipe.slug ];
     if (this.filterService.filters.get('diet')?.value) {
       route.push(this.filterService.filters.get('diet')?.value);
     }
@@ -123,7 +123,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     if (filters.name) {
       this.filterSummary.push({
         key: 'name',
-        value: `${await this.translatorService.instant('Name contain')} "${filters.name}"`
+        value: `${ await this.translatorService.instant('Name contain') } "${ filters.name }"`
       });
     }
     if (filters.diet) {

@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {RecipeTypeEnum} from '../../../../enums/recipe-type.enum';
-import {RecipeModel} from '../../../../models/recipe.model';
-import {RecipeService} from '../../../../services/recipe.service';
-import {TranslatorService} from '../../../../services/translator.service';
-import {EnumHelper} from '../../../../tools/enum.helper';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RecipeTypeEnum } from '../../../../enums/recipe-type.enum';
+import { RecipeModel } from '../../../../models/recipe.model';
+import { RecipeService } from '../../../../services/recipe.service';
+import { TranslatorService } from '../../../../services/translator.service';
+import { EnumHelper } from '../../../../tools/enum.helper';
 
 @Component({
   selector: 'app-back-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.scss'],
+  styleUrls: [ './recipes.component.scss' ],
   host: {
     class: 'page-container'
   }

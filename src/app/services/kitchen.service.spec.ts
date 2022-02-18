@@ -1,5 +1,5 @@
-import {TestBed} from '@angular/core/testing';
-import {KitchenIngredientService} from "./kitchen.service";
+import { TestBed } from '@angular/core/testing';
+import { KitchenIngredientService } from './kitchen.service';
 
 
 describe('KitchenIngredientService', () => {

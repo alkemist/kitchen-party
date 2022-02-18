@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
+import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
-} from "./kitchen.action";
-import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
+} from './kitchen.action';
 
 export class KitchenIngredientStateModel {
   all: KitchenIngredientInterface[] = [];
@@ -53,7 +53,7 @@ export class KitchenIngredientState {
   add({setState}: StateContext<KitchenIngredientStateModel>, {payload}: AddKitchenIngredient) {
     setState(
       patch({
-        all: append([payload])
+        all: append([ payload ])
       })
     );
   }

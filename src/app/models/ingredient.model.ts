@@ -1,9 +1,9 @@
-import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
-import {DateHelper} from '../tools/date.helper';
-import {slugify} from '../tools/slugify';
-import {RecipeModel} from './recipe.model';
-import {IngredientInterface} from "../interfaces/ingredient.interface";
-import {IngredientFormInterface} from "../interfaces/ingredient-form.interface";
+import { IngredientTypeEnum, IngredientTypes } from '../enums/ingredient-type.enum';
+import { IngredientFormInterface } from '../interfaces/ingredient-form.interface';
+import { IngredientInterface } from '../interfaces/ingredient.interface';
+import { DateHelper } from '../tools/date.helper';
+import { slugify } from '../tools/slugify';
+import { RecipeModel } from './recipe.model';
 
 
 export class IngredientModel implements IngredientInterface {

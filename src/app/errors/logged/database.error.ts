@@ -1,5 +1,5 @@
-import {LoggedError} from "../logged.error";
-import {DataObjectInterface} from "../../interfaces/data-object.interface";
+import { DataObjectInterface } from '../../interfaces/data-object.interface';
+import { LoggedError } from '../logged.error';
 
 export class DatabaseError extends LoggedError<DataObjectInterface> {
   override type = 'Database';

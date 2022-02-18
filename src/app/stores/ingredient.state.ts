@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
-import {AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient} from './ingredient.action';
-import {IngredientInterface} from "../interfaces/ingredient.interface";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
+import { IngredientTypeEnum, IngredientTypes } from '../enums/ingredient-type.enum';
+import { IngredientInterface } from '../interfaces/ingredient.interface';
+import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
 export class IngredientStateModel {
   all: IngredientInterface[] = [];
@@ -57,7 +57,7 @@ export class IngredientState {
   add({setState}: StateContext<IngredientStateModel>, {payload}: AddIngredient) {
     setState(
       patch({
-        all: append([payload])
+        all: append([ payload ])
       })
     );
   }
