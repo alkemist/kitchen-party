@@ -15,7 +15,7 @@ export class AppComponent implements OnDestroy {
     this.translateService.setDefaultLang('fr');
     this.translateService.use('fr');
 
-    this.subscription = this.translateService.stream('primeng').subscribe(data => {
+    this.subscription = this.translateService.stream('primeng').subscribe((data: any) => {
       this.primeNgConfig.setTranslation(data);
     });
   }
