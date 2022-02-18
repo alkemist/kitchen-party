@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, BrowserTransferStateModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ServiceWorkerModule} from '@angular/service-worker';
 import {RippleModule} from 'primeng/ripple';
 import {AppComponent} from './app.component';
 import {DialogIngredientComponent} from './components/dialogs/ingredient/ingredient.component';
@@ -28,6 +29,7 @@ import {StoringModule} from './modules/storing.module';
 import {TranslatingModule} from './modules/translating.module';
 import {UiModule} from './modules/ui.module';
 import {TranslatorPipe} from './pipes/translator.pipe';
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -51,7 +53,12 @@ import {TranslatorPipe} from './pipes/translator.pipe';
     CalendarComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({appId: 'angular-starter'}),
+    BrowserTransferStateModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     FormsModule,
     RoutingModule,
     BrowserAnimationsModule,

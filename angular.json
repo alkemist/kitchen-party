@@ -26,11 +26,16 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "nosleep.js",
+              "stackdriver-errors-js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/favicon.png",
               "src/humans.txt",
               "src/manifest.json",
+              "src/manifest.webmanifest",
               "src/robots.txt",
               "src/assets",
               "src/_redirects"
@@ -38,7 +43,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
