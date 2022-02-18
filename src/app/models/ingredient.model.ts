@@ -1,31 +1,10 @@
-import {FirestoreDataConverter} from '@firebase/firestore';
-import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {IngredientTypeEnum, IngredientTypes} from '../enums/ingredient-type.enum';
-import {DataObject} from '../services/firestore.service';
 import {DateHelper} from '../tools/date.helper';
 import {slugify} from '../tools/slugify';
-import {RecipeInterface, RecipeModel} from './recipe.model';
+import {RecipeModel} from './recipe.model';
+import {IngredientInterface} from "../interfaces/ingredient.interface";
+import {IngredientFormInterface} from "../interfaces/ingredient-form.interface";
 
-
-export interface IngredientInterface extends DataObject {
-  id?: string,
-  name: string,
-  slug: string,
-
-  monthBegin?: number | null,
-  monthEnd?: number | null,
-
-  type: IngredientTypeEnum,
-  isLiquid?: boolean | null,
-
-  recipeId?: string,
-  recipe?: RecipeInterface
-}
-
-export interface IngredientFormInterface extends IngredientInterface {
-  dateBegin: Date;
-  dateEnd: Date;
-}
 
 export class IngredientModel implements IngredientInterface {
   static saltyNames = [
@@ -194,22 +173,3 @@ export class IngredientModel implements IngredientInterface {
   }
 }
 
-export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = {
-  toFirestore: (ingredient: IngredientModel): IngredientInterface => {
-    const ingredientFields = {...ingredient};
-    ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
-    if (!ingredientFields.monthBegin) {
-      ingredientFields.monthBegin = null;
-    }
-    if (!ingredientFields.monthEnd) {
-      ingredientFields.monthEnd = null;
-    }
-
-    delete ingredientFields.id;
-    delete ingredientFields.recipe;
-    return ingredientFields;
-  },
-  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    return snapshot.data(options) as IngredientInterface;
-  }
-};

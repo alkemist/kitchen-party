@@ -4,27 +4,20 @@ import {Select, Store} from '@ngxs/store';
 import {first, Observable} from 'rxjs';
 import {KeyObject} from '../models/other.model';
 import {FillTranslations} from '../store/translation.action';
-import {Translation, TranslationState} from '../store/translation.state';
+import {TranslationState} from '../store/translation.state';
 import {TimeHelper} from '../tools/time.helper';
-import {LoggedError, LoggerService} from './logger.service';
-
-export class TranslationError extends LoggedError<string> {
-  override type = 'Translation';
-  override message = 'Missing translation';
-
-  constructor(public override context: string) {
-    super();
-  }
-}
+import {LoggerService} from './logger.service';
+import {TranslationError} from "../errors/logged/translation-error.service";
+import {KeyValueInterface} from "../interfaces/key-value.interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslatorService {
   @Select(TranslationState.lastUpdated) lastUpdated$?: Observable<Date>;
-  @Select(TranslationState.all) protected all$?: Observable<Translation[]>;
+  @Select(TranslationState.all) protected all$?: Observable<KeyValueInterface[]>;
   protected lastUpdated?: Date;
-  private all: Translation[] = [];
+  private all: KeyValueInterface[] = [];
   private lang = 'fr';
   private promise: Promise<void> | undefined;
 
@@ -81,7 +74,7 @@ export class TranslatorService {
         const keys = Object.keys(translations);
         const values = Object.values(translations);
         this.all = keys.map((value, index) => {
-          return {key: value, value: values[index]} as Translation;
+          return {key: value, value: values[index]} as KeyValueInterface;
         });
 
         this.store.dispatch(new FillTranslations(this.all));

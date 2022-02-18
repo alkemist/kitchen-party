@@ -1,4 +1,4 @@
-import {RecipeInterface} from '../models/recipe.model';
+import {RecipeInterface} from "../interfaces/recipe.interface";
 
 export class AddRecipe {
   static readonly type = '[Recipe] Add';

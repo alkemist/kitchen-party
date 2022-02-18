@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {MissingTranslationHandler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppMissingTranslationHandler} from '../handlers/missing-translation.handler';
+import {LoggerService} from "../services/logger.service";
 
 @NgModule({
   imports: [
@@ -10,7 +11,8 @@ import {AppMissingTranslationHandler} from '../handlers/missing-translation.hand
     TranslateModule.forRoot({
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
-        useClass: AppMissingTranslationHandler
+        useClass: AppMissingTranslationHandler,
+        deps: [LoggerService]
       },
       loader: {
         provide: TranslateLoader,

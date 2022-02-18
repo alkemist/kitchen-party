@@ -15,8 +15,8 @@ import {ShoppingService} from '../../../services/shopping.service';
 import {TranslatorService} from '../../../services/translator.service';
 import {UserService} from '../../../services/user.service';
 import {IngredientState} from '../../../store/ingredient.state';
-import {UserInterface} from '../../../store/user.state';
 import {EnumHelper} from '../../../tools/enum.helper';
+import {UserInterface} from "../../../interfaces/user.interface";
 
 export interface ToolbarFilters {
   diet: string,
@@ -37,68 +37,23 @@ export class HeaderComponent implements OnInit {
   loggedUser?: UserInterface;
   menuItems: MenuItem[] = [
     {
-      label: 'Ingredients',
-      items: [
-        {
-          label: 'List',
-          icon: 'pi pi-list',
-          routerLink: '/ingredients',
-        },
-        {
-          label: 'New',
-          icon: 'pi pi-plus',
-          routerLink: '/ingredient'
-        },
-      ]
+      label: 'Home',
+      icon: 'pi pi-home',
+      routerLink: '/'
     },
     {
-      label: 'Recipes',
-      items: [
-        {
-          label: 'List',
-          icon: 'pi pi-list',
-          routerLink: '/recipes',
-        },
-        {
-          label: 'New',
-          icon: 'pi pi-plus',
-          routerLink: '/recipe'
-        },
-      ]
+      label: 'Calendar',
+      icon: 'pi pi-calendar',
+      routerLink: '/calendar'
     },
     {
-      label: 'Kitchen',
-      items: [
-        {
-          label: 'List',
-          icon: 'pi pi-list',
-          routerLink: '/kitchen-ingredients',
-        },
-        {
-          label: 'New',
-          icon: 'pi pi-plus',
-          routerLink: '/kitchen-ingredient'
-        },
-      ]
+      label: 'About',
+      icon: 'pi pi-question',
+      routerLink: '/about'
     },
     {
-      label: 'User',
-      items: [
-        {
-          label: 'Home',
-          icon: 'pi pi-home',
-          routerLink: '/'
-        },
-        {
-          label: 'Sign out',
-          icon: 'pi pi-sign-out',
-          command: () => {
-            this.userService.logout().then(() => {
-              this.router.navigate(['/']);
-            });
-          }
-        }]
-    }
+      separator: true
+    },
   ];
   title: string = '';
 
@@ -110,7 +65,7 @@ export class HeaderComponent implements OnInit {
   dietTypes = EnumHelper.enumToObject(DietTypeEnum);
   sweetOrSalty = EnumHelper.enumToObject(SweetSaltyEnum);
   loading = true;
-  menuShowed = false;
+  sidebarShowed = false;
   noSleep = new NoSleep();
   @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
 
@@ -189,18 +144,95 @@ export class HeaderComponent implements OnInit {
     this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
     this.sweetOrSalty = await this.translatorService.translateLabels(this.sweetOrSalty);
 
-    for (const item of this.menuItems) {
-      item.label = await this.translatorService.instant(item.label!);
-      if (item.items) {
-        for (const subItem of item.items) {
-          subItem.label = await this.translatorService.instant(subItem.label!);
-        }
-      }
-    }
-
-    await this.userService.getLoggedUser((loggedUser) => {
+    await this.userService.getLoggedUser(async (loggedUser) => {
       this.loading = false;
       this.loggedUser = loggedUser;
+
+      if (loggedUser) {
+        this.menuItems = this.menuItems.concat([{
+          label: 'Ingredients',
+          items: [
+            {
+              label: 'List',
+              icon: 'pi pi-list',
+              routerLink: '/ingredients',
+            },
+            {
+              label: 'New',
+              icon: 'pi pi-plus',
+              routerLink: '/ingredient'
+            },
+          ]
+        },
+          {
+            label: 'Recipes',
+            items: [
+              {
+                label: 'List',
+                icon: 'pi pi-list',
+                routerLink: '/recipes',
+              },
+              {
+                label: 'New',
+                icon: 'pi pi-plus',
+                routerLink: '/recipe'
+              },
+            ]
+          },
+          {
+            label: 'Kitchen',
+            items: [
+              {
+                label: 'List',
+                icon: 'pi pi-list',
+                routerLink: '/kitchen-ingredients',
+              },
+              {
+                label: 'New',
+                icon: 'pi pi-plus',
+                routerLink: '/kitchen-ingredient'
+              },
+            ]
+          },
+          {
+            separator: true
+          },
+          {
+            label: 'Sign out',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.userService.logout().then(() => {
+                this.router.navigate(['/']);
+              });
+            }
+          }]);
+      } else {
+        this.menuItems = this.menuItems.concat([
+          {
+            separator: true
+          },
+          {
+            label: 'Log in',
+            icon: 'pi pi-user',
+            routerLink: '/login',
+          }
+        ])
+      }
+
+
+      for (const item of this.menuItems) {
+        if (item.label) {
+          item.label = await this.translatorService.instant(item.label);
+        }
+        if (item.items) {
+          for (const subItem of item.items) {
+            if (subItem.label) {
+              subItem.label = await this.translatorService.instant(subItem.label);
+            }
+          }
+        }
+      }
+
       this.ingredientService.getListOrRefresh().then(ingredients => {
         this.ingredients = ingredients;
         this.loading = false;
@@ -209,7 +241,7 @@ export class HeaderComponent implements OnInit {
   }
 
   resetFilters() {
-    this.menuShowed = false;
+    this.sidebarShowed = false;
     this.form.patchValue({
       name: '',
       diet: '',
@@ -221,7 +253,7 @@ export class HeaderComponent implements OnInit {
   }
 
   gotoShopping() {
-    this.menuShowed = false;
+    this.sidebarShowed = false;
     this.router.navigate(['/', 'shopping', this.selectedRecipes.join(',')]);
   }
 }

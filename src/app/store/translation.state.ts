@@ -1,14 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {FillTranslations} from "./translation.action";
+import {KeyValueInterface} from "../interfaces/key-value.interface";
 
-export interface Translation {
-  key: string,
-  value: string
-}
 
 export class TranslationStateModel {
-  all: Translation[] = [];
+  all: KeyValueInterface[] = [];
   lastUpdated?: Date = undefined;
 }
 
@@ -28,7 +25,7 @@ export class TranslationState {
   }
 
   @Selector()
-  static all(state: TranslationStateModel): Translation[] {
+  static all(state: TranslationStateModel): KeyValueInterface[] {
     return state.all;
   }
 

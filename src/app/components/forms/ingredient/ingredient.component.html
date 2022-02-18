@@ -62,18 +62,18 @@
       </div>
     </div>
 
-    <div class="field grid" *ngIf="isFruitsOrVegetables">
+    <div *ngIf="isFruitsOrVegetables" class="field grid">
       <label class="col-12 mb-2 md:col-4 md:mb-0"
              translate="">Season</label>
       <div class="col-6 md:col-4">
-        <p-calendar formControlName="dateBegin" view="month"
-                    dateFormat="MM" [showIcon]="true"
-                    styleClass="inputfield w-full"></p-calendar>
+        <p-calendar [showIcon]="true" dateFormat="MM"
+                    formControlName="dateBegin" styleClass="inputfield w-full"
+                    view="month"></p-calendar>
       </div>
       <div class="col-6 md:col-4">
-        <p-calendar formControlName="dateEnd" view="month"
-                    dateFormat="MM" [showIcon]="true"
-                    styleClass="inputfield w-full"></p-calendar>
+        <p-calendar [showIcon]="true" dateFormat="MM"
+                    formControlName="dateEnd" styleClass="inputfield w-full"
+                    view="month"></p-calendar>
       </div>
     </div>
 

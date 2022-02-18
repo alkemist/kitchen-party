@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {append, patch, removeItem, updateItem} from '@ngxs/store/operators';
-import {KitchenIngredientInterface} from "../models/kitchen-ingredient.model";
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
 } from "./kitchen.action";
+import {KitchenIngredientInterface} from "../interfaces/kitchen-ingredient.interface";
 
 export class KitchenIngredientStateModel {
   all: KitchenIngredientInterface[] = [];

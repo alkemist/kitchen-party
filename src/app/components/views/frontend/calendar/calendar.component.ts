@@ -1,14 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Select} from '@ngxs/store';
 import {first, Observable} from 'rxjs';
-import {IngredientInterface, IngredientModel} from '../../../../models/ingredient.model';
+import {IngredientModel} from '../../../../models/ingredient.model';
 import {TranslatorService} from '../../../../services/translator.service';
 import {IngredientState} from '../../../../store/ingredient.state';
-
-interface MonthCalendar {
-  name: string,
-  ingredients: (IngredientModel | null)[],
-}
+import {MonthCalendarInterface} from "../../../../interfaces/month-calendar.interface";
+import {IngredientInterface} from "../../../../interfaces/ingredient.interface";
 
 @Component({
   selector: 'app-calendar',
@@ -19,7 +16,7 @@ interface MonthCalendar {
   }
 })
 export class CalendarComponent implements OnInit {
-  months: MonthCalendar[] = [];
+  months: MonthCalendarInterface[] = [];
   @Select(IngredientState.fruitsOrVegetables) protected fruitsOrVegetables$?: Observable<IngredientInterface[]>;
 
   constructor(private translatorService: TranslatorService) {

@@ -1,25 +1,10 @@
 import {Injectable} from '@angular/core';
 import {FirebaseStorage, getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import {LoggedError, LoggerService} from "./logger.service";
+import {LoggerService} from "./logger.service";
 import {generatePushID} from "../tools/generate-pushid";
+import {NotFoundUploadError} from "../errors/logged/not-found-upload.error";
+import {UploadError} from "../errors/logged/upload.error";
 
-export class NotFoundUploadError extends LoggedError<string> {
-  override type = 'Upload';
-  override message = 'File not found';
-
-  constructor(public override context: string) {
-    super();
-  }
-}
-
-export class UploadError extends LoggedError<File> {
-  override type = 'Upload';
-  override message = 'Upload error';
-
-  constructor(public override context: File) {
-    super();
-  }
-}
 
 @Injectable({
   providedIn: 'root'

@@ -12,7 +12,6 @@ import {DialogService, DynamicDialogModule} from 'primeng/dynamicdialog';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
-import {MenuModule} from 'primeng/menu';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {PasswordModule} from 'primeng/password';
 import {SelectButtonModule} from 'primeng/selectbutton';
@@ -28,6 +27,7 @@ import {TooltipModule} from "primeng/tooltip";
 import {CheckboxModule} from "primeng/checkbox";
 import {CalendarModule} from "primeng/calendar";
 import {ChipModule} from "primeng/chip";
+import {TieredMenuModule} from "primeng/tieredmenu";
 
 const modules = [
   ToolbarModule,
@@ -35,7 +35,6 @@ const modules = [
   InputTextModule,
   CardModule,
   ButtonModule,
-  MenuModule,
   DropdownModule,
   SelectButtonModule,
   TableModule,
@@ -57,7 +56,8 @@ const modules = [
   TooltipModule,
   CheckboxModule,
   CalendarModule,
-  ChipModule
+  ChipModule,
+  TieredMenuModule
 ];
 
 @NgModule({
