@@ -77,18 +77,18 @@
       </div>
     </div>
     <div *ngIf="!isKitchen" class="field grid col-12 md:col-12">
-      <div class="field col-3 md:col-3">
+      <div class="field col-12 md:col-3">
         <label translate="">Options</label>
       </div>
-      <div class="field field-checkbox col-3 md:col-3">
+      <div class="field field-checkbox col-4 md:col-3">
         <p-checkbox [binary]="true" formControlName="optionCarne" inputId="optionCarne"></p-checkbox>
         <label for="optionCarne" translate="">Meat</label>
       </div>
-      <div class="field field-checkbox col-3 md:col-3">
+      <div class="field field-checkbox col-4 md:col-3">
         <p-checkbox [binary]="true" formControlName="optionVege" inputId="optionVege"></p-checkbox>
         <label for="optionVege" translate="">Vege</label>
       </div>
-      <div class="field field-checkbox col-3 md:col-3">
+      <div class="field field-checkbox col-4 md:col-3">
         <p-checkbox [binary]="true" formControlName="optionVegan" inputId="optionVegan"></p-checkbox>
         <label for="optionVegan" translate="">Vegan</label>
       </div>
