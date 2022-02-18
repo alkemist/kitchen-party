@@ -28,16 +28,16 @@ export class UserService {
     return new Promise<UserInterface | undefined>((resolve) => {
       const unsubscribe = onAuthStateChanged(this.auth, (userFirebase) => {
         const userData = userFirebase as unknown as UserInterface;
-        const user: UserInterface = {
+        const user: UserInterface | undefined = userData ? {
           email: userData.email!,
           createdAt: userData.createdAt!,
           lastLoginAt: userData.lastLoginAt!,
-        };
+        } : undefined;
 
         if (!event) {
           unsubscribe();
         } else {
-          return event(userData ? user : undefined);
+          return event(user);
         }
 
         if (!userData) {

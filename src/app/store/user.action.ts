@@ -3,7 +3,7 @@ import {UserInterface} from "../interfaces/user.interface";
 export class UserLogin {
   static readonly type = '[User] Login';
 
-  constructor(public payload: UserInterface) {
+  constructor(public payload: UserInterface | undefined) {
   }
 }
 

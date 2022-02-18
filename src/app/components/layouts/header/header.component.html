@@ -1,10 +1,11 @@
 <p-toolbar *ngIf="!hideHeader" [formGroup]="form" class="header">
   <!-- Begin Toolbar Left -->
   <div class="p-toolbar-group-left">
-    <button (click)="menuShowed = true" *ngIf="showFilters" class="p-button-rounded p-button-text"
-            icon="pi pi-chevron-right"
-            pButton
-            pRipple></button>
+    <button *ngIf="loading" class="p-button-rounded p-button-text"
+            [disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
+    <button (click)="menu.toggle($event)" *ngIf="!loading" class="p-button-rounded p-button-text"
+            icon="pi pi-align-justify" pButton pRipple
+            type="button"></button>
     <a [class.mobile-hidden]="!showAppName" [class.showFilters]="showFilters" [routerLink]="['/']" class="header__logo">
       Kitchen Party
     </a>
@@ -29,7 +30,7 @@
   <!-- End Toolbar Middle -->
 
   <!-- Begin Sidebar -->
-  <p-sidebar [(visible)]="menuShowed" [blockScroll]="true">
+  <p-sidebar [(visible)]="sidebarShowed" position="right" [fullScreen]="true">
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
                   [showClear]="true" formControlName="diet"
@@ -49,7 +50,9 @@
 				<label for="float-input" translate="">Sweet / Salty</label>
 		</span>
     <span class="p-float-label">
-      <p-multiSelect [emptyFilterMessage]="'No ingredients found.' | translate" [options]="ingredients"
+      <p-multiSelect [autofocusFilter]="true"
+                     [emptyFilterMessage]="'No ingredients found.' | translate"
+                     [options]="ingredients"
                      [selectionLimit]="3"
                      formControlName="ingredients" optionLabel="name" optionValue="id">
       </p-multiSelect>
@@ -57,9 +60,9 @@
     </span>
     <span class="p-float-label">
       <p-toggleButton [offLabel]="'In season' | translate" [onLabel]="'In season' | translate"
-                      formControlName="isSeason"></p-toggleButton>
+                      formControlName="isSeason" styleClass="w-full"></p-toggleButton>
     </span>
-    <div class="flex flex-row justify-content-between" style="padding: 20px 0 20px;">
+    <div class="flex flex-row justify-content-between" style="margin-top: 40px;">
       <button (click)="resetFilters()" [label]="'Clear filters' | translate"
               class="p-button-rounded p-button-text"
               icon="pi pi-times" pButton
@@ -69,31 +72,16 @@
               icon="pi pi-shopping-cart" pButton
               pRipple type="button"></button>
     </div>
-    <div class="flex flex-row justify-content-between" style="padding:0;">
-      <a (click)="menuShowed = false" [label]="'About' | translate"
-         [routerLink]="['/', 'about']" class="p-button-rounded p-button-text" icon="pi pi-question" pButton pRipple></a>
-    </div>
-    <div class="flex flex-row justify-content-between" style="padding:0;margin-top: 10px;">
-      <a (click)="menuShowed = false" [label]="'Calendar' | translate"
-         [routerLink]="['/', 'calendar']" class="p-button-rounded p-button-text" icon="pi pi-calendar" pButton
-         pRipple></a>
-    </div>
   </p-sidebar>
   <!-- End Sidebar -->
 
   <!-- Begin Toolbar Right -->
-  <div class="p-toolbar-group-right">
-    <button *ngIf="loading"
-            [disabled]="true" icon="pi pi-spin pi-spinner" pButton></button>
-    <a *ngIf="!loading && !loggedUser" [label]="'Log in' | translate" [routerLink]="['/', 'login']"
-       class="mobile-hidden"
-       icon="pi pi-user" pButton
-       pRipple></a>
-    <a *ngIf="!loading && !loggedUser" [routerLink]="['/', 'login']" class="mobile-showed" icon="pi pi-user" pButton
-       pRipple></a>
-    <button (click)="menu.toggle($event)" *ngIf="loggedUser" icon="pi pi-align-justify" pButton pRipple
-            type="button"></button>
-    <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
+  <div class="p-toolbar-group-right" *ngIf="showFilters">
+    <button (click)="sidebarShowed = true" class="p-button-rounded p-button-text"
+            icon="pi pi-chevron-left"
+            pButton
+            pRipple></button>
   </div>
   <!-- End Toolbar Right -->
 </p-toolbar>
+<p-tieredMenu #menu [model]="menuItems" [popup]="true"></p-tieredMenu>

@@ -1,8 +1,8 @@
-import {DataObjectInterface} from "../services/firestore.service";
 import {IngredientTypeEnum} from "../enums/ingredient-type.enum";
-import {RecipeInterface} from "../models/recipe.model";
+import {RecipeInterface} from "./recipe.interface";
+import {DataObjectInterface} from "./data-object.interface";
 
-export interface IngredientInterface extends DataObject {
+export interface IngredientInterface extends DataObjectInterface {
   id?: string,
   name: string,
   slug: string,

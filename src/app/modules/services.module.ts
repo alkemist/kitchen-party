@@ -8,6 +8,7 @@ import {SearchService} from "../services/search.service";
 import {ShoppingService} from "../services/shopping.service";
 import {FilterService} from "primeng/api";
 import {TranslatorService} from "../services/translator.service";
+import {LoggerService} from "../services/logger.service";
 
 @NgModule({
   providers: [
@@ -19,7 +20,8 @@ import {TranslatorService} from "../services/translator.service";
     ShoppingService,
     FilterService,
     TranslatorService,
-    KitchenIngredientService
+    KitchenIngredientService,
+    LoggerService,
   ],
 })
 export class ServicesModule {

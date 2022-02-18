@@ -1,6 +1,6 @@
 import {RecipeTypeEnum} from "../enums/recipe-type.enum";
-import {RecipeIngredientInterface} from "../models/recipe-ingredient.model";
 import {DataObjectInterface} from "./data-object.interface";
+import {RecipeIngredientInterface} from "./recipe-ingredient.interface";
 
 export interface RecipeInterface extends DataObjectInterface {
   id?: string,

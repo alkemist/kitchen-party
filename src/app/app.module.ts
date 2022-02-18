@@ -11,9 +11,7 @@ import {HeaderComponent} from './components/layouts/header/header.component';
 import {IngredientComponent} from './components/views/backend/ingredient/ingredient.component';
 import {IngredientsComponent} from './components/views/backend/ingredients/ingredients.component';
 import {KitchenIngredientComponent} from './components/views/backend/kitchen-ingredient/kitchen-ingredient.component';
-import {
-  KitchenIngredientsComponent
-} from './components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
+import {KitchenIngredientsComponent} from './components/views/backend/kitchen-ingredients/kitchen-ingredients.component';
 import {RecipeComponent} from './components/views/backend/recipe/recipe.component';
 import {RecipesComponent} from './components/views/backend/recipes/recipes.component';
 import {AboutComponent} from './components/views/frontend/about/about.component';

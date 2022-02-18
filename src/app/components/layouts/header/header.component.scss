@@ -9,6 +9,12 @@
   }
 
   border-radius: 0;
+
+  .p-toolbar-group-left {
+    button {
+      margin-right: 10px;
+    }
+  }
 }
 
 .header__logo {
@@ -17,10 +23,6 @@
 
   @media screen and (max-width: $mobile-breakpoint-width) {
     font-size: $font-size-s;
-  }
-
-  @media screen and (max-width: $mobile-tablet-width) {
-    margin-left: 10px;
   }
 
   &.showFilter {
