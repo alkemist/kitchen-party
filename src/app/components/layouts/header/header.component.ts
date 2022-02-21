@@ -2,7 +2,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router, RoutesRecognized } from '@angular/router';
 import { Select } from '@ngxs/store';
-import NoSleep from 'nosleep.js';
+//import { default as NoSleep } from 'nosleep.js';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { DietTypeEnum } from '../../../enums/diet-type.enum';
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit {
   sweetOrSalty = EnumHelper.enumToObject(SweetSaltyEnum);
   loading = true;
   sidebarShowed = false;
-  noSleep = new NoSleep();
+  //noSleep = new NoSleep();
   @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
 
   constructor(
@@ -108,7 +108,7 @@ export class HeaderComponent implements OnInit {
             this.showAppName = false;
           }
 
-          if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
+          /*if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
             if (!this.noSleep.isEnabled) {
               this.noSleep.enable();
             }
@@ -116,7 +116,7 @@ export class HeaderComponent implements OnInit {
             if (this.noSleep.isEnabled) {
               this.noSleep.disable();
             }
-          }
+          }*/
 
         }
       }
