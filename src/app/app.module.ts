@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { RippleModule } from 'primeng/ripple';
@@ -53,8 +52,6 @@ import { TranslatorPipe } from './pipes/translator.pipe';
     CalendarComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({appId: 'angular-starter'}),
-    BrowserTransferStateModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000'
