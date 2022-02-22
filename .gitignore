@@ -36,4 +36,5 @@ Thumbs.db
 # Environnement variables
 .env
 src/environments/
+src/environments/*
 src/environments/environment.ts
