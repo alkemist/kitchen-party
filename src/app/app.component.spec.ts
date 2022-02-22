@@ -56,7 +56,7 @@ describe('AppComponent', () => {
   describe('constructor', () => {
     const translations = [ 'translations' ];
 
-    it('should construct', () => {
+    it('should config primeNg', () => {
       streamObservable.next(translations);
       expect(primeNgConfigSpy).toBeCalledWith(translations);
     });

@@ -62,47 +62,6 @@ export class HeaderComponent implements OnInit {
     this.ingredients$?.subscribe((ingredients: IngredientModel[]) => {
       this.ingredients = ingredients;
     });
-    this.router.events.subscribe((data: any) => {
-      if (data instanceof RoutesRecognized) {
-        const routeData = data.state.root.firstChild?.data;
-        if (routeData && typeof routeData !== 'undefined') {
-          if (typeof routeData['title'] === 'string') {
-            this.title = routeData['title'];
-          } else {
-            this.title = '';
-          }
-
-          if (typeof routeData['showFilters'] === 'boolean') {
-            this.showFilters = routeData['showFilters'];
-          } else {
-            this.showFilters = false;
-          }
-
-          if (typeof routeData['hideHeader'] === 'boolean') {
-            this.hideHeader = routeData['hideHeader'];
-          } else {
-            this.hideHeader = false;
-          }
-
-          if (typeof routeData['showAppName'] === 'boolean') {
-            this.showAppName = routeData['showAppName'];
-          } else {
-            this.showAppName = false;
-          }
-
-          if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
-            if (!this.noSleep.isEnabled) {
-              this.noSleep.enable().then();
-            }
-          } else {
-            if (this.noSleep.isEnabled) {
-              this.noSleep.disable();
-            }
-          }
-
-        }
-      }
-    });
     this.filterService.filters = new FormGroup({
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
@@ -122,6 +81,15 @@ export class HeaderComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.router.events.subscribe((route: any) => {
+      if (route instanceof RoutesRecognized) {
+        const routeData = route.state.root.firstChild?.data;
+        if (routeData && typeof routeData !== 'undefined') {
+          this.initVariables(routeData);
+        }
+      }
+    });
+
     this.dietTypes = await this.translatorService.translateLabels(this.dietTypes);
     this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
     this.sweetOrSalty = await this.translatorService.translateLabels(this.sweetOrSalty);
@@ -150,6 +118,42 @@ export class HeaderComponent implements OnInit {
       this.ingredients = ingredients;
       this.loading = false;
     });
+  }
+
+  private initVariables(routeData: any) {
+    if (typeof routeData['title'] === 'string') {
+      this.title = routeData['title'];
+    } else {
+      this.title = '';
+    }
+
+    if (typeof routeData['showFilters'] === 'boolean') {
+      this.showFilters = routeData['showFilters'];
+    } else {
+      this.showFilters = false;
+    }
+
+    if (typeof routeData['hideHeader'] === 'boolean') {
+      this.hideHeader = routeData['hideHeader'];
+    } else {
+      this.hideHeader = false;
+    }
+
+    if (typeof routeData['showAppName'] === 'boolean') {
+      this.showAppName = routeData['showAppName'];
+    } else {
+      this.showAppName = false;
+    }
+
+    if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
+      if (!this.noSleep.isEnabled) {
+        this.noSleep.enable().then();
+      }
+    } else {
+      if (this.noSleep.isEnabled) {
+        this.noSleep.disable();
+      }
+    }
   }
 
   async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {

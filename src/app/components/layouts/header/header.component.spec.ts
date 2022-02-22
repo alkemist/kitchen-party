@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { MockModule, MockProvider } from 'ng-mocks';
 import { MenuItem } from 'primeng/api';
@@ -11,6 +11,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Subject } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
 import { UserInterface } from '../../../interfaces/user.interface';
 import { IngredientModel } from '../../../models/ingredient.model';
@@ -31,6 +32,12 @@ describe('HeaderComponent', () => {
   let shoppingServiceMock: ShoppingService;
   let ingredientServiceMock: IngredientService;
   let translatorServiceMock: TranslatorService;
+  const routerEventsSubject = new Subject<RouterEvent>();
+
+  const routerMock = {
+    navigate: jest.fn(),
+    events: routerEventsSubject.asObservable(),
+  };
 
   //let store: Store;
   //let ingredientsSelectorSubject: Subject<IngredientInterface[]>;
@@ -39,7 +46,6 @@ describe('HeaderComponent', () => {
     //await NgxsTestBed.configureTestingStates({states: [ IngredientState ]});
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
         ReactiveFormsModule,
         MockModule(TranslatingModule),
         MockModule(ToolbarModule),
@@ -61,6 +67,8 @@ describe('HeaderComponent', () => {
           MockProvider(IngredientService),
           MockProvider(FilterService),
           MockProvider(ShoppingService),
+          //MockProvider(Router, routerMock)
+          {provide: Router, useValue: routerMock}
         ],
     })
       .compileComponents();
@@ -92,10 +100,49 @@ describe('HeaderComponent', () => {
   describe('ngOnInit', () => {
     const ingredients = [ 'ingredient1', 'ingredient2' ] as unknown as IngredientModel[];
     let translateMenuSpy: jest.SpyInstance;
+    let noSleepSpy: jest.SpyInstance;
 
     beforeEach(() => {
       jest.spyOn(ingredientServiceMock, 'getListOrRefresh').mockReturnValue(Promise.resolve(ingredients));
       translateMenuSpy = jest.spyOn(component, 'translateMenu');
+      noSleepSpy = jest.spyOn(component, 'noSleep', 'get');
+    });
+
+    it('should init variables', async () => {
+      await component.ngOnInit();
+      let title;
+      let state;
+
+      title = 'test';
+      state = {
+        root: {
+          firstChild: {
+            data: {
+              title: title,
+              showFilters: true,
+              hideHeader: true,
+              showAppName: true,
+              enableNoSleep: true,
+            }
+          }
+        }
+      } as unknown as RouterStateSnapshot;
+      routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
+      expect(component.title).toBe(title);
+      expect(component.showFilters).toBe(true);
+      expect(component.hideHeader).toBe(true);
+      expect(component.showAppName).toBe(true);
+      expect(noSleepSpy).toBeCalled();
+
+
+      title = '';
+      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
+      routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
+      expect(component.title).toBe(title);
+      expect(component.showFilters).toBe(false);
+      expect(component.hideHeader).toBe(false);
+      expect(component.showAppName).toBe(false);
+      expect(noSleepSpy).not.toBeCalled();
     });
 
     it('should build not logged menu', async () => {
@@ -163,9 +210,20 @@ describe('HeaderComponent', () => {
     });
   });
 
-  it('should translate menu', () => {
+  it('should translate menu', async () => {
     const translatedLabel = 'test translated';
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
-    expect(component.translateMenu([ {label: 'test'} ])).toEqual([ {label: translatedLabel} ]);
+    expect(await component.translateMenu([ {
+      label: 'test',
+      items: [ {label: 'test'} ]
+    } ])).toEqual([ {label: translatedLabel} ]);
+  });
+
+  it('should go to shopping', async () => {
+
+  });
+
+  it('should log out', async () => {
+
   });
 });
