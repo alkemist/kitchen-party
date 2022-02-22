@@ -1,3 +1,4 @@
+import 'jest-extended';
 import 'jest-preset-angular/setup-jest';
 
 Object.defineProperty(window, 'CSS', {value: null});
@@ -6,7 +7,7 @@ Object.defineProperty(window, 'getComputedStyle', {
   value: () => {
     return {
       display: 'none',
-      appearance: ['-webkit-appearance'],
+      appearance: [ '-webkit-appearance' ],
     };
   },
 });

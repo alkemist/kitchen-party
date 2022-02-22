@@ -20,7 +20,9 @@ const states = [
 
 @NgModule({
   imports: [
-    NgxsModule.forRoot(states),
+    NgxsModule.forRoot(states, {
+      developmentMode: !environment.production
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,
     }),

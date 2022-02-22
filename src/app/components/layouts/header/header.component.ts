@@ -5,6 +5,7 @@ import { Select } from '@ngxs/store';
 import { default as NoSleep } from 'nosleep.js';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
 import { DietTypeEnum } from '../../../enums/diet-type.enum';
 import { RecipeTypeEnum } from '../../../enums/recipe-type.enum';
 import { SweetSaltyEnum } from '../../../enums/sweet-salty.enum';
@@ -35,26 +36,7 @@ export interface ToolbarFilters {
 export class HeaderComponent implements OnInit {
   ingredients: IngredientModel[] = [];
   loggedUser?: UserInterface;
-  menuItems: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home',
-      routerLink: '/'
-    },
-    {
-      label: 'Calendar',
-      icon: 'pi pi-calendar',
-      routerLink: '/calendar'
-    },
-    {
-      label: 'About',
-      icon: 'pi pi-question',
-      routerLink: '/about'
-    },
-    {
-      separator: true
-    },
-  ];
+  menuItems: MenuItem[] = [];
   title: string = '';
 
   showFilters = false;
@@ -110,7 +92,7 @@ export class HeaderComponent implements OnInit {
 
           if (typeof routeData['enableNoSleep'] === 'boolean' && routeData['enableNoSleep']) {
             if (!this.noSleep.isEnabled) {
-              this.noSleep.enable();
+              this.noSleep.enable().then();
             }
           } else {
             if (this.noSleep.isEnabled) {
@@ -148,96 +130,48 @@ export class HeaderComponent implements OnInit {
       this.loading = false;
       this.loggedUser = loggedUser;
 
+      let menuItems: MenuItem[] = baseMenuItems;
       if (loggedUser) {
-        this.menuItems = this.menuItems.concat([ {
-          label: 'Ingredients',
-          items: [
-            {
-              label: 'List',
-              icon: 'pi pi-list',
-              routerLink: '/ingredients',
-            },
-            {
-              label: 'New',
-              icon: 'pi pi-plus',
-              routerLink: '/ingredient'
-            },
-          ]
-        },
-          {
-            label: 'Recipes',
-            items: [
-              {
-                label: 'List',
-                icon: 'pi pi-list',
-                routerLink: '/recipes',
-              },
-              {
-                label: 'New',
-                icon: 'pi pi-plus',
-                routerLink: '/recipe'
-              },
-            ]
-          },
-          {
-            label: 'Kitchen',
-            items: [
-              {
-                label: 'List',
-                icon: 'pi pi-list',
-                routerLink: '/kitchen-ingredients',
-              },
-              {
-                label: 'New',
-                icon: 'pi pi-plus',
-                routerLink: '/kitchen-ingredient'
-              },
-            ]
-          },
-          {
-            separator: true
-          },
-          {
-            label: 'Sign out',
-            icon: 'pi pi-sign-out',
-            command: () => {
-              this.userService.logout().then(() => {
-                this.router.navigate([ '/' ]);
-              });
-            }
-          } ]);
+        menuItems = menuItems.concat(loggedMenuItems);
+        menuItems.push({
+          ...logoutMenuItem, command: () => {
+            this.userService.logout().then(() => {
+              this.router.navigate([ '/' ]);
+            });
+          }
+        });
       } else {
-        this.menuItems = this.menuItems.concat([
-          {
-            separator: true
-          },
-          {
-            label: 'Log in',
-            icon: 'pi pi-user',
-            routerLink: '/login',
-          }
-        ]);
+        menuItems = menuItems.concat(notLoggedMenuItems);
       }
-
-
-      for (const item of this.menuItems) {
-        if (item.label) {
-          item.label = await this.translatorService.instant(item.label);
-        }
-        if (item.items) {
-          for (const subItem of item.items) {
-            if (subItem.label) {
-              subItem.label = await this.translatorService.instant(subItem.label);
-            }
-          }
-        }
-      }
-
-      this.ingredientService.getListOrRefresh().then(ingredients => {
-        this.ingredients = ingredients;
-        this.loading = false;
-      });
+      this.menuItems = await this.translateMenu(menuItems);
     });
+
+    this.ingredientService.getListOrRefresh().then(ingredients => {
+      this.ingredients = ingredients;
+      this.loading = false;
+    });
+  }
+
+  async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
+    const menuItemsTranslated = [];
+    for (const item of menuItems) {
+      const itemTranslated = {...item};
+      if (item.label) {
+        itemTranslated.label = await this.translatorService.instant(item.label);
+      }
+      if (item.items) {
+        itemTranslated.items = [];
+        for (const subItem of item.items) {
+          const subItemTranslated = {...subItem};
+          if (subItem.label) {
+            subItemTranslated.label = await this.translatorService.instant(subItem.label);
+          }
+          itemTranslated.items?.push(subItemTranslated);
+        }
+      }
+      menuItemsTranslated.push(itemTranslated);
+    }
+    return menuItemsTranslated;
   }
 
   resetFilters() {
@@ -254,6 +188,6 @@ export class HeaderComponent implements OnInit {
 
   gotoShopping() {
     this.sidebarShowed = false;
-    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]);
+    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]).then();
   }
 }
