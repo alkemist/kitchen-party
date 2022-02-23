@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { MockModule, MockProvider } from 'ng-mocks';
-import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -12,14 +11,15 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { UserInterface } from '../../../interfaces';
-import { IngredientModel } from '../../../models';
+import { IngredientModel, UserInterface } from '../../../models';
 import { TranslatingModule } from '../../../modules/translating.module';
 import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
+import { default as NoSleep } from 'nosleep.js';
 
 import { HeaderComponent } from './header.component';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
+import { MenuItem } from 'primeng/api';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -28,12 +28,19 @@ describe('HeaderComponent', () => {
   let shoppingServiceMock: ShoppingService;
   let ingredientServiceMock: IngredientService;
   let translatorServiceMock: TranslatorService;
-  const routerEventsSubject = new Subject<RouterEvent>();
+  let routerEventsSubject = new Subject<RouterEvent>();
 
   const routerMock = {
-    navigate: jest.fn(),
+    navigate: jest.fn().mockName('navigate').mockResolvedValue(true),
     events: routerEventsSubject.asObservable(),
   };
+
+  const noSleepMock = {
+    enable: jest.fn(),
+    disable: jest.fn(),
+    isEnabled: false,
+    _addSourceToVideo: jest.fn()
+  }
 
   //let store: Store;
   //let ingredientsSelectorSubject: Subject<IngredientInterface[]>;
@@ -63,8 +70,7 @@ describe('HeaderComponent', () => {
           MockProvider(IngredientService),
           MockProvider(FilterService),
           MockProvider(ShoppingService),
-          //MockProvider(Router, routerMock)
-          { provide: Router, useValue: routerMock }
+          MockProvider(Router, routerMock)
         ],
     })
       .compileComponents();
@@ -82,6 +88,7 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    component.noSleep = noSleepMock as unknown as NoSleep;
 
     //Object.defineProperty(component, 'ingredients$', {writable: true});
     //component['ingredients$'] = of([]);
@@ -96,12 +103,14 @@ describe('HeaderComponent', () => {
   describe('ngOnInit', () => {
     const ingredients = [ 'ingredient1', 'ingredient2' ] as unknown as IngredientModel[];
     let translateMenuSpy: jest.SpyInstance;
-    let noSleepSpy: jest.SpyInstance;
+    let noSleepEnableSpy: jest.SpyInstance;
+    let noSleepDisableSpy: jest.SpyInstance;
 
     beforeEach(() => {
       jest.spyOn(ingredientServiceMock, 'getListOrRefresh').mockReturnValue(Promise.resolve(ingredients));
       translateMenuSpy = jest.spyOn(component, 'translateMenu');
-      noSleepSpy = jest.spyOn(component, 'noSleep', 'get');
+      noSleepEnableSpy = jest.spyOn(component.noSleep, 'enable').mockImplementation();
+      noSleepDisableSpy = jest.spyOn(component.noSleep, 'disable').mockImplementation();
     });
 
     it('should init variables', async () => {
@@ -123,22 +132,42 @@ describe('HeaderComponent', () => {
           }
         }
       } as unknown as RouterStateSnapshot;
+
+      noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
       expect(component.showFilters).toBe(true);
       expect(component.hideHeader).toBe(true);
       expect(component.showAppName).toBe(true);
-      expect(noSleepSpy).toBeCalled();
+      expect(noSleepDisableSpy).not.toBeCalled();
+      expect(noSleepEnableSpy).toBeCalled();
 
+      noSleepDisableSpy.mockReset();
+      noSleepEnableSpy.mockReset();
+      noSleepMock.isEnabled = true;
+      routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
+      expect(noSleepDisableSpy).not.toBeCalled();
+      expect(noSleepEnableSpy).not.toBeCalled();
 
+      noSleepDisableSpy.mockReset();
+      noSleepEnableSpy.mockReset();
       title = '';
       state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
+      noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
       expect(component.showFilters).toBe(false);
       expect(component.hideHeader).toBe(false);
       expect(component.showAppName).toBe(false);
-      expect(noSleepSpy).not.toBeCalled();
+      expect(noSleepDisableSpy).not.toBeCalled();
+      expect(noSleepEnableSpy).not.toBeCalled();
+
+      noSleepDisableSpy.mockReset();
+      noSleepEnableSpy.mockReset();
+      noSleepMock.isEnabled = true;
+      routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
+      expect(noSleepDisableSpy).toBeCalled();
+      expect(noSleepEnableSpy).not.toBeCalled();
     });
 
     it('should build not logged menu', async () => {
@@ -161,27 +190,48 @@ describe('HeaderComponent', () => {
       expect(component.loading).toBe(false);
     });
 
-    it('should build logged menu', async () => {
-      jest.spyOn(userServiceMock, 'getLoggedUser').mockImplementation((event?: (user?: UserInterface) => void): Promise<UserInterface | undefined> => {
-        const user = {} as UserInterface;
-        event!(user);
-        return Promise.resolve(user);
-      });
-      translateMenuSpy.mockImplementation((menuItems: MenuItem[]) => {
-        delete menuItems[menuItems.length - 1].command;
-        return menuItems;
+    describe('logged', () => {
+      beforeEach(() => {
+        jest.spyOn(userServiceMock, 'getLoggedUser').mockImplementation((event?: (user?: UserInterface) => void): Promise<UserInterface | undefined> => {
+          const user = {} as UserInterface;
+          event!(user);
+          return Promise.resolve(user);
+        });
       });
 
-      expect(component.loading).toBe(true);
+      it('should build logged menu', async () => {
+        translateMenuSpy.mockImplementation((menuItems: MenuItem[]) => {
+          delete menuItems[menuItems.length - 1].command;
+          return menuItems;
+        });
 
-      await component.ngOnInit();
+        expect(component.loading).toBe(true);
 
-      expect(component.menuItems).toEqual(
-        expect.arrayContaining([ ...baseMenuItems, ...loggedMenuItems, logoutMenuItem ])
-      );
-      expect(component.ingredients).toEqual(ingredients as unknown as IngredientModel[]);
-      expect(component.loading).toBe(false);
-    });
+        await component.ngOnInit();
+
+        expect(component.menuItems).toEqual(
+          expect.arrayContaining([ ...baseMenuItems, ...loggedMenuItems, logoutMenuItem ])
+        );
+        expect(component.ingredients).toEqual(ingredients as unknown as IngredientModel[]);
+        expect(component.loading).toBe(false);
+      });
+
+      it('should log out', async () => {
+        translateMenuSpy.mockImplementation((menuItems: MenuItem[]) => {
+          return menuItems;
+        });
+        jest.spyOn(userServiceMock, 'logout').mockResolvedValue();
+        const logoutSpy = jest.spyOn(userServiceMock, 'logout');
+
+        await component.ngOnInit();
+
+        const logoutMenuItem = component.menuItems[component.menuItems.length - 1] as MenuItem;
+
+        logoutMenuItem.command!();
+
+        expect(logoutSpy).toBeCalled();
+      });
+    })
   });
 
 
@@ -212,14 +262,13 @@ describe('HeaderComponent', () => {
     expect(await component.translateMenu([ {
       label: 'test',
       items: [ { label: 'test' } ]
-    } ])).toEqual([ { label: translatedLabel } ]);
+    } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
   });
 
   it('should go to shopping', async () => {
+    const routerSpy = jest.spyOn(routerMock, 'navigate');
+    component.gotoShopping();
 
-  });
-
-  it('should log out', async () => {
-
+    expect(routerSpy).toBeCalled();
   });
 });

@@ -70,6 +70,7 @@ export const loggedMenuItems = [ {
 ];
 
 export const logoutMenuItem = {
+  id: 'logoutButton',
   label: 'Sign out',
   icon: 'pi pi-sign-out',
 };

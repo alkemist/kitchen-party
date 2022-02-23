@@ -70,8 +70,11 @@ export class UserService {
   }
 
   async logout(): Promise<void> {
-    return signOut(this.auth).then(() => {
-      this.store.dispatch(new UserLogout());
-    });
+    return new Promise(resolve => {
+      signOut(this.auth).then(() => {
+        this.store.dispatch(new UserLogout());
+        resolve();
+      });
+    })
   }
 }
