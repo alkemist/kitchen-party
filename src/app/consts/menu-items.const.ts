@@ -1,4 +1,6 @@
-export const baseMenuItems = [
+import { MenuItem } from 'primeng/api';
+
+export const baseMenuItems: MenuItem[] = [
   {
     label: 'Home',
     icon: 'pi pi-home',
@@ -19,7 +21,7 @@ export const baseMenuItems = [
   },
 ];
 
-export const loggedMenuItems = [ {
+export const loggedMenuItems: MenuItem[] = [ {
   label: 'Ingredients',
   items: [
     {
@@ -69,13 +71,13 @@ export const loggedMenuItems = [ {
   }
 ];
 
-export const logoutMenuItem = {
+export const logoutMenuItem: MenuItem = {
   id: 'logoutButton',
   label: 'Sign out',
   icon: 'pi pi-sign-out',
 };
 
-export const notLoggedMenuItems = [
+export const notLoggedMenuItems: MenuItem[] = [
   {
     separator: true
   },

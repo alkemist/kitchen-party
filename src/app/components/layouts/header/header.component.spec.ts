@@ -3,6 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { MockModule, MockProvider } from 'ng-mocks';
+import { default as NoSleep } from 'nosleep.js';
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -11,15 +13,13 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
 import { IngredientModel, UserInterface } from '../../../models';
 import { TranslatingModule } from '../../../modules/translating.module';
 import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
-import { default as NoSleep } from 'nosleep.js';
 
 import { HeaderComponent } from './header.component';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { MenuItem } from 'primeng/api';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -40,7 +40,7 @@ describe('HeaderComponent', () => {
     disable: jest.fn(),
     isEnabled: false,
     _addSourceToVideo: jest.fn()
-  }
+  };
 
   //let store: Store;
   //let ingredientsSelectorSubject: Subject<IngredientInterface[]>;
@@ -152,7 +152,7 @@ describe('HeaderComponent', () => {
       noSleepDisableSpy.mockReset();
       noSleepEnableSpy.mockReset();
       title = '';
-      state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
+      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
       noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
@@ -231,7 +231,7 @@ describe('HeaderComponent', () => {
 
         expect(logoutSpy).toBeCalled();
       });
-    })
+    });
   });
 
 
@@ -261,8 +261,8 @@ describe('HeaderComponent', () => {
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
     expect(await component.translateMenu([ {
       label: 'test',
-      items: [ { label: 'test' } ]
-    } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
+      items: [ {label: 'test'} ]
+    } ])).toEqual([ {label: translatedLabel, items: [ {label: translatedLabel} ]} ]);
   });
 
   it('should go to shopping', async () => {

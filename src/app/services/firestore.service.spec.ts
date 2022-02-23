@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+import { DataObjectInterface } from '../interfaces';
 
-import { DataObjectInterface, FirestoreService } from './firestore.service';
+import { FirestoreService } from './firestore.service';
 
 describe('FirestoreService', () => {
-  let service: FirestoreService<DataObject>;
+  let service: FirestoreService<DataObjectInterface>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
