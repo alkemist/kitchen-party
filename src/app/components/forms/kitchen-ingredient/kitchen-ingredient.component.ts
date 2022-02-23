@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IngredientModel } from '../../../models/ingredient.model';
-import { KitchenIngredientModel } from '../../../models/kitchen-ingredient.model';
-import { KeyObject } from '../../../models/other.model';
-import { RecipeModel } from '../../../models/recipe.model';
+import { IngredientModel, KitchenIngredientModel, RecipeModel } from '../../../models';
+import { KeyLabelInterface } from '../../../interfaces';
 
 @Component({
   selector: 'app-form-kitchen-ingredient',
@@ -15,7 +13,7 @@ export class FormKitchenIngredientComponent implements OnInit {
   @Input() kitchenIngredient: KitchenIngredientModel | undefined = undefined;
   @Input() loading = true;
   @Input() isKitchen = true;
-  @Input() measureUnits: KeyObject[] = [];
+  @Input() measureUnits: KeyLabelInterface[] = [];
   @Input() form: FormGroup = new FormGroup({});
   @Input() ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   @Output() searchIngredientOrRecipeEvent: EventEmitter<{ query: string }> = new EventEmitter<{ query: string }>();

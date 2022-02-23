@@ -1,4 +1,4 @@
-import { RecipeTypeEnum } from '../enums/recipe-type.enum';
+import { RecipeTypeEnum } from '../enums';
 import { DataObjectInterface } from './data-object.interface';
 import { RecipeIngredientInterface } from './recipe-ingredient.interface';
 

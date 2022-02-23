@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IngredientTypeEnum, IngredientTypes } from '../../../enums/ingredient-type.enum';
-import { IngredientModel } from '../../../models/ingredient.model';
-import { KeyObject } from '../../../models/other.model';
+import { IngredientTypeEnum, IngredientTypes } from '../../../enums';
+import { IngredientModel } from '../../../models';
+import { KeyLabelInterface } from '../../../interfaces';
 
 @Component({
   selector: 'app-form-ingredient',
@@ -12,7 +12,7 @@ import { KeyObject } from '../../../models/other.model';
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
   @Input() loading = true;
-  @Input() ingredientTypes: KeyObject[] = [];
+  @Input() ingredientTypes: KeyLabelInterface[] = [];
   @Input() form: FormGroup = new FormGroup({});
   @Input() dialogMode = false;
   @Output() onSubmit = new EventEmitter<IngredientModel>();

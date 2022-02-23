@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { first, Observable } from 'rxjs';
-import { IngredientInterface } from '../../../../interfaces/ingredient.interface';
-import { MonthCalendarInterface } from '../../../../interfaces/month-calendar.interface';
-import { IngredientModel } from '../../../../models/ingredient.model';
-import { TranslatorService } from '../../../../services/translator.service';
+import { IngredientInterface, MonthCalendarInterface } from '../../../../interfaces';
+import { IngredientModel } from '../../../../models';
+import { TranslatorService } from '../../../../services';
 import { IngredientState } from '../../../../stores/ingredient.state';
 
 @Component({

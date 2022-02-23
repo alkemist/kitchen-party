@@ -9,12 +9,12 @@ export function lengthArrayValidator(length: number): ValidatorFn {
     if (c.value.length === length) {
       for (const value of c.value as Date[]) {
         if (!value) {
-          return {'lengthArray': {valid: false}};
+          return { 'lengthArray': { valid: false } };
         }
       }
       return null;
     }
 
-    return {'lengthArray': {valid: false}};
+    return { 'lengthArray': { valid: false } };
   };
 }

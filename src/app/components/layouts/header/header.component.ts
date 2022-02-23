@@ -6,18 +6,12 @@ import { default as NoSleep } from 'nosleep.js';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { DietTypeEnum } from '../../../enums/diet-type.enum';
-import { RecipeTypeEnum } from '../../../enums/recipe-type.enum';
-import { SweetSaltyEnum } from '../../../enums/sweet-salty.enum';
-import { UserInterface } from '../../../interfaces/user.interface';
-import { IngredientModel } from '../../../models/ingredient.model';
-import { FilterService } from '../../../services/filter.service';
-import { IngredientService } from '../../../services/ingredient.service';
-import { ShoppingService } from '../../../services/shopping.service';
-import { TranslatorService } from '../../../services/translator.service';
-import { UserService } from '../../../services/user.service';
+import { DietTypeEnum, RecipeTypeEnum, SweetSaltyEnum } from '../../../enums';
+import { UserInterface } from '../../../interfaces';
+import { IngredientModel } from '../../../models';
+import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
-import { EnumHelper } from '../../../tools/enum.helper';
+import { EnumHelper } from '../../../tools';
 
 export interface ToolbarFilters {
   diet: string,
@@ -120,6 +114,45 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
+    const menuItemsTranslated = [];
+    for (const item of menuItems) {
+      const itemTranslated = { ...item };
+      if (item.label) {
+        itemTranslated.label = await this.translatorService.instant(item.label);
+      }
+      if (item.items) {
+        itemTranslated.items = [];
+        for (const subItem of item.items) {
+          const subItemTranslated = { ...subItem };
+          if (subItem.label) {
+            subItemTranslated.label = await this.translatorService.instant(subItem.label);
+          }
+          itemTranslated.items?.push(subItemTranslated);
+        }
+      }
+      menuItemsTranslated.push(itemTranslated);
+    }
+    return menuItemsTranslated;
+  }
+
+  resetFilters() {
+    this.sidebarShowed = false;
+    this.form.patchValue({
+      name: '',
+      diet: '',
+      type: '',
+      sweetOrSalty: '',
+      isSeason: false,
+      ingredients: []
+    } as ToolbarFilters);
+  }
+
+  gotoShopping() {
+    this.sidebarShowed = false;
+    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]).then();
+  }
+
   private initVariables(routeData: any) {
     if (typeof routeData['title'] === 'string') {
       this.title = routeData['title'];
@@ -154,44 +187,5 @@ export class HeaderComponent implements OnInit {
         this.noSleep.disable();
       }
     }
-  }
-
-  async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
-    const menuItemsTranslated = [];
-    for (const item of menuItems) {
-      const itemTranslated = {...item};
-      if (item.label) {
-        itemTranslated.label = await this.translatorService.instant(item.label);
-      }
-      if (item.items) {
-        itemTranslated.items = [];
-        for (const subItem of item.items) {
-          const subItemTranslated = {...subItem};
-          if (subItem.label) {
-            subItemTranslated.label = await this.translatorService.instant(subItem.label);
-          }
-          itemTranslated.items?.push(subItemTranslated);
-        }
-      }
-      menuItemsTranslated.push(itemTranslated);
-    }
-    return menuItemsTranslated;
-  }
-
-  resetFilters() {
-    this.sidebarShowed = false;
-    this.form.patchValue({
-      name: '',
-      diet: '',
-      type: '',
-      sweetOrSalty: '',
-      isSeason: false,
-      ingredients: []
-    } as ToolbarFilters);
-  }
-
-  gotoShopping() {
-    this.sidebarShowed = false;
-    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]).then();
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { DietTypes } from '../enums/diet-type.enum';
+import { DietTypes } from '../enums';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class DietResolver implements Resolve<string> {
   constructor() {
   }

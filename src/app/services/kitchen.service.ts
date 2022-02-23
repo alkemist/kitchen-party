@@ -3,9 +3,9 @@ import { Select, Store } from '@ngxs/store';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
 import { kitchenIngredientConverter } from '../converters/kitchen-ingredient.converter';
-import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
-import { KitchenIngredientInterface } from '../interfaces/kitchen-ingredient.interface';
-import { KitchenIngredientModel } from '../models/kitchen-ingredient.model';
+import { DocumentNotFound } from '../errors';
+import { KitchenIngredientInterface } from '../interfaces';
+import { KitchenIngredientModel } from '../models';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -13,7 +13,7 @@ import {
   UpdateKitchenIngredient
 } from '../stores/kitchen.action';
 import { KitchenIngredientState } from '../stores/kitchen.state';
-import { ArrayHelper } from '../tools/array.helper';
+import { ArrayHelper } from '../tools';
 import { FirestoreService } from './firestore.service';
 import { IngredientService } from './ingredient.service';
 import { LoggerService } from './logger.service';

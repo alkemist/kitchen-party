@@ -1,4 +1,4 @@
-import { DataObjectInterface } from '../../interfaces/data-object.interface';
+import { DataObjectInterface } from '../../interfaces';
 
 export class DocumentNotFound<T extends DataObjectInterface> extends Error {
   private readonly collectionName: string;

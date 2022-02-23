@@ -13,14 +13,10 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { UserInterface } from '../../../interfaces/user.interface';
-import { IngredientModel } from '../../../models/ingredient.model';
+import { UserInterface } from '../../../interfaces';
+import { IngredientModel } from '../../../models';
 import { TranslatingModule } from '../../../modules/translating.module';
-import { FilterService } from '../../../services/filter.service';
-import { IngredientService } from '../../../services/ingredient.service';
-import { ShoppingService } from '../../../services/shopping.service';
-import { TranslatorService } from '../../../services/translator.service';
-import { UserService } from '../../../services/user.service';
+import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
 
 import { HeaderComponent } from './header.component';
@@ -68,7 +64,7 @@ describe('HeaderComponent', () => {
           MockProvider(FilterService),
           MockProvider(ShoppingService),
           //MockProvider(Router, routerMock)
-          {provide: Router, useValue: routerMock}
+          { provide: Router, useValue: routerMock }
         ],
     })
       .compileComponents();
@@ -136,7 +132,7 @@ describe('HeaderComponent', () => {
 
 
       title = '';
-      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
+      state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
       expect(component.showFilters).toBe(false);
@@ -215,8 +211,8 @@ describe('HeaderComponent', () => {
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
     expect(await component.translateMenu([ {
       label: 'test',
-      items: [ {label: 'test'} ]
-    } ])).toEqual([ {label: translatedLabel} ]);
+      items: [ { label: 'test' } ]
+    } ])).toEqual([ { label: translatedLabel } ]);
   });
 
   it('should go to shopping', async () => {

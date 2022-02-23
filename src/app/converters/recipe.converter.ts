@@ -1,16 +1,16 @@
 import { FirestoreDataConverter } from '@firebase/firestore';
 import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
-import { RecipeInterface } from '../interfaces/recipe.interface';
-import { RecipeModel } from '../models/recipe.model';
+import { RecipeInterface } from '../interfaces';
+import { RecipeModel } from '../models';
 
 export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
   toFirestore: (recipe: RecipeModel): RecipeInterface => {
-    const recipeFields = {...recipe} as RecipeInterface;
+    const recipeFields = { ...recipe } as RecipeInterface;
     delete recipeFields.id;
     recipeFields.recipeIngredients = [];
 
     recipe.recipeIngredients.forEach(recipeIngredient => {
-      const recipeIngredientField = {...recipeIngredient};
+      const recipeIngredientField = { ...recipeIngredient };
       delete recipeIngredientField.id;
 
       recipeIngredientField.ingredientId = recipeIngredient.ingredient?.id! || '';

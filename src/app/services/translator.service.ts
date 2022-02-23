@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { first, Observable } from 'rxjs';
-import { TranslationError } from '../errors/logged/translation-error.service';
-import { KeyValueInterface } from '../interfaces/key-value.interface';
-import { KeyObject } from '../models/other.model';
+import { TranslationError } from '../errors';
+import { KeyLabelInterface, KeyValueInterface } from '../interfaces';
 import { FillTranslations } from '../stores/translation.action';
 import { TranslationState } from '../stores/translation.state';
-import { TimeHelper } from '../tools/time.helper';
+import { TimeHelper } from '../tools';
 import { LoggerService } from './logger.service';
 
 @Injectable({
@@ -58,9 +57,9 @@ export class TranslatorService {
     return value;
   }
 
-  async translateLabels(keyObjects: KeyObject[]): Promise<KeyObject[]> {
+  async translateLabels(keyObjects: KeyLabelInterface[]): Promise<KeyLabelInterface[]> {
     return Promise.all(keyObjects.map(async item => {
-      return {...item, label: await this.instant(item.label)};
+      return { ...item, label: await this.instant(item.label) };
     }));
   }
 
@@ -74,7 +73,7 @@ export class TranslatorService {
         const keys = Object.keys(translations);
         const values = Object.values(translations);
         this.all = keys.map((value, index) => {
-          return {key: value, value: values[index]} as KeyValueInterface;
+          return { key: value, value: values[index] } as KeyValueInterface;
         });
 
         this.store.dispatch(new FillTranslations(this.all));

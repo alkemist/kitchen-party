@@ -3,12 +3,12 @@ import { Select, Store } from '@ngxs/store';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
 import { ingredientConverter } from '../converters/ingredient.converter';
-import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
-import { IngredientInterface } from '../interfaces/ingredient.interface';
-import { IngredientModel } from '../models/ingredient.model';
+import { DocumentNotFound } from '../errors';
+import { IngredientInterface } from '../interfaces';
+import { IngredientModel } from '../models';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from '../stores/ingredient.action';
 import { IngredientState } from '../stores/ingredient.state';
-import { ArrayHelper } from '../tools/array.helper';
+import { ArrayHelper } from '../tools';
 import { FirestoreService } from './firestore.service';
 import { LoggerService } from './logger.service';
 

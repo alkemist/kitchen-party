@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppMissingTranslationHandler } from '../handlers/missing-translation.handler';
-import { LoggerService } from '../services/logger.service';
+import { LoggerService } from '../services';
 
 @NgModule({
   imports: [

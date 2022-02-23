@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { IngredientInterface } from '../interfaces/ingredient.interface';
-import { IngredientModel } from '../models/ingredient.model';
-import { IngredientService } from '../services/ingredient.service';
+import { IngredientInterface } from '../interfaces';
+import { IngredientModel } from '../models';
+import { IngredientService } from '../services';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class IngredientResolver implements Resolve<IngredientModel> {
   constructor(private service: IngredientService) {
   }

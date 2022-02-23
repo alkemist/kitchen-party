@@ -1,11 +1,11 @@
-import { DietTypeEnum } from '../enums/diet-type.enum';
-import { IngredientTypeEnum } from '../enums/ingredient-type.enum';
-import { MeasureUnitEnum, MeasureUnits } from '../enums/measure-unit.enum';
-import { HasIngredient } from '../interfaces/has-ingredient.interface';
-import { RecipeIngredientFormInterface } from '../interfaces/recipe-ingredient-form.interface';
-import { RecipeIngredientInterface } from '../interfaces/recipe-ingredient.interface';
+import { DietTypeEnum, IngredientTypeEnum, MeasureUnitEnum, MeasureUnits } from '../enums';
+import {
+  HasIngredient,
+  KeyLabelInterface,
+  RecipeIngredientFormInterface,
+  RecipeIngredientInterface
+} from '../interfaces';
 import { IngredientModel } from './ingredient.model';
-import { KeyObject } from './other.model';
 import { RecipeModel } from './recipe.model';
 
 
@@ -65,18 +65,18 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
           unit: this.ingredient?.isLiquid ? MeasureUnitEnum.milliliter : MeasureUnitEnum.gram
         };
       case MeasureUnitEnum.centiliter:
-        return {count: quantity * 10, unit: MeasureUnitEnum.milliliter};
+        return { count: quantity * 10, unit: MeasureUnitEnum.milliliter };
       case MeasureUnitEnum.kilogram:
-        return {count: quantity * 1000, unit: MeasureUnitEnum.gram};
+        return { count: quantity * 1000, unit: MeasureUnitEnum.gram };
       case MeasureUnitEnum.gram:
-        return {count: quantity, unit: MeasureUnitEnum.gram};
+        return { count: quantity, unit: MeasureUnitEnum.gram };
     }
 
-    return {count: quantity, measure: this.measure};
+    return { count: quantity, measure: this.measure };
   }
 
-  static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyObject[]): RecipeIngredientInterface {
-    const recipeIngredient = {...recipeIngredientForm};
+  static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
+    const recipeIngredient = { ...recipeIngredientForm };
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     if (ingredientOrRecipe instanceof RecipeModel) {
@@ -124,7 +124,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return recipeIngredient;
   }
 
-  static unitOrMeasureToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyObject[]): string | undefined {
+  static unitOrMeasureToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyLabelInterface[]): string | undefined {
     let unitOrMeasure = '';
     if (recipeIngredient.measure) {
       unitOrMeasure = recipeIngredient.measure;
@@ -137,7 +137,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       : recipeIngredient.quantity?.toString();
   }
 
-  static recipeIngredientToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyObject[]): string {
+  static recipeIngredientToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyLabelInterface[]): string {
     let str = '';
     const quantityDescription = RecipeIngredientModel.unitOrMeasureToString(recipeIngredient, measureUnits);
 
@@ -184,10 +184,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     if (option === DietTypeEnum.vege && this.optionVege) {
       return true;
     }
-    if (option === DietTypeEnum.vegan && this.optionVegan) {
-      return true;
-    }
-    return false;
+    return option === DietTypeEnum.vegan && this.optionVegan;
   }
 }
 

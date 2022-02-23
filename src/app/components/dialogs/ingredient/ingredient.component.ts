@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { IngredientTypeEnum } from '../../../enums/ingredient-type.enum';
-import { IngredientInterface } from '../../../interfaces/ingredient.interface';
-import { IngredientModel } from '../../../models/ingredient.model';
-import { IngredientService } from '../../../services/ingredient.service';
-import { TranslatorService } from '../../../services/translator.service';
-import { EnumHelper } from '../../../tools/enum.helper';
-import { slugify } from '../../../tools/slugify';
+import { IngredientTypeEnum } from '../../../enums';
+import { IngredientInterface } from '../../../interfaces';
+import { IngredientModel } from '../../../models';
+import { IngredientService, TranslatorService } from '../../../services';
+import { EnumHelper, slugify } from '../../../tools';
 
 @Component({
   selector: 'app-dialog-ingredient',
@@ -55,25 +53,25 @@ export class DialogIngredientComponent implements OnInit {
     await this.preSubmit(IngredientModel.format(this.form.value));
   }
 
-  async preSubmit(formDocument: IngredientInterface): Promise<void> {
+  async preSubmit(ingredient: IngredientInterface): Promise<void> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
       if (this.ingredient.id) {
-        formDocument.id = this.ingredient.id;
+        ingredient.id = this.ingredient.id;
       }
 
-      const checkExist = !this.ingredient.id || slugify(formDocument.name) !== slugify(this.ingredient.name);
+      const checkExist = !this.ingredient.id || slugify(ingredient.name) !== slugify(this.ingredient.name);
 
       if (checkExist) {
-        this.ingredientService.exist(formDocument.name!).then(async exist => {
+        this.ingredientService.exist(ingredient.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({'exist': true});
+            return this.name.setErrors({ 'exist': true });
           }
-          await this.submit(formDocument);
+          await this.submit(ingredient);
         });
       } else {
-        await this.submit(formDocument);
+        await this.submit(ingredient);
       }
     }
   }

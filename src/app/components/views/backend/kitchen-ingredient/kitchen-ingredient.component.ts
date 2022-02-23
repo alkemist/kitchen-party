@@ -2,19 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { MeasureUnitEnum, MeasureUnits } from '../../../../enums/measure-unit.enum';
-import { KitchenIngredientInterface } from '../../../../interfaces/kitchen-ingredient.interface';
-import { RecipeIngredientFormInterface } from '../../../../interfaces/recipe-ingredient-form.interface';
-import { IngredientModel } from '../../../../models/ingredient.model';
-import { KitchenIngredientModel } from '../../../../models/kitchen-ingredient.model';
-import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
-import { RecipeModel } from '../../../../models/recipe.model';
-import { KitchenIngredientService } from '../../../../services/kitchen.service';
-import { RecipeService } from '../../../../services/recipe.service';
-import { SearchService } from '../../../../services/search.service';
-import { TranslatorService } from '../../../../services/translator.service';
-import { EnumHelper } from '../../../../tools/enum.helper';
-import { slugify } from '../../../../tools/slugify';
+import { MeasureUnitEnum, MeasureUnits } from '../../../../enums';
+import { KitchenIngredientInterface, RecipeIngredientFormInterface } from '../../../../interfaces';
+import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
+import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '../../../../services';
+import { EnumHelper, slugify } from '../../../../tools';
 
 @Component({
   selector: 'app-kitchen-ingredient',
@@ -59,7 +51,7 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm = {...this.kitchenIngredient} as RecipeIngredientFormInterface;
+          const kitchenIngredientForm = { ...this.kitchenIngredient } as RecipeIngredientFormInterface;
           kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.recipe ? this.kitchenIngredient.recipe : this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits[this.kitchenIngredient.unit] ? await this.translatorService.instant(MeasureUnits[this.kitchenIngredient.unit]) : this.kitchenIngredient.unit
@@ -96,7 +88,7 @@ export class KitchenIngredientComponent implements OnInit {
       if (checkExist) {
         this.kitchenIngredientService.exist(formDocument.name).then(async exist => {
           if (exist) {
-            return this.form.get('ingredientOrRecipe')?.setErrors({'exist': true});
+            return this.form.get('ingredientOrRecipe')?.setErrors({ 'exist': true });
           }
           await this.submit(formDocument);
         });

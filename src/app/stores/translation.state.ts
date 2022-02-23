@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { KeyValueInterface } from '../interfaces/key-value.interface';
+import { KeyValueInterface } from '../interfaces';
 import { FillTranslations } from './translation.action';
 
 
@@ -30,7 +30,7 @@ export class TranslationState {
   }
 
   @Action(FillTranslations)
-  fill({getState, patchState}: StateContext<TranslationStateModel>, {payload}: FillTranslations) {
+  fill({ getState, patchState }: StateContext<TranslationStateModel>, { payload }: FillTranslations) {
     patchState({
       all: payload,
       lastUpdated: new Date()

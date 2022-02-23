@@ -16,7 +16,7 @@ describe('AppComponent', () => {
   const streamObservable = new Subject();
   let primeNgConfigSpy: jest.SpyInstance;
 
-  @Component({selector: 'app-header', template: ''})
+  @Component({ selector: 'app-header', template: '' })
   class HeaderStubComponent {
   }
 

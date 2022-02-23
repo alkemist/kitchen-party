@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { NotFoundUploadError } from '../errors/logged/not-found-upload.error';
-import { UploadError } from '../errors/logged/upload.error';
-import { generatePushID } from '../tools/generate-pushid';
+import { NotFoundUploadError, UploadError } from '../errors';
+import { generatePushID } from '../tools';
 import { LoggerService } from './logger.service';
 
 
@@ -34,12 +33,12 @@ export class UploadService {
 
         if (localFileName.length > 1) {
           const fileName = `${ generatePushID() }.${ localFileName.pop() }`;
-          const file = new File([ localFile ], fileName, {type: localFile.type});
+          const file = new File([ localFile ], fileName, { type: localFile.type });
 
           const refImage = ref(this.storage, `${ this.basePath }/${ file.name }`);
           uploadBytes(refImage, file).then(async (snapshot) => {
             const imagePath = await this.download(snapshot.ref.name);
-            resolve({name: fileName, path: imagePath!});
+            resolve({ name: fileName, path: imagePath! });
           });
         } else {
           resolve(undefined);

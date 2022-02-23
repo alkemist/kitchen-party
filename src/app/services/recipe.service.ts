@@ -3,13 +3,12 @@ import { Select, Store } from '@ngxs/store';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
 import { recipeConverter } from '../converters/recipe.converter';
-import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
-import { RecipeInterface } from '../interfaces/recipe.interface';
-import { KeyObject } from '../models/other.model';
-import { RecipeModel } from '../models/recipe.model';
+import { DocumentNotFound } from '../errors';
+import { KeyLabelInterface, RecipeInterface } from '../interfaces';
+import { RecipeModel } from '../models';
 import { AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe } from '../stores/recipe.action';
 import { RecipeState } from '../stores/recipe.state';
-import { ArrayHelper } from '../tools/array.helper';
+import { ArrayHelper } from '../tools';
 import { FirestoreService } from './firestore.service';
 import { IngredientService } from './ingredient.service';
 import { LoggerService } from './logger.service';
@@ -18,11 +17,11 @@ import { LoggerService } from './logger.service';
   providedIn: 'root'
 })
 export class RecipeService extends FirestoreService<RecipeInterface> {
-  customMeasures: KeyObject[] = [];
+  customMeasures: KeyLabelInterface[] = [];
   @Select(RecipeState.lastUpdated) protected override lastUpdated$?: Observable<Date>;
   @Select(RecipeState.all) protected override all$?: Observable<RecipeInterface[]>;
 
-  @Select(RecipeState.customMeasure) private customMeasures$?: Observable<KeyObject[]>;
+  @Select(RecipeState.customMeasure) private customMeasures$?: Observable<KeyLabelInterface[]>;
 
   private all: RecipeModel[] = [];
   private promise: Promise<RecipeModel[]> | undefined;

@@ -1,7 +1,6 @@
-import { DietTypeEnum } from '../enums/diet-type.enum';
-import { RecipeTypeEnum, RecipeTypes } from '../enums/recipe-type.enum';
-import { RecipeInterface } from '../interfaces/recipe.interface';
-import { slugify } from '../tools/slugify';
+import { DietTypeEnum, RecipeTypeEnum, RecipeTypes } from '../enums';
+import { RecipeInterface } from '../interfaces';
+import { slugify } from '../tools';
 import { RecipeIngredientModel } from './recipe-ingredient.model';
 
 export class RecipeModel implements RecipeInterface {

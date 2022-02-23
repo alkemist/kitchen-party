@@ -1,4 +1,4 @@
-import { IngredientModel } from '../models/ingredient.model';
+import { IngredientModel } from '../models';
 
 export interface MonthCalendarInterface {
   name: string,

@@ -13,14 +13,9 @@ import {
   where,
 } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { DatabaseError } from '../errors/logged/database.error';
-import { QuotaExceededError } from '../errors/logged/quota-exceeded.error';
-import { DocumentNotFound } from '../errors/not-logged/document-not-found.error';
-import { EmptyDocument } from '../errors/not-logged/empty-document.error';
-import { DataObjectInterface } from '../interfaces/data-object.interface';
-import { generatePushID } from '../tools/generate-pushid';
-import { slugify } from '../tools/slugify';
-import { TimeHelper } from '../tools/time.helper';
+import { DatabaseError, DocumentNotFound, EmptyDocument, QuotaExceededError } from '../errors';
+import { DataObjectInterface } from '../interfaces';
+import { generatePushID, slugify, TimeHelper } from '../tools';
 import { LoggerService } from './logger.service';
 
 
@@ -80,7 +75,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       dataObjectDocument = await this.findOneBySlug(slug);
     } catch (e) {
       if (!(e instanceof DocumentNotFound)) {
-        this.loggerService.error(new DatabaseError((e as Error).message, {slug}));
+        this.loggerService.error(new DatabaseError((e as Error).message, { slug }));
       }
     }
     return !!dataObjectDocument;
@@ -106,7 +101,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       const ref = doc(this.ref, id).withConverter(this.converter);
       docSnapshot = await getDoc(ref);
     } catch (error) {
-      this.loggerService.error(new DatabaseError((error as Error).message, {id}));
+      this.loggerService.error(new DatabaseError((error as Error).message, { id }));
     }
 
     if (!docSnapshot) {

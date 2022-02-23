@@ -1,11 +1,11 @@
 import { FirestoreDataConverter } from '@firebase/firestore';
 import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
-import { IngredientInterface } from '../interfaces/ingredient.interface';
-import { IngredientModel } from '../models/ingredient.model';
+import { IngredientInterface } from '../interfaces';
+import { IngredientModel } from '../models';
 
 export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = {
   toFirestore: (ingredient: IngredientModel): IngredientInterface => {
-    const ingredientFields = {...ingredient};
+    const ingredientFields = { ...ingredient };
     ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
     if (!ingredientFields.monthBegin) {
       ingredientFields.monthBegin = null;

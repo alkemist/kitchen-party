@@ -1,6 +1,6 @@
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
-import { TranslationError } from '../errors/logged/translation-error.service';
-import { LoggerService } from '../services/logger.service';
+import { TranslationError } from '../errors';
+import { LoggerService } from '../services';
 
 export class AppMissingTranslationHandler implements MissingTranslationHandler {
   constructor(private logger: LoggerService) {

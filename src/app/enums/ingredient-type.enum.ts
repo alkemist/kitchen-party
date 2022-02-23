@@ -1,4 +1,4 @@
-import { EnumHelper } from '../tools/enum.helper';
+import { EnumHelper } from '../tools';
 
 export enum IngredientTypeEnum {
   meats = 'Meats', // Viandes

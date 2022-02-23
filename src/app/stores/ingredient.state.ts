@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { IngredientTypeEnum, IngredientTypes } from '../enums/ingredient-type.enum';
-import { IngredientInterface } from '../interfaces/ingredient.interface';
+import { IngredientTypeEnum, IngredientTypes } from '../enums';
+import { IngredientInterface } from '../interfaces';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
 export class IngredientStateModel {
@@ -46,7 +46,7 @@ export class IngredientState {
   }
 
   @Action(FillIngredients)
-  fill({getState, patchState}: StateContext<IngredientStateModel>, {payload}: FillIngredients) {
+  fill({ getState, patchState }: StateContext<IngredientStateModel>, { payload }: FillIngredients) {
     patchState({
       all: payload,
       lastUpdated: new Date()
@@ -54,7 +54,7 @@ export class IngredientState {
   }
 
   @Action(AddIngredient)
-  add({setState}: StateContext<IngredientStateModel>, {payload}: AddIngredient) {
+  add({ setState }: StateContext<IngredientStateModel>, { payload }: AddIngredient) {
     setState(
       patch({
         all: append([ payload ])
@@ -63,7 +63,7 @@ export class IngredientState {
   }
 
   @Action(RemoveIngredient)
-  remove({setState}: StateContext<IngredientStateModel>, {payload}: RemoveIngredient) {
+  remove({ setState }: StateContext<IngredientStateModel>, { payload }: RemoveIngredient) {
     setState(
       patch({
         all: removeItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id)
@@ -72,7 +72,7 @@ export class IngredientState {
   }
 
   @Action(UpdateIngredient)
-  update({getState, patchState, setState}: StateContext<IngredientStateModel>, {payload}: UpdateIngredient) {
+  update({ getState, patchState, setState }: StateContext<IngredientStateModel>, { payload }: UpdateIngredient) {
     setState(
       patch({
         all: updateItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id, payload)

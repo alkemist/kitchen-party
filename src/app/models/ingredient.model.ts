@@ -1,8 +1,6 @@
-import { IngredientTypeEnum, IngredientTypes } from '../enums/ingredient-type.enum';
-import { IngredientFormInterface } from '../interfaces/ingredient-form.interface';
-import { IngredientInterface } from '../interfaces/ingredient.interface';
-import { DateHelper } from '../tools/date.helper';
-import { slugify } from '../tools/slugify';
+import { IngredientTypeEnum, IngredientTypes } from '../enums';
+import { IngredientFormInterface, IngredientInterface } from '../interfaces';
+import { DateHelper, slugify } from '../tools';
 import { RecipeModel } from './recipe.model';
 
 

@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MeasureUnitEnum } from '../../../../enums/measure-unit.enum';
-import { RecipeTypeEnum } from '../../../../enums/recipe-type.enum';
-import { RecipeInterface } from '../../../../interfaces/recipe.interface';
-import { UserInterface } from '../../../../interfaces/user.interface';
-import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
-import { RecipeModel } from '../../../../models/recipe.model';
-import { TranslatorService } from '../../../../services/translator.service';
-import { UserService } from '../../../../services/user.service';
-import { EnumHelper } from '../../../../tools/enum.helper';
+import { MeasureUnitEnum, RecipeTypeEnum } from '../../../../enums';
+import { RecipeInterface, UserInterface } from '../../../../interfaces';
+import { RecipeIngredientModel, RecipeModel } from '../../../../models';
+import { TranslatorService, UserService } from '../../../../services';
+import { EnumHelper } from '../../../../tools';
 
 @Component({
   selector: 'app-front-recipe',

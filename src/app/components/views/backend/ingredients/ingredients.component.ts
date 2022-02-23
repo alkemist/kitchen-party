@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IngredientTypeEnum } from '../../../../enums/ingredient-type.enum';
-import { IngredientModel } from '../../../../models/ingredient.model';
-import { IngredientService } from '../../../../services/ingredient.service';
-import { TranslatorService } from '../../../../services/translator.service';
-import { EnumHelper } from '../../../../tools/enum.helper';
+import { IngredientTypeEnum } from '../../../../enums';
+import { IngredientModel } from '../../../../models';
+import { IngredientService, TranslatorService } from '../../../../services';
+import { EnumHelper } from '../../../../tools';
 
 @Component({
   selector: 'app-back-ingredients',

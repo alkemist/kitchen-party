@@ -1,4 +1,4 @@
-import { MeasureUnitEnum } from '../enums/measure-unit.enum';
+import { MeasureUnitEnum } from '../enums';
 import { HasIngredient } from './has-ingredient.interface';
 import { IngredientInterface } from './ingredient.interface';
 import { RecipeInterface } from './recipe.interface';

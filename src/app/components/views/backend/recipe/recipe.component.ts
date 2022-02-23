@@ -3,22 +3,17 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { DietTypeEnum } from '../../../../enums/diet-type.enum';
-import { MeasureUnitEnum, MeasureUnits } from '../../../../enums/measure-unit.enum';
-import { RecipeTypeEnum } from '../../../../enums/recipe-type.enum';
-import { RecipeIngredientFormInterface } from '../../../../interfaces/recipe-ingredient-form.interface';
-import { RecipeInterface } from '../../../../interfaces/recipe.interface';
-import { IngredientModel } from '../../../../models/ingredient.model';
-import { KeyObject } from '../../../../models/other.model';
-import { RecipeIngredientModel } from '../../../../models/recipe-ingredient.model';
-import { RecipeModel } from '../../../../models/recipe.model';
-import { IngredientService } from '../../../../services/ingredient.service';
-import { RecipeService } from '../../../../services/recipe.service';
-import { SearchService } from '../../../../services/search.service';
-import { TranslatorService } from '../../../../services/translator.service';
-import { UploadService } from '../../../../services/upload.service';
-import { EnumHelper } from '../../../../tools/enum.helper';
-import { slugify } from '../../../../tools/slugify';
+import { DietTypeEnum, MeasureUnitEnum, MeasureUnits, RecipeTypeEnum } from '../../../../enums';
+import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '../../../../interfaces';
+import { IngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
+import {
+  IngredientService,
+  RecipeService,
+  SearchService,
+  TranslatorService,
+  UploadService
+} from '../../../../services';
+import { EnumHelper, slugify } from '../../../../tools';
 import { recipeIngredientValidator } from '../../../../validators/recipeIngredient.validator';
 import { DialogIngredientComponent } from '../../../dialogs/ingredient/ingredient.component';
 
@@ -33,9 +28,9 @@ import { DialogIngredientComponent } from '../../../dialogs/ingredient/ingredien
 export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
   DietTypeEnum = DietTypeEnum;
-  recipeTypes: KeyObject[] = [];
-  measureUnits: KeyObject[] = [];
-  unitsOrMeasures: KeyObject[] = [];
+  recipeTypes: KeyLabelInterface[] = [];
+  measureUnits: KeyLabelInterface[] = [];
+  unitsOrMeasures: KeyLabelInterface[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
   form: FormGroup = new FormGroup({});
   loading = true;
@@ -141,7 +136,7 @@ export class RecipeComponent implements OnInit {
       const i = this.recipe.orderedRecipeIngredients.indexOf(recipeIngredient);
       this.addRecipeIngredient();
 
-      const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
+      const recipeIngredientForm = { ...recipeIngredient } as RecipeIngredientFormInterface;
       recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
       recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
         ? MeasureUnits[recipeIngredient.unit] ? await this.translatorService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.unit
@@ -188,7 +183,7 @@ export class RecipeComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = {...this.form.value, recipeIngredients: []};
+    const formRecipe = { ...this.form.value, recipeIngredients: [] };
     for (let i = 0; i < this.recipeIngredients.length; i++) {
       formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
@@ -209,7 +204,7 @@ export class RecipeComponent implements OnInit {
       if (checkExist) {
         this.recipeService.exist(formDocument.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({'exist': true});
+            return this.name.setErrors({ 'exist': true });
           }
           await this.submit(formDocument);
         });

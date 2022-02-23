@@ -1,4 +1,4 @@
-import { EnumHelper } from '../tools/enum.helper';
+import { EnumHelper } from '../tools';
 
 export enum MeasureUnitEnum {
   gram = 'Gram', // g
