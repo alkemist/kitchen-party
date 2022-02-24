@@ -7,7 +7,7 @@
     "prod": "npm run config -- --environment=prod && ng serve --prod --host 0.0.0.0 --port 4021",
     "build": "npm run config -- --environment=prod && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "npx ngcc && jest",
+    "test": "npx ngcc && jest --coverage",
     "reset": "rm -rf node_modules && rm yarn.lock && yarn install",
     "config": "ts-node ./scripts/setenv.ts"
   },
@@ -25,7 +25,6 @@
     "@angular/service-worker": "~13.1.0",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
-    "@ngxs-labs/testing": "^0.0.3",
     "@ngxs/logger-plugin": "^3.7.3",
     "@ngxs/storage-plugin": "^3.7.3",
     "@ngxs/store": "^3.7.3",

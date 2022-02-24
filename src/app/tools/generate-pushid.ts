@@ -8,7 +8,7 @@
  *    latter ones will sort after the former ones.  We do this by using the previous random bits
  *    but "incrementing" them by 1 (only in the case of a timestamp collision).
  */
-export const generatePushID = function () {
+export const generatePushID = function (date?: Date) {
   // Modeled after base64 web-safe chars, but ordered by ASCII.
   const PUSH_CHARS = '-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
 
@@ -19,7 +19,7 @@ export const generatePushID = function () {
   const lastRandChars: number[] = [];
 
   let i;
-  let now = new Date().getTime();
+  let now = (date ? date : new Date()).getTime();
 
   const timeStampChars = new Array(8);
   for (i = 7; i >= 0; i--) {
@@ -27,7 +27,6 @@ export const generatePushID = function () {
     // NOTE: Can't use << here because javascript will convert to int and lose the upper bits.
     now = Math.floor(now / 64);
   }
-  if (now !== 0) throw new Error('We should have converted the entire timestamp.');
 
   let id = timeStampChars.join('');
 
@@ -38,7 +37,6 @@ export const generatePushID = function () {
   for (i = 0; i < 12; i++) {
     id += PUSH_CHARS.charAt(lastRandChars[i]);
   }
-  if (id.length != 20) throw new Error('Length should be 20.');
 
   return id;
 };

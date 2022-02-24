@@ -1,7 +1,7 @@
 export abstract class TimeHelper {
-  static calcHoursAfter(date: string | Date) {
-    const dateTime = new Date().getTime();
+  static calcHoursAfter(date: string | Date, dateNow?: Date): number {
+    const dateTime = (dateNow ? dateNow : new Date()).getTime();
     const lastUpdatedTime = new Date(date).getTime();
-    return (dateTime - lastUpdatedTime) / (1000 * 60 * 60);
+    return Math.round((dateTime - lastUpdatedTime) / (1000 * 60 * 60));
   }
 }

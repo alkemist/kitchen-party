@@ -41,12 +41,7 @@ describe('HeaderComponent', () => {
     isEnabled: false,
     _addSourceToVideo: jest.fn()
   };
-
-  //let store: Store;
-  //let ingredientsSelectorSubject: Subject<IngredientInterface[]>;
-
   beforeEach(async () => {
-    //await NgxsTestBed.configureTestingStates({states: [ IngredientState ]});
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
@@ -75,9 +70,6 @@ describe('HeaderComponent', () => {
     })
       .compileComponents();
 
-    //ingredientsSelectorSubject = mockSelect(IngredientState.all);
-    //store = TestBed.inject(Store);
-
     userServiceMock = TestBed.inject(UserService);
     shoppingServiceMock = TestBed.inject(ShoppingService);
     ingredientServiceMock = TestBed.inject(IngredientService);
@@ -89,9 +81,6 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     component.noSleep = noSleepMock as unknown as NoSleep;
-
-    //Object.defineProperty(component, 'ingredients$', {writable: true});
-    //component['ingredients$'] = of([]);
 
     fixture.detectChanges();
   });
