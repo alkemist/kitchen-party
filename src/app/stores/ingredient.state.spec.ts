@@ -6,6 +6,24 @@ import { IngredientState } from './ingredient.state';
 
 describe('IngredientState', () => {
   let store: Store;
+  let ingredientsSelected;
+  const updatedDate = new Date('1984-08-04 12:12');
+
+  const currentIngredient = { id: '1', slug: '1' } as IngredientInterface;
+  const newIngredient = { id: '2', slug: '2' } as IngredientInterface;
+  const ingredientUpdated = { ...currentIngredient, name: currentIngredient.slug } as IngredientInterface;
+  const fruitWithSeasonIngredient = {
+    id: '3',
+    slug: '3',
+    type: 'fruits_vegetables_mushrooms',
+    monthBegin: 1,
+    monthEnd: 2
+  } as IngredientInterface;
+  const fruitIngredient = { id: '4', slug: '4', type: 'fruits_vegetables_mushrooms' } as IngredientInterface;
+
+  const ingredientsSimple = [ currentIngredient ] as IngredientInterface[];
+  const ingredientsComplete = [ currentIngredient, fruitWithSeasonIngredient, fruitIngredient, newIngredient ];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -18,38 +36,53 @@ describe('IngredientState', () => {
     store = TestBed.inject(Store);
   });
 
-  it('should action', () => {
-    let ingredientsSelected;
-    const updatedDate = new Date('1984-08-04 12:12');
+  describe('actions', () => {
+    beforeEach(async () => {
+      store.dispatch(new FillIngredients(ingredientsSimple));
+    });
 
-    const currentIngredient = {id: '1', slug: '1'} as IngredientInterface;
-    let ingredients = [ currentIngredient ] as IngredientInterface[];
-    store.dispatch(new FillIngredients(ingredients));
+    it('should fill ingredients', () => {
+      ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
+      expect(ingredientsSelected).toEqual(ingredientsSimple);
+    });
 
-    ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
-    expect(ingredientsSelected).toEqual(ingredients);
+    it('should add ingredient', () => {
+      store.dispatch(new AddIngredient(newIngredient));
 
-    const newIngredient = {id: '2', slug: '2'} as IngredientInterface;
-    store.dispatch(new AddIngredient(newIngredient));
+      ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
+      expect(ingredientsSelected).toEqual([ ...ingredientsSimple, newIngredient ]);
+    });
 
-    ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
-    expect(ingredientsSelected).toEqual([ ...ingredients, newIngredient ]);
+    it('should update ingredient', () => {
+      store.dispatch(new UpdateIngredient(ingredientUpdated));
 
-    const ingredientUpdated = {...newIngredient, name: '2'} as IngredientInterface;
-    store.dispatch(new UpdateIngredient(ingredientUpdated));
+      ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
+      expect(ingredientsSelected).toEqual([ ingredientUpdated ]);
+    });
 
-    ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
-    expect(ingredientsSelected).toEqual([ ...ingredients, ingredientUpdated ]);
+    it('should remove ingredient', () => {
+      store.dispatch(new RemoveIngredient(currentIngredient));
 
-    store.dispatch(new RemoveIngredient(currentIngredient));
+      ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
+      expect(ingredientsSelected).toEqual([]);
+    });
+  })
 
-    ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
-    expect(ingredientsSelected).toEqual([ ingredientUpdated ]);
+  describe('selectors', () => {
+    it('should select all ingredients', () => {
+      expect(IngredientState.all({ all: ingredientsComplete })).toEqual(ingredientsComplete);
+    });
 
-    ingredients = [ currentIngredient, newIngredient ];
-    expect(IngredientState.all({all: ingredients})).toEqual(ingredients);
-    expect(IngredientState.lastUpdated({lastUpdated: updatedDate, all: []})).toEqual(updatedDate);
-    expect(IngredientState.fruitsOrVegetables({all: ingredients})).toEqual(ingredients);
-    expect(IngredientState.getIngredientBySlug({all: ingredients}, '2')).toEqual(ingredients);
-  });
+    it('should get last updated store date', () => {
+      expect(IngredientState.lastUpdated({ lastUpdated: updatedDate, all: [] })).toEqual(updatedDate);
+    });
+
+    it('should select fruits and vegetables with saisons', () => {
+      expect(IngredientState.fruitsOrVegetables({ all: ingredientsComplete })).toEqual([ fruitWithSeasonIngredient ]);
+    });
+
+    it('should get ingredient by slug', () => {
+      expect(IngredientState.getIngredientBySlug({ all: ingredientsComplete }, newIngredient.slug)).toEqual(newIngredient);
+    });
+  })
 });

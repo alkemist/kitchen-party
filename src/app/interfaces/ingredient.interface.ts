@@ -10,7 +10,7 @@ export interface IngredientInterface extends DataObjectInterface {
   monthBegin?: number | null,
   monthEnd?: number | null,
 
-  type: IngredientTypeEnum,
+  type: IngredientTypeEnum | string,
   isLiquid?: boolean | null,
 
   recipeId?: string,

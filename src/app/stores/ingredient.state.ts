@@ -5,13 +5,13 @@ import { IngredientTypeEnum, IngredientTypes } from '../enums';
 import { IngredientInterface } from '../interfaces';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
-export class IngredientStateModel {
-  all: IngredientInterface[] = [];
-  lastUpdated?: Date = undefined;
+export interface IngredientStateInterface {
+  all: IngredientInterface[];
+  lastUpdated?: Date;
 }
 
 @Injectable()
-@State<IngredientStateModel>({
+@State<IngredientStateInterface>({
   name: 'ingredients',
   defaults: {
     all: [],
@@ -21,17 +21,17 @@ export class IngredientStateModel {
 export class IngredientState {
 
   @Selector()
-  static lastUpdated(state: IngredientStateModel): Date | undefined {
+  static lastUpdated(state: IngredientStateInterface): Date | undefined {
     return state.lastUpdated;
   }
 
   @Selector()
-  static all(state: IngredientStateModel): IngredientInterface[] {
+  static all(state: IngredientStateInterface): IngredientInterface[] {
     return state.all;
   }
 
   @Selector()
-  static fruitsOrVegetables(state: IngredientStateModel): IngredientInterface[] {
+  static fruitsOrVegetables(state: IngredientStateInterface): IngredientInterface[] {
     return state.all.filter(ingredient =>
       IngredientTypes[ingredient.type] === IngredientTypeEnum.fruits_vegetables_mushrooms
       && ingredient.monthBegin && ingredient.monthEnd
@@ -39,14 +39,14 @@ export class IngredientState {
   }
 
   @Selector()
-  static getIngredientBySlug(state: IngredientStateModel, slug: string) {
+  static getIngredientBySlug(state: IngredientStateInterface, slug: string) {
     return state.all.find((ingredient: IngredientInterface) => {
       return ingredient.slug === slug;
     });
   }
 
   @Action(FillIngredients)
-  fill({ getState, patchState }: StateContext<IngredientStateModel>, { payload }: FillIngredients) {
+  fill({ getState, patchState }: StateContext<IngredientStateInterface>, { payload }: FillIngredients) {
     patchState({
       all: payload,
       lastUpdated: new Date()
@@ -54,7 +54,7 @@ export class IngredientState {
   }
 
   @Action(AddIngredient)
-  add({ setState }: StateContext<IngredientStateModel>, { payload }: AddIngredient) {
+  add({ setState }: StateContext<IngredientStateInterface>, { payload }: AddIngredient) {
     setState(
       patch({
         all: append([ payload ])
@@ -63,7 +63,7 @@ export class IngredientState {
   }
 
   @Action(RemoveIngredient)
-  remove({ setState }: StateContext<IngredientStateModel>, { payload }: RemoveIngredient) {
+  remove({ setState }: StateContext<IngredientStateInterface>, { payload }: RemoveIngredient) {
     setState(
       patch({
         all: removeItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id)
@@ -72,7 +72,7 @@ export class IngredientState {
   }
 
   @Action(UpdateIngredient)
-  update({ getState, patchState, setState }: StateContext<IngredientStateModel>, { payload }: UpdateIngredient) {
+  update({ getState, patchState, setState }: StateContext<IngredientStateInterface>, { payload }: UpdateIngredient) {
     setState(
       patch({
         all: updateItem<IngredientInterface>((item?: IngredientInterface) => item?.id === payload.id, payload)

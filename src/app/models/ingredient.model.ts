@@ -20,7 +20,7 @@ export class IngredientModel implements IngredientInterface {
   slug: string;
   monthBegin?: number | null;
   monthEnd?: number | null;
-  type: IngredientTypeEnum;
+  type: IngredientTypeEnum | string;
   isLiquid: boolean | null;
   recipeId?: string;
   recipe?: RecipeModel;
