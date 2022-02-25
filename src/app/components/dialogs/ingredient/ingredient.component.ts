@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { IngredientTypeEnum } from '../../../enums';
+import { IngredientTypeLabelEnum } from '../../../enums';
 import { IngredientInterface } from '../../../interfaces';
 import { IngredientModel } from '../../../models';
 import { IngredientService, TranslatorService } from '../../../services';
@@ -15,7 +15,7 @@ import { EnumHelper, slugify } from '../../../tools';
 })
 export class DialogIngredientComponent implements OnInit {
   ingredient = new IngredientModel({} as IngredientInterface);
-  ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
+  ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
   form: FormGroup = new FormGroup({});
   loading = false;
@@ -33,7 +33,7 @@ export class DialogIngredientComponent implements OnInit {
       ]),
       type: new FormControl('', [
         Validators.required,
-        Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
+        Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeLabelEnum)))
       ]),
       isLiquid: new FormControl('', []),
       dateBegin: new FormControl('', []),

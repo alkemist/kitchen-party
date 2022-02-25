@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MeasureUnitEnum, RecipeTypeEnum } from '../../../../enums';
+import { MeasureUnitLabelEnum, RecipeTypeLabelEnum } from '../../../../enums';
 import { RecipeInterface, UserInterface } from '../../../../interfaces';
 import { RecipeIngredientModel, RecipeModel } from '../../../../models';
 import { TranslatorService, UserService } from '../../../../services';
@@ -15,8 +15,8 @@ import { EnumHelper } from '../../../../tools';
   }
 })
 export class FrontRecipeComponent implements OnInit {
-  recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
-  measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+  recipeTypes = EnumHelper.enumToObject(RecipeTypeLabelEnum);
+  measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
   recipe = new RecipeModel({} as RecipeInterface);
   diet: string = '';
   loading = true;

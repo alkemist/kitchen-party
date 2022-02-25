@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { IngredientTypeEnum, IngredientTypes } from '../enums';
+import { IngredientTypeLabelEnum, IngredientTypes } from '../enums';
 import { IngredientInterface } from '../interfaces';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
@@ -33,7 +33,7 @@ export class IngredientState {
   @Selector()
   static fruitsOrVegetables(state: IngredientStateInterface): IngredientInterface[] {
     return state.all.filter(ingredient =>
-      IngredientTypes[ingredient.type] === IngredientTypeEnum.fruits_vegetables_mushrooms
+      IngredientTypes[ingredient.type] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms
       && ingredient.monthBegin && ingredient.monthEnd
     );
   }

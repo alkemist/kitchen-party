@@ -1,6 +1,21 @@
 import { EnumHelper } from '../tools';
 
-export enum RecipeTypeEnum {
+export enum RecipeTypeKeyEnum {
+  soup = 'soup',
+  cake = 'cake',
+  risotto = 'risotto',
+  pasta = 'pasta',
+  pie = 'pie',
+  quiche = 'quiche',
+  pizza = 'pizza',
+  gratin = 'gratin',
+  mash = 'mash',
+  sauce = 'sauce',
+  burger = 'burger',
+  ingredient = 'ingredient',
+}
+
+export enum RecipeTypeLabelEnum {
   soup = 'Soup', // Soupe
   cake = 'Cake', // Cake
   risotto = 'Risotto', // Risotto
@@ -15,4 +30,4 @@ export enum RecipeTypeEnum {
   ingredient = 'Ingredient' // Ingrédient
 }
 
-export const RecipeTypes = EnumHelper.enumToAssociativArray(RecipeTypeEnum);
+export const RecipeTypes = EnumHelper.enumToAssociativArray(RecipeTypeLabelEnum);

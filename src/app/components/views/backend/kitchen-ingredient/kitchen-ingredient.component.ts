@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { MeasureUnitEnum, MeasureUnits } from '../../../../enums';
+import { MeasureUnitLabelEnum, MeasureUnits } from '../../../../enums';
 import { KitchenIngredientInterface, RecipeIngredientFormInterface } from '../../../../interfaces';
 import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
 import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '../../../../services';
@@ -18,7 +18,7 @@ import { EnumHelper, slugify } from '../../../../tools';
 })
 export class KitchenIngredientComponent implements OnInit {
   kitchenIngredient = new KitchenIngredientModel({} as KitchenIngredientInterface);
-  measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+  measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
 
   form: FormGroup = new FormGroup({});
@@ -45,7 +45,7 @@ export class KitchenIngredientComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(
       async (data: any) => {
-        this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitEnum));
+        this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitLabelEnum));
         this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
 
         if (data && data['kitchenIngredient']) {

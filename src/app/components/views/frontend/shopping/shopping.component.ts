@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MeasureUnitEnum } from '../../../../enums';
+import { MeasureUnitLabelEnum } from '../../../../enums';
 import { IngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
 import { KitchenIngredientService, TranslatorService } from '../../../../services';
 import { EnumHelper } from '../../../../tools';
@@ -21,7 +21,7 @@ interface CartElement {
   }
 })
 export class ShoppingComponent implements OnInit {
-  measureUnits = EnumHelper.enumToObject(MeasureUnitEnum);
+  measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
   recipes: RecipeModel[] = [];
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
@@ -92,8 +92,8 @@ export class ShoppingComponent implements OnInit {
       const quantities: any = {};
       quantities[''] = 0;
       quantities['undefined'] = 0;
-      quantities[MeasureUnitEnum.gram] = 0;
-      quantities[MeasureUnitEnum.milliliter] = 0;
+      quantities[MeasureUnitLabelEnum.gram] = 0;
+      quantities[MeasureUnitLabelEnum.milliliter] = 0;
 
       this.cart.push({
         ingredient: recipeIngredient.ingredient!,
@@ -134,7 +134,7 @@ export class ShoppingComponent implements OnInit {
       const quantities = [];
       for (let quantityType in cartElement.quantities) {
         const count = cartElement.quantities[quantityType];
-        if (quantityType === MeasureUnitEnum.gram || quantityType === MeasureUnitEnum.milliliter) {
+        if (quantityType === MeasureUnitLabelEnum.gram || quantityType === MeasureUnitLabelEnum.milliliter) {
           quantityType = await this.translatorService.instant(quantityType);
         }
 

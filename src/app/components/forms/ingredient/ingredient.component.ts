@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IngredientTypeEnum, IngredientTypes } from '../../../enums';
+import { IngredientTypeLabelEnum, IngredientTypes } from '../../../enums';
 import { IngredientModel } from '../../../models';
 import { KeyLabelInterface } from '../../../interfaces';
 
@@ -23,7 +23,7 @@ export class FormIngredientComponent implements OnInit {
   }
 
   get isFruitsOrVegetables(): boolean {
-    return IngredientTypes[this.type.value] === IngredientTypeEnum.fruits_vegetables_mushrooms;
+    return IngredientTypes[this.type.value] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms;
   }
 
   get name(): FormControl {

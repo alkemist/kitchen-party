@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { DietTypeEnum, MeasureUnitEnum, MeasureUnits, RecipeTypeEnum } from '../../../../enums';
+import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '../../../../enums';
 import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '../../../../interfaces';
 import { IngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
 import {
@@ -27,7 +27,7 @@ import { DialogIngredientComponent } from '../../../dialogs/ingredient/ingredien
 })
 export class RecipeComponent implements OnInit {
   recipe = new RecipeModel({} as RecipeInterface);
-  DietTypeEnum = DietTypeEnum;
+  DietTypeEnum = DietTypeLabelEnum;
   recipeTypes: KeyLabelInterface[] = [];
   measureUnits: KeyLabelInterface[] = [];
   unitsOrMeasures: KeyLabelInterface[] = [];
@@ -114,8 +114,8 @@ export class RecipeComponent implements OnInit {
     this.route.data.subscribe(
       (async (data: any) => {
         this.ingredientTranslation = await this.translatorService.instant('Ingredients');
-        this.recipeTypes = await this.translatorService.translateLabels(EnumHelper.enumToObject(RecipeTypeEnum));
-        this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitEnum));
+        this.recipeTypes = await this.translatorService.translateLabels(EnumHelper.enumToObject(RecipeTypeLabelEnum));
+        this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitLabelEnum));
         this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
 
         if (data && data['recipe']) {

@@ -1,4 +1,10 @@
-import { DietTypeEnum, IngredientTypeEnum, MeasureUnitEnum, MeasureUnits } from '../enums';
+import {
+  DietTypeLabelEnum,
+  IngredientTypeLabelEnum,
+  MeasureUnitKeyEnum,
+  MeasureUnitLabelEnum,
+  MeasureUnits
+} from '../enums';
 import {
   HasIngredient,
   KeyLabelInterface,
@@ -10,11 +16,11 @@ import { RecipeModel } from './recipe.model';
 
 
 export class RecipeIngredientModel implements RecipeIngredientInterface {
-  static ingredientTypes = Object.keys(IngredientTypeEnum);
+  static ingredientTypes = Object.keys(IngredientTypeLabelEnum);
   id?: string;
   quantity: number | null;
   measure: string;
-  unit: MeasureUnitEnum | null;
+  unit: MeasureUnitKeyEnum | null;
 
   ingredient?: IngredientModel;
   ingredientId?: string;
@@ -54,22 +60,22 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     const unit = this.unit ? MeasureUnits[this.unit] : null;
 
     switch (unit) {
-      case MeasureUnitEnum.tablespoon:
+      case MeasureUnitLabelEnum.tablespoon:
         return {
           count: quantity * 15,
-          unit: this.ingredient?.isLiquid ? MeasureUnitEnum.milliliter : MeasureUnitEnum.gram
+          unit: this.ingredient?.isLiquid ? MeasureUnitLabelEnum.milliliter : MeasureUnitLabelEnum.gram
         };
-      case MeasureUnitEnum.teaspoon:
+      case MeasureUnitLabelEnum.teaspoon:
         return {
           count: quantity * 5,
-          unit: this.ingredient?.isLiquid ? MeasureUnitEnum.milliliter : MeasureUnitEnum.gram
+          unit: this.ingredient?.isLiquid ? MeasureUnitLabelEnum.milliliter : MeasureUnitLabelEnum.gram
         };
-      case MeasureUnitEnum.centiliter:
-        return { count: quantity * 10, unit: MeasureUnitEnum.milliliter };
-      case MeasureUnitEnum.kilogram:
-        return { count: quantity * 1000, unit: MeasureUnitEnum.gram };
-      case MeasureUnitEnum.gram:
-        return { count: quantity, unit: MeasureUnitEnum.gram };
+      case MeasureUnitLabelEnum.centiliter:
+        return { count: quantity * 10, unit: MeasureUnitLabelEnum.milliliter };
+      case MeasureUnitLabelEnum.kilogram:
+        return { count: quantity * 1000, unit: MeasureUnitLabelEnum.gram };
+      case MeasureUnitLabelEnum.gram:
+        return { count: quantity, unit: MeasureUnitLabelEnum.gram };
     }
 
     return { count: quantity, measure: this.measure };
@@ -98,14 +104,14 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     if (MeasureUnits[value] !== undefined) {
       isUnit = true;
     } else {
-      const measureUnitKeys = Object.keys(MeasureUnitEnum);
+      const measureUnitKeys = Object.keys(MeasureUnitLabelEnum);
       const keyIndex = measureUnitKeys.indexOf(unitOrMeasure);
       if (keyIndex > -1) {
         isUnit = true;
         value = measureUnits[keyIndex].key;
       } else {
-        const measureUnitValues = Object.values(MeasureUnitEnum);
-        const valueIndex = measureUnitValues.indexOf(unitOrMeasure as MeasureUnitEnum);
+        const measureUnitValues = Object.values(MeasureUnitLabelEnum);
+        const valueIndex = measureUnitValues.indexOf(unitOrMeasure as MeasureUnitLabelEnum);
         if (valueIndex > -1) {
           isUnit = true;
           value = measureUnits[valueIndex].key;
@@ -114,7 +120,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     if (isUnit) {
-      recipeIngredient.unit = value as MeasureUnitEnum;
+      recipeIngredient.unit = value as MeasureUnitKeyEnum;
       recipeIngredient.measure = '';
     } else {
       recipeIngredient.measure = value;
@@ -178,13 +184,13 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   }
 
   hasOption(option: string): boolean {
-    if (option === DietTypeEnum.meat && this.optionCarne) {
+    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
       return true;
     }
-    if (option === DietTypeEnum.vege && this.optionVege) {
+    if (option === DietTypeLabelEnum.vege && this.optionVege) {
       return true;
     }
-    return option === DietTypeEnum.vegan && this.optionVegan;
+    return option === DietTypeLabelEnum.vegan && this.optionVegan;
   }
 }
 

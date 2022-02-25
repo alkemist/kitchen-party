@@ -1,4 +1,4 @@
-import { IngredientTypeEnum, IngredientTypes } from '../enums';
+import { IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
 import { IngredientFormInterface, IngredientInterface } from '../interfaces';
 import { DateHelper, slugify } from '../tools';
 import { RecipeModel } from './recipe.model';
@@ -20,7 +20,7 @@ export class IngredientModel implements IngredientInterface {
   slug: string;
   monthBegin?: number | null;
   monthEnd?: number | null;
-  type: IngredientTypeEnum | string;
+  type: IngredientTypeKeyEnum | string;
   isLiquid: boolean | null;
   recipeId?: string;
   recipe?: RecipeModel;
@@ -40,43 +40,43 @@ export class IngredientModel implements IngredientInterface {
   }
 
   get typeIcon(): string {
-    if (IngredientTypes[this.type] === IngredientTypeEnum.meats) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.meats) {
       return 'goat';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods) {
       return 'directions_boat';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms) {
       return 'local_florist';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.cereals_legumines) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.cereals_legumines) {
       return 'grass';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.animal_fats) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.animal_fats) {
       return 'opacity';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.vegetable_fats) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.vegetable_fats) {
       return 'opacity';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.yeasts) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.yeasts) {
       return 'bubble_chart';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.aromatic_herbs) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.aromatic_herbs) {
       return 'eco';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.spices) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.spices) {
       return 'bolt';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.sugars) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.sugars) {
       return 'view_comfortable';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.salts) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.salts) {
       return 'grain';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.alcohols) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.alcohols) {
       return 'liquor';
     }
-    if (IngredientTypes[this.type] === IngredientTypeEnum.water) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.water) {
       return 'local_drink';
     }
     return '';
@@ -109,15 +109,15 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isVegan(): boolean {
-    return this.isVege() && IngredientTypes[this.type] !== IngredientTypeEnum.animal_fats;
+    return this.isVege() && IngredientTypes[this.type] !== IngredientTypeLabelEnum.animal_fats;
   }
 
   isMeat(): boolean {
-    return IngredientTypes[this.type] === IngredientTypeEnum.meats;
+    return IngredientTypes[this.type] === IngredientTypeLabelEnum.meats;
   }
 
   isFish(): boolean {
-    return IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods;
+    return IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods;
   }
 
   isSweet(): boolean {
@@ -130,8 +130,8 @@ export class IngredientModel implements IngredientInterface {
     const name = this.name.toLowerCase();
     const regex = new RegExp('bouillon .*', 'gi');
 
-    if (IngredientTypes[this.type] === IngredientTypeEnum.fishes_seafoods
-      || IngredientTypes[this.type] === IngredientTypeEnum.meats) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods
+      || IngredientTypes[this.type] === IngredientTypeLabelEnum.meats) {
       return true;
     } else if (IngredientModel.saltyNames.includes(name)) {
       return true;
@@ -144,7 +144,7 @@ export class IngredientModel implements IngredientInterface {
 
   isSeason(): boolean {
 
-    if (IngredientTypes[this.type] === IngredientTypeEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
+    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
       const date = new Date();
       let monthCurrent = date.getMonth() + 1;
       let yearBegin = date.getFullYear();

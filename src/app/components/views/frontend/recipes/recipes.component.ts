@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyEnum } from '../../../../enums';
+import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '../../../../enums';
 import { IngredientModel, RecipeModel } from '../../../../models';
 import {
   FilterService,
@@ -79,8 +79,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
         valid = recipe.type! && recipe.type === filters.type;
       }
       if (valid && filters.sweetOrSalty) {
-        valid = recipe.isSweet() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.sweet
-          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyEnum.salty;
+        valid = recipe.isSweet() && SweetSalty[filters.sweetOrSalty] === SweetSaltyLabelEnum.sweet
+          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyLabelEnum.salty;
       }
       if (valid && filters.ingredients) {
         valid = filters.ingredients.every((filterIngredientId: string) => recipe.ingredientIds.some(recipeIngredientId => filterIngredientId === recipeIngredientId));

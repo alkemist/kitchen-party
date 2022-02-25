@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IngredientTypeEnum } from '../../../../enums';
+import { IngredientTypeLabelEnum } from '../../../../enums';
 import { IngredientModel } from '../../../../models';
 import { IngredientService, TranslatorService } from '../../../../services';
 import { EnumHelper } from '../../../../tools';
@@ -15,7 +15,7 @@ import { EnumHelper } from '../../../../tools';
 })
 export class IngredientsComponent implements OnInit {
   ingredients: IngredientModel[] = [];
-  ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
+  ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
   loading = true;
 
   constructor(private ingredientService: IngredientService, private router: Router, private translatorService: TranslatorService) {

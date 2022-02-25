@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { IngredientTypeEnum } from '../../../../enums';
+import { IngredientTypeLabelEnum } from '../../../../enums';
 import { IngredientInterface } from '../../../../interfaces';
 import { IngredientModel } from '../../../../models';
 import { IngredientService, TranslatorService } from '../../../../services';
@@ -18,7 +18,7 @@ import { EnumHelper, slugify } from '../../../../tools';
 })
 export class IngredientComponent implements OnInit {
   ingredient = new IngredientModel({} as IngredientInterface);
-  ingredientTypes = EnumHelper.enumToObject(IngredientTypeEnum);
+  ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
   form: FormGroup = new FormGroup({});
   loading = true;
@@ -38,7 +38,7 @@ export class IngredientComponent implements OnInit {
       ]),
       type: new FormControl('', [
         Validators.required,
-        Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeEnum)))
+        Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeLabelEnum)))
       ]),
       isLiquid: new FormControl('', []),
       dateBegin: new FormControl('', []),

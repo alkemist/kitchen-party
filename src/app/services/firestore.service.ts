@@ -51,12 +51,20 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     this.collectionName = collectionName;
     this.converter = converter;
     this.ref = collection(getFirestore(), collectionName);
-    this.lastUpdated$?.subscribe(lastUpdated => {
+    this.initLastUpdated();
+  }
+
+  getLastUpdated$() {
+    return this.lastUpdated$;
+  }
+
+  initLastUpdated() {
+    this.getLastUpdated$()?.subscribe(lastUpdated => {
       this.lastUpdated = lastUpdated;
     });
   }
 
-  storeIsOutdated() {
+  storeIsOutdated(): boolean {
     if (this.lastUpdated === undefined) {
       return true;
     }
@@ -70,27 +78,30 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     }
 
     const slug = slugify(name);
+
     let dataObjectDocument = null;
     try {
       dataObjectDocument = await this.findOneBySlug(slug);
     } catch (e) {
-      if (!(e instanceof DocumentNotFound)) {
-        this.loggerService.error(new DatabaseError((e as Error).message, { slug }));
+      if (e instanceof DocumentNotFound) {
+        return false;
       }
     }
     return !!dataObjectDocument;
   }
 
-  protected async select(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+  protected async promiseQueryList(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const sign = JSON.stringify(queryConstraints);
     if (!this.promises[sign]) {
-      this.promises[sign] = this.refresh(...queryConstraints);
+      this.promises[sign] = this.queryList(...queryConstraints);
     }
 
-    return new Promise<T[]>(resolve => {
-      this.promises[sign]?.then(documents => {
+    return new Promise<T[]>((resolve, reject) => {
+      this.promises[sign]!.then(documents => {
         delete this.promises[sign];
         resolve(documents);
+      }).catch(e => {
+        reject(e);
       });
     });
   }
@@ -119,10 +130,16 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
   }
 
   protected async findOneBySlug(slug: string): Promise<T> {
-    const list = await this.select(where('slug', '==', slug));
+    let list: T[] = [];
+
+    try {
+      list = await this.promiseQueryList(where('slug', '==', slug));
+    } catch (e) {
+      this.loggerService.error(new DatabaseError((e as Error).message, { slug }));
+    }
 
     if (list.length === 0) {
-      throw new DocumentNotFound<T>(this.collectionName);
+      throw new DocumentNotFound<T>(this.collectionName, { slug } as T);
     }
 
     return list[0];
@@ -172,7 +189,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     }
   }
 
-  private async refresh(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+  private async queryList(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];
     try {
@@ -186,6 +203,8 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       const er = e as Error;
       if (er.message === 'Quota exceeded.') {
         this.loggerService.error(new QuotaExceededError());
+      } else {
+        throw e;
       }
     }
     this.refreshed = true;

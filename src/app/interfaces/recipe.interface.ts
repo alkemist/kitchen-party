@@ -1,4 +1,4 @@
-import { RecipeTypeEnum } from '../enums';
+import { RecipeTypeKeyEnum } from '../enums';
 import { DataObjectInterface } from './data-object.interface';
 import { RecipeIngredientInterface } from './recipe-ingredient.interface';
 
@@ -13,7 +13,7 @@ export interface RecipeInterface extends DataObjectInterface {
 
   nbSlices?: number,
   instructions?: string[],
-  type?: RecipeTypeEnum | null,
+  type?: RecipeTypeKeyEnum | null,
   image?: string,
   imagePath?: string,
   source?: string,

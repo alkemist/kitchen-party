@@ -6,7 +6,7 @@ import { default as NoSleep } from 'nosleep.js';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { DietTypeEnum, RecipeTypeEnum, SweetSaltyEnum } from '../../../enums';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '../../../enums';
 import { UserInterface } from '../../../interfaces';
 import { IngredientModel } from '../../../models';
 import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
@@ -37,9 +37,9 @@ export class HeaderComponent implements OnInit {
   showAppName = false;
   @HostBinding('class.hideHeader') hideHeader = false;
 
-  recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
-  dietTypes = EnumHelper.enumToObject(DietTypeEnum);
-  sweetOrSalty = EnumHelper.enumToObject(SweetSaltyEnum);
+  recipeTypes = EnumHelper.enumToObject(RecipeTypeLabelEnum);
+  dietTypes = EnumHelper.enumToObject(DietTypeLabelEnum);
+  sweetOrSalty = EnumHelper.enumToObject(SweetSaltyLabelEnum);
   loading = true;
   sidebarShowed = false;
   noSleep = new NoSleep();

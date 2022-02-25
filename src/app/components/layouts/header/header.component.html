@@ -21,9 +21,12 @@
           <input formControlName="name" id="float-input" pInputText type="text">
           <label for="float-input" translate="">Name</label>
     </span>
-    <button (click)="resetFilters()" class="p-button-rounded p-button-text" icon="pi pi-times" pButton
+    <button (click)="resetFilters()" [pTooltip]="'Clear filters' | translate" class="p-button-rounded p-button-text"
+            icon="pi pi-times"
+            pButton
             pRipple type="button"></button>
     <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+            [pTooltip]="'Create shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
             pButton pRipple type="button"></button>
   </div>
@@ -68,6 +71,7 @@
               icon="pi pi-times" pButton
               pRipple type="button"></button>
       <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+              [pTooltip]="'Create shopping cart' | translate"
               class="p-button-rounded p-button-text"
               icon="pi pi-shopping-cart" pButton
               pRipple type="button"></button>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RecipeTypeEnum } from '../../../../enums';
+import { RecipeTypeLabelEnum } from '../../../../enums';
 import { RecipeModel } from '../../../../models';
 import { RecipeService, TranslatorService } from '../../../../services';
 import { EnumHelper } from '../../../../tools';
@@ -15,7 +15,7 @@ import { EnumHelper } from '../../../../tools';
 })
 export class RecipesComponent implements OnInit {
   recipes: RecipeModel[] = [];
-  recipeTypes = EnumHelper.enumToObject(RecipeTypeEnum);
+  recipeTypes = EnumHelper.enumToObject(RecipeTypeLabelEnum);
   loading = true;
 
   constructor(private recipeService: RecipeService, private router: Router, private translatorService: TranslatorService) {

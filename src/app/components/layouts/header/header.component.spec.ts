@@ -41,6 +41,7 @@ describe('HeaderComponent', () => {
     isEnabled: false,
     _addSourceToVideo: jest.fn()
   };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -141,7 +142,7 @@ describe('HeaderComponent', () => {
       noSleepDisableSpy.mockReset();
       noSleepEnableSpy.mockReset();
       title = '';
-      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
+      state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
       noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
@@ -250,8 +251,8 @@ describe('HeaderComponent', () => {
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
     expect(await component.translateMenu([ {
       label: 'test',
-      items: [ {label: 'test'} ]
-    } ])).toEqual([ {label: translatedLabel, items: [ {label: translatedLabel} ]} ]);
+      items: [ { label: 'test' } ]
+    } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
   });
 
   it('should go to shopping', async () => {
