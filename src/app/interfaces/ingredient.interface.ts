@@ -1,6 +1,5 @@
 import { IngredientTypeKeyEnum } from '../enums';
 import { DataObjectInterface } from './data-object.interface';
-import { RecipeInterface } from './recipe.interface';
 
 export interface IngredientInterface extends DataObjectInterface {
   id?: string,
@@ -12,7 +11,4 @@ export interface IngredientInterface extends DataObjectInterface {
 
   type: IngredientTypeKeyEnum | string,
   isLiquid?: boolean | null,
-
-  recipeId?: string,
-  recipe?: RecipeInterface
 }

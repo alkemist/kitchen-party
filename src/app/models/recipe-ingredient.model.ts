@@ -28,9 +28,9 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   recipe?: RecipeModel;
   recipeId?: string;
 
-  optionCarne: boolean;
-  optionVege: boolean;
-  optionVegan: boolean;
+  optionCarne?: boolean;
+  optionVege?: boolean;
+  optionVegan?: boolean;
 
   constructor(recipeIngredient: RecipeIngredientInterface) {
     this.id = recipeIngredient.id;
@@ -190,7 +190,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     if (option === DietTypeLabelEnum.vege && this.optionVege) {
       return true;
     }
-    return option === DietTypeLabelEnum.vegan && this.optionVegan;
+    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
   }
 }
 

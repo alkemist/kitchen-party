@@ -6,7 +6,6 @@ import { IngredientModel } from '../models';
 export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = {
   toFirestore: (ingredient: IngredientModel): IngredientInterface => {
     const ingredientFields = { ...ingredient };
-    ingredientFields.recipeId = ingredientFields.recipe ? ingredientFields.recipe?.id : '';
     if (!ingredientFields.monthBegin) {
       ingredientFields.monthBegin = null;
     }
@@ -15,7 +14,6 @@ export const ingredientConverter: FirestoreDataConverter<IngredientInterface> = 
     }
 
     delete ingredientFields.id;
-    delete ingredientFields.recipe;
     return ingredientFields;
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {

@@ -14,7 +14,7 @@ export interface RecipeIngredientInterface extends HasIngredient {
   recipe?: RecipeInterface,
   recipeId?: string,
 
-  optionCarne: boolean,
-  optionVege: boolean,
-  optionVegan: boolean,
+  optionCarne?: boolean,
+  optionVege?: boolean,
+  optionVegan?: boolean,
 }
