@@ -24,3 +24,22 @@ Object.defineProperty(document.body.style, 'transform', {
     };
   },
 });
+
+jest.mock('firebase/firestore', () => ({
+  ...(jest.requireActual('firebase/firestore')),
+  collection: jest.fn(),
+  CollectionReference: jest.fn(),
+  deleteDoc: jest.fn(),
+  doc: jest.fn().mockReturnValue({
+    withConverter: jest.fn()
+  }),
+  getDoc: jest.fn(),
+  getDocs: jest.fn(),
+  getFirestore: jest.fn(),
+  query: jest.fn().mockReturnValue({
+    withConverter: jest.fn()
+  }),
+  QueryConstraint: jest.fn(),
+  setDoc: jest.fn(),
+  where: jest.fn(),
+}))

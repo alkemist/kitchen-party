@@ -18,7 +18,11 @@ export class IngredientsComponent implements OnInit {
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
   loading = true;
 
-  constructor(private ingredientService: IngredientService, private router: Router, private translatorService: TranslatorService) {
+  constructor(
+    private ingredientService: IngredientService,
+    private router: Router,
+    private translatorService: TranslatorService
+  ) {
   }
 
   async ngOnInit(): Promise<void> {

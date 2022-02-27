@@ -70,8 +70,8 @@ export class ShoppingComponent implements OnInit {
   initCart() {
     for (const recipe of this.recipes) {
       for (const recipeIngredient of recipe.recipeIngredients) {
-        if (recipeIngredient.ingredient?.recipe) {
-          const subRecipe = recipeIngredient.ingredient?.recipe;
+        if (recipeIngredient.recipe) {
+          const subRecipe = recipeIngredient.recipe;
           for (const subRecipeIngredient of subRecipe.recipeIngredients) {
             this.addToCart(subRecipeIngredient);
           }

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { MockModule, MockProvider } from 'ng-mocks';
@@ -16,7 +16,13 @@ import { Subject } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
 import { IngredientModel, UserInterface } from '../../../models';
 import { TranslatingModule } from '../../../modules/translating.module';
-import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
+import {
+  FilteringService,
+  IngredientService,
+  ShoppingService,
+  TranslatorService,
+  UserService
+} from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
 
 import { HeaderComponent } from './header.component';
@@ -28,6 +34,8 @@ describe('HeaderComponent', () => {
   let shoppingServiceMock: ShoppingService;
   let ingredientServiceMock: IngredientService;
   let translatorServiceMock: TranslatorService;
+  let filteringService: FilteringService;
+  let filtersForm: FormGroup;
   let routerEventsSubject = new Subject<RouterEvent>();
 
   const routerMock = {
@@ -64,7 +72,7 @@ describe('HeaderComponent', () => {
           MockProvider(UserService),
           MockProvider(TranslatorService),
           MockProvider(IngredientService),
-          MockProvider(FilterService),
+          MockProvider(FilteringService),
           MockProvider(ShoppingService),
           MockProvider(Router, routerMock)
         ],
@@ -75,6 +83,7 @@ describe('HeaderComponent', () => {
     shoppingServiceMock = TestBed.inject(ShoppingService);
     ingredientServiceMock = TestBed.inject(IngredientService);
     translatorServiceMock = TestBed.inject(TranslatorService);
+    filteringService = TestBed.inject(FilteringService);
     shoppingServiceMock.selectedRecipes = [];
   });
 
@@ -82,6 +91,16 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     component.noSleep = noSleepMock as unknown as NoSleep;
+
+    filtersForm = new FormGroup({
+      diet: new FormControl(null, []),
+      type: new FormControl(null, []),
+      name: new FormControl(null, []),
+      sweetOrSalty: new FormControl(null, []),
+      isSeason: new FormControl(false, []),
+      ingredients: new FormControl([], []),
+    });
+    jest.spyOn(filteringService, 'getFilters').mockReturnValue(filtersForm);
 
     fixture.detectChanges();
   });

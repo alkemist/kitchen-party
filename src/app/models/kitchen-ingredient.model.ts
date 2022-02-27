@@ -7,7 +7,7 @@ export class KitchenIngredientModel extends RecipeIngredientModel implements Kit
 
   constructor(kitchenIngredient: KitchenIngredientInterface) {
     super(kitchenIngredient);
-    this.slug = kitchenIngredient.slug;
+    this.slug = kitchenIngredient.slug ?? '';
   }
 
   get name(): string | undefined {

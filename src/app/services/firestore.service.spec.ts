@@ -4,40 +4,12 @@ import { DataObjectInterface } from '../interfaces';
 import { FirestoreService } from './firestore.service';
 import { MockProvider } from 'ng-mocks';
 import { LoggerService } from './logger.service';
-import { FirestoreDataConverter } from '@firebase/firestore';
 import { of } from 'rxjs';
 import { deleteDoc, getDoc, getDocs, QueryConstraint, setDoc } from 'firebase/firestore';
 import { DatabaseError, DocumentNotFound, EmptyDocument, QuotaExceededError } from '../errors';
 import { slugify } from '../tools';
 import { dateMock } from '../mocks/date.mock';
-
-jest.mock('firebase/firestore', () => ({
-  ...(jest.requireActual('firebase/firestore')),
-  collection: jest.fn(),
-  CollectionReference: jest.fn(),
-  deleteDoc: jest.fn(),
-  doc: jest.fn().mockReturnValue({
-    withConverter: jest.fn()
-  }),
-  getDoc: jest.fn(),
-  getDocs: jest.fn(),
-  getFirestore: jest.fn(),
-  query: jest.fn().mockReturnValue({
-    withConverter: jest.fn()
-  }),
-  QueryConstraint: jest.fn(),
-  setDoc: jest.fn(),
-  where: jest.fn(),
-}));
-
-const dummyConverter: FirestoreDataConverter<DataObjectInterface> = {
-  toFirestore: (object: any): DataObjectInterface => {
-    return object;
-  },
-  fromFirestore: () => {
-    return {};
-  }
-};
+import { dummyConverter } from '../mocks/firestore.mock';
 
 class DummyService extends FirestoreService<DataObjectInterface> {
   constructor(private logger: LoggerService) {

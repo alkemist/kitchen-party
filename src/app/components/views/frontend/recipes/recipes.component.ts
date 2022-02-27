@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '../../../../enums';
 import { IngredientModel, RecipeModel } from '../../../../models';
 import {
-  FilterService,
+  FilteringService,
   IngredientService,
   RecipeService,
   ShoppingService,
@@ -25,25 +25,17 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   ingredients: IngredientModel[] = [];
   filteredRecipes: RecipeModel[] = [];
   loading = true;
-  subscription: Subscription;
+  subscription?: Subscription;
   filterSummary: { key: string, value: string }[] = [];
 
   constructor(
     private recipeService: RecipeService,
     private ingredientService: IngredientService,
-    private filterService: FilterService,
+    private filteringService: FilteringService,
     private shoppingService: ShoppingService,
     private translatorService: TranslatorService,
     private router: Router
   ) {
-    this.recipeService.getListOrRefresh().then(recipes => {
-      this.recipes = recipes;
-      this.filteredRecipes = recipes;
-      this.loading = false;
-    });
-    this.subscription = this.filterService.filters.valueChanges.subscribe((filters) => {
-      this.filter(filters);
-    });
   }
 
   get selectedRecipes() {
@@ -94,11 +86,21 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   }
 
   removeFilter(key: string) {
-    this.filterService.filters.get(key)?.patchValue('');
+    this.filteringService.getFilters().get(key)?.patchValue('');
   }
 
   ngOnInit(): void {
-    this.filter(this.filterService.filters.value);
+    if (!this.subscription) {
+      this.subscription = this.filteringService.getFilters().valueChanges.subscribe((filters) => {
+        this.filter(filters);
+      });
+    }
+    this.recipeService.getListOrRefresh().then(recipes => {
+      this.recipes = recipes;
+      this.filteredRecipes = recipes;
+      this.loading = false;
+    });
+    this.filter(this.filteringService.getFilters().value);
   }
 
   ngOnDestroy() {
@@ -109,8 +111,8 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
 
   gotoRecipe(recipe: RecipeModel) {
     const route = [ '/', recipe.slug ];
-    if (this.filterService.filters.get('diet')?.value) {
-      route.push(this.filterService.filters.get('diet')?.value);
+    if (this.filteringService.getFilters().get('diet')?.value) {
+      route.push(this.filteringService.getFilters().get('diet')?.value);
     }
 
     this.router.navigate(route);

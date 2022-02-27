@@ -55,6 +55,7 @@ describe('recipeConverter', () => {
   it('toFirestore', () => {
     expect(recipeConverter.toFirestore(recipeMeatMock)).toEqual(recipeInFirestore);
   })
+
   it('fromFirestore', () => {
     expect(recipeConverter.fromFirestore(
       {

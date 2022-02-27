@@ -29,7 +29,7 @@ export class IngredientModel implements IngredientInterface {
     this.type = ingredient.type;
     this.monthBegin = ingredient.monthBegin;
     this.monthEnd = ingredient.monthEnd;
-    this.isLiquid = ingredient.isLiquid || null;
+    this.isLiquid = typeof ingredient.isLiquid !== 'undefined' ? ingredient.isLiquid : null;
   }
 
   get typeName(): string {

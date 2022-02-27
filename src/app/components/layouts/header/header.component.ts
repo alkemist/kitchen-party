@@ -9,7 +9,13 @@ import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } fr
 import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '../../../enums';
 import { UserInterface } from '../../../interfaces';
 import { IngredientModel } from '../../../models';
-import { FilterService, IngredientService, ShoppingService, TranslatorService, UserService } from '../../../services';
+import {
+  FilteringService,
+  IngredientService,
+  ShoppingService,
+  TranslatorService,
+  UserService
+} from '../../../services';
 import { IngredientState } from '../../../stores/ingredient.state';
 import { EnumHelper } from '../../../tools';
 
@@ -50,24 +56,24 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private translatorService: TranslatorService,
     private ingredientService: IngredientService,
-    private filterService: FilterService,
+    private filteringService: FilteringService,
     private shoppingService: ShoppingService,
   ) {
     this.ingredients$?.subscribe((ingredients: IngredientModel[]) => {
       this.ingredients = ingredients;
     });
-    this.filterService.filters = new FormGroup({
+    this.filteringService.setFilters(new FormGroup({
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
       name: new FormControl(null, []),
       sweetOrSalty: new FormControl(null, []),
       isSeason: new FormControl(false, []),
       ingredients: new FormControl([], []),
-    });
+    }));
   }
 
   get form() {
-    return this.filterService.filters;
+    return this.filteringService.getFilters();
   }
 
   get selectedRecipes() {
