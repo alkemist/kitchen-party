@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '../../../../services';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
-import { FormKitchenIngredientComponent } from '../../../forms/kitchen-ingredient/kitchen-ingredient.component';
+import { FormKitchenIngredientComponent } from '../../../forms/kitchen-ingredient/form-kitchen-ingredient.component';
 import { ButtonModule } from 'primeng/button';
 import { BlockUIModule } from 'primeng/blockui';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';

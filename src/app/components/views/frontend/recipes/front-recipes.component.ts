@@ -14,8 +14,8 @@ import { ToolbarFilters } from '../../../layouts/header/header.component';
 
 @Component({
   selector: 'app-front-recipes',
-  templateUrl: './recipes.component.html',
-  styleUrls: [ './recipes.component.scss' ],
+  templateUrl: './front-recipes.component.html',
+  styleUrls: [ './front-recipes.component.scss' ],
   host: {
     class: 'page-container'
   }

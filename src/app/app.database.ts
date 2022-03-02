@@ -1,6 +1,6 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
 const app = initializeApp({
   apiKey: environment.FIREBASE_API_KEY,

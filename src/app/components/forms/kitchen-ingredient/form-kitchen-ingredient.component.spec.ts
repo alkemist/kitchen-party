@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormKitchenIngredientComponent } from './kitchen-ingredient.component';
+import { FormKitchenIngredientComponent } from './form-kitchen-ingredient.component';
 import { MockModule } from 'ng-mocks';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';

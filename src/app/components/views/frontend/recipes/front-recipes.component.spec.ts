@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FrontRecipesComponent } from './recipes.component';
+import { FrontRecipesComponent } from './front-recipes.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockModule, MockProvider } from 'ng-mocks';
 import { TranslateModule } from '@ngx-translate/core';

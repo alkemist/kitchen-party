@@ -5,8 +5,8 @@ import { KeyLabelInterface } from '../../../interfaces';
 
 @Component({
   selector: 'app-form-kitchen-ingredient',
-  templateUrl: './kitchen-ingredient.component.html',
-  styleUrls: [ './kitchen-ingredient.component.scss' ],
+  templateUrl: './form-kitchen-ingredient.component.html',
+  styleUrls: [ './form-kitchen-ingredient.component.scss' ],
 })
 export class FormKitchenIngredientComponent implements OnInit {
   @Input() i: number = 0;

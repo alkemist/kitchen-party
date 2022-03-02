@@ -5,7 +5,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
 import { AppComponent } from './app.component';
-import { TranslatingModule } from './modules/translating.module';
+import { TranslatingRootModule } from './modules/translating.module';
 import { MockDeclaration, MockModule } from 'ng-mocks';
 import { HeaderComponent } from './components/layouts/header/header.component';
 
@@ -21,7 +21,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        MockModule(TranslatingModule),
+        MockModule(TranslatingRootModule),
         MockModule(ToastModule),
       ],
       declarations: [

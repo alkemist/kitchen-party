@@ -15,7 +15,7 @@ import {
 } from '../../../../services';
 import { EnumHelper, slugify } from '../../../../tools';
 import { recipeIngredientValidator } from '../../../../validators/recipeIngredient.validator';
-import { DialogIngredientComponent } from '../../../dialogs/ingredient/ingredient.component';
+import { DialogIngredientComponent } from '../../../dialogs/ingredient/dialog-ingredient.component';
 
 @Component({
   selector: 'app-back-recipe',
@@ -223,7 +223,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated recipe`)
         });
-        await this.routerService.navigate([ '/', 'recipe', recipe!.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug ]);
       });
     } else {
       this.recipeService.add(localDocument).then(async recipe => {
@@ -232,7 +232,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added recipe`)
         });
-        this.routerService.navigate([ '/', 'recipe', recipe!.slug ]);
+        this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug ]);
       });
     }
   }
@@ -248,7 +248,7 @@ export class RecipeComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          this.routerService.navigate([ '/', 'recipes' ]);
+          this.routerService.navigate(['/', 'admin', 'recipes' ]);
         });
       }
     });

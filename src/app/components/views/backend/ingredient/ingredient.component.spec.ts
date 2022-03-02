@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockDeclaration, MockModule, MockProvider } from 'ng-mocks';
 import { IngredientService, TranslatorService } from '../../../../services';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { FormIngredientComponent } from '../../../forms/ingredient/ingredient.component';
+import { FormIngredientComponent } from '../../../forms/ingredient/form-ingredient.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';

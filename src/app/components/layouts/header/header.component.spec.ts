@@ -15,7 +15,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
 import { IngredientModel, UserInterface } from '../../../models';
-import { TranslatingModule } from '../../../modules/translating.module';
+import { TranslatingRootModule } from '../../../modules/translating.module';
 import {
   FilteringService,
   IngredientService,
@@ -54,7 +54,7 @@ describe('HeaderComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        MockModule(TranslatingModule),
+        MockModule(TranslatingRootModule),
         MockModule(ToolbarModule),
         MockModule(ButtonModule),
         MockModule(DropdownModule),

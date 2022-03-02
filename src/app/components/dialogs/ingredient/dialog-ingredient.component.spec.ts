@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DialogIngredientComponent } from './ingredient.component';
+import { DialogIngredientComponent } from './dialog-ingredient.component';
 import { MockDeclaration, MockProvider } from 'ng-mocks';
 import { IngredientService, TranslatorService } from '../../../services';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { FormIngredientComponent } from '../../forms/ingredient/ingredient.component';
+import { FormIngredientComponent } from '../../forms/ingredient/form-ingredient.component';
 
 describe('DialogIngredientComponent', () => {
   let component: DialogIngredientComponent;

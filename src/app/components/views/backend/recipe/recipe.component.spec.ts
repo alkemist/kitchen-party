@@ -24,7 +24,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AccordionModule } from 'primeng/accordion';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { FormKitchenIngredientComponent } from '../../../forms/kitchen-ingredient/kitchen-ingredient.component';
+import { FormKitchenIngredientComponent } from '../../../forms/kitchen-ingredient/form-kitchen-ingredient.component';
 import { BlockUIModule } from 'primeng/blockui';
 
 describe('RecipeComponent', () => {

@@ -109,7 +109,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate([ '/', 'ingredient', this.ingredient.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'ingredient', this.ingredient.slug ]);
       });
     } else {
       await this.ingredientService.add(localDocument).then(async ingredient => {
@@ -119,7 +119,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate([ '/', 'ingredient', this.ingredient.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'ingredient', this.ingredient.slug ]);
       });
     }
   }
@@ -134,7 +134,7 @@ export class IngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate([ '/', 'ingredients' ]);
+          await this.routerService.navigate(['/', 'admin', 'ingredients' ]);
         });
       }
     });

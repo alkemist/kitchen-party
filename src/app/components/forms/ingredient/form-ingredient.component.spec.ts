@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormIngredientComponent } from './ingredient.component';
+import { FormIngredientComponent } from './form-ingredient.component';
 import { MockModule } from 'ng-mocks';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
