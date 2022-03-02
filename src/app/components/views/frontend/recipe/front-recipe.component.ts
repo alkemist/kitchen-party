@@ -8,8 +8,8 @@ import { EnumHelper } from '../../../../tools';
 
 @Component({
   selector: 'app-front-recipe',
-  templateUrl: './recipe.component.html',
-  styleUrls: [ './recipe.component.scss' ],
+  templateUrl: './front-recipe.component.html',
+  styleUrls: [ './front-recipe.component.scss' ],
   host: {
     class: 'page-container'
   }

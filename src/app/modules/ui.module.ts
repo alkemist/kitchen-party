@@ -28,6 +28,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+import { RippleModule } from 'primeng/ripple';
 
 const modules = [
   ToolbarModule,
@@ -57,7 +58,8 @@ const modules = [
   CheckboxModule,
   CalendarModule,
   ChipModule,
-  TieredMenuModule
+  TieredMenuModule,
+  RippleModule,
 ];
 
 @NgModule({

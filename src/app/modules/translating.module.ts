@@ -5,28 +5,43 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppMissingTranslationHandler } from '../handlers/missing-translation.handler';
 import { LoggerService } from '../services';
 
+const TranslateConfig = {
+  missingTranslationHandler: {
+    provide: MissingTranslationHandler,
+    useClass: AppMissingTranslationHandler,
+    deps: [ LoggerService ]
+  },
+  loader: {
+    provide: TranslateLoader,
+    useFactory: (http: HttpClient): TranslateHttpLoader => {
+      return new TranslateHttpLoader(http);
+    },
+    deps: [ HttpClient ],
+    isolate: true,
+  },
+};
+
 @NgModule({
   imports: [
     HttpClientModule,
-    TranslateModule.forRoot({
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: AppMissingTranslationHandler,
-        deps: [ LoggerService ]
-      },
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (http: HttpClient): TranslateHttpLoader => {
-          return new TranslateHttpLoader(http);
-        },
-        deps: [ HttpClient ]
-      },
-      isolate: true,
-    })
+    TranslateModule.forRoot(TranslateConfig)
   ],
   exports: [
     TranslateModule
   ],
 })
-export class TranslatingModule {
+export class TranslatingRootModule {
+}
+
+@NgModule({
+  imports: [
+    HttpClientModule,
+    TranslateModule.forChild(TranslateConfig)
+  ],
+  exports: [
+    TranslateModule
+  ],
+})
+
+export class TranslatingChildModule {
 }

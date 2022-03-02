@@ -33,16 +33,17 @@ export class RecipeModel implements RecipeInterface {
     this.name = recipe.name;
     this.slug = recipe.slug;
 
-    this.cookingDuration = recipe.cookingDuration;
-    this.preparationDuration = recipe.preparationDuration;
-    this.waitingDuration = recipe.waitingDuration;
+    this.cookingDuration = recipe.cookingDuration ?? 0;
+    this.preparationDuration = recipe.preparationDuration ?? 0;
+    this.waitingDuration = recipe.waitingDuration ?? 0;
 
-    this.nbSlices = recipe.nbSlices;
+    this.nbSlices = recipe.nbSlices ?? 0;
     this.instructions = recipe.instructions || [];
     this.type = recipe.type || null;
-    this.image = recipe.image || '';
     this.imagePath = recipe.imagePath || '';
-    this.source = recipe.source;
+    this.source = recipe.source ?? '';
+    
+    this.image = recipe.image;
 
     if (recipe.recipeIngredients?.length > 0) {
       this.recipeIngredients =

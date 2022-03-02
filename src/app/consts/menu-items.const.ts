@@ -4,17 +4,17 @@ export const baseMenuItems: MenuItem[] = [
   {
     label: 'Home',
     icon: 'pi pi-home',
-    routerLink: '/'
+    routerLink: [ '/' ]
   },
   {
     label: 'Calendar',
     icon: 'pi pi-calendar',
-    routerLink: '/calendar'
+    routerLink: [ '/', 'calendar' ]
   },
   {
     label: 'About',
     icon: 'pi pi-question',
-    routerLink: '/about'
+    routerLink: [ '/', 'about' ]
   },
   {
     separator: true
@@ -27,12 +27,12 @@ export const loggedMenuItems: MenuItem[] = [ {
     {
       label: 'List',
       icon: 'pi pi-list',
-      routerLink: '/ingredients',
+      routerLink: [ '/', 'admin', 'ingredients' ],
     },
     {
       label: 'New',
       icon: 'pi pi-plus',
-      routerLink: '/ingredient'
+      routerLink: [ '/', 'admin', 'ingredient' ],
     },
   ]
 },
@@ -42,12 +42,12 @@ export const loggedMenuItems: MenuItem[] = [ {
       {
         label: 'List',
         icon: 'pi pi-list',
-        routerLink: '/recipes',
+        routerLink: [ '/', 'admin', 'recipes' ],
       },
       {
         label: 'New',
         icon: 'pi pi-plus',
-        routerLink: '/recipe'
+        routerLink: [ '/', 'admin', 'recipe' ],
       },
     ]
   },
@@ -57,12 +57,12 @@ export const loggedMenuItems: MenuItem[] = [ {
       {
         label: 'List',
         icon: 'pi pi-list',
-        routerLink: '/kitchen-ingredients',
+        routerLink: [ '/', 'admin', 'kitchen-ingredients' ],
       },
       {
         label: 'New',
         icon: 'pi pi-plus',
-        routerLink: '/kitchen-ingredient'
+        routerLink: [ '/', 'admin', 'kitchen-ingredient' ],
       },
     ]
   },
@@ -84,6 +84,6 @@ export const notLoggedMenuItems: MenuItem[] = [
   {
     label: 'Log in',
     icon: 'pi pi-user',
-    routerLink: '/login',
+    routerLink: [ '/', 'user', 'login' ],
   }
 ];

@@ -11,6 +11,10 @@ export class LoggerService {
 
   constructor() {
     this.errorHandler = new StackdriverErrorReporter();
+    this.init();
+  }
+
+  init() {
     this.errorHandler.start({
       key: environment.GOOGLE_CLOUD_OPERATIONS_API_KEY,
       projectId: environment.FIREBASE_PROJECT_ID

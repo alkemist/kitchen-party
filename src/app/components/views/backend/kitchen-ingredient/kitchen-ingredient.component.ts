@@ -108,7 +108,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate([ '/', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     } else {
       await this.kitchenIngredientService.add(localDocument).then(async ingredient => {
@@ -118,7 +118,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate([ '/', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     }
   }
@@ -133,7 +133,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate([ '/', 'kitchen-ingredients' ]);
+          await this.routerService.navigate(['/', 'admin', 'kitchen-ingredients' ]);
         });
       }
     });

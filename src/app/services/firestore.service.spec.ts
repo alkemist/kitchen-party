@@ -4,39 +4,12 @@ import { DataObjectInterface } from '../interfaces';
 import { FirestoreService } from './firestore.service';
 import { MockProvider } from 'ng-mocks';
 import { LoggerService } from './logger.service';
-import { FirestoreDataConverter } from '@firebase/firestore';
 import { of } from 'rxjs';
 import { deleteDoc, getDoc, getDocs, QueryConstraint, setDoc } from 'firebase/firestore';
 import { DatabaseError, DocumentNotFound, EmptyDocument, QuotaExceededError } from '../errors';
 import { slugify } from '../tools';
-
-jest.mock('firebase/firestore', () => ({
-  ...(jest.requireActual('firebase/firestore')),
-  collection: jest.fn(),
-  CollectionReference: jest.fn(),
-  deleteDoc: jest.fn(),
-  doc: jest.fn().mockReturnValue({
-    withConverter: jest.fn()
-  }),
-  getDoc: jest.fn(),
-  getDocs: jest.fn(),
-  getFirestore: jest.fn(),
-  query: jest.fn().mockReturnValue({
-    withConverter: jest.fn()
-  }),
-  QueryConstraint: jest.fn(),
-  setDoc: jest.fn(),
-  where: jest.fn(),
-}));
-
-const dummyConverter: FirestoreDataConverter<DataObjectInterface> = {
-  toFirestore: (object: any): DataObjectInterface => {
-    return object;
-  },
-  fromFirestore: () => {
-    return {};
-  }
-};
+import { dateMock } from '../mocks/date.mock';
+import { dummyConverter } from '../mocks/firestore.mock';
 
 class DummyService extends FirestoreService<DataObjectInterface> {
   constructor(private logger: LoggerService) {
@@ -50,13 +23,11 @@ describe('FirestoreService', () => {
 
   let loggerSpy: jest.SpyInstance;
 
-  const unknowErrorMessage = 'Unknown error';
-  const unknowError = new Error(unknowErrorMessage);
+  const unknownErrorMessage = 'Unknown error';
+  const unknownError = new Error(unknownErrorMessage);
 
   const dataObjectId = '1';
   const dataObject = { name: '1', slug: '1' } as DataObjectInterface;
-
-  const lastUpdated = new Date('1984-08-04 12:12');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -75,11 +46,11 @@ describe('FirestoreService', () => {
 
   describe('lastUpdated', () => {
     it('should update lastUpdated date', () => {
-      jest.spyOn(service, 'getLastUpdated$').mockReturnValue(of(lastUpdated));
+      jest.spyOn(service, 'getLastUpdated$').mockReturnValue(of(dateMock));
 
       service!.initLastUpdated();
 
-      expect(service['lastUpdated']).toEqual(lastUpdated);
+      expect(service['lastUpdated']).toEqual(dateMock);
     });
   })
 
@@ -89,7 +60,7 @@ describe('FirestoreService', () => {
       expect(service.storeIsOutdated()).toBe(true);
     });
     it('should return true if last updated is old', () => {
-      service['lastUpdated'] = lastUpdated;
+      service['lastUpdated'] = dateMock;
       expect(service.storeIsOutdated()).toBe(true);
     });
     it('should return false if last updated is not old', () => {
@@ -122,14 +93,14 @@ describe('FirestoreService', () => {
       expect(loggerSpy).toBeCalledWith(new QuotaExceededError());
     })
 
-    it('should throw unknow error', async () => {
-      (getDocs as jest.Mock).mockRejectedValue(unknowError);
+    it('should throw unknown error', async () => {
+      (getDocs as jest.Mock).mockRejectedValue(unknownError);
 
       await expect(async () => {
         await service['queryList']()
       })
         .rejects
-        .toThrow(unknowError);
+        .toThrow(unknownError);
     })
   })
 
@@ -182,9 +153,9 @@ describe('FirestoreService', () => {
         .toThrow(DocumentNotFound);
     });
 
-    it('should log unknow error', async () => {
+    it('should log unknown error', async () => {
       const slug = 'test';
-      (getDocs as jest.Mock).mockRejectedValue(unknowError);
+      (getDocs as jest.Mock).mockRejectedValue(unknownError);
 
       await expect(async () => {
         await service['findOneBySlug'](slug)
@@ -192,7 +163,7 @@ describe('FirestoreService', () => {
         .rejects
         .toThrow(DocumentNotFound);
 
-      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknowError.message, { slug }));
+      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, { slug }));
     })
   })
 
@@ -216,16 +187,16 @@ describe('FirestoreService', () => {
   })
 
   describe('findOneById', () => {
-    it('should log unknow error', async () => {
+    it('should log unknown error', async () => {
       const slug = 'test';
-      (getDoc as jest.Mock).mockRejectedValue(unknowError);
+      (getDoc as jest.Mock).mockRejectedValue(unknownError);
 
       await expect(async () => {
         await service['findOneById'](slug)
       })
         .rejects
         .toThrow(DocumentNotFound);
-      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknowError.message, { slug }));
+      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, { slug }));
     });
     it('should throw document not found error with document null', async () => {
       (getDoc as jest.Mock).mockReturnValue(null);
@@ -269,12 +240,12 @@ describe('FirestoreService', () => {
   })
 
   describe('addOne', () => {
-    it('should throw unknow error', async () => {
-      (setDoc as jest.Mock).mockRejectedValue(unknowError);
+    it('should throw unknown error', async () => {
+      (setDoc as jest.Mock).mockRejectedValue(unknownError);
       jest.spyOn(service, 'findOneById' as never).mockImplementation()
 
       await service['addOne']({ ...dataObject })
-      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknowError.message, dataObject));
+      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, dataObject));
     })
 
     it('should add object', async () => {
@@ -297,12 +268,12 @@ describe('FirestoreService', () => {
         .toThrow(DocumentNotFound);
     })
 
-    it('should throw unknow error', async () => {
-      (setDoc as jest.Mock).mockRejectedValue(unknowError);
+    it('should throw unknown error', async () => {
+      (setDoc as jest.Mock).mockRejectedValue(unknownError);
       jest.spyOn(service, 'findOneById' as never).mockImplementation()
 
       await service['updateOne']({ id: dataObjectId, ...dataObject })
-      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknowError.message, dataObject));
+      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, dataObject));
     })
 
     it('should update object', async () => {
@@ -325,12 +296,12 @@ describe('FirestoreService', () => {
         .toThrow(DocumentNotFound);
     })
 
-    it('should throw unknow error', async () => {
-      (deleteDoc as jest.Mock).mockRejectedValue(unknowError);
+    it('should throw unknown error', async () => {
+      (deleteDoc as jest.Mock).mockRejectedValue(unknownError);
       jest.spyOn(service, 'findOneById' as never).mockImplementation()
 
       await service['removeOne']({ id: dataObjectId, ...dataObject })
-      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknowError.message, dataObject));
+      expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, dataObject));
     })
 
     it('should work fine', async () => {

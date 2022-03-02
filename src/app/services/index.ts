@@ -1,4 +1,4 @@
-export * from './filter.service'
+export * from './filtering.service'
 export * from './firestore.service'
 export * from './ingredient.service'
 export * from './kitchen.service'

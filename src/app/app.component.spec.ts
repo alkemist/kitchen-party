@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
 import { AppComponent } from './app.component';
-import { TranslatingModule } from './modules/translating.module';
+import { TranslatingRootModule } from './modules/translating.module';
+import { MockDeclaration, MockModule } from 'ng-mocks';
+import { HeaderComponent } from './components/layouts/header/header.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -16,24 +17,18 @@ describe('AppComponent', () => {
   const streamObservable = new Subject();
   let primeNgConfigSpy: jest.SpyInstance;
 
-  @Component({ selector: 'app-header', template: '' })
-  class HeaderStubComponent {
-  }
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        TranslatingModule,
-        ToastModule,
+        MockModule(TranslatingRootModule),
+        MockModule(ToastModule),
       ],
       declarations: [
         AppComponent,
-        HeaderStubComponent,
+        MockDeclaration(HeaderComponent),
       ],
-      providers: [
-        MessageService
-      ]
+      providers: []
     }).compileComponents();
 
     translateServiceMock = TestBed.inject(TranslateService);

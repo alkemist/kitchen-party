@@ -10,8 +10,8 @@ import { EnumHelper, slugify } from '../../../tools';
 
 @Component({
   selector: 'app-dialog-ingredient',
-  templateUrl: './ingredient.component.html',
-  styleUrls: [ './ingredient.component.scss' ]
+  templateUrl: './dialog-ingredient.component.html',
+  styleUrls: [ './dialog-ingredient.component.scss' ]
 })
 export class DialogIngredientComponent implements OnInit {
   ingredient = new IngredientModel({} as IngredientInterface);

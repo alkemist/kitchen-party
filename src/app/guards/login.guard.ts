@@ -13,7 +13,7 @@ export class LoginGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
     if (await this.userService.getLoggedUser() !== undefined) {
-      return this.router.navigate([ '/', 'ingredients' ]);
+      return this.router.navigate([ '/', 'admin' ]);
     } else {
       return true;
     }

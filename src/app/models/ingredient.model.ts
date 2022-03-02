@@ -1,7 +1,6 @@
 import { IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
 import { IngredientFormInterface, IngredientInterface } from '../interfaces';
 import { DateHelper, slugify } from '../tools';
-import { RecipeModel } from './recipe.model';
 
 
 export class IngredientModel implements IngredientInterface {
@@ -22,8 +21,6 @@ export class IngredientModel implements IngredientInterface {
   monthEnd?: number | null;
   type: IngredientTypeKeyEnum | string;
   isLiquid: boolean | null;
-  recipeId?: string;
-  recipe?: RecipeModel;
 
   constructor(ingredient: IngredientInterface) {
     this.id = ingredient.id;
@@ -32,7 +29,7 @@ export class IngredientModel implements IngredientInterface {
     this.type = ingredient.type;
     this.monthBegin = ingredient.monthBegin;
     this.monthEnd = ingredient.monthEnd;
-    this.isLiquid = ingredient.isLiquid || null;
+    this.isLiquid = typeof ingredient.isLiquid !== 'undefined' ? ingredient.isLiquid : null;
   }
 
   get typeName(): string {

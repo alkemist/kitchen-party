@@ -6,8 +6,8 @@ import { KeyLabelInterface } from '../../../interfaces';
 
 @Component({
   selector: 'app-form-ingredient',
-  templateUrl: './ingredient.component.html',
-  styleUrls: [ './ingredient.component.scss' ]
+  templateUrl: './form-ingredient.component.html',
+  styleUrls: [ './form-ingredient.component.scss' ]
 })
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;

@@ -18,7 +18,11 @@ export class RecipesComponent implements OnInit {
   recipeTypes = EnumHelper.enumToObject(RecipeTypeLabelEnum);
   loading = true;
 
-  constructor(private recipeService: RecipeService, private router: Router, private translatorService: TranslatorService) {
+  constructor(
+    private recipeService: RecipeService,
+    private router: Router,
+    private translatorService: TranslatorService
+  ) {
   }
 
   async ngOnInit(): Promise<void> {

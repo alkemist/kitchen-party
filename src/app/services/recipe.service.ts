@@ -125,7 +125,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   }
 
   private async refreshList(): Promise<RecipeInterface[]> {
-    const recipes = await super.select(orderBy('name'));
+    const recipes = await super.promiseQueryList(orderBy('name'));
 
     this.store.dispatch(new FillRecipes(recipes));
     return recipes;

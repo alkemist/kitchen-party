@@ -3,11 +3,11 @@ import { NgxsModule, Store } from '@ngxs/store';
 import { IngredientInterface } from '../interfaces';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 import { IngredientState } from './ingredient.state';
+import { dateMock } from '../mocks/date.mock';
 
 describe('IngredientState', () => {
   let store: Store;
   let ingredientsSelected;
-  const updatedDate = new Date('1984-08-04 12:12');
 
   const currentIngredient = { id: '1', slug: '1' } as IngredientInterface;
   const newIngredient = { id: '2', slug: '2' } as IngredientInterface;
@@ -74,7 +74,7 @@ describe('IngredientState', () => {
     });
 
     it('should get last updated store date', () => {
-      expect(IngredientState.lastUpdated({ lastUpdated: updatedDate, all: [] })).toEqual(updatedDate);
+      expect(IngredientState.lastUpdated({ lastUpdated: dateMock, all: [] })).toEqual(dateMock);
     });
 
     it('should select fruits and vegetables with saisons', () => {
