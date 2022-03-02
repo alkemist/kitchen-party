@@ -1,6 +1,6 @@
-import { IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
+import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
 import { IngredientFormInterface, IngredientInterface } from '../interfaces';
-import { DateHelper, slugify } from '../tools';
+import { DateHelper, EnumHelper, slugify } from '../tools';
 
 
 export class IngredientModel implements IngredientInterface {
@@ -37,46 +37,8 @@ export class IngredientModel implements IngredientInterface {
   }
 
   get typeIcon(): string {
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.meats) {
-      return 'goat';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods) {
-      return 'directions_boat';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms) {
-      return 'local_florist';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.cereals_legumines) {
-      return 'grass';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.animal_fats) {
-      return 'opacity';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.vegetable_fats) {
-      return 'opacity';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.yeasts) {
-      return 'bubble_chart';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.aromatic_herbs) {
-      return 'eco';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.spices) {
-      return 'bolt';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.sugars) {
-      return 'view_comfortable';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.salts) {
-      return 'grain';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.alcohols) {
-      return 'liquor';
-    }
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.water) {
-      return 'local_drink';
-    }
-    return '';
+    const icons = EnumHelper.enumToAssociativArray(IngredientTypeIconEnum);
+    return icons[this.type] ?? '';
   }
 
   static format(ingredientForm: IngredientFormInterface) {

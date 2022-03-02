@@ -32,4 +32,21 @@ export enum IngredientTypeLabelEnum {
   salts = 'Salts', // Sels
 }
 
+export enum IngredientTypeIconEnum {
+  meats = 'goat',
+  fishes_seafoods = 'directions_boat',
+  fruits_vegetables_mushrooms = 'local_florist',
+  cereals_legumines = 'grass',
+  animal_fats = 'opacity',
+  vegetable_fats = 'opacity',
+  yeasts = 'bubble_chart',
+  aromatic_herbs = 'eco',
+  alcohols = 'liquor',
+  water = 'local_drink',
+  spices = 'bolt',
+  sugars = 'view_comfortable',
+  salts = 'grain',
+}
+
+
 export const IngredientTypes = EnumHelper.enumToAssociativArray(IngredientTypeLabelEnum);

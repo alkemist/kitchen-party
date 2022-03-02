@@ -65,7 +65,7 @@
     <ng-template pTemplate="footer">
       <div *ngIf="loggedUser" class="flex flex-row">
         <div class="flex-grow-1"></div>
-        <a [label]="'Edit' | translate" [routerLink]="['/', 'recipe', recipe.slug]" icon="pi pi-pencil" pButton
+        <a [label]="'Edit' | translate" [routerLink]="['/', 'admin', 'recipe', recipe.slug]" icon="pi pi-pencil" pButton
            pRipple></a>
       </div>
     </ng-template>
