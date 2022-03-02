@@ -48,7 +48,7 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('constructor', () => {
+  describe('AppComponent.constructor', () => {
     const translations = [ 'translations' ];
 
     it('should config primeNg', () => {
