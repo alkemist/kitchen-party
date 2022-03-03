@@ -33,7 +33,7 @@ export class IngredientState {
   @Selector()
   static fruitsOrVegetables(state: IngredientStateInterface): IngredientInterface[] {
     return state.all.filter(ingredient =>
-      IngredientTypes.get(ingredient.type) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms
+      IngredientTypes.get(ingredient.type!) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms
       && ingredient.monthBegin && ingredient.monthEnd
     );
   }

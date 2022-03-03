@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { DietTypes } from '../enums';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class DietResolver implements Resolve<string> {
   constructor() {
   }
@@ -11,6 +11,6 @@ export class DietResolver implements Resolve<string> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<string> {
-    return DietTypes[route.paramMap.get('diet')!];
+    return DietTypes.get(route.paramMap.get('diet')!)!;
   }
 }

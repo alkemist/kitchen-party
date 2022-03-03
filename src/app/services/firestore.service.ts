@@ -13,7 +13,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { DatabaseError, DocumentNotFound, EmptyDocument, QuotaExceededError } from '../errors';
+import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '../errors';
 import { DataObjectInterface } from '../interfaces';
 import { generatePushID, slugify, TimeHelper } from '../tools';
 import { LoggerService } from './logger.service';
@@ -83,7 +83,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       dataObjectDocument = await this.findOneBySlug(slug);
     } catch (e) {
-      if (e instanceof DocumentNotFound) {
+      if (e instanceof DocumentNotFoundError) {
         return false;
       }
     }
@@ -112,17 +112,17 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       const ref = doc(this.ref, id).withConverter(this.converter);
       docSnapshot = await getDoc(ref);
     } catch (error) {
-      this.loggerService.error(new DatabaseError((error as Error).message, { id }));
+      this.loggerService.error(new DatabaseError((error as Error).message, {id}));
     }
 
     if (!docSnapshot) {
-      throw new DocumentNotFound<T>(this.collectionName);
+      throw new DocumentNotFoundError<T>(this.collectionName);
     }
 
     const document = docSnapshot.data();
 
     if (!document) {
-      throw new DocumentNotFound<T>(this.collectionName);
+      throw new DocumentNotFoundError<T>(this.collectionName);
     }
     document.id = docSnapshot.id;
 
@@ -135,11 +135,11 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       list = await this.promiseQueryList(where('slug', '==', slug));
     } catch (e) {
-      this.loggerService.error(new DatabaseError((e as Error).message, { slug }));
+      this.loggerService.error(new DatabaseError((e as Error).message, {slug}));
     }
 
     if (list.length === 0) {
-      throw new DocumentNotFound<T>(this.collectionName, { slug } as T);
+      throw new DocumentNotFoundError<T>(this.collectionName, {slug} as T);
     }
 
     return list[0];
@@ -161,7 +161,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
 
   protected async updateOne(document: T): Promise<T> {
     if (!document.id) {
-      throw new DocumentNotFound<T>(this.collectionName, document);
+      throw new DocumentNotFoundError<T>(this.collectionName, document);
     }
     this.updateSlug(document);
 
@@ -177,7 +177,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
 
   protected async removeOne(document: T): Promise<void> {
     if (!document.id) {
-      throw new DocumentNotFound<T>(this.collectionName, document);
+      throw new DocumentNotFoundError<T>(this.collectionName, document);
     }
 
     try {
@@ -213,7 +213,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
 
   private updateSlug(document: T) {
     if (!document.name) {
-      throw new EmptyDocument(this.collectionName);
+      throw new EmptyDocumentError(this.collectionName);
     }
 
     document.slug = slugify(document.name);

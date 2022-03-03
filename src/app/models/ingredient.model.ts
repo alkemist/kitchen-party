@@ -24,9 +24,9 @@ export class IngredientModel implements IngredientInterface {
 
   constructor(ingredient: IngredientInterface) {
     this.id = ingredient.id;
-    this.name = ingredient.name?.trim();
-    this.slug = ingredient.slug;
-    this.type = ingredient.type;
+    this.name = ingredient.name?.trim() ?? '';
+    this.slug = ingredient.slug ?? '';
+    this.type = ingredient.type ?? '';
     this.monthBegin = ingredient.monthBegin;
     this.monthEnd = ingredient.monthEnd;
     this.isLiquid = typeof ingredient.isLiquid !== 'undefined' ? ingredient.isLiquid : null;
@@ -57,9 +57,9 @@ export class IngredientModel implements IngredientInterface {
   }
 
   hydrate(ingredient: IngredientInterface) {
-    this.name = ingredient.name;
-    this.slug = ingredient.slug;
-    this.type = ingredient.type;
+    this.name = ingredient.name ?? '';
+    this.slug = ingredient.slug ?? '';
+    this.type = ingredient.type ?? '';
     this.isLiquid = ingredient.isLiquid || null;
   }
 

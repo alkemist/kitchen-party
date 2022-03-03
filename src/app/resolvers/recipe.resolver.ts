@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { RecipeInterface } from '../interfaces';
 import { RecipeModel } from '../models';
 import { RecipeService } from '../services';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class RecipeResolver implements Resolve<RecipeModel> {
   constructor(private service: RecipeService) {
   }
@@ -17,6 +16,6 @@ export class RecipeResolver implements Resolve<RecipeModel> {
     if (recipe) {
       return recipe;
     }
-    return new RecipeModel({} as RecipeInterface);
+    return new RecipeModel({});
   }
 }

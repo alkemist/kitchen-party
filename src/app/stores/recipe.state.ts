@@ -34,7 +34,7 @@ export class RecipeState {
   @Selector()
   static customMeasure(state: RecipeStateModel): KeyLabelInterface[] {
     let measures = state.all.map(recipe => {
-      return recipe.recipeIngredients.map(recipeIngredient => recipeIngredient.measure);
+      return recipe.recipeIngredients?.map(recipeIngredient => recipeIngredient.measure);
     });
     const uniqueMeasures = measures.flat().filter((value, index, self) => {
       return value && self.indexOf(value) === index;
@@ -48,7 +48,7 @@ export class RecipeState {
   }
 
   @Action(FillRecipes)
-  fill({ getState, patchState }: StateContext<RecipeStateModel>, { payload }: FillRecipes) {
+  fill({getState, patchState}: StateContext<RecipeStateModel>, {payload}: FillRecipes) {
     patchState({
       all: payload,
       lastUpdated: new Date()
@@ -56,7 +56,7 @@ export class RecipeState {
   }
 
   @Action(AddRecipe)
-  add({ setState }: StateContext<RecipeStateModel>, { payload }: AddRecipe) {
+  add({setState}: StateContext<RecipeStateModel>, {payload}: AddRecipe) {
     setState(
       patch({
         all: append([ payload ])
@@ -65,7 +65,7 @@ export class RecipeState {
   }
 
   @Action(RemoveRecipe)
-  remove({ setState }: StateContext<RecipeStateModel>, { payload }: RemoveRecipe) {
+  remove({setState}: StateContext<RecipeStateModel>, {payload}: RemoveRecipe) {
     setState(
       patch({
         all: removeItem<RecipeInterface>((item?: RecipeInterface) => item?.id === payload.id)
@@ -74,7 +74,7 @@ export class RecipeState {
   }
 
   @Action(UpdateRecipe)
-  update({ getState, patchState, setState }: StateContext<RecipeStateModel>, { payload }: UpdateRecipe) {
+  update({getState, patchState, setState}: StateContext<RecipeStateModel>, {payload}: UpdateRecipe) {
     setState(
       patch({
         all: updateItem<RecipeInterface>((item?: RecipeInterface) => item?.id === payload.id, payload)

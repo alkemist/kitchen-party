@@ -14,7 +14,7 @@ import {
   UploadService
 } from '../../../../services';
 import { EnumHelper, slugify } from '../../../../tools';
-import { recipeIngredientValidator } from '../../../../validators/recipeIngredient.validator';
+import { recipeIngredientValidator } from '../../../../validators/recipe-ingredient.validator';
 import { DialogIngredientComponent } from '../../../dialogs/ingredient/dialog-ingredient.component';
 
 @Component({

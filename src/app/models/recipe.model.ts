@@ -30,8 +30,8 @@ export class RecipeModel implements RecipeInterface {
 
   constructor(recipe: RecipeInterface) {
     this.id = recipe.id;
-    this.name = recipe.name;
-    this.slug = recipe.slug;
+    this.name = recipe.name ?? '';
+    this.slug = recipe.slug ?? '';
 
     this.cookingDuration = recipe.cookingDuration ?? 0;
     this.preparationDuration = recipe.preparationDuration ?? 0;
@@ -45,7 +45,7 @@ export class RecipeModel implements RecipeInterface {
 
     this.image = recipe.image;
 
-    if (recipe.recipeIngredients?.length > 0) {
+    if (recipe.recipeIngredients && recipe.recipeIngredients.length > 0) {
       this.recipeIngredients =
         recipe.recipeIngredients.map(recipeIngredient => new RecipeIngredientModel(recipeIngredient));
     }

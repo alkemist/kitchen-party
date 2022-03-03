@@ -9,9 +9,14 @@ import { IngredientFormInterface, IngredientInterface } from '../interfaces';
 import { dateMock } from '../mocks/date.mock';
 import { EnumHelper } from '../tools';
 import { IngredientModel } from './ingredient.model';
+import { KitchenIngredientModel } from './kitchen-ingredient.model';
 
 describe('IngredientModel', () => {
   describe('IngredientModel.constructor', () => {
+    it('should construct', () => {
+      expect(new KitchenIngredientModel({})).toBeDefined();
+    });
+    
     it('should contain isLiquid boolean value', () => {
       expect(new IngredientModel({isLiquid: true} as IngredientInterface)).toMatchObject({isLiquid: true});
     });

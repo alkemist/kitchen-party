@@ -1,6 +1,6 @@
 import { DataObjectInterface } from '../../interfaces';
 
-export class EmptyDocument<T extends DataObjectInterface> extends Error {
+export class EmptyDocumentError<T extends DataObjectInterface> extends Error {
   private readonly collectionName: string;
 
   constructor(collectionName: string) {

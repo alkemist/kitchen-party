@@ -3,7 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
 import { ingredientConverter } from '../converters/ingredient.converter';
-import { DocumentNotFound } from '../errors';
+import { DocumentNotFoundError } from '../errors';
 import { IngredientInterface } from '../interfaces';
 import { IngredientModel } from '../models';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from '../stores/ingredient.action';
@@ -87,7 +87,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
         const ingredientData = await super.findOneBySlug(slug);
         return new IngredientModel(this.addToStore(ingredientData));
       } catch (e) {
-        if (e instanceof DocumentNotFound) {
+        if (e instanceof DocumentNotFoundError) {
           return undefined;
         }
       }

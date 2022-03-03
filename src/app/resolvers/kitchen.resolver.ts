@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { KitchenIngredientInterface } from '../interfaces';
 import { KitchenIngredientModel } from '../models';
 import { KitchenIngredientService } from '../services';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class KitchenResolver implements Resolve<KitchenIngredientModel> {
   constructor(private service: KitchenIngredientService) {
   }
@@ -17,6 +16,6 @@ export class KitchenResolver implements Resolve<KitchenIngredientModel> {
     if (kitchenIngredient) {
       return kitchenIngredient;
     }
-    return new KitchenIngredientModel({} as KitchenIngredientInterface);
+    return new KitchenIngredientModel({});
   }
 }

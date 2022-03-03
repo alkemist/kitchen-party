@@ -3,7 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
 import { recipeConverter } from '../converters/recipe.converter';
-import { DocumentNotFound } from '../errors';
+import { DocumentNotFoundError } from '../errors';
 import { KeyLabelInterface, RecipeInterface } from '../interfaces';
 import { RecipeModel } from '../models';
 import { AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe } from '../stores/recipe.action';
@@ -96,7 +96,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         let recipeData = await super.findOneBySlug(slug);
         return new RecipeModel(this.addToStore(recipeData));
       } catch (e) {
-        if (e instanceof DocumentNotFound) {
+        if (e instanceof DocumentNotFoundError) {
           return undefined;
         }
       }
@@ -137,16 +137,18 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   }
 
   private async hydrate(recipe: RecipeInterface, recipes: RecipeInterface[]): Promise<RecipeInterface> {
-    for (const recipeIngredient of recipe.recipeIngredients) {
-      if (recipeIngredient.ingredientId) {
-        recipeIngredient.ingredient = await this.ingredientService.getById(recipeIngredient.ingredientId);
-      }
-      delete recipeIngredient.ingredientId;
+    if (recipe.recipeIngredients) {
+      for (const recipeIngredient of recipe.recipeIngredients) {
+        if (recipeIngredient.ingredientId) {
+          recipeIngredient.ingredient = await this.ingredientService.getById(recipeIngredient.ingredientId);
+        }
+        delete recipeIngredient.ingredientId;
 
-      if (recipeIngredient.recipeId) {
-        recipeIngredient.recipe = new RecipeModel(recipes.find(recipe => recipe.id === recipeIngredient.recipeId)!);
+        if (recipeIngredient.recipeId) {
+          recipeIngredient.recipe = new RecipeModel(recipes.find(recipe => recipe.id === recipeIngredient.recipeId)!);
+        }
+        delete recipeIngredient.recipeId;
       }
-      delete recipeIngredient.recipeId;
     }
     return recipe;
   }
