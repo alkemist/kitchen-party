@@ -1,61 +1,73 @@
 import { IngredientTypeKeyEnum } from '../enums';
 
-export const ingredientTypeMeatMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>();
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.meats, true);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.fishes_seafoods, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.fruits_vegetables_mushrooms, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.cereals_legumines, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.animal_fats, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.vegetable_fats, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.yeasts, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.aromatic_herbs, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.alcohols, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.water, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.spices, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.sugars, false);
-ingredientTypeMeatMap.set(IngredientTypeKeyEnum.salts, false);
+export const ingredientTypeMeatMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>(
+  [
+    [ IngredientTypeKeyEnum.meats, true ],
+    [ IngredientTypeKeyEnum.fishes_seafoods, false ],
+    [ IngredientTypeKeyEnum.fruits_vegetables_mushrooms, false ],
+    [ IngredientTypeKeyEnum.cereals_legumines, false ],
+    [ IngredientTypeKeyEnum.animal_fats, false ],
+    [ IngredientTypeKeyEnum.vegetable_fats, false ],
+    [ IngredientTypeKeyEnum.yeasts, false ],
+    [ IngredientTypeKeyEnum.aromatic_herbs, false ],
+    [ IngredientTypeKeyEnum.alcohols, false ],
+    [ IngredientTypeKeyEnum.water, false ],
+    [ IngredientTypeKeyEnum.spices, false ],
+    [ IngredientTypeKeyEnum.sugars, false ],
+    [ IngredientTypeKeyEnum.salts, false ],
+  ]
+);
 
-export const ingredientTypeFishMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>();
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.meats, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.fishes_seafoods, true);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.fruits_vegetables_mushrooms, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.cereals_legumines, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.animal_fats, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.vegetable_fats, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.yeasts, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.aromatic_herbs, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.alcohols, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.water, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.spices, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.sugars, false);
-ingredientTypeFishMap.set(IngredientTypeKeyEnum.salts, false);
+export const ingredientTypeFishMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>(
+  [
+    [ IngredientTypeKeyEnum.meats, false ],
+    [ IngredientTypeKeyEnum.fishes_seafoods, true ],
+    [ IngredientTypeKeyEnum.fruits_vegetables_mushrooms, false ],
+    [ IngredientTypeKeyEnum.cereals_legumines, false ],
+    [ IngredientTypeKeyEnum.animal_fats, false ],
+    [ IngredientTypeKeyEnum.vegetable_fats, false ],
+    [ IngredientTypeKeyEnum.yeasts, false ],
+    [ IngredientTypeKeyEnum.aromatic_herbs, false ],
+    [ IngredientTypeKeyEnum.alcohols, false ],
+    [ IngredientTypeKeyEnum.water, false ],
+    [ IngredientTypeKeyEnum.spices, false ],
+    [ IngredientTypeKeyEnum.sugars, false ],
+    [ IngredientTypeKeyEnum.salts, false ],
+  ]
+);
 
-export const ingredientTypeVegeMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>();
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.meats, false);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.fishes_seafoods, false);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.fruits_vegetables_mushrooms, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.cereals_legumines, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.animal_fats, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.vegetable_fats, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.yeasts, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.aromatic_herbs, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.alcohols, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.water, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.spices, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.sugars, true);
-ingredientTypeVegeMap.set(IngredientTypeKeyEnum.salts, true);
+export const ingredientTypeVegeMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>(
+  [
+    [ IngredientTypeKeyEnum.meats, false ],
+    [ IngredientTypeKeyEnum.fishes_seafoods, false ],
+    [ IngredientTypeKeyEnum.fruits_vegetables_mushrooms, true ],
+    [ IngredientTypeKeyEnum.cereals_legumines, true ],
+    [ IngredientTypeKeyEnum.animal_fats, true ],
+    [ IngredientTypeKeyEnum.vegetable_fats, true ],
+    [ IngredientTypeKeyEnum.yeasts, true ],
+    [ IngredientTypeKeyEnum.aromatic_herbs, true ],
+    [ IngredientTypeKeyEnum.alcohols, true ],
+    [ IngredientTypeKeyEnum.water, true ],
+    [ IngredientTypeKeyEnum.spices, true ],
+    [ IngredientTypeKeyEnum.sugars, true ],
+    [ IngredientTypeKeyEnum.salts, true ],
+  ]
+);
 
-export const ingredientTypeVeganMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>();
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.meats, false);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.fishes_seafoods, false);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.fruits_vegetables_mushrooms, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.cereals_legumines, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.animal_fats, false);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.vegetable_fats, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.yeasts, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.aromatic_herbs, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.alcohols, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.water, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.spices, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.sugars, true);
-ingredientTypeVeganMap.set(IngredientTypeKeyEnum.salts, true);
+export const ingredientTypeVeganMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>(
+  [
+    [ IngredientTypeKeyEnum.meats, false ],
+    [ IngredientTypeKeyEnum.fishes_seafoods, false ],
+    [ IngredientTypeKeyEnum.fruits_vegetables_mushrooms, true ],
+    [ IngredientTypeKeyEnum.cereals_legumines, true ],
+    [ IngredientTypeKeyEnum.animal_fats, false ],
+    [ IngredientTypeKeyEnum.vegetable_fats, true ],
+    [ IngredientTypeKeyEnum.yeasts, true ],
+    [ IngredientTypeKeyEnum.aromatic_herbs, true ],
+    [ IngredientTypeKeyEnum.alcohols, true ],
+    [ IngredientTypeKeyEnum.water, true ],
+    [ IngredientTypeKeyEnum.spices, true ],
+    [ IngredientTypeKeyEnum.sugars, true ],
+    [ IngredientTypeKeyEnum.salts, true ],
+  ]
+);
