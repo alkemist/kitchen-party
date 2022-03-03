@@ -30,4 +30,4 @@ export enum RecipeTypeLabelEnum {
   ingredient = 'Ingredient' // Ingrédient
 }
 
-export const RecipeTypes = EnumHelper.enumToAssociativArray(RecipeTypeLabelEnum);
+export const RecipeTypes = EnumHelper.enumToMap(RecipeTypeLabelEnum);

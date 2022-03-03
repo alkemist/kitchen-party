@@ -32,13 +32,13 @@ export class IngredientModel implements IngredientInterface {
     this.isLiquid = typeof ingredient.isLiquid !== 'undefined' ? ingredient.isLiquid : null;
   }
 
-  get typeName(): string {
-    return IngredientTypes[this.type];
+  get typeName(): string | undefined {
+    return IngredientTypes.get(this.type);
   }
 
   get typeIcon(): string {
-    const icons = EnumHelper.enumToAssociativArray(IngredientTypeIconEnum);
-    return icons[this.type] ?? '';
+    const icons = EnumHelper.enumToMap(IngredientTypeIconEnum);
+    return icons.get(this.type) ?? '';
   }
 
   static format(ingredientForm: IngredientFormInterface) {
@@ -68,15 +68,15 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isVegan(): boolean {
-    return this.isVege() && IngredientTypes[this.type] !== IngredientTypeLabelEnum.animal_fats;
+    return this.isVege() && IngredientTypes.get(this.type) !== IngredientTypeLabelEnum.animal_fats;
   }
 
   isMeat(): boolean {
-    return IngredientTypes[this.type] === IngredientTypeLabelEnum.meats;
+    return IngredientTypes.get(this.type) === IngredientTypeLabelEnum.meats;
   }
 
   isFish(): boolean {
-    return IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods;
+    return IngredientTypes.get(this.type) === IngredientTypeLabelEnum.fishes_seafoods;
   }
 
   isSweet(): boolean {
@@ -89,8 +89,8 @@ export class IngredientModel implements IngredientInterface {
     const name = this.name.toLowerCase();
     const regex = new RegExp('bouillon .*', 'gi');
 
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fishes_seafoods
-      || IngredientTypes[this.type] === IngredientTypeLabelEnum.meats) {
+    if (IngredientTypes.get(this.type) === IngredientTypeLabelEnum.fishes_seafoods
+      || IngredientTypes.get(this.type) === IngredientTypeLabelEnum.meats) {
       return true;
     } else if (IngredientModel.saltyNames.includes(name)) {
       return true;
@@ -103,7 +103,7 @@ export class IngredientModel implements IngredientInterface {
 
   isSeason(): boolean {
 
-    if (IngredientTypes[this.type] === IngredientTypeLabelEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
+    if (IngredientTypes.get(this.type) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
       const date = new Date();
       let monthCurrent = date.getMonth() + 1;
       let yearBegin = date.getFullYear();

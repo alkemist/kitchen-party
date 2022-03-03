@@ -14,4 +14,4 @@ export enum DietTypeLabelEnum {
   fish = 'Fish', // Végan
 }
 
-export const DietTypes = EnumHelper.enumToAssociativArray(DietTypeLabelEnum);
+export const DietTypes = EnumHelper.enumToMap(DietTypeLabelEnum);

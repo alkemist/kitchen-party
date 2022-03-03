@@ -49,4 +49,4 @@ export enum IngredientTypeIconEnum {
 }
 
 
-export const IngredientTypes = EnumHelper.enumToAssociativArray(IngredientTypeLabelEnum);
+export const IngredientTypes = EnumHelper.enumToMap(IngredientTypeLabelEnum);

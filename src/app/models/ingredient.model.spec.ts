@@ -27,11 +27,11 @@ describe('IngredientModel', () => {
   });
   describe('IngredientModel.typeIcon', () => {
     it('should return icons', () => {
-      const icons = EnumHelper.enumToAssociativArray(IngredientTypeIconEnum);
+      const icons = EnumHelper.enumToMap(IngredientTypeIconEnum);
       const keys = Object.keys(IngredientTypeKeyEnum);
 
       for (const key of keys) {
-        expect(new IngredientModel({type: key} as IngredientInterface).typeIcon).toBe(icons[key]);
+        expect(new IngredientModel({type: key} as IngredientInterface).typeIcon).toBe(icons.get(key));
       }
 
       expect.assertions(keys.length);

@@ -10,4 +10,4 @@ export enum SweetSaltyLabelEnum {
   salty = 'Salty', // Salé
 }
 
-export const SweetSalty = EnumHelper.enumToAssociativArray(SweetSaltyLabelEnum);
+export const SweetSalty = EnumHelper.enumToMap(SweetSaltyLabelEnum);

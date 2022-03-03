@@ -136,10 +136,10 @@ export class RecipeComponent implements OnInit {
       const i = this.recipe.orderedRecipeIngredients.indexOf(recipeIngredient);
       this.addRecipeIngredient();
 
-      const recipeIngredientForm = { ...recipeIngredient } as RecipeIngredientFormInterface;
+      const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
       recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
       recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
-        ? MeasureUnits[recipeIngredient.unit] ? await this.translatorService.instant(MeasureUnits[recipeIngredient.unit]) : recipeIngredient.unit
+        ? MeasureUnits.get(recipeIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(recipeIngredient.unit)!) : recipeIngredient.unit
         : recipeIngredient.measure;
 
       this.recipeIngredients.at(i).patchValue(recipeIngredientForm);
@@ -183,7 +183,7 @@ export class RecipeComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = { ...this.form.value, recipeIngredients: [] };
+    const formRecipe = {...this.form.value, recipeIngredients: []};
     for (let i = 0; i < this.recipeIngredients.length; i++) {
       formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
@@ -204,7 +204,7 @@ export class RecipeComponent implements OnInit {
       if (checkExist) {
         this.recipeService.exist(formDocument.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({ 'exist': true });
+            return this.name.setErrors({'exist': true});
           }
           await this.submit(formDocument);
         });
@@ -223,7 +223,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated recipe`)
         });
-        await this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug ]);
+        await this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
       });
     } else {
       this.recipeService.add(localDocument).then(async recipe => {
@@ -232,7 +232,7 @@ export class RecipeComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added recipe`)
         });
-        this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug ]);
+        this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
       });
     }
   }
@@ -248,7 +248,7 @@ export class RecipeComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          this.routerService.navigate(['/', 'admin', 'recipes' ]);
+          this.routerService.navigate([ '/', 'admin', 'recipes' ]);
         });
       }
     });

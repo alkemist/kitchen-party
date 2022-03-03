@@ -65,14 +65,14 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
         valid = recipe.nameContain(filters.name);
       }
       if (valid && filters.diet) {
-        valid = recipe.dietIs(DietTypes[filters.diet]);
+        valid = recipe.dietIs(DietTypes.get(filters.diet)!);
       }
       if (valid && filters.type) {
         valid = recipe.type! && recipe.type === filters.type;
       }
       if (valid && filters.sweetOrSalty) {
-        valid = recipe.isSweet() && SweetSalty[filters.sweetOrSalty] === SweetSaltyLabelEnum.sweet
-          || recipe.isSalty() && SweetSalty[filters.sweetOrSalty] === SweetSaltyLabelEnum.salty;
+        valid = recipe.isSweet() && SweetSalty.get(filters.sweetOrSalty) === SweetSaltyLabelEnum.sweet
+          || recipe.isSalty() && SweetSalty.get(filters.sweetOrSalty) === SweetSaltyLabelEnum.salty;
       }
       if (valid && filters.ingredients) {
         valid = filters.ingredients.every((filterIngredientId: string) => recipe.ingredientIds.some(recipeIngredientId => filterIngredientId === recipeIngredientId));
@@ -130,19 +130,19 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     if (filters.diet) {
       this.filterSummary.push({
         key: 'diet',
-        value: await this.translatorService.instant(DietTypes[filters.diet])
+        value: await this.translatorService.instant(DietTypes.get(filters.diet)!)
       });
     }
     if (filters.type) {
       this.filterSummary.push({
         key: 'type',
-        value: await this.translatorService.instant(RecipeTypes[filters.type])
+        value: await this.translatorService.instant(RecipeTypes.get(filters.type)!)
       });
     }
     if (filters.sweetOrSalty) {
       this.filterSummary.push({
         key: 'sweetOrSalty',
-        value: await this.translatorService.instant(SweetSalty[filters.sweetOrSalty])
+        value: await this.translatorService.instant(SweetSalty.get(filters.sweetOrSalty)!)
       });
     }
     if (filters.ingredients && filters.ingredients.length > 0) {

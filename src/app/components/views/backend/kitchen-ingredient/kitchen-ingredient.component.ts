@@ -51,10 +51,10 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm = { ...this.kitchenIngredient } as RecipeIngredientFormInterface;
+          const kitchenIngredientForm = {...this.kitchenIngredient} as RecipeIngredientFormInterface;
           kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.recipe ? this.kitchenIngredient.recipe : this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
-            ? MeasureUnits[this.kitchenIngredient.unit] ? await this.translatorService.instant(MeasureUnits[this.kitchenIngredient.unit]) : this.kitchenIngredient.unit
+            ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit
             : this.kitchenIngredient.measure;
 
           this.form.patchValue(kitchenIngredientForm);
@@ -88,7 +88,7 @@ export class KitchenIngredientComponent implements OnInit {
       if (checkExist) {
         this.kitchenIngredientService.exist(formDocument.name).then(async exist => {
           if (exist) {
-            return this.form.get('ingredientOrRecipe')?.setErrors({ 'exist': true });
+            return this.form.get('ingredientOrRecipe')?.setErrors({'exist': true});
           }
           await this.submit(formDocument);
         });
@@ -108,7 +108,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate(['/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
+        await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     } else {
       await this.kitchenIngredientService.add(localDocument).then(async ingredient => {
@@ -118,7 +118,7 @@ export class KitchenIngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate(['/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
+        await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredient', this.kitchenIngredient.slug ]);
       });
     }
   }
@@ -133,7 +133,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate(['/', 'admin', 'kitchen-ingredients' ]);
+          await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredients' ]);
         });
       }
     });
