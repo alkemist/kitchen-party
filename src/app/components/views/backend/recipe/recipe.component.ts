@@ -26,7 +26,7 @@ import { DialogIngredientComponent } from '../../../dialogs/ingredient/dialog-in
   }
 })
 export class RecipeComponent implements OnInit {
-  recipe = new RecipeModel({} as RecipeInterface);
+  recipe = new RecipeModel({});
   DietTypeEnum = DietTypeLabelEnum;
   recipeTypes: KeyLabelInterface[] = [];
   measureUnits: KeyLabelInterface[] = [];
@@ -136,7 +136,7 @@ export class RecipeComponent implements OnInit {
       const i = this.recipe.orderedRecipeIngredients.indexOf(recipeIngredient);
       this.addRecipeIngredient();
 
-      const recipeIngredientForm = {...recipeIngredient} as RecipeIngredientFormInterface;
+      const recipeIngredientForm: RecipeIngredientFormInterface = {...recipeIngredient};
       recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
       recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
         ? MeasureUnits.get(recipeIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(recipeIngredient.unit)!) : recipeIngredient.unit

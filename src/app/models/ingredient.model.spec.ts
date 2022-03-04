@@ -16,9 +16,9 @@ describe('IngredientModel', () => {
     it('should construct', () => {
       expect(new KitchenIngredientModel({})).toBeDefined();
     });
-    
+
     it('should contain isLiquid boolean value', () => {
-      expect(new IngredientModel({isLiquid: true} as IngredientInterface)).toMatchObject({isLiquid: true});
+      expect(new IngredientModel({isLiquid: true})).toMatchObject({isLiquid: true});
     });
 
     it('should contain isLiquid null value', () => {

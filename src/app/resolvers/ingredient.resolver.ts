@@ -4,18 +4,18 @@ import { IngredientModel } from '../models';
 import { IngredientService } from '../services';
 
 @Injectable({providedIn: 'root'})
-export class IngredientResolver implements Resolve<IngredientModel> {
+export class IngredientResolver implements Resolve<IngredientModel | undefined> {
   constructor(private service: IngredientService) {
   }
 
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Promise<IngredientModel> {
+  ): Promise<IngredientModel | undefined> {
     const ingredient = await this.service.get(route.paramMap.get('slug') ?? '');
     if (ingredient) {
       return ingredient;
     }
-    return new IngredientModel({});
+    return undefined;
   }
 }

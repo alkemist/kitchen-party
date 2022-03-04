@@ -14,7 +14,7 @@
         <h5 class="text-center" translate="">Shopping list</h5>
       </ng-template>
 
-      <div *ngFor="let cartElement of cartOrderedByChecked" [class.checked]="cartElement.inKitchen"
+      <div *ngFor="let cartElement of cart" [class.checked]="cartElement.inKitchen"
            class="ingredient flex align-items-center justify-content-between">
         <p-checkbox [(ngModel)]="cartElement.inKitchen" [binary]="true"
                     [label]="cartElement.ingredient.name">test

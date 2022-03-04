@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ShoppingComponent } from './shopping.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { MockModule, MockProvider } from 'ng-mocks';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import { KitchenIngredientService, TranslatorService } from '../../../../services';
+import { ShoppingService } from '../../../../services';
+
+import { ShoppingComponent } from './shopping.component';
 
 describe('ShoppingComponent', () => {
   let component: ShoppingComponent;
@@ -21,8 +21,7 @@ describe('ShoppingComponent', () => {
         MockModule(TranslateModule),
       ],
       providers: [
-        MockProvider(TranslatorService),
-        MockProvider(KitchenIngredientService),
+        MockProvider(ShoppingService),
       ],
       declarations: [ ShoppingComponent ]
     })
@@ -37,5 +36,13 @@ describe('ShoppingComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('ShoppingComponent.cartOrderedByChecked', function () {
+
+  });
+
+  describe('ShoppingComponent.ngOnInit', function () {
+
   });
 });

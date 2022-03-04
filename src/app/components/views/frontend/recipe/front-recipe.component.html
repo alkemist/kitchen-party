@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="loader">
     <i class="pi pi-spin pi-spinner"></i>
   </div>
-  <p-card *ngIf="!loading">
+  <p-card *ngIf="!loading && !noExist">
     <ng-template pTemplate="title">
       <div class="title flex flex-row align-items-center">
         <div class="flex flex-row align-items-center">
@@ -69,5 +69,19 @@
            pRipple></a>
       </div>
     </ng-template>
+  </p-card>
+  <p-card *ngIf="!loading && noExist">
+    <ng-template pTemplate="title">
+      <div class="title flex flex-row align-items-center">
+        <a [routerLink]="['/']" class="p-button-rounded p-button-text" icon="pi pi-angle-left" pButton
+           pRipple
+           type="button"></a>
+        <h5 class="text-center flex-grow-1" translate="">Recipe don't exist</h5>
+      </div>
+    </ng-template>
+
+    <div class="flex flex-row align-items-center justify-content-center">
+      <p-button [routerLink]="['/']" [label]="'Back to home' | translate" icon="pi pi-home"></p-button>
+    </div>
   </p-card>
 </div>

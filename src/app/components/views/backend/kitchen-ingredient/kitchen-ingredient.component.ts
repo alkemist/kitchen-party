@@ -17,7 +17,7 @@ import { EnumHelper, slugify } from '../../../../tools';
   }
 })
 export class KitchenIngredientComponent implements OnInit {
-  kitchenIngredient = new KitchenIngredientModel({} as KitchenIngredientInterface);
+  kitchenIngredient = new KitchenIngredientModel({});
   measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
 
@@ -51,7 +51,7 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm = {...this.kitchenIngredient} as RecipeIngredientFormInterface;
+          const kitchenIngredientForm: RecipeIngredientFormInterface = {...this.kitchenIngredient};
           kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.recipe ? this.kitchenIngredient.recipe : this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit

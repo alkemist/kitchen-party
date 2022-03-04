@@ -75,10 +75,11 @@ export class TranslatorService {
 
     this.promise = new Promise<void>(resolve => {
       this.translateService.getTranslation(this.lang).pipe(first()).subscribe(translations => {
-        const keys = Object.keys(translations);
-        const values = Object.values(translations);
+        const keys: string[] = Object.keys(translations);
+        const values: string[] = Object.values(translations);
         this.all = keys.map((value, index) => {
-          return {key: value, value: values[index]} as KeyValueInterface;
+          const keyValue: KeyValueInterface = {key: value, value: values[index]};
+          return keyValue;
         });
 
         this.store.dispatch(new FillTranslations(this.all));

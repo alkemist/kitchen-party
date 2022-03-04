@@ -17,7 +17,7 @@ import { EnumHelper, slugify } from '../../../../tools';
   }
 })
 export class IngredientComponent implements OnInit {
-  ingredient = new IngredientModel({} as IngredientInterface);
+  ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
   form: FormGroup = new FormGroup({});
@@ -89,7 +89,7 @@ export class IngredientComponent implements OnInit {
       if (checkExist) {
         this.ingredientService.exist(ingredient.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({ 'exist': true });
+            return this.name.setErrors({'exist': true});
           }
           await this.submit(ingredient);
         });
@@ -109,7 +109,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Updated ingredient`)
         });
-        await this.routerService.navigate(['/', 'admin', 'ingredient', this.ingredient.slug ]);
+        await this.routerService.navigate([ '/', 'admin', 'ingredient', this.ingredient.slug ]);
       });
     } else {
       await this.ingredientService.add(localDocument).then(async ingredient => {
@@ -119,7 +119,7 @@ export class IngredientComponent implements OnInit {
           severity: 'success',
           detail: await this.translatorService.instant(`Added ingredient`),
         });
-        await this.routerService.navigate(['/', 'admin', 'ingredient', this.ingredient.slug ]);
+        await this.routerService.navigate([ '/', 'admin', 'ingredient', this.ingredient.slug ]);
       });
     }
   }
@@ -134,7 +134,7 @@ export class IngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate(['/', 'admin', 'ingredients' ]);
+          await this.routerService.navigate([ '/', 'admin', 'ingredients' ]);
         });
       }
     });

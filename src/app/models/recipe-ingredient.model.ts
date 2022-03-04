@@ -105,7 +105,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       isUnit = true;
     } else {
       const measureUnitKeys = Object.keys(MeasureUnitLabelEnum);
-      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure);
+      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure!);
       if (keyIndex > -1) {
         isUnit = true;
         value = measureUnits[keyIndex].key;
@@ -163,7 +163,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return str;
   }
 
-  static orderRecipeIngredients(recipeIngredients: HasIngredient[]): HasIngredient[] {
+  static orderRecipeIngredients<T extends HasIngredient>(recipeIngredients: T[]): T[] {
     return recipeIngredients.sort((a, b) => {
       return RecipeIngredientModel.orderTwoRecipeIngredients(a, b);
     });
