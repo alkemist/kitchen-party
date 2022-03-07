@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "npx ngcc && jest --coverage",
     "reset": "rm -rf node_modules && rm yarn.lock && yarn install",
-    "config": "ts-node ./scripts/setenv.ts"
+    "config": "ts-node ./scripts/setenv.ts",
+    "backup": "ts-node ./scripts/backup.ts"
   },
   "private": true,
   "dependencies": {

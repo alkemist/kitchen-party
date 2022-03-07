@@ -1,0 +1,14 @@
+name: Create and send backup
+
+on:
+  schedule:
+    # CRON : mm hh jj MMM JJJ
+    - cron: '30 1 * * *'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: finnp/create-file-action@1.0.0
+      - run: npm run backup
