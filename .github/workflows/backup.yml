@@ -3,7 +3,7 @@ name: Create and send backup
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '30 18 * * *'
+    - cron: '45 10 * * *'
 
 jobs:
   backup:
