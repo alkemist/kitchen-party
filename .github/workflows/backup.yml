@@ -4,6 +4,10 @@ on:
   schedule:
     # CRON : mm hh jj MMM JJJ
     - cron: '40 12 * * *'
+    
+defaults:
+  run:
+    working-directory: ../
 
 jobs:
   backup:
@@ -12,4 +16,4 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
       - uses: stefanzweifel/git-auto-commit-action@v4
-      - run: npx ts-node ./scripts/backup.ts
+      - run: npm run backup
