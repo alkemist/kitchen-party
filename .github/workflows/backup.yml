@@ -3,11 +3,11 @@ name: Create backups
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '40 12 * * *'
+    - cron: '50 12 * * *'
     
 defaults:
   run:
-    working-directory: ../
+    working-directory: ./
 
 jobs:
   backup:
