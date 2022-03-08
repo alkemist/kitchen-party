@@ -3,12 +3,13 @@ name: Create and send backup
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '55 11 * * *'
+    - cron: '05 12 * * *'
 
 jobs:
   backup:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/setup-node@v2
       - uses: stefanzweifel/git-auto-commit-action@v4
       - run: ts-node ./scripts/backup.ts
