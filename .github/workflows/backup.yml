@@ -3,7 +3,7 @@ name: Create backups
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '00 15 * * *'
+    - cron: '24 16 * * *'
     
 defaults:
   run:
@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/setup-node@v3
+      #- uses: actions/setup-node@v3
       #- uses: stefanzweifel/git-auto-commit-action@v4
-      - run: npx ts-node ./scripts/backup.ts
+      #- run: npm run backup
+      #- run: npx ts-node ./scripts/backup.ts
+      - run: ls
+      - run: ls ../
+      - run: ls ../../
