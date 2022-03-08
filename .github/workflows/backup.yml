@@ -1,9 +1,9 @@
-name: Create and send backup
+name: Create backups
 
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '05 12 * * *'
+    - cron: '20 12 * * *'
 
 jobs:
   backup:
@@ -12,4 +12,4 @@ jobs:
     steps:
       - uses: actions/setup-node@v2
       - uses: stefanzweifel/git-auto-commit-action@v4
-      - run: ts-node ./scripts/backup.ts
+      - run: npm run backup
