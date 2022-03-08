@@ -93,8 +93,12 @@ p-dropdown.ng-touched.p-invalid > div {
 }
 
 .loader {
-  font-size: 2rem;
   padding: 20px;
+  text-align: center;
+
+  i {
+    font-size: 4rem;
+  }
 }
 
 .mobile-showed {

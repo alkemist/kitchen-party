@@ -23,11 +23,8 @@ export class UserService {
   getLoggedUser(event?: (user?: UserInterface) => void): Promise<UserInterface | undefined> {
     return new Promise<UserInterface | undefined>((resolve) => {
       const unsubscribe = onAuthStateChanged(this.auth, (userFirebase) => {
-        const userData = userFirebase as unknown as UserInterface;
-        const user: UserInterface | undefined = userData ? {
-          email: userData.email!,
-          createdAt: userData.createdAt!,
-          lastLoginAt: userData.lastLoginAt!,
+        const user: UserInterface | undefined = userFirebase ? {
+          email: userFirebase.email,
         } : undefined;
 
         if (!event) {
@@ -36,7 +33,7 @@ export class UserService {
           return event(user);
         }
 
-        if (!userData) {
+        if (!userFirebase) {
           this.store.dispatch(new UserLogout());
           resolve(undefined);
         }
@@ -75,6 +72,6 @@ export class UserService {
         this.store.dispatch(new UserLogout());
         resolve();
       });
-    })
+    });
   }
 }

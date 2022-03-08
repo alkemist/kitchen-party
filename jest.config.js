@@ -8,7 +8,7 @@ module.exports = {
     setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
     collectCoverage: true,
     coverageReporters: ['html'],
-    coverageDirectory: 'coverage/my-app',
+    coverageDirectory: 'coverage/kitchen-party',
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
         prefix: '<rootDir>/',
         '@app/(.*)': '<rootDir>/src/app/$1',

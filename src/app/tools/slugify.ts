@@ -1,4 +1,8 @@
-export const slugify = function (str: string) {
+export const slugify = function (str?: string) {
+  if (!str) {
+    return '';
+  }
+
   str = str.trim().replace(/^\s+|\s+$/g, '');
 
   // Make the string lowercase

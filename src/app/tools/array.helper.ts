@@ -8,4 +8,12 @@ export abstract class ArrayHelper {
       return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : 0);
     });
   }
+
+  static keysValuesToMap<T, U>(keys: T[], values: U[]): Map<T, U> {
+    const map = new Map<T, U>();
+    keys.forEach((key, index) => {
+      map.set(key as T, values[index] as U);
+    });
+    return map;
+  }
 }

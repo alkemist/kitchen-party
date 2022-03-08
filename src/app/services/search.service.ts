@@ -17,7 +17,7 @@ export class SearchService {
   async searchIngredientsOrRecipes(query: string): Promise<(RecipeModel | IngredientModel)[]> {
     const ingredients = await this.ingredientService.search(query);
     const recipes = (await this.recipeService.search(query))
-      .filter((recipe: RecipeModel) => recipe.type && RecipeTypes[recipe.type] === RecipeTypeLabelEnum.ingredient);
+      .filter((recipe: RecipeModel) => recipe.type && RecipeTypes.get(recipe.type) === RecipeTypeLabelEnum.ingredient);
     return ([] as (RecipeModel | IngredientModel)[]).concat(ingredients).concat(recipes);
   }
 }

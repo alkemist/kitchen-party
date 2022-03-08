@@ -5,12 +5,12 @@ import { RecipeModel } from '../models';
 
 export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
   toFirestore: (recipe: RecipeModel): RecipeInterface => {
-    const recipeFields = { ...recipe } as RecipeInterface;
+    const recipeFields = {...recipe} as RecipeInterface;
     delete recipeFields.id;
     recipeFields.recipeIngredients = [];
 
     recipe.recipeIngredients.forEach(recipeIngredient => {
-      const recipeIngredientField = { ...recipeIngredient };
+      const recipeIngredientField = {...recipeIngredient};
       delete recipeIngredientField.id;
 
       recipeIngredientField.ingredientId = recipeIngredient.ingredient?.id! || '';
@@ -19,7 +19,7 @@ export const recipeConverter: FirestoreDataConverter<RecipeInterface> = {
       recipeIngredientField.recipeId = recipeIngredient.recipe?.id! || '';
       delete recipeIngredientField.recipe;
 
-      recipeFields.recipeIngredients.push({
+      recipeFields.recipeIngredients?.push({
         ...recipeIngredientField
       });
     });

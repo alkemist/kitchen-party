@@ -4,8 +4,8 @@ import { RecipeIngredientInterface } from './recipe-ingredient.interface';
 
 export interface RecipeInterface extends DataObjectInterface {
   id?: string,
-  name: string,
-  slug: string,
+  name?: string,
+  slug?: string,
 
   cookingDuration?: number,
   preparationDuration?: number,
@@ -18,5 +18,5 @@ export interface RecipeInterface extends DataObjectInterface {
   imagePath?: string,
   source?: string,
 
-  recipeIngredients: RecipeIngredientInterface[],
+  recipeIngredients?: RecipeIngredientInterface[],
 }

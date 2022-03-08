@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FrontRecipeComponent } from './front-recipe.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockModule, MockProvider } from 'ng-mocks';
-import { TranslatorService, UserService } from '../../../../services';
 import { TranslateModule } from '@ngx-translate/core';
+import { MockModule, MockProvider } from 'ng-mocks';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import { TranslatorService, UserService } from '../../../../services';
+
+import { FrontRecipeComponent } from './front-recipe.component';
 
 describe('FrontRecipeComponent', () => {
   let component: FrontRecipeComponent;
@@ -19,6 +20,7 @@ describe('FrontRecipeComponent', () => {
         MockModule(TranslateModule),
         MockModule(CardModule),
         MockModule(TagModule),
+        MockModule(ButtonModule),
       ],
       providers: [
         MockProvider(TranslatorService),

@@ -1,38 +1,46 @@
-import { IngredientModel } from './ingredient.model';
-import { IngredientFormInterface, IngredientInterface } from '../interfaces';
-import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum } from '../enums';
-import { EnumHelper } from '../tools';
-import { dateMock } from '../mocks/date.mock';
 import {
   ingredientTypeFishMap,
   ingredientTypeMeatMap,
   ingredientTypeVeganMap,
   ingredientTypeVegeMap
 } from '../consts/ingredient-type-diet.const';
+import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum } from '../enums';
+import { IngredientFormInterface, IngredientInterface } from '../interfaces';
+import { dateMock } from '../mocks/date.mock';
+import { EnumHelper } from '../tools';
+import { IngredientModel } from './ingredient.model';
+import { KitchenIngredientModel } from './kitchen-ingredient.model';
 
 describe('IngredientModel', () => {
   describe('IngredientModel.constructor', () => {
+    it('should construct', () => {
+      expect(new KitchenIngredientModel({})).toBeDefined();
+    });
+
     it('should contain isLiquid boolean value', () => {
-      expect(new IngredientModel({ isLiquid: true } as IngredientInterface)).toMatchObject({ isLiquid: true });
-    })
+      expect(new IngredientModel({isLiquid: true})).toMatchObject({isLiquid: true});
+    });
+
     it('should contain isLiquid null value', () => {
-      expect(new IngredientModel({} as IngredientInterface)).toMatchObject({ isLiquid: null });
-    })
-  })
+      expect(new IngredientModel({} as IngredientInterface)).toMatchObject({isLiquid: null});
+    });
+  });
   describe('IngredientModel.typeName', () => {
     it('should return type name', () => {
-      expect(new IngredientModel({ type: IngredientTypeKeyEnum.meats } as IngredientInterface).typeName).toBe(IngredientTypeLabelEnum.meats)
-    })
-  })
+      expect(new IngredientModel({type: IngredientTypeKeyEnum.meats} as IngredientInterface).typeName).toBe(IngredientTypeLabelEnum.meats);
+    });
+  });
   describe('IngredientModel.typeIcon', () => {
     it('should return icons', () => {
-      const icons = EnumHelper.enumToAssociativArray(IngredientTypeIconEnum);
+      const icons = EnumHelper.enumToMap(IngredientTypeIconEnum);
       const keys = Object.keys(IngredientTypeKeyEnum);
+
       for (const key of keys) {
-        expect(new IngredientModel({ type: key } as IngredientInterface).typeIcon).toBe(icons[key])
+        expect(new IngredientModel({type: key} as IngredientInterface).typeIcon).toBe(icons.get(key));
       }
+
       expect.assertions(keys.length);
-    })
+    });
   });
   describe('IngredientModel.format', () => {
     it('should format ingredient date', () => {
@@ -44,26 +52,29 @@ describe('IngredientModel', () => {
           monthBegin: 8,
           monthEnd: 8,
         } as IngredientInterface));
-    })
+    });
   });
   describe('IngredientModel.nameContain', () => {
     it('should return true if name contain searched word', () => {
-      expect(new IngredientModel({ name: 'ceci est un test', slug: 'rien' } as IngredientInterface)
+      expect(new IngredientModel({name: 'ceci est un test', slug: 'rien'} as IngredientInterface)
         .nameContain('test')).toBe(true);
-    })
+    });
+
     it('should return true if slug contain searched word', () => {
-      expect(new IngredientModel({ name: 'rien', slug: 'ceci est un test' } as IngredientInterface)
+      expect(new IngredientModel({name: 'rien', slug: 'ceci est un test'} as IngredientInterface)
         .nameContain('test')).toBe(true);
-    })
+    });
+
     it('should return true if name and slug slug contain searched word', () => {
-      expect(new IngredientModel({ name: 'test test', slug: 'ceci est un test' } as IngredientInterface)
+      expect(new IngredientModel({name: 'test test', slug: 'ceci est un test'} as IngredientInterface)
         .nameContain('test')).toBe(true);
-    })
+    });
+
     it('should return false if name and slug don\'t contain searched word', () => {
-      expect(new IngredientModel({ name: 'rien', slug: 'nothing' } as IngredientInterface)
+      expect(new IngredientModel({name: 'rien', slug: 'nothing'} as IngredientInterface)
         .nameContain('test')).toBe(false);
-    })
-  })
+    });
+  });
   describe('IngredientModel.hydrate', () => {
     it('should hydrate', () => {
       const id = '3';
@@ -73,49 +84,56 @@ describe('IngredientModel', () => {
         type: IngredientTypeKeyEnum.salts,
         isLiquid: true,
       } as IngredientInterface;
-      const objectToHydrated = new IngredientModel({ name: 'test', id } as IngredientInterface);
+      const objectToHydrated = new IngredientModel({name: 'test', id} as IngredientInterface);
+
       objectToHydrated.hydrate(hydratedValues);
-      expect(objectToHydrated).toEqual({ ...hydratedValues, id })
-    })
-  })
+
+      expect(objectToHydrated).toEqual({...hydratedValues, id});
+    });
+  });
   describe('IngredientModel.isMeat', () => {
     it('should return true if ingredient is meat', () => {
       ingredientTypeMeatMap.forEach(((value, key) => {
-        expect(new IngredientModel({ type: key } as IngredientInterface).isMeat()).toBe(value)
-      }))
+        expect(new IngredientModel({type: key} as IngredientInterface).isMeat()).toBe(value);
+      }));
+
       expect.assertions(ingredientTypeMeatMap.size);
-    })
+    });
   });
   describe('IngredientModel.isFish', () => {
     it('should return true if ingredient is fish', () => {
       ingredientTypeFishMap.forEach(((value, key) => {
-        expect(new IngredientModel({ type: key } as IngredientInterface).isFish()).toBe(value)
-      }))
+        expect(new IngredientModel({type: key} as IngredientInterface).isFish()).toBe(value);
+      }));
+
       expect.assertions(ingredientTypeMeatMap.size);
-    })
+    });
   });
   describe('IngredientModel.isVege', () => {
     it('should return true if ingredient is vegan', () => {
       ingredientTypeVegeMap.forEach(((value, key) => {
-        expect(new IngredientModel({ type: key } as IngredientInterface).isVege()).toBe(value)
-      }))
+        expect(new IngredientModel({type: key} as IngredientInterface).isVege()).toBe(value);
+      }));
+
       expect.assertions(ingredientTypeVegeMap.size);
-    })
+    });
   });
   describe('IngredientModel.isVegan', () => {
     it('should return true if ingredient is vegan', () => {
       ingredientTypeVeganMap.forEach(((value, key) => {
-        expect(new IngredientModel({ type: key } as IngredientInterface).isVegan()).toBe(value)
-      }))
+        expect(new IngredientModel({type: key} as IngredientInterface).isVegan()).toBe(value);
+      }));
+
       expect.assertions(ingredientTypeVeganMap.size);
-    })
+    });
   });
   describe('IngredientModel.isSweet', () => {
     it('should return true if ingredient is sweet', () => {
-      expect(new IngredientModel({ name: 'Chocolat' } as IngredientInterface).isSweet()).toBe(true)
+      expect(new IngredientModel({name: 'Chocolat'} as IngredientInterface).isSweet()).toBe(true);
     });
+
     it('should return true if ingredient is not sweet', () => {
-      expect(new IngredientModel({ name: 'Courgette' } as IngredientInterface).isSweet()).toBe(false)
+      expect(new IngredientModel({name: 'Courgette'} as IngredientInterface).isSweet()).toBe(false);
     });
   });
   describe('IngredientModel.isSalty', () => {
@@ -123,20 +141,23 @@ describe('IngredientModel', () => {
       expect(new IngredientModel({
         name: '',
         type: IngredientTypeKeyEnum.fishes_seafoods
-      } as IngredientInterface).isSalty()).toBe(true)
+      } as IngredientInterface).isSalty()).toBe(true);
     });
+
     it('should return true if ingredient is meat', () => {
       expect(new IngredientModel({
         name: '',
         type: IngredientTypeKeyEnum.meats
-      } as IngredientInterface).isSalty()).toBe(true)
+      } as IngredientInterface).isSalty()).toBe(true);
     });
+
     it('should return true if ingredient is salty', () => {
-      expect(new IngredientModel({ name: 'Tomate' } as IngredientInterface).isSalty()).toBe(true)
-      expect(new IngredientModel({ name: 'Bouillon de légume' } as IngredientInterface).isSalty()).toBe(true)
+      expect(new IngredientModel({name: 'Tomate'} as IngredientInterface).isSalty()).toBe(true);
+      expect(new IngredientModel({name: 'Bouillon de légume'} as IngredientInterface).isSalty()).toBe(true);
     });
+
     it('should return false else', () => {
-      expect(new IngredientModel({ name: '' } as IngredientInterface).isSalty()).toBe(false)
+      expect(new IngredientModel({name: ''} as IngredientInterface).isSalty()).toBe(false);
     });
   });
   describe('IngredientModel.isSeason', () => {
@@ -154,6 +175,7 @@ describe('IngredientModel', () => {
         [ 9, 8 ],
         [ 7, 1 ],
       ];
+
       for (const testSeason of testsSeason) {
         expect(new IngredientModel({
           type: IngredientTypeKeyEnum.fruits_vegetables_mushrooms,
@@ -163,7 +185,7 @@ describe('IngredientModel', () => {
       }
 
       expect.assertions(testsSeason.length);
-    })
+    });
     it('should return true if ingredient is not season', () => {
       const testsSeason = [
         [ 9, 7 ],
@@ -180,13 +202,13 @@ describe('IngredientModel', () => {
       }
 
       expect.assertions(testsSeason.length);
-    })
+    });
     it('should return true if ingredient has not season', () => {
       expect(new IngredientModel({} as IngredientInterface).isSeason()).toBe(true);
       expect(new IngredientModel({
         monthBegin: 1,
         monthEnd: 12, type: IngredientTypeKeyEnum.alcohols
       } as IngredientInterface).isSeason()).toBe(true);
-    })
+    });
   });
-})
+});

@@ -14,7 +14,7 @@ import { EnumHelper, slugify } from '../../../tools';
   styleUrls: [ './dialog-ingredient.component.scss' ]
 })
 export class DialogIngredientComponent implements OnInit {
-  ingredient = new IngredientModel({} as IngredientInterface);
+  ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
   form: FormGroup = new FormGroup({});
@@ -66,7 +66,7 @@ export class DialogIngredientComponent implements OnInit {
       if (checkExist) {
         this.ingredientService.exist(ingredient.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({ 'exist': true });
+            return this.name.setErrors({'exist': true});
           }
           await this.submit(ingredient);
         });

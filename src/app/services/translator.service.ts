@@ -6,7 +6,7 @@ import { TranslationError } from '../errors';
 import { KeyLabelInterface, KeyValueInterface } from '../interfaces';
 import { FillTranslations } from '../stores/translation.action';
 import { TranslationState } from '../stores/translation.state';
-import { TimeHelper } from '../tools';
+import { ArrayHelper, TimeHelper } from '../tools';
 import { LoggerService } from './logger.service';
 
 @Injectable({
@@ -59,8 +59,13 @@ export class TranslatorService {
 
   async translateLabels(keyObjects: KeyLabelInterface[]): Promise<KeyLabelInterface[]> {
     return Promise.all(keyObjects.map(async item => {
-      return { ...item, label: await this.instant(item.label) };
+      return {...item, label: await this.instant(item.label)};
     }));
+  }
+
+  async translateMap<T extends string, U extends string>(map: Map<T, U>): Promise<Map<T, string>> {
+    const translations = await Promise.all(Array.from(map).map(([ value ]) => this.instant(value)));
+    return ArrayHelper.keysValuesToMap<T, string>(Array.from(map.keys()), translations);
   }
 
   async refresh(): Promise<void> {
@@ -70,10 +75,11 @@ export class TranslatorService {
 
     this.promise = new Promise<void>(resolve => {
       this.translateService.getTranslation(this.lang).pipe(first()).subscribe(translations => {
-        const keys = Object.keys(translations);
-        const values = Object.values(translations);
+        const keys: string[] = Object.keys(translations);
+        const values: string[] = Object.values(translations);
         this.all = keys.map((value, index) => {
-          return { key: value, value: values[index] } as KeyValueInterface;
+          const keyValue: KeyValueInterface = {key: value, value: values[index]};
+          return keyValue;
         });
 
         this.store.dispatch(new FillTranslations(this.all));

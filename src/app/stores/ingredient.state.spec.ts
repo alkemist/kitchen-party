@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { NgxsModule, Store } from '@ngxs/store';
 import { IngredientInterface } from '../interfaces';
+import { dateMock } from '../mocks/date.mock';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 import { IngredientState } from './ingredient.state';
-import { dateMock } from '../mocks/date.mock';
 
 describe('IngredientState', () => {
   let store: Store;
   let ingredientsSelected;
 
-  const currentIngredient = { id: '1', slug: '1' } as IngredientInterface;
-  const newIngredient = { id: '2', slug: '2' } as IngredientInterface;
-  const ingredientUpdated = { ...currentIngredient, name: currentIngredient.slug } as IngredientInterface;
+  const currentIngredient = {id: '1', slug: '1'} as IngredientInterface;
+  const newIngredient = {id: '2', slug: '2'} as IngredientInterface;
+  const ingredientUpdated = {...currentIngredient, name: currentIngredient.slug} as IngredientInterface;
   const fruitWithSeasonIngredient = {
     id: '3',
     slug: '3',
@@ -19,7 +19,7 @@ describe('IngredientState', () => {
     monthBegin: 1,
     monthEnd: 2
   } as IngredientInterface;
-  const fruitIngredient = { id: '4', slug: '4', type: 'fruits_vegetables_mushrooms' } as IngredientInterface;
+  const fruitIngredient = {id: '4', slug: '4', type: 'fruits_vegetables_mushrooms'} as IngredientInterface;
 
   const ingredientsSimple = [ currentIngredient ] as IngredientInterface[];
   const ingredientsComplete = [ currentIngredient, fruitWithSeasonIngredient, fruitIngredient, newIngredient ];
@@ -66,23 +66,23 @@ describe('IngredientState', () => {
       ingredientsSelected = store.selectSnapshot((state) => state.ingredients.all);
       expect(ingredientsSelected).toEqual([]);
     });
-  })
+  });
 
   describe('selectors', () => {
     it('should select all ingredients', () => {
-      expect(IngredientState.all({ all: ingredientsComplete })).toEqual(ingredientsComplete);
+      expect(IngredientState.all({all: ingredientsComplete})).toEqual(ingredientsComplete);
     });
 
     it('should get last updated store date', () => {
-      expect(IngredientState.lastUpdated({ lastUpdated: dateMock, all: [] })).toEqual(dateMock);
+      expect(IngredientState.lastUpdated({lastUpdated: dateMock, all: []})).toEqual(dateMock);
     });
 
     it('should select fruits and vegetables with saisons', () => {
-      expect(IngredientState.fruitsOrVegetables({ all: ingredientsComplete })).toEqual([ fruitWithSeasonIngredient ]);
+      expect(IngredientState.fruitsOrVegetables({all: ingredientsComplete})).toEqual([ fruitWithSeasonIngredient ]);
     });
 
     it('should get ingredient by slug', () => {
-      expect(IngredientState.getIngredientBySlug({ all: ingredientsComplete }, newIngredient.slug)).toEqual(newIngredient);
+      expect(IngredientState.getIngredientBySlug({all: ingredientsComplete}, newIngredient.slug!)).toEqual(newIngredient);
     });
-  })
+  });
 });

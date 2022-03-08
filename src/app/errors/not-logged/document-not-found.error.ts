@@ -1,6 +1,6 @@
 import { DataObjectInterface } from '../../interfaces';
 
-export class DocumentNotFound<T extends DataObjectInterface> extends Error {
+export class DocumentNotFoundError<T extends DataObjectInterface> extends Error {
   private readonly collectionName: string;
 
   constructor(collectionName: string, document?: T) {

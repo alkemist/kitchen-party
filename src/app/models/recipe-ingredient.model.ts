@@ -57,7 +57,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     let quantity = this.quantity || 0;
 
 
-    const unit = this.unit ? MeasureUnits[this.unit] : null;
+    const unit = this.unit ? MeasureUnits.get(this.unit) : null;
 
     switch (unit) {
       case MeasureUnitLabelEnum.tablespoon:
@@ -71,18 +71,18 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
           unit: this.ingredient?.isLiquid ? MeasureUnitLabelEnum.milliliter : MeasureUnitLabelEnum.gram
         };
       case MeasureUnitLabelEnum.centiliter:
-        return { count: quantity * 10, unit: MeasureUnitLabelEnum.milliliter };
+        return {count: quantity * 10, unit: MeasureUnitLabelEnum.milliliter};
       case MeasureUnitLabelEnum.kilogram:
-        return { count: quantity * 1000, unit: MeasureUnitLabelEnum.gram };
+        return {count: quantity * 1000, unit: MeasureUnitLabelEnum.gram};
       case MeasureUnitLabelEnum.gram:
-        return { count: quantity, unit: MeasureUnitLabelEnum.gram };
+        return {count: quantity, unit: MeasureUnitLabelEnum.gram};
     }
 
-    return { count: quantity, measure: this.measure };
+    return {count: quantity, measure: this.measure};
   }
 
   static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
-    const recipeIngredient = { ...recipeIngredientForm };
+    const recipeIngredient = {...recipeIngredientForm};
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     if (ingredientOrRecipe instanceof RecipeModel) {
@@ -101,11 +101,11 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
       return recipeIngredient;
     }
 
-    if (MeasureUnits[value] !== undefined) {
+    if (MeasureUnits.get(value) !== undefined) {
       isUnit = true;
     } else {
       const measureUnitKeys = Object.keys(MeasureUnitLabelEnum);
-      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure);
+      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure!);
       if (keyIndex > -1) {
         isUnit = true;
         value = measureUnits[keyIndex].key;
@@ -163,7 +163,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return str;
   }
 
-  static orderRecipeIngredients(recipeIngredients: HasIngredient[]): HasIngredient[] {
+  static orderRecipeIngredients<T extends HasIngredient>(recipeIngredients: T[]): T[] {
     return recipeIngredients.sort((a, b) => {
       return RecipeIngredientModel.orderTwoRecipeIngredients(a, b);
     });

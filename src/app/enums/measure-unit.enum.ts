@@ -20,4 +20,4 @@ export enum MeasureUnitLabelEnum {
   teaspoon = 'Teaspoon', // c-à-c
 }
 
-export const MeasureUnits = EnumHelper.enumToAssociativArray(MeasureUnitLabelEnum);
+export const MeasureUnits = EnumHelper.enumToMap(MeasureUnitLabelEnum);

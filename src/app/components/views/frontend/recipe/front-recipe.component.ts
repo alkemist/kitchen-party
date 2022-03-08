@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MeasureUnitLabelEnum, RecipeTypeLabelEnum } from '../../../../enums';
-import { RecipeInterface, UserInterface } from '../../../../interfaces';
+import { UserInterface } from '../../../../interfaces';
 import { RecipeIngredientModel, RecipeModel } from '../../../../models';
 import { TranslatorService, UserService } from '../../../../services';
 import { EnumHelper } from '../../../../tools';
@@ -17,10 +17,11 @@ import { EnumHelper } from '../../../../tools';
 export class FrontRecipeComponent implements OnInit {
   recipeTypes = EnumHelper.enumToObject(RecipeTypeLabelEnum);
   measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
-  recipe = new RecipeModel({} as RecipeInterface);
+  recipe = new RecipeModel({});
   diet: string = '';
   loading = true;
   loggedUser?: UserInterface;
+  noExist = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,8 +40,10 @@ export class FrontRecipeComponent implements OnInit {
             this.recipe.recipeIngredients = this.recipe.recipeIngredientsOption(this.diet);
           }
 
-          this.loading = false;
+        } else {
+          this.noExist = true;
         }
+        this.loading = false;
       }));
 
     this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);

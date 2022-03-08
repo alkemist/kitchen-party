@@ -30,8 +30,8 @@ export class RecipeModel implements RecipeInterface {
 
   constructor(recipe: RecipeInterface) {
     this.id = recipe.id;
-    this.name = recipe.name;
-    this.slug = recipe.slug;
+    this.name = recipe.name ?? '';
+    this.slug = recipe.slug ?? '';
 
     this.cookingDuration = recipe.cookingDuration ?? 0;
     this.preparationDuration = recipe.preparationDuration ?? 0;
@@ -42,10 +42,10 @@ export class RecipeModel implements RecipeInterface {
     this.type = recipe.type || null;
     this.imagePath = recipe.imagePath || '';
     this.source = recipe.source ?? '';
-    
+
     this.image = recipe.image;
 
-    if (recipe.recipeIngredients?.length > 0) {
+    if (recipe.recipeIngredients && recipe.recipeIngredients.length > 0) {
       this.recipeIngredients =
         recipe.recipeIngredients.map(recipeIngredient => new RecipeIngredientModel(recipeIngredient));
     }
@@ -56,7 +56,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get typeName(): string {
-    return this.type ? RecipeTypes[this.type] : '';
+    return this.type ? RecipeTypes.get(this.type)! : '';
   }
 
   get ingredientIds(): string[] {
@@ -219,7 +219,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   isSweet(): boolean | null {
-    if (this.type && RecipeTypes[this.type] === RecipeTypeLabelEnum.ingredient) {
+    if (this.type && RecipeTypes.get(this.type) === RecipeTypeLabelEnum.ingredient) {
       const name = this.name.toLowerCase();
 
       if (RecipeModel.sweetNames.includes(name)) {
@@ -247,7 +247,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   isSalty(): boolean | null {
-    if (this.type && RecipeTypes[this.type] === RecipeTypeLabelEnum.ingredient) {
+    if (this.type && RecipeTypes.get(this.type) === RecipeTypeLabelEnum.ingredient) {
       const name = this.name.toLowerCase();
 
       if (RecipeModel.saltyNames.includes(name)) {
