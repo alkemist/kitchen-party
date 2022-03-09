@@ -3,7 +3,7 @@ name: Create backups
 on:
   schedule:
     # CRON : mm hh jj MMM JJJ
-    - cron: '40 19 * * *'
+    - cron: '40 13 * * *'
     
 defaults:
   run:
