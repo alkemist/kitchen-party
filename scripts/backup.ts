@@ -1,6 +1,5 @@
 // @ts-ignore
 const { writeFile } = require('fs');
-//const { Firestore } = require('@google-cloud/firestore');
 const firebase = require("firebase/app");
 const firestore = require("firebase/firestore");
 
@@ -25,9 +24,11 @@ firebase.initializeApp({
   measurementId: process.env['FIREBASE_MEASUREMENT_ID']
 });
 
+console.log(process.env['FIREBASE_PROJECT_ID']);
+
 const firestoreRef = firestore.getFirestore();
 
-async function select(collectionName: string): Promise<any[]> {
+async function selectAll(collectionName: string): Promise<any[]> {
   const reference = firestore.collection(firestoreRef, collectionName);
   const query = firestore.query(reference, firestore.orderBy('slug'));
   const querySnapshot = await firestore.getDocs(query);
@@ -40,7 +41,7 @@ async function select(collectionName: string): Promise<any[]> {
 }
 
 async function backup(type: string) {
-  const documents = await select(type);
+  const documents = await selectAll(type);
   const targetPath = `./backups/backup-${ type }-${ todayStr }.json`;
 
   writeFile(targetPath, JSON.stringify(documents), (err: Error) => {
