@@ -1,7 +1,7 @@
-import { KitchenIngredientModel } from '../models';
+import { MeasureUnitKeyEnum } from '@enums';
+import { KitchenIngredientModel } from '@models';
 import { ingredientLegumineMock } from './ingredient.mock';
 import { recipeIngredientMock } from './recipe.mock';
-import { MeasureUnitKeyEnum } from '../enums';
 
 export const kitchenIngredientMock = new KitchenIngredientModel({
   ingredient: ingredientLegumineMock,

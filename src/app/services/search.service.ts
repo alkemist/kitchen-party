@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { RecipeTypeLabelEnum, RecipeTypes } from '../enums';
-import { IngredientModel, RecipeModel } from '../models';
-import { IngredientService } from './ingredient.service';
-import { RecipeService } from './recipe.service';
+import { RecipeTypeLabelEnum, RecipeTypes } from '@enums';
+import { IngredientModel, RecipeModel } from '@models';
+import { IngredientService, RecipeService } from '@services';
 
 @Injectable({
   providedIn: 'root'

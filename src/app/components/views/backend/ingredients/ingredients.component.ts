@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IngredientTypeLabelEnum } from '../../../../enums';
-import { IngredientModel } from '../../../../models';
-import { IngredientService, TranslatorService } from '../../../../services';
-import { EnumHelper } from '../../../../tools';
+import { IngredientTypeLabelEnum } from '@enums';
+import { IngredientModel } from '@models';
+import { IngredientService, TranslatorService } from '@services';
+import { EnumHelper } from '@tools';
 
 @Component({
   selector: 'app-back-ingredients',

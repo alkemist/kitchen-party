@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { IngredientInterface, MonthCalendarInterface } from '@interfaces';
+import { IngredientModel } from '@models';
 import { Select } from '@ngxs/store';
+import { TranslatorService } from '@services';
+import { IngredientState } from '@stores';
 import { first, Observable } from 'rxjs';
-import { IngredientInterface, MonthCalendarInterface } from '../../../../interfaces';
-import { IngredientModel } from '../../../../models';
-import { TranslatorService } from '../../../../services';
-import { IngredientState } from '../../../../stores/ingredient.state';
+
 
 @Component({
   selector: 'app-calendar',

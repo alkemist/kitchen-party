@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockProvider } from 'ng-mocks';
-import { RecipeService } from '../services';
+import { RecipeService } from '@services';
 import { RecipeResolver } from './recipe.resolver';
 
 describe('RecipeResolver', () => {

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MeasureUnitLabelEnum } from '../enums';
-import { CartElement } from '../interfaces/cart-element.interface';
-import { RecipeIngredientModel, RecipeModel } from '../models';
-import { KitchenIngredientService } from './kitchen.service';
-import { TranslatorService } from './translator.service';
+import { MeasureUnitLabelEnum } from '@enums';
+import { CartElement } from '@interfaces';
+import { RecipeIngredientModel, RecipeModel } from '@models';
+import { KitchenIngredientService, TranslatorService } from '@services';
 
 @Injectable({
   providedIn: 'root'

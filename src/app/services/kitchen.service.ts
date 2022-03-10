@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
+import { kitchenIngredientConverter } from '@converters';
+import { DocumentNotFoundError } from '@errors';
+import { KitchenIngredientInterface } from '@interfaces';
+import { KitchenIngredientModel } from '@models';
 import { Select, Store } from '@ngxs/store';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
-import { kitchenIngredientConverter } from '../converters/kitchen-ingredient.converter';
-import { DocumentNotFoundError } from '../errors';
-import { KitchenIngredientInterface } from '../interfaces';
-import { KitchenIngredientModel } from '../models';
+import { FirestoreService, IngredientService, LoggerService, RecipeService } from '@services';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
+  KitchenIngredientState,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
-} from '../stores/kitchen.action';
-import { KitchenIngredientState } from '../stores/kitchen.state';
-import { ArrayHelper } from '../tools';
-import { FirestoreService } from './firestore.service';
-import { IngredientService } from './ingredient.service';
-import { LoggerService } from './logger.service';
-import { RecipeService } from './recipe.service';
+} from '@stores';
+import { ArrayHelper } from '@tools';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'

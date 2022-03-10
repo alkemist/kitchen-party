@@ -1,9 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { AppMissingTranslationHandler } from '@handlers';
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AppMissingTranslationHandler } from '../handlers/missing-translation.handler';
-import { LoggerService } from '../services';
+import { LoggerService } from '@services';
 
 const TranslateConfig = {
   missingTranslationHandler: {

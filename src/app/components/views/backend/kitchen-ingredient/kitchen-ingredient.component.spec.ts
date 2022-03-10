@@ -5,7 +5,7 @@ import { MockDeclaration, MockModule, MockProvider } from 'ng-mocks';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '../../../../services';
+import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '@services';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { FormKitchenIngredientComponent } from '../../../forms/kitchen-ingredient/form-kitchen-ingredient.component';

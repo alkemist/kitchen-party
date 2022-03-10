@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IngredientComponent } from './ingredient.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockDeclaration, MockModule, MockProvider } from 'ng-mocks';
-import { IngredientService, TranslatorService } from '../../../../services';
+import { IngredientService, TranslatorService } from '@services';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormIngredientComponent } from '../../../forms/ingredient/form-ingredient.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';

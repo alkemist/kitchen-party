@@ -1,4 +1,4 @@
-import { UserInterface } from '../interfaces';
+import { UserInterface } from '@interfaces';
 import { UserLogin, UserLogout } from './user.action';
 
 describe('UserLogin', () => {

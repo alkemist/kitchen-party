@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-
-import { UserService } from './user.service';
 import { NgxsModule, Store } from '@ngxs/store';
-import { UserState } from '../stores/user.state';
+
+import { UserService } from '@services';
+import { UserState } from '@stores';
 
 jest.mock('firebase/auth', () => ({
   ...(jest.requireActual('firebase/auth')),

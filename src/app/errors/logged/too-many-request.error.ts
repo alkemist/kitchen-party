@@ -1,4 +1,4 @@
-import { LoggedError } from '../logged.error';
+import { LoggedError } from '@errors';
 
 export class TooManyRequestError extends LoggedError<any> {
   override type = 'Database';

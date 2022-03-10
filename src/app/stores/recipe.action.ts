@@ -1,4 +1,4 @@
-import { RecipeInterface } from '../interfaces';
+import { RecipeInterface } from '@interfaces';
 
 export class AddRecipe {
   static readonly type = '[Recipe] Add';

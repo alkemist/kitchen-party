@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-
-import { TranslatorService } from './translator.service';
-import { NgxsModule, Store } from '@ngxs/store';
-import { TranslationState } from '../stores/translation.state';
-import { MockProvider } from 'ng-mocks';
-import { LoggerService } from './logger.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgxsModule, Store } from '@ngxs/store';
+import { LoggerService, TranslatorService } from '@services';
+import { TranslationState } from '@stores';
+import { MockProvider } from 'ng-mocks';
+
 
 describe('TranslatorService', () => {
   let service: TranslatorService;

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { DatabaseError } from '@errors';
 
-import { LoggerService } from './logger.service';
-import { DatabaseError } from '../errors';
+import { LoggerService } from '@services';
 import { environment } from '../../environments/environment';
 
 jest.mock('stackdriver-errors-js');
@@ -16,8 +16,8 @@ describe('LoggerService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(LoggerService);
 
-    errorMessage = 'test;'
-    errorContext = { id: 1 };
+    errorMessage = 'test;';
+    errorContext = {id: 1};
     error = new DatabaseError(errorMessage, errorContext);
   });
 

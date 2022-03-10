@@ -1,4 +1,8 @@
+import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '@errors';
 import { FirestoreDataConverter } from '@firebase/firestore';
+import { DataObjectInterface } from '@interfaces';
+import { LoggerService } from '@services';
+import { generatePushID, slugify, TimeHelper } from '@tools';
 import {
   collection,
   CollectionReference,
@@ -13,10 +17,6 @@ import {
   where,
 } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '../errors';
-import { DataObjectInterface } from '../interfaces';
-import { generatePushID, slugify, TimeHelper } from '../tools';
-import { LoggerService } from './logger.service';
 
 
 export abstract class FirestoreService<T extends DataObjectInterface> {

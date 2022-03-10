@@ -1,21 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DialogIngredientComponent } from '@components';
+import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '@enums';
+import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '@interfaces';
+import { IngredientModel, RecipeIngredientModel, RecipeModel } from '@models';
+import { IngredientService, RecipeService, SearchService, TranslatorService, UploadService } from '@services';
+import { EnumHelper, slugify } from '@tools';
+import { recipeIngredientValidator } from '@validators';
 import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '../../../../enums';
-import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '../../../../interfaces';
-import { IngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
-import {
-  IngredientService,
-  RecipeService,
-  SearchService,
-  TranslatorService,
-  UploadService
-} from '../../../../services';
-import { EnumHelper, slugify } from '../../../../tools';
-import { recipeIngredientValidator } from '../../../../validators/recipe-ingredient.validator';
-import { DialogIngredientComponent } from '../../../dialogs/ingredient/dialog-ingredient.component';
 
 @Component({
   selector: 'app-back-recipe',

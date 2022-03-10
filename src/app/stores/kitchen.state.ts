@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { KitchenIngredientInterface } from '@interfaces';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { KitchenIngredientInterface } from '../interfaces';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -42,7 +42,7 @@ export class KitchenIngredientState {
   }
 
   @Action(FillKitchenIngredients)
-  fill({ getState, patchState }: StateContext<KitchenIngredientStateModel>, { payload }: FillKitchenIngredients) {
+  fill({getState, patchState}: StateContext<KitchenIngredientStateModel>, {payload}: FillKitchenIngredients) {
     patchState({
       all: payload,
       lastUpdated: new Date()
@@ -50,7 +50,7 @@ export class KitchenIngredientState {
   }
 
   @Action(AddKitchenIngredient)
-  add({ setState }: StateContext<KitchenIngredientStateModel>, { payload }: AddKitchenIngredient) {
+  add({setState}: StateContext<KitchenIngredientStateModel>, {payload}: AddKitchenIngredient) {
     setState(
       patch({
         all: append([ payload ])
@@ -59,7 +59,7 @@ export class KitchenIngredientState {
   }
 
   @Action(RemoveKitchenIngredient)
-  remove({ setState }: StateContext<KitchenIngredientStateModel>, { payload }: RemoveKitchenIngredient) {
+  remove({setState}: StateContext<KitchenIngredientStateModel>, {payload}: RemoveKitchenIngredient) {
     setState(
       patch({
         all: removeItem<KitchenIngredientInterface>((item?: KitchenIngredientInterface) => item?.id === payload.id)
@@ -72,7 +72,7 @@ export class KitchenIngredientState {
            getState,
            patchState,
            setState
-         }: StateContext<KitchenIngredientStateModel>, { payload }: UpdateKitchenIngredient) {
+         }: StateContext<KitchenIngredientStateModel>, {payload}: UpdateKitchenIngredient) {
     setState(
       patch({
         all: updateItem<KitchenIngredientInterface>((item?: KitchenIngredientInterface) => item?.id === payload.id, payload)

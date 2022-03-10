@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CalendarComponent } from './calendar.component';
-import { MockProvider } from 'ng-mocks';
-import { TranslatorService } from '../../../../services';
+import { CalendarComponent } from '@components';
 import { NgxsModule } from '@ngxs/store';
-import { IngredientState } from '../../../../stores/ingredient.state';
+import { TranslatorService } from '@services';
+import { IngredientState } from '@stores';
+import { MockProvider } from 'ng-mocks';
+
 
 describe('CalendarComponent', () => {
   let component: CalendarComponent;

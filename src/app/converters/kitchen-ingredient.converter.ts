@@ -1,11 +1,11 @@
 import { FirestoreDataConverter } from '@firebase/firestore';
+import { KitchenIngredientInterface } from '@interfaces';
+import { KitchenIngredientModel } from '@models';
 import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
-import { KitchenIngredientInterface } from '../interfaces';
-import { KitchenIngredientModel } from '../models';
 
 export const kitchenIngredientConverter: FirestoreDataConverter<KitchenIngredientModel> = {
   toFirestore: (kitchenIngredient: KitchenIngredientModel) => {
-    const kitchenIngredientFields = { ...kitchenIngredient };
+    const kitchenIngredientFields = {...kitchenIngredient};
     delete kitchenIngredientFields.id;
 
     kitchenIngredientFields.ingredientId = kitchenIngredientFields.ingredient?.id! || '';

@@ -6,20 +6,6 @@
     "outDir": "./out-tsc/app",
     "types": [],
     "paths": {
-      "@components/(.*)": ["src/app/components/$1"],
-      "@converters/(.*)": ["src/app/converters/$1"],
-      "@enums/(.*)": ["src/app/enums/$1"],
-      "@errors/(.*)": ["src/app/models/$1"],
-      "@guards/(.*)": ["src/app/guards/$1"],
-      "@handlers/(.*)": ["src/app/handlers/$1"],
-      "@interfaces/(.*)": ["src/app/models/$1"],
-      "@models/(.*)": ["src/app/models/$1"],
-      "@modules/(.*)": ["src/app/modules/$1"],
-      "@resolvers/(.*)": ["src/app/resolvers/$1"],
-      "@services/(.*)": ["src/app/services/$1"],
-      "@stores/(.*)": ["src/app/stores/$1"],
-      "@tools/(.*)": ["src/app/tools/$1"],
-      "@validators/(.*)": ["src/app/tools/$1"]
     }
   },
   "files": [

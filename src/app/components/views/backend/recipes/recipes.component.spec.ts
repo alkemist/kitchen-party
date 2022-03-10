@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { RecipeService, TranslatorService } from '../../../../services';
+import { RecipeService, TranslatorService } from '@services';
 
 describe('RecipesComponent', () => {
   let component: RecipesComponent;

@@ -1,14 +1,10 @@
-import {
-  ingredientTypeFishMap,
-  ingredientTypeMeatMap,
-  ingredientTypeVeganMap,
-  ingredientTypeVegeMap
-} from '../consts/ingredient-type-diet.const';
-import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum } from '../enums';
-import { dateMock } from '../mocks/date.mock';
-import { EnumHelper } from '../tools';
+import { ingredientTypeFishMap, ingredientTypeMeatMap, ingredientTypeVeganMap, ingredientTypeVegeMap } from '@consts';
+import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum } from '@enums';
+import { dateMock } from '@mocks';
+import { EnumHelper } from '@tools';
 import { IngredientModel } from './ingredient.model';
 import { KitchenIngredientModel } from './kitchen-ingredient.model';
+
 
 describe('IngredientModel', () => {
   describe('IngredientModel.constructor', () => {
@@ -135,6 +131,7 @@ describe('IngredientModel', () => {
       expect(new IngredientModel({name}).isSweet()).toBe(false);
     });
   });
+
   describe('IngredientModel.isSalty', () => {
     it.each([
       IngredientTypeKeyEnum.fishes_seafoods,

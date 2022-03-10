@@ -1,10 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { UserRoutingModule } from './user-routing.module';
-import { SharingModule } from '../sharing.module';
-import { LoginComponent } from '../../components/views/user/login/login.component';
-import { TranslatingChildModule } from '../translating.module';
+import { NgModule } from '@angular/core';
+import { LoginComponent } from '@components';
+import { SharingModule, TranslatingChildModule, UserRoutingModule } from '@modules';
 
 
 @NgModule({

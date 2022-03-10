@@ -1,4 +1,4 @@
-import { LoggedError } from '../logged.error';
+import { LoggedError } from '@errors';
 
 export class TranslationError extends LoggedError<string> {
   override type = 'Translation';

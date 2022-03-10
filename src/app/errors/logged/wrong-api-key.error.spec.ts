@@ -1,4 +1,4 @@
-import { WrongApiKeyError } from './wrong-api-key.error';
+import { WrongApiKeyError } from '@errors';
 
 describe('WrongApiKeyError', () => {
   describe('WrongApiKeyError.constructor', function () {

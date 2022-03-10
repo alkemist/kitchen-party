@@ -1,15 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '@enums';
+import { IngredientModel, RecipeModel } from '@models';
+import { FilteringService, IngredientService, RecipeService, ShoppingService, TranslatorService } from '@services';
 import { Subscription } from 'rxjs';
-import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '../../../../enums';
-import { IngredientModel, RecipeModel } from '../../../../models';
-import {
-  FilteringService,
-  IngredientService,
-  RecipeService,
-  ShoppingService,
-  TranslatorService
-} from '../../../../services';
 import { ToolbarFilters } from '../../../layouts/header/header.component';
 
 @Component({

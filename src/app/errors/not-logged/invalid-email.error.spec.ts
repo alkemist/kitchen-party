@@ -1,4 +1,4 @@
-import { InvalidEmailError } from './invalid-email.error';
+import { InvalidEmailError } from '@errors';
 
 describe('InvalidEmailError', () => {
   describe('InvalidEmailError.constructor', function () {

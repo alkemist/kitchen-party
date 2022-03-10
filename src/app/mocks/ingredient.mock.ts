@@ -1,5 +1,5 @@
-import { IngredientModel } from '../models';
-import { IngredientTypeKeyEnum } from '../enums';
+import { IngredientTypeKeyEnum } from '@enums';
+import { IngredientModel } from '@models';
 
 export const ingredientVegetableMock = new IngredientModel({
   id: 'ingredientVegetableId1',

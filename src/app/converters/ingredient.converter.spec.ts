@@ -1,8 +1,8 @@
+import { IngredientTypeKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
-import { IngredientInterface, RecipeInterface } from '../interfaces';
+import { IngredientInterface, RecipeInterface } from '@interfaces';
+import { ingredientLegumineMock, ingredientVegetableMock } from '@mocks';
 import { ingredientConverter } from './ingredient.converter';
-import { ingredientLegumineMock, ingredientVegetableMock } from '../mocks/ingredient.mock';
-import { IngredientTypeKeyEnum } from '../enums';
 
 describe('ingredientConverter', () => {
   const ingredientVegetableInFirestore: IngredientInterface = {
@@ -25,17 +25,17 @@ describe('ingredientConverter', () => {
 
   it('toFirestore with date', () => {
     expect(ingredientConverter.toFirestore(ingredientVegetableMock)).toEqual(ingredientVegetableInFirestore);
-  })
+  });
   it('toFirestore without date', () => {
     expect(ingredientConverter.toFirestore(ingredientLegumineMock)).toEqual(ingredientInFirestore);
-  })
+  });
   it('fromFirestore', () => {
     expect(ingredientConverter.fromFirestore(
       {
         data: () => {
-          return ingredientVegetableInFirestore
+          return ingredientVegetableInFirestore;
         }
       } as unknown as QueryDocumentSnapshot<RecipeInterface>
     )).toEqual(ingredientVegetableInFirestore);
-  })
-})
+  });
+});
