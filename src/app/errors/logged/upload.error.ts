@@ -1,4 +1,4 @@
-import { LoggedError } from '@errors';
+import { LoggedError } from '../logged.error';
 
 export class UploadError extends LoggedError<File> {
   override type = 'Upload';

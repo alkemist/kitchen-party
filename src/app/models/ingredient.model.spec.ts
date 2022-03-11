@@ -127,7 +127,7 @@ describe('IngredientModel', () => {
     });
 
     it.each(IngredientModel.saltyNames)
-    ('should %s return true', (name) => {
+    ('should %s return false', (name) => {
       expect(new IngredientModel({name}).isSweet()).toBe(false);
     });
   });
@@ -137,18 +137,18 @@ describe('IngredientModel', () => {
       IngredientTypeKeyEnum.fishes_seafoods,
       IngredientTypeKeyEnum.meats
     ])
-    ('should %s return false', (type) => {
+    ('should %s return true', (type) => {
       expect(new IngredientModel({type}).isSalty()).toBe(true);
     });
 
     it.each(IngredientModel.saltyNames)
-    ('should %s return false', (name) => {
+    ('should %s return true', (name) => {
       expect(new IngredientModel({name}).isSalty()).toBe(true);
     });
 
     it.each(IngredientModel.sweetNames)
-    ('should %s return true', (name) => {
-      expect(new IngredientModel({name}).isSweet()).toBe(false);
+    ('should %s return false', (name) => {
+      expect(new IngredientModel({name}).isSalty()).toBe(false);
     });
 
     it.each([ '' ])

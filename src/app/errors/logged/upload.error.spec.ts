@@ -1,4 +1,4 @@
-import { UploadError } from '@errors';
+import { UploadError } from '@app/errors';
 
 describe('UploadError', () => {
   describe('UploadError.constructor', function () {

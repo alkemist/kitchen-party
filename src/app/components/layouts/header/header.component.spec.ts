@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
+import { TranslatingRootModule } from '@app/modules/translating.module';
 
 import { HeaderComponent } from '@components';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
 import { IngredientModel, UserInterface } from '@models';
-import { TranslatingRootModule } from '@modules';
 import { NgxsModule } from '@ngxs/store';
 import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
 import { IngredientState } from '@stores';

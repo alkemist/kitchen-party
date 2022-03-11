@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '@app/app.component';
+import { TranslatingRootModule } from '@app/modules/translating.module';
 import { HeaderComponent } from '@components';
-import { TranslatingRootModule } from '@modules';
 import { TranslateService } from '@ngx-translate/core';
 import { MockDeclaration, MockModule } from 'ng-mocks';
 import { PrimeNGConfig } from 'primeng/api';

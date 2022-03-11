@@ -1,4 +1,4 @@
-import { WrongPasswordError } from '@errors';
+import { WrongPasswordError } from '@app/errors';
 
 describe('WrongPasswordError', () => {
   describe('WrongPasswordError.constructor', function () {

@@ -1,4 +1,4 @@
-import { WrongApiKeyError } from '@errors';
+import { WrongApiKeyError } from '@app/errors';
 
 describe('WrongApiKeyError', () => {
   describe('WrongApiKeyError.constructor', function () {

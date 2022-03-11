@@ -12,7 +12,11 @@ import {
   HeaderComponent,
   ShoppingComponent
 } from './components';
-import { RoutingModule, ServicesModule, SharingModule, StoringModule, TranslatingRootModule } from './modules';
+import { RoutingModule } from './modules/routing.module';
+import { ServicesModule } from './modules/services.module';
+import { SharingModule } from './modules/sharing.module';
+import { StoringModule } from './modules/storing.module';
+import { TranslatingRootModule } from './modules/translating.module';
 import { TranslatorPipe } from './pipes';
 
 @NgModule({

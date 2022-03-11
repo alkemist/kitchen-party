@@ -1,4 +1,4 @@
-import { LoggedError } from '@errors';
+import { LoggedError } from '../logged.error';
 
 export class QuotaExceededError extends LoggedError<any> {
   override type = 'Database';

@@ -1,4 +1,4 @@
-import { QuotaExceededError } from '@errors';
+import { QuotaExceededError } from '@app/errors';
 
 describe('QuotaExceededError', () => {
   describe('QuotaExceededError.constructor', function () {

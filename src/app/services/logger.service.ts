@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoggedError } from '@errors';
+import { LoggedError } from '@app/errors/logged.error';
 import { default as StackdriverErrorReporter } from 'stackdriver-errors-js';
 import { environment } from '../../environments/environment';
 

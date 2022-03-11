@@ -1,4 +1,4 @@
-import { DatabaseError } from '@errors';
+import { DatabaseError } from '@app/errors';
 
 describe('DatabaseError', () => {
   describe('DatabaseError.constructor', function () {
