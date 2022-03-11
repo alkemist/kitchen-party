@@ -54,6 +54,10 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     this.initLastUpdated();
   }
 
+  getAll$(): Observable<T[]> | undefined {
+    return this.all$;
+  }
+
   getLastUpdated$() {
     return this.lastUpdated$;
   }

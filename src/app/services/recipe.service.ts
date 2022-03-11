@@ -40,21 +40,25 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     }
 
     this.promise = new Promise<RecipeModel[]>((resolve) => {
-      this.all$?.pipe(first()).subscribe(async recipes => {
-        if (recipes.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          recipes = await this.refreshList();
-        }
+      if (this.getAll$()) {
+        this.getAll$()?.pipe(first()).subscribe(async recipes => {
+          if (recipes.length === 0 && !this.refreshed || this.storeIsOutdated()) {
+            recipes = await this.refreshList();
+          }
 
-        this.all = [];
-        for (const recipe of recipes) {
-          const recipeModel = new RecipeModel(recipe);
-          await this.hydrate(recipeModel, recipes);
-          this.all.push(recipeModel);
-        }
-        this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
-        this.synchronized = true;
+          this.all = [];
+          for (const recipe of recipes) {
+            const recipeModel = new RecipeModel(recipe);
+            await this.hydrate(recipeModel, recipes);
+            this.all.push(recipeModel);
+          }
+          this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
+          this.synchronized = true;
+          resolve(this.all);
+        });
+      } else {
         resolve(this.all);
-      });
+      }
     });
     return this.promise;
   }

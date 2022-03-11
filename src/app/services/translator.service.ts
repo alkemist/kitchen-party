@@ -27,9 +27,13 @@ export class TranslatorService {
       }
     });
 
-    this.all$?.pipe(first()).subscribe(translations => {
+    this.getAll$()?.pipe(first()).subscribe(translations => {
       this.all = translations;
     });
+  }
+
+  getAll$(): Observable<KeyValueInterface[]> | undefined {
+    return this.all$;
   }
 
   storeIsOutdated() {
