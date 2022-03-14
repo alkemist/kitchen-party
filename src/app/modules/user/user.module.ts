@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { SharingModule } from '@app/modules/sharing.module';
+import { TranslatingChildModule } from '@app/modules/translating.module';
+import { UserRoutingModule } from '@app/modules/user/user-routing.module';
 import { LoginComponent } from '@components';
-import { SharingModule, TranslatingChildModule, UserRoutingModule } from '@modules';
 
 
 @NgModule({
