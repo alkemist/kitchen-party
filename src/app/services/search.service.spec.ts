@@ -1,9 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SearchService } from './search.service';
+import { IngredientService, RecipeService, SearchService } from '@services';
 import { MockProvider } from 'ng-mocks';
-import { IngredientService } from './ingredient.service';
-import { RecipeService } from './recipe.service';
 
 describe('SearchService', () => {
   let service: SearchService;

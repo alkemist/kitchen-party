@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IngredientTypeLabelEnum, IngredientTypes } from '../../../enums';
-import { KeyLabelInterface } from '../../../interfaces';
-import { IngredientModel } from '../../../models';
+import { IngredientTypeLabelEnum, IngredientTypes } from '@enums';
+import { KeyLabelInterface } from '@interfaces';
+import { IngredientModel } from '@models';
 
 @Component({
   selector: 'app-form-ingredient',

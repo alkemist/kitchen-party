@@ -1,5 +1,5 @@
+import { dateMock } from '@mocks';
 import { TimeHelper } from './time.helper';
-import { dateMock } from '../mocks/date.mock';
 
 describe('TimeHelper', () => {
   it('calcHoursAfter', () => {

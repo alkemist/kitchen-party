@@ -1,4 +1,4 @@
-import { DocumentNotFoundError } from './document-not-found.error';
+import { DocumentNotFoundError } from '@app/errors';
 
 describe('DocumentNotFoundError', () => {
   describe('DocumentNotFoundError.constructor', function () {

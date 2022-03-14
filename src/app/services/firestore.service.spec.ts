@@ -1,15 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '@errors';
+import { DataObjectInterface } from '@interfaces';
+import { dateMock, dummyConverter } from '@mocks';
+
+import { FirestoreService, LoggerService } from '@services';
+import { slugify } from '@tools';
 import { deleteDoc, getDoc, getDocs, QueryConstraint, setDoc } from 'firebase/firestore';
 import { MockProvider } from 'ng-mocks';
 import { of } from 'rxjs';
-import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '../errors';
-import { DataObjectInterface } from '../interfaces';
-import { dateMock } from '../mocks/date.mock';
-import { dummyConverter } from '../mocks/firestore.mock';
-import { slugify } from '../tools';
-
-import { FirestoreService } from './firestore.service';
-import { LoggerService } from './logger.service';
 
 class DummyService extends FirestoreService<DataObjectInterface> {
   constructor(private logger: LoggerService) {
@@ -59,10 +57,12 @@ describe('FirestoreService', () => {
       service['lastUpdated'] = undefined;
       expect(service.storeIsOutdated()).toBe(true);
     });
+
     it('should return true if last updated is old', () => {
       service['lastUpdated'] = dateMock;
       expect(service.storeIsOutdated()).toBe(true);
     });
+
     it('should return false if last updated is not old', () => {
       service['lastUpdated'] = new Date();
       expect(service.storeIsOutdated()).toBe(false);
@@ -133,7 +133,6 @@ describe('FirestoreService', () => {
 
   describe('findOneBySlug', () => {
     it('should be return object by slug', async () => {
-
       (getDocs as jest.Mock).mockReturnValue([ {
         id: dataObjectId,
         data: jest.fn().mockReturnValue({...dataObject})
@@ -171,11 +170,13 @@ describe('FirestoreService', () => {
     it('should be return false if no name', async () => {
       expect(await service.exist('')).toBe(false);
     });
+
     it('should be return false if object don\'t exist', async () => {
       (getDocs as jest.Mock).mockReturnValue([]);
 
       expect(await service.exist('test')).toBe(false);
     });
+
     it('should be return true if object exist', async () => {
       (getDocs as jest.Mock).mockReturnValue([ {
         id: dataObjectId,
@@ -198,6 +199,7 @@ describe('FirestoreService', () => {
         .toThrow(DocumentNotFoundError);
       expect(loggerSpy).toBeCalledWith(new DatabaseError(unknownError.message, {slug}));
     });
+
     it('should throw document not found error with document null', async () => {
       (getDoc as jest.Mock).mockReturnValue(null);
 
@@ -207,6 +209,7 @@ describe('FirestoreService', () => {
         .rejects
         .toThrow(DocumentNotFoundError);
     });
+
     it('should throw document not found error with data null', async () => {
       (getDoc as jest.Mock).mockReturnValue({id: dataObjectId, data: jest.fn().mockReturnValue(null)});
 
@@ -216,6 +219,7 @@ describe('FirestoreService', () => {
         .rejects
         .toThrow(DocumentNotFoundError);
     });
+
     it('should return object', async () => {
       (getDoc as jest.Mock).mockReturnValue({id: dataObjectId, data: jest.fn().mockReturnValue({...dataObject})});
 
@@ -230,6 +234,7 @@ describe('FirestoreService', () => {
       })
         .toThrow(EmptyDocumentError);
     });
+
     it('should update slug', () => {
       const name = 'CECI est un %test%';
       const slug = slugify(name);

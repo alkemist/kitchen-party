@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AppComponent } from '@app/app.component';
+import { TranslatingRootModule } from '@app/modules/translating.module';
+import { HeaderComponent } from '@components';
 import { TranslateService } from '@ngx-translate/core';
+import { MockDeclaration, MockModule } from 'ng-mocks';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
-import { AppComponent } from './app.component';
-import { TranslatingRootModule } from './modules/translating.module';
-import { MockDeclaration, MockModule } from 'ng-mocks';
-import { HeaderComponent } from './components/layouts/header/header.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;

@@ -10,7 +10,7 @@ import {
   RecipeService,
   ShoppingService,
   TranslatorService
-} from '../../../../services';
+} from '@services';
 import { ChipModule } from 'primeng/chip';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';

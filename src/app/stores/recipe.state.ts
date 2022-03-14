@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { KeyLabelInterface, RecipeInterface } from '@interfaces';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { KeyLabelInterface, RecipeInterface } from '../interfaces';
 import { AddRecipe, FillRecipes, RemoveRecipe, UpdateRecipe } from './recipe.action';
 
 export class RecipeStateModel {

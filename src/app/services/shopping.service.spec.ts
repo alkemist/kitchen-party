@@ -1,9 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { KitchenIngredientService, ShoppingService, TranslatorService } from '@services';
 import { MockProvider } from 'ng-mocks';
-import { KitchenIngredientService } from './kitchen.service';
-
-import { ShoppingService } from './shopping.service';
-import { TranslatorService } from './translator.service';
 
 describe('ShoppingService', () => {
   let service: ShoppingService;

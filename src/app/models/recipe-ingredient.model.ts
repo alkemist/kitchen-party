@@ -4,13 +4,13 @@ import {
   MeasureUnitKeyEnum,
   MeasureUnitLabelEnum,
   MeasureUnits
-} from '../enums';
+} from '@enums';
 import {
   HasIngredient,
   KeyLabelInterface,
   RecipeIngredientFormInterface,
   RecipeIngredientInterface
-} from '../interfaces';
+} from '@interfaces';
 import { IngredientModel } from './ingredient.model';
 import { RecipeModel } from './recipe.model';
 

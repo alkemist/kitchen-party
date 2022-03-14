@@ -8,7 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { IngredientService, TranslatorService } from '../../../../services';
+import { IngredientService, TranslatorService } from '@services';
 
 describe('IngredientsComponent', () => {
   let component: IngredientsComponent;

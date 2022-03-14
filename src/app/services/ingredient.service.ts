@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
+import { ingredientConverter } from '@converters';
+import { DocumentNotFoundError } from '@errors';
+import { IngredientInterface } from '@interfaces';
+import { IngredientModel } from '@models';
 import { Select, Store } from '@ngxs/store';
+import { FirestoreService, LoggerService } from '@services';
+import { AddIngredient, FillIngredients, IngredientState, RemoveIngredient, UpdateIngredient } from '@stores';
+import { ArrayHelper } from '@tools';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
-import { ingredientConverter } from '../converters/ingredient.converter';
-import { DocumentNotFoundError } from '../errors';
-import { IngredientInterface } from '../interfaces';
-import { IngredientModel } from '../models';
-import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from '../stores/ingredient.action';
-import { IngredientState } from '../stores/ingredient.state';
-import { ArrayHelper } from '../tools';
-import { FirestoreService } from './firestore.service';
-import { LoggerService } from './logger.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,19 +35,23 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     }
 
     this.promise = new Promise<IngredientModel[]>(resolve => {
-      this.all$?.pipe(first()).subscribe(async ingredients => {
-        if (ingredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          ingredients = await this.refreshList();
-        }
+      if (this.getAll$()) {
+        this.getAll$()?.pipe(first()).subscribe(async ingredients => {
+          if (ingredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
+            ingredients = await this.refreshList();
+          }
 
-        this.all = [];
-        for (const ingredient of ingredients) {
-          this.all.push(new IngredientModel(ingredient));
-        }
-        this.all = ArrayHelper.sortBy<IngredientModel>(this.all, 'slug');
-        this.synchronized = true;
+          this.all = [];
+          for (const ingredient of ingredients) {
+            this.all.push(new IngredientModel(ingredient));
+          }
+          this.all = ArrayHelper.sortBy<IngredientModel>(this.all, 'slug');
+          this.synchronized = true;
+          resolve(this.all);
+        });
+      } else {
         resolve(this.all);
-      });
+      }
     });
     return this.promise;
   }
@@ -83,8 +86,10 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
 
     let ingredient = await this.getBySlug(slug);
     if (!ingredient || forceRefresh) {
+      console.log(slug, ingredient);
       try {
         const ingredientData = await super.findOneBySlug(slug);
+        console.log(ingredientData);
         return new IngredientModel(this.addToStore(ingredientData));
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {

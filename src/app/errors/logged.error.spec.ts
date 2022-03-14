@@ -1,4 +1,4 @@
-import { LoggedError } from './logged.error';
+import { LoggedError } from '@app/errors/logged.error';
 
 describe('LoggedError', () => {
   describe('LoggedError.constructor', function () {

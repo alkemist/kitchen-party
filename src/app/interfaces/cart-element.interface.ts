@@ -1,4 +1,4 @@
-import { IngredientModel } from '../models';
+import { IngredientModel } from '@models';
 
 export interface CartElement {
   inKitchen: boolean,

@@ -1,4 +1,4 @@
-import { TranslationError } from './translation.error';
+import { TranslationError } from '@app/errors';
 
 describe('TranslationError', () => {
   describe('TranslationError.constructor', function () {

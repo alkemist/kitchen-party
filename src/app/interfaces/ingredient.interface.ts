@@ -1,4 +1,4 @@
-import { IngredientTypeKeyEnum } from '../enums';
+import { IngredientTypeKeyEnum } from '@enums';
 import { DataObjectInterface } from './data-object.interface';
 
 export interface IngredientInterface extends DataObjectInterface {

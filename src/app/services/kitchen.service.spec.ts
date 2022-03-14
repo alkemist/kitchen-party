@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { KitchenIngredientService } from './kitchen.service';
 import { NgxsModule, Store } from '@ngxs/store';
+import { KitchenIngredientService, LoggerService } from '@services';
+import { KitchenIngredientState } from '@stores';
 import { MockProvider } from 'ng-mocks';
-import { LoggerService } from './logger.service';
-import { KitchenIngredientState } from '../stores/kitchen.state';
 
 
 describe('KitchenIngredientService', () => {

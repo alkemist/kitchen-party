@@ -1,23 +1,18 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router, RoutesRecognized } from '@angular/router';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
+import { UserInterface } from '@interfaces';
+import { IngredientModel } from '@models';
 import { Select } from '@ngxs/store';
+import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
+import { IngredientState } from '@stores';
+import { EnumHelper } from '@tools';
 import { default as NoSleep } from 'nosleep.js';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '../../../consts/menu-items.const';
-import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '../../../enums';
-import { UserInterface } from '../../../interfaces';
-import { IngredientModel } from '../../../models';
-import {
-  FilteringService,
-  IngredientService,
-  ShoppingService,
-  TranslatorService,
-  UserService
-} from '../../../services';
-import { IngredientState } from '../../../stores/ingredient.state';
-import { EnumHelper } from '../../../tools';
+
 
 export interface ToolbarFilters {
   diet: string,
@@ -123,14 +118,14 @@ export class HeaderComponent implements OnInit {
   async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
     const menuItemsTranslated = [];
     for (const item of menuItems) {
-      const itemTranslated = { ...item };
+      const itemTranslated = {...item};
       if (item.label) {
         itemTranslated.label = await this.translatorService.instant(item.label);
       }
       if (item.items) {
         itemTranslated.items = [];
         for (const subItem of item.items) {
-          const subItemTranslated = { ...subItem };
+          const subItemTranslated = {...subItem};
           if (subItem.label) {
             subItemTranslated.label = await this.translatorService.instant(subItem.label);
           }

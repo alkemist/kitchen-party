@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RecipeTypeLabelEnum } from '../../../../enums';
-import { RecipeModel } from '../../../../models';
-import { RecipeService, TranslatorService } from '../../../../services';
-import { EnumHelper } from '../../../../tools';
+import { RecipeTypeLabelEnum } from '@enums';
+import { RecipeModel } from '@models';
+import { RecipeService, TranslatorService } from '@services';
+import { EnumHelper } from '@tools';
 
 @Component({
   selector: 'app-back-recipes',

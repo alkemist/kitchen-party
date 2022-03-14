@@ -10,7 +10,7 @@ import {
   TranslatorService,
   UploadService,
   UserService
-} from '../services';
+} from '@services';
 
 @NgModule({
   providers: [

@@ -1,5 +1,5 @@
-import { RecipeModel } from '../models';
-import { MeasureUnitKeyEnum, RecipeTypeKeyEnum } from '../enums';
+import { MeasureUnitKeyEnum, RecipeTypeKeyEnum } from '@enums';
+import { RecipeModel } from '@models';
 import {
   ingredientAnimalFatMock,
   ingredientLegumineMock,

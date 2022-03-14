@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { LoggedGuard } from './logged.guard';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockProvider } from 'ng-mocks';
-import { UserService } from '../services';
+import { UserService } from '@services';
 
 describe('LoggedGuard', () => {
   let guard: LoggedGuard;

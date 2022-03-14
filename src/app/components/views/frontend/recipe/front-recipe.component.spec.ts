@@ -5,7 +5,7 @@ import { MockModule, MockProvider } from 'ng-mocks';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { TranslatorService, UserService } from '../../../../services';
+import { TranslatorService, UserService } from '@services';
 
 import { FrontRecipeComponent } from './front-recipe.component';
 

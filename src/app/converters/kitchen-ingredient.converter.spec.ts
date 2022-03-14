@@ -1,10 +1,13 @@
-import { kitchenIngredientConverter } from './kitchen-ingredient.converter';
-import { kitchenIngredientMock, kitchenIngredientRecipeMock } from '../mocks/kitchen-ingredient.mock';
+import { MeasureUnitKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
-import { KitchenIngredientInterface, RecipeInterface } from '../interfaces';
-import { ingredientLegumineMock } from '../mocks/ingredient.mock';
-import { recipeIngredientMock } from '../mocks/recipe.mock';
-import { MeasureUnitKeyEnum } from '../enums';
+import { KitchenIngredientInterface, RecipeInterface } from '@interfaces';
+import {
+  ingredientLegumineMock,
+  kitchenIngredientMock,
+  kitchenIngredientRecipeMock,
+  recipeIngredientMock
+} from '@mocks';
+import { kitchenIngredientConverter } from './kitchen-ingredient.converter';
 
 describe('kitchenIngredientConverter', () => {
   const kitchenIngredientInFirestore: KitchenIngredientInterface = {
@@ -31,20 +34,20 @@ describe('kitchenIngredientConverter', () => {
   };
 
   it('toFirestore with ingredient', () => {
-    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientMock)).toEqual(kitchenIngredientInFirestore)
-  })
+    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientMock)).toEqual(kitchenIngredientInFirestore);
+  });
 
   it('toFirestore with recipe', () => {
-    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientRecipeMock)).toEqual(kitchenIngredientRecipeInFirestore)
-  })
+    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientRecipeMock)).toEqual(kitchenIngredientRecipeInFirestore);
+  });
 
   it('fromFirestore', () => {
     expect(kitchenIngredientConverter.fromFirestore(
       {
         data: () => {
-          return kitchenIngredientInFirestore
+          return kitchenIngredientInFirestore;
         }
       } as unknown as QueryDocumentSnapshot<RecipeInterface>
     )).toEqual(kitchenIngredientInFirestore);
-  })
-})
+  });
+});

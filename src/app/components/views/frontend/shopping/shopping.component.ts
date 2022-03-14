@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MeasureUnitLabelEnum } from '../../../../enums';
-import { CartElement } from '../../../../interfaces/cart-element.interface';
-import { RecipeModel } from '../../../../models';
-import { ShoppingService } from '../../../../services';
-import { EnumHelper } from '../../../../tools';
+import { MeasureUnitLabelEnum } from '@enums';
+import { CartElement } from '@interfaces';
+import { RecipeModel } from '@models';
+import { ShoppingService } from '@services';
+import { EnumHelper } from '@tools';
 
 @Component({
   selector: 'app-shopping',

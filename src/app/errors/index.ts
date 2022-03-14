@@ -10,4 +10,3 @@ export * from './not-logged/empty-document.error';
 export * from './not-logged/invalid-email.error';
 export * from './not-logged/offline.error';
 export * from './not-logged/wrong-password.error';
-export * from './logged.error';

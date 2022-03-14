@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { InvalidEmailError, OfflineError, TooManyRequestError, WrongApiKeyError, WrongPasswordError } from '@errors';
+import { UserInterface } from '@interfaces';
 import { Store } from '@ngxs/store';
+import { UserLogin, UserLogout } from '@stores';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import { Observable } from 'rxjs';
-import { InvalidEmailError, OfflineError, TooManyRequestError, WrongApiKeyError, WrongPasswordError } from '../errors';
-import { UserInterface } from '../interfaces';
-import { UserLogin, UserLogout } from '../stores/user.action';
+
 
 @Injectable({
   providedIn: 'root'

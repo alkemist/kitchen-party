@@ -1,4 +1,4 @@
-import { KeyValueInterface } from '../interfaces';
+import { KeyValueInterface } from '@interfaces';
 
 export class FillTranslations {
   static readonly type = '[Translations] Fill';

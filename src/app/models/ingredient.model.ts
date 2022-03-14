@@ -1,6 +1,6 @@
-import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
-import { IngredientFormInterface, IngredientInterface } from '../interfaces';
-import { DateHelper, EnumHelper, slugify } from '../tools';
+import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '@enums';
+import { IngredientFormInterface, IngredientInterface } from '@interfaces';
+import { DateHelper, EnumHelper, slugify } from '@tools';
 
 
 export class IngredientModel implements IngredientInterface {

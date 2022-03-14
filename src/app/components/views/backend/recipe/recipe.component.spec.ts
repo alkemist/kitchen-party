@@ -10,7 +10,7 @@ import {
   SearchService,
   TranslatorService,
   UploadService
-} from '../../../../services';
+} from '@services';
 import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReactiveFormsModule } from '@angular/forms';

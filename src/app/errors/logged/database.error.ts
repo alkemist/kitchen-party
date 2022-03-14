@@ -1,4 +1,4 @@
-import { DataObjectInterface } from '../../interfaces';
+import { DataObjectInterface } from '@interfaces';
 import { LoggedError } from '../logged.error';
 
 export class DatabaseError extends LoggedError<DataObjectInterface> {

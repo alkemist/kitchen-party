@@ -1,4 +1,4 @@
-import { OfflineError } from './offline.error';
+import { OfflineError } from '@app/errors';
 
 describe('OfflineError', () => {
   describe('OfflineError.constructor', function () {

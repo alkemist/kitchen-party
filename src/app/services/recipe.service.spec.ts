@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-
-import { RecipeService } from './recipe.service';
 import { NgxsModule, Store } from '@ngxs/store';
+import { LoggerService, RecipeService } from '@services';
+import { RecipeState } from '@stores';
 import { MockProvider } from 'ng-mocks';
-import { LoggerService } from './logger.service';
-import { RecipeState } from '../stores/recipe.state';
+
 
 describe('RecipeService', () => {
   let service: RecipeService;

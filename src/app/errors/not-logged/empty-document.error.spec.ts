@@ -1,4 +1,4 @@
-import { EmptyDocumentError } from './empty-document.error';
+import { EmptyDocumentError } from '@app/errors';
 
 describe('EmptyDocumentError', () => {
   describe('EmptyDocumentError.constructor', function () {

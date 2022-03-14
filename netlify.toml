@@ -1,0 +1,7 @@
+[dev]
+    functionsPort = 4242
+    port = 4020
+    targetPort = 4020
+
+[functions."scheduled-function"]
+    schedule = "@hourly"
