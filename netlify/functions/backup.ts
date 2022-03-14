@@ -5,6 +5,7 @@ import { Response } from '@netlify/functions/dist/function/response';
 import * as dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore';
+import * as mailjet from 'node-mailjet';
 
 dotenv.config();
 
@@ -18,6 +19,11 @@ const scheduleHandler: Handler = async function (event: Event, context: Context)
     appId: process.env['FIREBASE_APP_ID'],
     measurementId: process.env['FIREBASE_MEASUREMENT_ID']
   });
+
+  const mailer = mailjet.connect(
+    process.env['MAILJET_API_KEY'] as string,
+    process.env['MAILJET_SECRET_KEY'] as string
+  );
 
   const firestoreRef = getFirestore();
 
@@ -34,6 +40,37 @@ const scheduleHandler: Handler = async function (event: Event, context: Context)
   }
 
   const recipes = await select('recipe');
+
+  /*const request = await mailer
+    .post('send', {'version': 'v3.1'})
+    .request({
+      Messages: [
+        {
+          From: {
+            'Email': 'achain.jeremy@gmail.com',
+            'Name': '[KitchenParty] Server'
+          },
+          To: [
+            {
+              'Email': 'achain.jeremy@gmail.com',
+              'Name': 'Jérémy ACHAIN'
+            }
+          ],
+          Subject: 'Backup',
+          TextPart: [
+            `${ recipes.length } recipes exported`
+          ].join('\n'),
+          Attachments: [
+            {
+              ContentType: 'application/json',
+              Filename: 'recipes.json',
+              Base64Content: Buffer.from(JSON.stringify(recipes)).toString('base64'),
+            }
+          ]
+        }
+      ]
+    });*/
+
   console.log(`${ recipes.length } recipes exported`);
 
   return {
