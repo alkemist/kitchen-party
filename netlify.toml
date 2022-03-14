@@ -1,7 +1,7 @@
 [dev]
-    functionsPort = 4242
-    port = 4020
+    functionsPort = 1234
     targetPort = 4020
+    port = 4242
 
-[functions."scheduled-function"]
+[functions."backup"]
     schedule = "@hourly"

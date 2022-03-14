@@ -10,9 +10,8 @@
     "test": "npx ngcc && jest --coverage",
     "reset": "rm -rf node_modules && rm yarn.lock && yarn install",
     "config": "ts-node ./scripts/setenv.ts",
-    "backup": "ts-node ./scripts/backup.ts",
     "netlify": "netlify dev",
-    "netlify:backup": "netlify functions:invoke scheduled-function --port 4242"
+    "netlify:backup": "netlify functions:invoke scheduled-function --port 1234"
   },
   "private": true,
   "dependencies": {
