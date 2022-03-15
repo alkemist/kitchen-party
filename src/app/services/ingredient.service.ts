@@ -86,10 +86,8 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
 
     let ingredient = await this.getBySlug(slug);
     if (!ingredient || forceRefresh) {
-      console.log(slug, ingredient);
       try {
         const ingredientData = await super.findOneBySlug(slug);
-        console.log(ingredientData);
         return new IngredientModel(this.addToStore(ingredientData));
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
