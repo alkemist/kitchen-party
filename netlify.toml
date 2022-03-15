@@ -4,4 +4,4 @@
     port = 4242
 
 [functions."backup"]
-    schedule = "@hourly"
+    schedule = "@weekly"
