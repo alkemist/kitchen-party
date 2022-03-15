@@ -11,7 +11,7 @@
     "reset": "rm -rf node_modules && rm yarn.lock && yarn install",
     "config": "ts-node ./scripts/setenv.ts",
     "netlify": "netlify dev",
-    "netlify:backup": "netlify functions:invoke scheduled-function --port 1234"
+    "netlify:backup": "netlify functions:invoke backup --port 1234"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +33,7 @@
     "@ngxs/store": "^3.7.3",
     "dotenv": "^14.2.0",
     "firebase": "^9.6.3",
+    "mailgun.js": "^5.0.2",
     "material-icons": "^1.10.6",
     "ng-mocks": "^13.0.3",
     "nosleep.js": "^0.12.0",
