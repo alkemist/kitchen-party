@@ -176,13 +176,16 @@ describe('IngredientService', () => {
 
     describe('IngredientService.get', () => {
       beforeEach(() => {
-        // Mock super.findOneBySlug
         FirestoreService.prototype['findOneBySlug'] = jest.fn();
         (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockResolvedValue(ingredientAnimalFatMock);
       });
 
       it('should return undefined if no name', async () => {
         expect(await service.get('')).toBe(undefined);
+      });
+
+      it('should call findOneBySlug if slug exist', async () => {
+        expect(await service.get(ingredientLegumineMock.slug)).toEqual(ingredientLegumineMock);
       });
 
       it('should call findOneBySlug if slug don\'t exist', async () => {
@@ -204,24 +207,75 @@ describe('IngredientService', () => {
     });
   });
 
+  describe('IngredientService.add', () => {
+    let storeSpy: jest.SpyInstance;
 
-  xdescribe('IngredientService.add', () => {
+    beforeEach(() => {
+      FirestoreService.prototype['addOne'] = jest.fn();
+      (FirestoreService.prototype['addOne'] as jest.Mock).mockResolvedValue(ingredientAnimalFatMock);
+      storeSpy = jest.spyOn(store, 'dispatch');
+    });
 
+    it('should store ingredient', async () => {
+      expect(await service.add(ingredientAnimalFatMock)).toEqual(ingredientAnimalFatMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: ingredientAnimalFatMock});
+    });
   });
 
-  xdescribe('IngredientService.update', () => {
+  describe('IngredientService.update', () => {
+    let storeSpy: jest.SpyInstance;
 
+    beforeEach(() => {
+      FirestoreService.prototype['updateOne'] = jest.fn();
+      (FirestoreService.prototype['updateOne'] as jest.Mock).mockResolvedValue(ingredientAnimalFatMock);
+      storeSpy = jest.spyOn(store, 'dispatch');
+    });
+
+    it('should store ingredient', async () => {
+      expect(await service.update(ingredientAnimalFatMock)).toEqual(ingredientAnimalFatMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: ingredientAnimalFatMock});
+    });
   });
 
-  xdescribe('IngredientService.remove', () => {
+  describe('IngredientService.remove', () => {
+    let storeSpy: jest.SpyInstance;
 
+    beforeEach(() => {
+      FirestoreService.prototype['removeOne'] = jest.fn();
+      (FirestoreService.prototype['removeOne'] as jest.Mock).mockResolvedValue(ingredientAnimalFatMock);
+      storeSpy = jest.spyOn(store, 'dispatch');
+    });
+
+    it('should store ingredient', async () => {
+      await service.remove(ingredientAnimalFatMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: ingredientAnimalFatMock});
+    });
   });
 
-  xdescribe('IngredientService.addToStore', () => {
+  describe('IngredientService.exist', () => {
+    beforeEach(() => {
+      FirestoreService.prototype['exist'] = jest.fn();
+      (FirestoreService.prototype['exist'] as jest.Mock).mockResolvedValue(true);
+    });
 
+    it('should store ingredient', async () => {
+      expect(await service.exist(ingredientAnimalFatMock.name)).toEqual(true);
+    });
   });
 
-  xdescribe('IngredientService.refreshList', () => {
+  describe('IngredientService.refreshList', () => {
+    let storeSpy: jest.SpyInstance;
+    const ingredients = [ ingredientAnimalFatMock ];
 
+    beforeEach(() => {
+      FirestoreService.prototype['promiseQueryList'] = jest.fn();
+      (FirestoreService.prototype['promiseQueryList'] as jest.Mock).mockResolvedValue(ingredients);
+      storeSpy = jest.spyOn(store, 'dispatch');
+    });
+
+    it('should store ingredient', async () => {
+      expect(await service.refreshList()).toEqual(ingredients);
+      expect(storeSpy).toHaveBeenCalledWith({payload: ingredients});
+    });
   });
 });
