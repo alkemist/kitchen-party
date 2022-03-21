@@ -146,7 +146,10 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         delete recipeIngredient.ingredientId;
 
         if (recipeIngredient.recipeId) {
-          recipeIngredient.recipe = new RecipeModel(recipes.find(recipe => recipe.id === recipeIngredient.recipeId)!);
+          const recipe = recipes.find(recipe => recipe.id === recipeIngredient.recipeId);
+          if (recipe) {
+            recipeIngredient.recipe = new RecipeModel(recipe);
+          }
         }
         delete recipeIngredient.recipeId;
       }

@@ -274,7 +274,7 @@ describe('IngredientService', () => {
     });
 
     it('should store ingredient', async () => {
-      expect(await service.refreshList()).toEqual(ingredients);
+      expect(await service['refreshList']()).toEqual(ingredients);
       expect(storeSpy).toHaveBeenCalledWith({payload: ingredients});
     });
   });

@@ -1,12 +1,7 @@
 import { MeasureUnitKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { KitchenIngredientInterface, RecipeInterface } from '@interfaces';
-import {
-  ingredientLegumineMock,
-  kitchenIngredientMock,
-  kitchenIngredientRecipeMock,
-  recipeIngredientMock
-} from '@mocks';
+import { ingredientLegumineMock, kitchenIngredientMock, kitchenIngredientRecipeMock, recipeMixedMock } from '@mocks';
 import { kitchenIngredientConverter } from './kitchen-ingredient.converter';
 
 describe('kitchenIngredientConverter', () => {
@@ -22,8 +17,8 @@ describe('kitchenIngredientConverter', () => {
     optionVegan: false
   };
   const kitchenIngredientRecipeInFirestore: KitchenIngredientInterface = {
-    recipeId: recipeIngredientMock.id,
-    slug: recipeIngredientMock.slug,
+    recipeId: recipeMixedMock.id,
+    slug: recipeMixedMock.slug,
     ingredientId: '',
     quantity: 3,
     measure: '',

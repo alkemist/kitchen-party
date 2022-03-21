@@ -123,7 +123,7 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     return ingredient;
   }
 
-  public async refreshList(): Promise<IngredientInterface[]> {
+  private async refreshList(): Promise<IngredientInterface[]> {
     const ingredients = await super.promiseQueryList(orderBy('name'));
 
     this.store.dispatch(new FillIngredients(ingredients));

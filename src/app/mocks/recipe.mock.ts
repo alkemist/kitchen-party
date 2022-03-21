@@ -7,7 +7,7 @@ import {
   ingredientVegetableFatMock
 } from './ingredient.mock';
 
-export const recipeIngredientMock = new RecipeModel({
+export const recipeMixedMock = new RecipeModel({
   id: 'recipeIngredient1',
   name: 'Recipe Ingredient 1',
   slug: 'recipe-ingredient-1',
@@ -24,10 +24,32 @@ export const recipeIngredientMock = new RecipeModel({
   ]
 });
 
-export const recipeVegeMock = new RecipeModel({
-  id: 'recipeVegeId1',
-  name: 'Recipe Vege 1',
-  slug: 'recipe-vege-1',
+export const recipeLegumineMock = new RecipeModel({
+  id: 'recipeLegumineId1',
+  name: 'Recipe Legumine 1',
+  slug: 'recipe-legumine-1',
+  type: RecipeTypeKeyEnum.gratin,
+  recipeIngredients: [
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 3,
+    },
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 7,
+    },
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 1,
+      unit: MeasureUnitKeyEnum.kilogram
+    },
+  ]
+});
+
+export const recipeVegetableMock = new RecipeModel({
+  id: 'recipeVegetableId1',
+  name: 'Recipe Vegetable 1',
+  slug: 'recipe-vegetable-1',
   type: RecipeTypeKeyEnum.gratin,
   recipeIngredients: [
     {
@@ -57,6 +79,10 @@ export const recipeVeganMock = new RecipeModel({
       ingredient: ingredientVegetableFatMock,
       quantity: 3,
     },
+    {
+      recipe: recipeLegumineMock,
+      quantity: 1,
+    },
   ]
 });
 
@@ -76,7 +102,7 @@ export const recipeMeatMock = new RecipeModel({
       optionCarne: true
     },
     {
-      recipe: recipeIngredientMock,
+      recipe: recipeMixedMock,
       quantity: 3,
     },
   ]

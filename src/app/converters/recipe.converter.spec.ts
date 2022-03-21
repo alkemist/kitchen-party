@@ -1,7 +1,7 @@
 import { MeasureUnitKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { RecipeInterface } from '@interfaces';
-import { ingredientLegumineMock, ingredientMeatMock, recipeIngredientMock, recipeMeatMock } from '@mocks';
+import { ingredientLegumineMock, ingredientMeatMock, recipeMixedMock, recipeMeatMock } from '@mocks';
 import { recipeConverter } from './recipe.converter';
 
 describe('recipeConverter', () => {
@@ -39,7 +39,7 @@ describe('recipeConverter', () => {
         optionVege: false,
       },
       {
-        recipeId: recipeIngredientMock.id,
+        recipeId: recipeMixedMock.id,
         ingredientId: '',
         quantity: 3,
         measure: '',
