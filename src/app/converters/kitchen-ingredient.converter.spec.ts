@@ -1,7 +1,12 @@
 import { MeasureUnitKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { KitchenIngredientInterface, RecipeInterface } from '@interfaces';
-import { ingredientLegumineMock, kitchenIngredientMock, kitchenIngredientRecipeMock, recipeMixedMock } from '@mocks';
+import {
+  ingredientLegumineMock,
+  kitchenIngredientLegumineMock,
+  kitchenIngredientRecipeMock,
+  recipeMixedMock
+} from '@mocks';
 import { kitchenIngredientConverter } from './kitchen-ingredient.converter';
 
 describe('kitchenIngredientConverter', () => {
@@ -29,7 +34,7 @@ describe('kitchenIngredientConverter', () => {
   };
 
   it('toFirestore with ingredient', () => {
-    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientMock)).toEqual(kitchenIngredientInFirestore);
+    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientLegumineMock)).toEqual(kitchenIngredientInFirestore);
   });
 
   it('toFirestore with recipe', () => {

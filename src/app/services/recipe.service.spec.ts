@@ -1,8 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { MockHelper } from '@app/tools/mock.helper';
-import { recipeConverter } from '@converters';
 import { DocumentNotFoundError } from '@errors';
-import { recipeLegumineMock, recipeMeatMock, recipeVeganMock, recipeVegetableMock } from '@mocks';
+import {
+  ingredientLegumineMock,
+  recipeLegumineMock,
+  recipeMeatMock,
+  recipeVeganMock,
+  recipeVegetableMock
+} from '@mocks';
 import { RecipeModel } from '@models';
 import { NgxsModule, Store } from '@ngxs/store';
 import { FirestoreService, IngredientService, LoggerService, RecipeService } from '@services';
@@ -280,18 +284,43 @@ describe('RecipeService', () => {
   describe('RecipeService.hydrate', () => {
     beforeEach(() => {
       ingredientService.getById = jest.fn();
-      (ingredientService.getById as jest.Mock).mockResolvedValue(undefined);
+      (ingredientService.getById as jest.Mock).mockResolvedValue(ingredientLegumineMock);
     });
 
     it('should hydrate', async () => {
-      const recipesMocked = [ recipeLegumineMock, recipeVegetableMock, recipeMeatMock ];
-      const recipeVeganFirestoreMock = MockHelper.prepareInterfaces(recipeVeganMock, recipeConverter);
-      const recipesFirestoreMock = recipesMocked.map(recipe => MockHelper.prepareInterfaces(recipe, recipeConverter));
+      const recipesMocked = [ recipeLegumineMock ];
 
-      console.log(recipeVeganFirestoreMock);
+      const recipeVeganMockNotHydrated = new RecipeModel({
+        id: 'recipeVeganId1',
+        name: 'Recipe Vegan 1',
+        slug: 'recipe-vegan-1',
+        recipeIngredients: [
+          {
+            recipeId: recipeLegumineMock.id,
+          },
+          {
+            ingredientId: ingredientLegumineMock.id,
+          },
+        ]
+      });
 
-      const recipeHydrated = await service['hydrate'](recipeVeganFirestoreMock, recipesFirestoreMock);
-      expect(recipeHydrated).toEqual(recipeVeganMock);
+      const recipeVeganMockHydrated = new RecipeModel({
+        id: 'recipeVeganId1',
+        name: 'Recipe Vegan 1',
+        slug: 'recipe-vegan-1',
+        recipeIngredients: [
+          {
+            recipe: recipeLegumineMock,
+          },
+          {
+            ingredient: ingredientLegumineMock,
+          },
+        ]
+      });
+
+      await service['hydrate'](recipeVeganMockNotHydrated, recipesMocked);
+
+      expect(recipeVeganMockNotHydrated).toEqual(recipeVeganMockHydrated);
     });
   });
 });

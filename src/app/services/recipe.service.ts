@@ -137,7 +137,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     return recipe;
   }
 
-  private async hydrate(recipe: RecipeInterface, recipes: RecipeInterface[]): Promise<RecipeInterface> {
+  private async hydrate(recipe: RecipeModel, recipes: RecipeInterface[]): Promise<void> {
     if (recipe.recipeIngredients) {
       for (const recipeIngredient of recipe.recipeIngredients) {
         if (recipeIngredient.ingredientId) {
@@ -154,6 +154,5 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         delete recipeIngredient.recipeId;
       }
     }
-    return recipe;
   }
 }

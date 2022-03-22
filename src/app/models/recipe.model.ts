@@ -29,7 +29,7 @@ export class RecipeModel implements RecipeInterface {
   recipeIngredients: RecipeIngredientModel[] = [];
 
   constructor(recipe: RecipeInterface) {
-    this.id = recipe.id;
+    this.id = recipe.id ?? '';
     this.name = recipe.name ?? '';
     this.slug = recipe.slug ?? '';
 

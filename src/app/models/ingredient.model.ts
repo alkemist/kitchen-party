@@ -23,7 +23,7 @@ export class IngredientModel implements IngredientInterface {
   isLiquid: boolean | null;
 
   constructor(ingredient: IngredientInterface) {
-    this.id = ingredient.id;
+    this.id = ingredient.id ?? '';
     this.name = ingredient.name?.trim() ?? '';
     this.slug = ingredient.slug ?? '';
     this.type = ingredient.type ?? '';
