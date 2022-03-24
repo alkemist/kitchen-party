@@ -17,7 +17,7 @@ describe('IngredientResolver', () => {
     ingredientServiceMock = TestBed.inject(IngredientService);
   });
 
-  describe('IngredientResolver.constructor', function () {
+  describe('IngredientResolver.constructor', () => {
     it('should construct', () => {
       expect(new IngredientResolver(ingredientServiceMock)).toBeDefined();
     });

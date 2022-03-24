@@ -1,7 +1,7 @@
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
 describe('AddIngredient', () => {
-  describe('AddIngredient.constructor', function () {
+  describe('AddIngredient.constructor', () => {
     it('should construct', () => {
       expect(new AddIngredient({})).toBeDefined();
     });
@@ -9,7 +9,7 @@ describe('AddIngredient', () => {
 });
 
 describe('UpdateIngredient', () => {
-  describe('UpdateIngredient.constructor', function () {
+  describe('UpdateIngredient.constructor', () => {
     it('should construct', () => {
       expect(new UpdateIngredient({})).toBeDefined();
     });
@@ -17,7 +17,7 @@ describe('UpdateIngredient', () => {
 });
 
 describe('RemoveIngredient', () => {
-  describe('RemoveIngredient.constructor', function () {
+  describe('RemoveIngredient.constructor', () => {
     it('should construct', () => {
       expect(new RemoveIngredient({})).toBeDefined();
     });
@@ -25,7 +25,7 @@ describe('RemoveIngredient', () => {
 });
 
 describe('FillIngredients', () => {
-  describe('FillIngredients.constructor', function () {
+  describe('FillIngredients.constructor', () => {
     it('should construct', () => {
       expect(new FillIngredients([])).toBeDefined();
     });

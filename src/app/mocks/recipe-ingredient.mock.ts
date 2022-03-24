@@ -1,12 +1,13 @@
+import { recipeIngredientMock } from '@app/mocks/recipe.mock';
 import { MeasureUnitKeyEnum } from '@enums';
 import { RecipeIngredientModel } from '@models';
 import {
+  ingredientAnimalFatMock,
   ingredientLegumineMock,
   ingredientMeatMock,
   ingredientVegetableFatMock,
   ingredientVegetableMock
 } from './ingredient.mock';
-import { recipeIngredientMock } from './recipe.mock';
 
 export const recipeIngredientLegumineMock = new RecipeIngredientModel({
   id: 'recipeIngredientLegumineId1',
@@ -33,6 +34,11 @@ export const recipeIngredientVegetableFatMock = new RecipeIngredientModel({
   ingredient: ingredientVegetableFatMock,
   quantity: 200,
   unit: MeasureUnitKeyEnum.centiliter
+});
+
+export const recipeIngredientAnimalFatMock = new RecipeIngredientModel({
+  id: 'ingredientAnimalFatId1',
+  ingredient: ingredientAnimalFatMock,
 });
 
 export const recipeIngredientRecipeMock = new RecipeIngredientModel({

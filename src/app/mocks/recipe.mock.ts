@@ -7,7 +7,7 @@ import {
   ingredientVegetableFatMock
 } from './ingredient.mock';
 
-export const recipeMixedMock = new RecipeModel({
+export const recipeIngredientMock = new RecipeModel({
   id: 'recipeIngredient1',
   name: 'Recipe Ingredient 1',
   slug: 'recipe-ingredient-1',
@@ -102,7 +102,7 @@ export const recipeMeatMock = new RecipeModel({
       optionCarne: true
     },
     {
-      recipe: recipeMixedMock,
+      recipe: recipeIngredientMock,
       quantity: 3,
     },
   ]

@@ -1,12 +1,13 @@
 import {
+  recipeIngredientAnimalFatMock,
   recipeIngredientLegumineMock,
   recipeIngredientMeatMock,
   recipeIngredientRecipeMock,
   recipeIngredientVegetableFatMock,
   recipeIngredientVegetableMock
 } from '@app/mocks/recipe-ingredient.mock';
-import { MeasureUnitLabelEnum } from '@enums';
-import { ingredientMeatMock } from '@mocks';
+import { MeasureUnitKeyEnum, MeasureUnitLabelEnum } from '@enums';
+import { ingredientLegumineMock, ingredientMeatMock, recipeIngredientMock } from '@mocks';
 import { EnumHelper } from '@tools';
 import { RecipeIngredientModel } from './recipe-ingredient.model';
 
@@ -18,15 +19,89 @@ describe('RecipeIngredientModel', () => {
       name: 'Ingredient A',
     }
   } as RecipeIngredientModel;
+  const measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
 
-  describe('RecipeIngredientModel.constructor', function () {
+  describe('RecipeIngredientModel.constructor', () => {
     it('should construct', () => {
       expect(new RecipeIngredientModel({})).toBeDefined();
     });
   });
 
-  describe('RecipeIngredientModel.recipeIngredientToString', function () {
+  describe('RecipeIngredientModel.format', function () {
+    it.each([ [ 'gram' ], [ 'Gram' ], [ MeasureUnitLabelEnum.gram ] ])
+    ('should retrieve unit', (unit) => {
+      expect(
+        RecipeIngredientModel.format({
+          unitOrMeasure: unit,
+        }, measureUnits)
+      ).toEqual(
+        {
+          unit: MeasureUnitKeyEnum.gram,
+          measure: '',
+        }
+      );
+    });
+
+    it('should retrieve measure', () => {
+      const measure = 'feuille';
+      expect(
+        RecipeIngredientModel.format({
+          unitOrMeasure: measure,
+        }, measureUnits)
+      ).toEqual(
+        {
+          measure: measure,
+          unit: null
+        }
+      );
+    });
+
+    it('should retrieve ingredient', () => {
+      expect(
+        RecipeIngredientModel.format({
+          ingredientOrRecipe: ingredientLegumineMock,
+        }, measureUnits)
+      ).toEqual(
+        {
+          ingredient: ingredientLegumineMock
+        }
+      );
+    });
+
+    it('should retrieve recipe', () => {
+      expect(
+        RecipeIngredientModel.format({
+          ingredientOrRecipe: recipeIngredientMock,
+        }, measureUnits)
+      ).toEqual(
+        {
+          recipe: recipeIngredientMock
+        }
+      );
+    });
+  });
+
+  describe('RecipeIngredientModel.unitOrMeasureToString', () => {
     it.each([
+      [ recipeIngredientAnimalFatMock, '' ],
+      [ recipeIngredientMeatMock, '2' ],
+      [ recipeIngredientLegumineMock, '600 Gram' ],
+      [ recipeIngredientVegetableMock, '3 feuille' ],
+      [ recipeIngredientVegetableFatMock, '200 Centiliter' ],
+      [ recipeIngredientRecipeMock, '3' ],
+    ])('should be converted to string', (recipeIngredient, recipeIngredientStr) => {
+      expect(
+        RecipeIngredientModel.unitOrMeasureToString(
+          recipeIngredient as RecipeIngredientModel,
+          measureUnits
+        )
+      ).toBe(recipeIngredientStr);
+    });
+  });
+
+  describe('RecipeIngredientModel.recipeIngredientToString', () => {
+    it.each([
+      [ recipeIngredientAnimalFatMock, 'Ingredient Animal Fat 1' ],
       [ recipeIngredientMeatMock, 'Ingredient Meat 1:  2' ],
       [ recipeIngredientLegumineMock, 'Ingredient Legumine 1:  600 Gram' ],
       [ recipeIngredientVegetableMock, 'Ingredient Vegetable 1:  3 feuille' ],
@@ -36,13 +111,13 @@ describe('RecipeIngredientModel', () => {
       expect(
         RecipeIngredientModel.recipeIngredientToString(
           recipeIngredient as RecipeIngredientModel,
-          EnumHelper.enumToObject(MeasureUnitLabelEnum)
+          measureUnits
         )
       ).toBe(recipeIngredientStr);
     });
   });
 
-  describe('RecipeIngredientModel.orderRecipeIngredients', function () {
+  describe('RecipeIngredientModel.orderRecipeIngredients', () => {
     const recipeIngredients: RecipeIngredientModel[] = [
       recipeIngredientMeatMock,
       recipeIngredientMeat2Mock,
@@ -52,12 +127,12 @@ describe('RecipeIngredientModel', () => {
       recipeIngredientRecipeMock
     ];
     const recipeIngredientIdsSortedExpected = [
-      recipeIngredientRecipeMock.id,
       recipeIngredientMeat2Mock.id,
       recipeIngredientMeatMock.id,
       recipeIngredientVegetableMock.id,
       recipeIngredientLegumineMock.id,
       recipeIngredientVegetableFatMock.id,
+      recipeIngredientRecipeMock.id,
     ];
 
     const recipeIngredientsSorted = RecipeIngredientModel.orderRecipeIngredients(recipeIngredients);
@@ -68,23 +143,16 @@ describe('RecipeIngredientModel', () => {
     });
   });
 
-  describe('RecipeIngredientModel.orderTwoRecipeIngredients', function () {
-    it('should sort recipeIngredients with different type', () => {
+  describe('RecipeIngredientModel.orderTwoRecipeIngredients', () => {
+    it.each([
+      [ recipeIngredientMeatMock, recipeIngredientLegumineMock, -1 ],
+      [ recipeIngredientMeatMock, recipeIngredientMeat2Mock, 1 ],
+      [ recipeIngredientVegetableFatMock, recipeIngredientVegetableFatMock, 0 ],
+      [ {}, {}, 0 ],
+    ])('should sort', (recipeIngredientA, recipeIngredientB, result) => {
       expect(
-        RecipeIngredientModel.orderTwoRecipeIngredients(recipeIngredientMeatMock, recipeIngredientLegumineMock)
-      ).toEqual(-1);
-    });
-
-    it('should sort recipeIngredients with same type but different name', () => {
-      expect(
-        RecipeIngredientModel.orderTwoRecipeIngredients(recipeIngredientMeatMock, recipeIngredientMeat2Mock)
-      ).toEqual(1);
-    });
-
-    it('should sort recipeIngredients with same type', () => {
-      expect(
-        RecipeIngredientModel.orderTwoRecipeIngredients(recipeIngredientVegetableFatMock, recipeIngredientVegetableFatMock)
-      ).toEqual(0);
+        RecipeIngredientModel.orderTwoRecipeIngredients(recipeIngredientA, recipeIngredientB)
+      ).toEqual(result);
     });
   });
 });

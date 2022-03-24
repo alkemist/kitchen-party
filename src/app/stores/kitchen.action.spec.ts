@@ -6,7 +6,7 @@ import {
 } from './kitchen.action';
 
 describe('AddKitchenIngredient', () => {
-  describe('AddKitchenIngredient.constructor', function () {
+  describe('AddKitchenIngredient.constructor', () => {
     it('should construct', () => {
       expect(new AddKitchenIngredient({})).toBeDefined();
     });
@@ -14,7 +14,7 @@ describe('AddKitchenIngredient', () => {
 });
 
 describe('UpdateKitchenIngredient', () => {
-  describe('UpdateKitchenIngredient.constructor', function () {
+  describe('UpdateKitchenIngredient.constructor', () => {
     it('should construct', () => {
       expect(new UpdateKitchenIngredient({})).toBeDefined();
     });
@@ -22,7 +22,7 @@ describe('UpdateKitchenIngredient', () => {
 });
 
 describe('RemoveKitchenIngredient', () => {
-  describe('RemoveKitchenIngredient.constructor', function () {
+  describe('RemoveKitchenIngredient.constructor', () => {
     it('should construct', () => {
       expect(new RemoveKitchenIngredient({})).toBeDefined();
     });
@@ -30,7 +30,7 @@ describe('RemoveKitchenIngredient', () => {
 });
 
 describe('FillKitchenIngredients', () => {
-  describe('FillKitchenIngredients.constructor', function () {
+  describe('FillKitchenIngredients.constructor', () => {
     it('should construct', () => {
       expect(new FillKitchenIngredients([])).toBeDefined();
     });
