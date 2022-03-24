@@ -18,4 +18,12 @@ describe('ShoppingService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  describe('ShoppingService.cartOrderedByChecked', () => {
+    it('should sort cart', () => {
+      service.cart = [];
+
+      expect(service.cartOrderedByChecked).toEqual([]);
+    });
+  });
 });

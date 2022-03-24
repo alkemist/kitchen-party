@@ -85,6 +85,16 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return {count: quantity, measure: this.measure};
   }
 
+  hasOption(option: string): boolean {
+    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
+      return true;
+    }
+    if (option === DietTypeLabelEnum.vege && this.optionVege) {
+      return true;
+    }
+    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
+  }
+
   static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
     const recipeIngredient = {...recipeIngredientForm};
 
@@ -185,16 +195,6 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     }
 
     return (aNumber > bNumber) ? 1 : ((bNumber > aNumber) ? -1 : 0);
-  }
-
-  hasOption(option: string): boolean {
-    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
-      return true;
-    }
-    if (option === DietTypeLabelEnum.vege && this.optionVege) {
-      return true;
-    }
-    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
   }
 }
 

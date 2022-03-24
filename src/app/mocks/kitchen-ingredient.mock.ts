@@ -6,7 +6,7 @@ import {
   ingredientVegetableFatMock,
   ingredientVegetableMock
 } from './ingredient.mock';
-import { recipeMixedMock } from './recipe.mock';
+import { recipeIngredientMock } from './recipe.mock';
 
 export const kitchenIngredientLegumineMock = new KitchenIngredientModel({
   id: 'kitchenIngredientLegumineId1',
@@ -17,7 +17,7 @@ export const kitchenIngredientLegumineMock = new KitchenIngredientModel({
 });
 
 export const kitchenIngredientVegetableMock = new KitchenIngredientModel({
-  id: '-kitchenIngredientVegetableId1',
+  id: 'kitchenIngredientVegetableId1',
   ingredient: ingredientVegetableMock,
   slug: ingredientVegetableMock.slug,
   quantity: 3,
@@ -41,7 +41,7 @@ export const kitchenIngredientVegetableFatMock = new KitchenIngredientModel({
 
 export const kitchenIngredientRecipeMock = new KitchenIngredientModel({
   id: 'kitchenIngredientRecipeId1',
-  recipe: recipeMixedMock,
-  slug: recipeMixedMock.slug,
+  recipe: recipeIngredientMock,
+  slug: recipeIngredientMock.slug,
   quantity: 3
 });
