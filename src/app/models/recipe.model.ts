@@ -60,7 +60,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get ingredientIds(): string[] {
-    return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredient?.id!);
+    return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredientIds!).flat();
   }
 
   get diet(): string {
@@ -98,7 +98,7 @@ export class RecipeModel implements RecipeInterface {
     return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
   }
 
-  dietIs(diet: string) {
+  dietIs(diet: string): boolean {
     if (diet === DietTypeLabelEnum.vege) {
       return this.diet === DietTypeLabelEnum.vegan || this.diet === DietTypeLabelEnum.vege;
     }
@@ -107,7 +107,7 @@ export class RecipeModel implements RecipeInterface {
 
   isSeason(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (!recipeIngredient.ingredient?.isSeason()) {
+      if (recipeIngredient.ingredient && !recipeIngredient.ingredient?.isSeason()) {
         return false;
       }
     }
@@ -116,8 +116,14 @@ export class RecipeModel implements RecipeInterface {
 
   isVegan(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (!recipeIngredient.ingredient?.isVegan()) {
-        return false;
+      if (recipeIngredient.ingredient) {
+        if (!recipeIngredient.ingredient.isVegan()) {
+          return false;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (!recipeIngredient.recipe.isVegan()) {
+          return false;
+        }
       }
     }
     return true;
@@ -126,13 +132,13 @@ export class RecipeModel implements RecipeInterface {
   isVege(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
       if (recipeIngredient.ingredient) {
-        if (!recipeIngredient.ingredient?.isVege()) {
+        if (!recipeIngredient.ingredient.isVege()) {
           return false;
         }
       } else if (recipeIngredient.recipe) {
-        /*if (!recipeIngredient.recipe?.isVege()) {
+        if (!recipeIngredient.recipe.isVege()) {
           return false;
-        }*/
+        }
       }
     }
     return true;
@@ -140,8 +146,14 @@ export class RecipeModel implements RecipeInterface {
 
   isMeat(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isMeat()) {
-        return true;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient.isMeat()) {
+          return true;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe.isMeat()) {
+          return true;
+        }
       }
     }
     return false;
@@ -149,14 +161,20 @@ export class RecipeModel implements RecipeInterface {
 
   isFish(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isFish()) {
-        return true;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient.isFish()) {
+          return true;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe.isFish()) {
+          return true;
+        }
       }
     }
     return false;
   }
 
-  recipeIngredientsOption(option?: string): RecipeIngredientModel[] {
+  recipeIngredientsOption(option: DietTypeLabelEnum | string): RecipeIngredientModel[] {
     const recipeIngredients = [];
 
     for (const recipeIngredient of this.recipeIngredients) {

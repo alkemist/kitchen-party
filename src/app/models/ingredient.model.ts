@@ -102,7 +102,6 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isSeason(): boolean {
-
     if (IngredientTypes.get(this.type) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
       const date = new Date();
       let monthCurrent = date.getMonth() + 1;

@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 
 
 export interface ToolbarFilters {
-  diet: string,
+  diet: DietTypeLabelEnum | string,
   type: string,
   name: string,
   sweetOrSalty: string,

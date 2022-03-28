@@ -4,7 +4,7 @@ import {
   ingredientLegumineMock,
   recipeLegumineMock,
   recipeMeatMock,
-  recipeVeganMock,
+  recipeVegeMock,
   recipeVegetableMock
 } from '@mocks';
 import { RecipeModel } from '@models';
@@ -167,7 +167,7 @@ describe('RecipeService', () => {
       });
 
       it('should return undefined', async () => {
-        expect(await service.getBySlug(recipeVeganMock.slug)).toBe(undefined);
+        expect(await service.getBySlug(recipeVegeMock.slug)).toBe(undefined);
       });
     });
 
@@ -177,14 +177,14 @@ describe('RecipeService', () => {
       });
 
       it('should return undefined', async () => {
-        expect(await service.getById(recipeVeganMock.slug)).toBe(undefined);
+        expect(await service.getById(recipeVegeMock.slug)).toBe(undefined);
       });
     });
 
     describe('RecipeService.get', () => {
       beforeEach(() => {
         FirestoreService.prototype['findOneBySlug'] = jest.fn();
-        (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockResolvedValue(recipeVeganMock);
+        (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockResolvedValue(recipeVegeMock);
       });
 
       it('should return undefined if no name', async () => {
@@ -196,15 +196,15 @@ describe('RecipeService', () => {
       });
 
       it('should call findOneBySlug if slug don\'t exist', async () => {
-        expect(await service.get(recipeVeganMock.slug)).toEqual(recipeVeganMock);
-        expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(recipeVeganMock.slug);
+        expect(await service.get(recipeVegeMock.slug)).toEqual(recipeVegeMock);
+        expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(recipeVegeMock.slug);
       });
 
       it('should return undefined if not found', async () => {
         const error = new DocumentNotFoundError('test');
         (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockRejectedValue(error);
 
-        expect(await service.get(recipeVeganMock.slug)).toBe(undefined);
+        expect(await service.get(recipeVegeMock.slug)).toBe(undefined);
       });
     });
   });
@@ -214,13 +214,13 @@ describe('RecipeService', () => {
 
     beforeEach(() => {
       FirestoreService.prototype['addOne'] = jest.fn();
-      (FirestoreService.prototype['addOne'] as jest.Mock).mockResolvedValue(recipeVeganMock);
+      (FirestoreService.prototype['addOne'] as jest.Mock).mockResolvedValue(recipeVegeMock);
       storeSpy = jest.spyOn(store, 'dispatch');
     });
 
     it('should store recipe', async () => {
-      expect(await service.add(recipeVeganMock)).toEqual(recipeVeganMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVeganMock});
+      expect(await service.add(recipeVegeMock)).toEqual(recipeVegeMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVegeMock});
     });
   });
 
@@ -229,13 +229,13 @@ describe('RecipeService', () => {
 
     beforeEach(() => {
       FirestoreService.prototype['updateOne'] = jest.fn();
-      (FirestoreService.prototype['updateOne'] as jest.Mock).mockResolvedValue(recipeVeganMock);
+      (FirestoreService.prototype['updateOne'] as jest.Mock).mockResolvedValue(recipeVegeMock);
       storeSpy = jest.spyOn(store, 'dispatch');
     });
 
     it('should store recipe', async () => {
-      expect(await service.update(recipeVeganMock)).toEqual(recipeVeganMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVeganMock});
+      expect(await service.update(recipeVegeMock)).toEqual(recipeVegeMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVegeMock});
     });
   });
 
@@ -244,13 +244,13 @@ describe('RecipeService', () => {
 
     beforeEach(() => {
       FirestoreService.prototype['removeOne'] = jest.fn();
-      (FirestoreService.prototype['removeOne'] as jest.Mock).mockResolvedValue(recipeVeganMock);
+      (FirestoreService.prototype['removeOne'] as jest.Mock).mockResolvedValue(recipeVegeMock);
       storeSpy = jest.spyOn(store, 'dispatch');
     });
 
     it('should store recipe', async () => {
-      await service.remove(recipeVeganMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVeganMock});
+      await service.remove(recipeVegeMock);
+      expect(storeSpy).toHaveBeenCalledWith({payload: recipeVegeMock});
     });
   });
 
@@ -261,13 +261,13 @@ describe('RecipeService', () => {
     });
 
     it('should store recipe', async () => {
-      expect(await service.exist(recipeVeganMock.name)).toEqual(true);
+      expect(await service.exist(recipeVegeMock.name)).toEqual(true);
     });
   });
 
   describe('RecipeService.refreshList', () => {
     let storeSpy: jest.SpyInstance;
-    const recipes = [ recipeVeganMock ];
+    const recipes = [ recipeVegeMock ];
 
     beforeEach(() => {
       FirestoreService.prototype['promiseQueryList'] = jest.fn();

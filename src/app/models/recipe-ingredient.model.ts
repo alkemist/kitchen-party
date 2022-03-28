@@ -85,6 +85,15 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return {count: quantity, measure: this.measure};
   }
 
+  get ingredientIds(): string[] {
+    if (this.ingredient) {
+      return [ this.ingredient.id! ];
+    } else if (this.recipe) {
+      return this.recipe.ingredientIds;
+    }
+    return [];
+  }
+
   hasOption(option: string): boolean {
     if (option === DietTypeLabelEnum.meat && this.optionCarne) {
       return true;
@@ -161,7 +170,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   }
 
   static orderRecipeIngredients<T extends HasIngredient>(recipeIngredients: T[]): T[] {
-    return recipeIngredients.sort((a, b) => {
+    return [ ...recipeIngredients ].sort((a, b) => {
       return RecipeIngredientModel.orderTwoRecipeIngredients(a, b);
     });
   }

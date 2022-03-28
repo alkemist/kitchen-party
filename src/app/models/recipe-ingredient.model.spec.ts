@@ -27,7 +27,7 @@ describe('RecipeIngredientModel', () => {
     });
   });
 
-  describe('RecipeIngredientModel.format', function () {
+  describe('RecipeIngredientModel.format', () => {
     it.each([ [ 'gram' ], [ 'Gram' ], [ MeasureUnitLabelEnum.gram ] ])
     ('should retrieve unit', (unit) => {
       expect(

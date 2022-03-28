@@ -158,10 +158,6 @@ describe('IngredientModel', () => {
   });
 
   describe('IngredientModel.isSeason', () => {
-    jest
-      .useFakeTimers()
-      .setSystemTime(dateMock);
-
     const testsSeason = [
       [ 8, 8 ],
       [ 8, 9 ],
@@ -176,6 +172,12 @@ describe('IngredientModel', () => {
       [ 9, 12 ],
       [ 1, 7 ],
     ];
+
+    beforeEach(() => {
+      jest
+        .useFakeTimers()
+        .setSystemTime(dateMock);
+    });
 
     it.each(testsSeason)
     ('should months %i to %i return true', (monthBegin, monthEnd) => {
