@@ -63,33 +63,37 @@ export class RecipeModel implements RecipeInterface {
     return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredientIds!).flat();
   }
 
-  get diet(): string {
-    if (this.isVegan()) {
-      return DietTypeLabelEnum.vegan;
-    } else if (this.isVege()) {
-      return DietTypeLabelEnum.vege;
-    } else if (this.isFish()) {
-      return DietTypeLabelEnum.fish;
-    } else if (this.isMeat()) {
-      return DietTypeLabelEnum.meat;
+  get diet(): DietTypeLabelEnum | null {
+    if (this.recipeIngredients.length > 0) {
+      if (this.isVegan()) {
+        return DietTypeLabelEnum.vegan;
+      } else if (this.isVege()) {
+        return DietTypeLabelEnum.vege;
+      } else if (this.isFish()) {
+        return DietTypeLabelEnum.fish;
+      } else if (this.isMeat()) {
+        return DietTypeLabelEnum.meat;
+      }
     }
-    return '';
+    return null;
   }
 
-  get dietClassName(): string {
-    if (this.diet === DietTypeLabelEnum.vegan) {
-      return 'success';
+  get dietClassName(): string | null {
+    if (this.recipeIngredients.length > 0) {
+      if (this.diet === DietTypeLabelEnum.vegan) {
+        return 'success';
+      }
+      if (this.diet === DietTypeLabelEnum.vege) {
+        return 'warning';
+      }
+      if (this.diet === DietTypeLabelEnum.meat) {
+        return 'danger';
+      }
+      if (this.diet === DietTypeLabelEnum.fish) {
+        return 'primary';
+      }
     }
-    if (this.diet === DietTypeLabelEnum.vege) {
-      return 'warning';
-    }
-    if (this.diet === DietTypeLabelEnum.meat) {
-      return 'danger';
-    }
-    if (this.diet === DietTypeLabelEnum.fish) {
-      return 'primary';
-    }
-    return '';
+    return null;
   }
 
   nameContain(search: string): boolean {

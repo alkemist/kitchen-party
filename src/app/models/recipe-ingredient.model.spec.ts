@@ -86,7 +86,7 @@ describe('RecipeIngredientModel', () => {
       [ recipeIngredientAnimalFatMock, '' ],
       [ recipeIngredientMeatMock, '2' ],
       [ recipeIngredientLegumineMock, '600 Gram' ],
-      [ recipeIngredientVegetableMock, '3 feuille' ],
+      [ recipeIngredientVegetableMock, '3 barquette' ],
       [ recipeIngredientVegetableFatMock, '200 Centiliter' ],
       [ recipeIngredientRecipeMock, '3' ],
     ])('should be converted to string', (recipeIngredient, recipeIngredientStr) => {
@@ -104,7 +104,7 @@ describe('RecipeIngredientModel', () => {
       [ recipeIngredientAnimalFatMock, 'Ingredient Animal Fat 1' ],
       [ recipeIngredientMeatMock, 'Ingredient Meat 1:  2' ],
       [ recipeIngredientLegumineMock, 'Ingredient Legumine 1:  600 Gram' ],
-      [ recipeIngredientVegetableMock, 'Ingredient Vegetable 1:  3 feuille' ],
+      [ recipeIngredientVegetableMock, 'Fraise:  3 barquette' ],
       [ recipeIngredientVegetableFatMock, 'Ingredient Vegetable Fat 1:  200 Centiliter' ],
       [ recipeIngredientRecipeMock, 'Recipe Ingredient 1:  3' ],
     ])('should be converted to string', (recipeIngredient, recipeIngredientStr) => {

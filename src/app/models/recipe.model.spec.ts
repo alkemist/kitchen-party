@@ -1,4 +1,4 @@
-import { DietTypeLabelEnum, RecipeTypeLabelEnum } from '@enums';
+import { DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum } from '@enums';
 import {
   dateSeasonMock,
   ingredientAnimalFatMock,
@@ -17,6 +17,19 @@ import {
 import { RecipeModel } from './recipe.model';
 
 describe('RecipeModel', () => {
+  const recipeWithOnlyRecipe = new RecipeModel({
+    recipeIngredients: [
+      {
+        recipe: recipeMeatMock,
+        quantity: 1,
+      },
+      {
+        recipe: recipeFishMock,
+        quantity: 1,
+      },
+    ]
+  });
+
   describe('RecipeModel.constructor', () => {
     it('should construct', () => {
       expect(new RecipeModel({})).toBeDefined();
@@ -62,6 +75,7 @@ describe('RecipeModel', () => {
       {recipe: recipeVeganMock, expectedDiet: DietTypeLabelEnum.vegan},
       {recipe: recipeMeatMock, expectedDiet: DietTypeLabelEnum.meat},
       {recipe: recipeFishMock, expectedDiet: DietTypeLabelEnum.fish},
+      {recipe: new RecipeModel({}), expectedDiet: null},
     ])
     ('$recipe.name should return $expectedDiet', ({recipe, expectedDiet}) => {
       expect(recipe.diet).toEqual(expectedDiet);
@@ -74,6 +88,7 @@ describe('RecipeModel', () => {
       {recipe: recipeLegumineMock, expectedDietClassname: 'success'},
       {recipe: recipeMeatMock, expectedDietClassname: 'danger'},
       {recipe: recipeFishMock, expectedDietClassname: 'primary'},
+      {recipe: new RecipeModel({}), expectedDietClassname: null},
     ])
     ('$recipe.name should return $expectedDietClassname', ({recipe, expectedDietClassname}) => {
       expect(recipe.dietClassName).toEqual(expectedDietClassname);
@@ -93,12 +108,12 @@ describe('RecipeModel', () => {
 
   describe('RecipeModel.dietIs', () => {
     it.each([
-      {recipe: recipeIngredientMock, result: true},
-      {recipe: recipeLegumineMock, result: true},
-      {recipe: recipeMeatMock, result: false},
-      {recipe: recipeFishMock, result: false},
-    ])('$recipe.name should return $result', ({recipe, result}) => {
-      expect(recipe.dietIs(DietTypeLabelEnum.vege)).toEqual(result);
+      {recipe: recipeIngredientMock, diet: DietTypeLabelEnum.vege, result: true},
+      {recipe: recipeLegumineMock, diet: DietTypeLabelEnum.vege, result: true},
+      {recipe: recipeMeatMock, diet: DietTypeLabelEnum.meat, result: true},
+      {recipe: recipeFishMock, diet: DietTypeLabelEnum.meat, result: false},
+    ])('$recipe.name should return $result', ({recipe, diet, result}) => {
+      expect(recipe.dietIs(diet)).toEqual(result);
     });
   });
 
@@ -125,6 +140,7 @@ describe('RecipeModel', () => {
       {recipe: recipeVegetableMock, result: false},
       {recipe: recipeMeatMock, result: false},
       {recipe: recipeFishMock, result: false},
+      {recipe: recipeWithOnlyRecipe, result: false},
     ])
     ('$recipe.name should return $result', ({recipe, result}) => {
       expect(recipe.isVegan()).toEqual(result);
@@ -137,6 +153,7 @@ describe('RecipeModel', () => {
       {recipe: recipeVegetableMock, result: true},
       {recipe: recipeMeatMock, result: false},
       {recipe: recipeFishMock, result: false},
+      {recipe: recipeWithOnlyRecipe, result: false},
     ])
     ('$recipe.name should return $result', ({recipe, result}) => {
       expect(recipe.isVege()).toEqual(result);
@@ -149,6 +166,7 @@ describe('RecipeModel', () => {
       {recipe: recipeVegetableMock, result: false},
       {recipe: recipeMeatMock, result: true},
       {recipe: recipeFishMock, result: false},
+      {recipe: recipeWithOnlyRecipe, result: true},
     ])
     ('$recipe.name should return $result', ({recipe, result}) => {
       expect(recipe.isMeat()).toEqual(result);
@@ -161,6 +179,7 @@ describe('RecipeModel', () => {
       {recipe: recipeVegetableMock, result: false},
       {recipe: recipeMeatMock, result: false},
       {recipe: recipeFishMock, result: true},
+      {recipe: recipeWithOnlyRecipe, result: true},
     ])
     ('$recipe.name should return $result', ({recipe, result}) => {
       expect(recipe.isFish()).toEqual(result);
@@ -209,6 +228,46 @@ describe('RecipeModel', () => {
       });
 
       expect.assertions(3);
+    });
+  });
+
+  describe('RecipeModel.isSweet', () => {
+    const nullRecipe = new RecipeModel({});
+    const patePizzaRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza'});
+    const pateSableeRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée'});
+    const saltyRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeMeatMock} ]});
+    const sweetRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeVeganMock} ]});
+
+    it.each([
+      {recipe: nullRecipe, result: null},
+      {recipe: patePizzaRecipe, result: null},
+      {recipe: pateSableeRecipe, result: true},
+      {recipe: recipeMeatMock, result: false},
+      {recipe: recipeVeganMock, result: true},
+      {recipe: saltyRecipe, result: false},
+      {recipe: sweetRecipe, result: true},
+    ])('$recipe.name should be $result', ({recipe, result}) => {
+      expect(recipe.isSweet()).toBe(result);
+    });
+  });
+
+  describe('RecipeModel.isSalty', () => {
+    const nullRecipe = new RecipeModel({});
+    const patePizzaRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza'});
+    const pateSableeRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée'});
+    const saltyRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeMeatMock} ]});
+    const sweetRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeVeganMock} ]});
+
+    it.each([
+      {recipe: nullRecipe, result: null},
+      {recipe: pateSableeRecipe, result: null},
+      {recipe: patePizzaRecipe, result: true},
+      {recipe: recipeVeganMock, result: false},
+      {recipe: recipeMeatMock, result: true},
+      {recipe: sweetRecipe, result: false},
+      {recipe: saltyRecipe, result: true},
+    ])('$recipe.name should be $result', ({recipe, result}) => {
+      expect(recipe.isSalty()).toBe(result);
     });
   });
 });

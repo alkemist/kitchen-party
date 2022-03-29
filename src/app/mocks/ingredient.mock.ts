@@ -3,7 +3,7 @@ import { IngredientModel } from '@models';
 
 export const ingredientVegetableMock = new IngredientModel({
   id: 'ingredientVegetableId1',
-  name: 'Ingredient Vegetable 1',
+  name: 'Fraise',
   slug: 'ingredient-vegetable-1',
   type: IngredientTypeKeyEnum.fruits_vegetables_mushrooms,
   isLiquid: false,

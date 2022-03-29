@@ -20,7 +20,7 @@ export const recipeIngredientVegetableMock = new RecipeIngredientModel({
   id: 'recipeIngredientVegetableId1',
   ingredient: ingredientVegetableMock,
   quantity: 3,
-  measure: 'feuille'
+  measure: 'barquette'
 });
 
 export const recipeIngredientMeatMock = new RecipeIngredientModel({

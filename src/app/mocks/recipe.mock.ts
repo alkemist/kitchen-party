@@ -78,7 +78,7 @@ export const recipeVegeMock = new RecipeModel({
     {
       ingredient: ingredientLegumineMock,
       quantity: 1,
-      measure: 'feuille',
+      measure: 'barquette',
     },
     {
       ingredient: ingredientAnimalFatMock,
