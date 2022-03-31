@@ -34,7 +34,7 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
 
   constructor(recipeIngredient: RecipeIngredientInterface) {
     this.id = recipeIngredient.id ?? '';
-    this.quantity = parseInt(recipeIngredient.quantity?.toString()!) || null;
+    this.quantity = recipeIngredient.quantity ?? null;
     this.measure = recipeIngredient.measure?.trim() || '';
     this.unit = recipeIngredient.unit || null;
 
@@ -43,14 +43,14 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     this.optionVegan = recipeIngredient.optionVegan || false;
 
     if (recipeIngredient.ingredientId) {
-      this.ingredientId = recipeIngredient.ingredientId ?? '';
+      this.ingredientId = recipeIngredient.ingredientId;
     }
     if (recipeIngredient.ingredient) {
       this.ingredient = new IngredientModel(recipeIngredient.ingredient);
     }
 
     if (recipeIngredient.recipeId) {
-      this.recipeId = recipeIngredient.recipeId ?? '';
+      this.recipeId = recipeIngredient.recipeId;
     }
     if (recipeIngredient.recipe) {
       this.recipe = new RecipeModel(recipeIngredient.recipe);

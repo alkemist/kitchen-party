@@ -56,11 +56,12 @@ export class IngredientModel implements IngredientInterface {
     return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
   }
 
-  hydrate(ingredient: IngredientInterface) {
+  hydrate(ingredient: IngredientInterface): IngredientModel {
     this.name = ingredient.name ?? '';
     this.slug = ingredient.slug ?? '';
     this.type = ingredient.type ?? '';
     this.isLiquid = ingredient.isLiquid || null;
+    return this;
   }
 
   isVege(): boolean {

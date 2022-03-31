@@ -77,6 +77,17 @@ describe('IngredientModel', () => {
 
   describe('IngredientModel.hydrate', () => {
     it('should hydrate', () => {
+      expect(new IngredientModel({}).hydrate({})).toEqual(new IngredientModel({
+        id: '',
+        name: '',
+        slug: '',
+        type: '',
+        isLiquid: null,
+        monthBegin: undefined,
+        monthEnd: undefined,
+      }));
+    });
+    it('should hydrate', () => {
       const id = '3';
       const hydratedValues = {
         name: 'name',
@@ -141,7 +152,7 @@ describe('IngredientModel', () => {
       expect(new IngredientModel({type}).isSalty()).toBe(true);
     });
 
-    it.each(IngredientModel.saltyNames)
+    it.each([ ...IngredientModel.saltyNames, 'bouillon de légume' ])
     ('should %s return true', (name) => {
       expect(new IngredientModel({name}).isSalty()).toBe(true);
     });
