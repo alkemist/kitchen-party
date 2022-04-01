@@ -6,18 +6,18 @@ import { ingredientConverter } from './ingredient.converter';
 
 describe('ingredientConverter', () => {
   const ingredientVegetableInFirestore: IngredientInterface = {
-    name: 'Ingredient Vegetable 1',
-    slug: 'ingredient-vegetable-1',
-    isLiquid: false,
-    monthBegin: 1,
-    monthEnd: 3,
+    name: ingredientVegetableMock.name,
+    slug: ingredientVegetableMock.slug,
+    isLiquid: ingredientVegetableMock.isLiquid,
+    monthBegin: ingredientVegetableMock.monthBegin,
+    monthEnd: ingredientVegetableMock.monthEnd,
     type: IngredientTypeKeyEnum.fruits_vegetables_mushrooms
   };
 
   const ingredientInFirestore: IngredientInterface = {
-    name: 'Ingredient Legumine 1',
-    slug: 'ingredient-legumine-1',
-    isLiquid: false,
+    name: ingredientLegumineMock.name,
+    slug: ingredientLegumineMock.slug,
+    isLiquid: ingredientLegumineMock.isLiquid,
     monthBegin: null,
     monthEnd: null,
     type: IngredientTypeKeyEnum.cereals_legumines

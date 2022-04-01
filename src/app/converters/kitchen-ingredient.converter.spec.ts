@@ -3,7 +3,7 @@ import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { KitchenIngredientInterface, RecipeInterface } from '@interfaces';
 import {
   ingredientLegumineMock,
-  kitchenIngredientMock,
+  kitchenIngredientLegumineMock,
   kitchenIngredientRecipeMock,
   recipeIngredientMock
 } from '@mocks';
@@ -13,7 +13,6 @@ describe('kitchenIngredientConverter', () => {
   const kitchenIngredientInFirestore: KitchenIngredientInterface = {
     ingredientId: ingredientLegumineMock.id,
     slug: ingredientLegumineMock.slug,
-    recipeId: '',
     quantity: 600,
     unit: MeasureUnitKeyEnum.gram,
     measure: '',
@@ -34,11 +33,17 @@ describe('kitchenIngredientConverter', () => {
   };
 
   it('toFirestore with ingredient', () => {
-    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientMock)).toEqual(kitchenIngredientInFirestore);
+    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientLegumineMock)).toEqual(
+      {
+        ...kitchenIngredientInFirestore,
+        recipeId: '',
+      });
   });
 
   it('toFirestore with recipe', () => {
-    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientRecipeMock)).toEqual(kitchenIngredientRecipeInFirestore);
+    expect(kitchenIngredientConverter.toFirestore(kitchenIngredientRecipeMock)).toEqual({
+      ...kitchenIngredientRecipeInFirestore,
+    });
   });
 
   it('fromFirestore', () => {
@@ -48,6 +53,9 @@ describe('kitchenIngredientConverter', () => {
           return kitchenIngredientInFirestore;
         }
       } as unknown as QueryDocumentSnapshot<RecipeInterface>
-    )).toEqual(kitchenIngredientInFirestore);
+    )).toEqual({
+      ...kitchenIngredientInFirestore,
+      id: ''
+    });
   });
 });

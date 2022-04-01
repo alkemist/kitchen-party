@@ -15,7 +15,7 @@ describe('AppMissingTranslationHandler', () => {
     loggerServiceMock = TestBed.inject(LoggerService);
   });
 
-  describe('AppMissingTranslationHandler.constructor', function () {
+  describe('AppMissingTranslationHandler.constructor', () => {
     it('should construct', () => {
       expect(new AppMissingTranslationHandler(loggerServiceMock)).toBeDefined();
     });

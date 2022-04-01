@@ -2,9 +2,12 @@ import { MeasureUnitKeyEnum, RecipeTypeKeyEnum } from '@enums';
 import { RecipeModel } from '@models';
 import {
   ingredientAnimalFatMock,
+  ingredientFishMock,
   ingredientLegumineMock,
   ingredientMeatMock,
-  ingredientVegetableFatMock
+  ingredientVegetableFatMock,
+  ingredientVegetableMock,
+  ingredientVegetableOutOfSeasonMock
 } from './ingredient.mock';
 
 export const recipeIngredientMock = new RecipeModel({
@@ -14,20 +17,44 @@ export const recipeIngredientMock = new RecipeModel({
   type: RecipeTypeKeyEnum.ingredient,
   recipeIngredients: [
     {
-      ingredient: ingredientAnimalFatMock,
-      quantity: 1,
+      ingredient: ingredientVegetableFatMock,
+      optionVegan: true,
+      quantity: 2,
     },
     {
-      ingredient: ingredientVegetableFatMock,
-      quantity: 2,
-    }
+      ingredient: ingredientAnimalFatMock,
+      optionVege: true,
+      quantity: 1,
+    },
   ]
 });
 
-export const recipeVegeMock = new RecipeModel({
-  id: 'recipeVegeId1',
-  name: 'Recipe Vege 1',
-  slug: 'recipe-vege-1',
+export const recipeLegumineMock = new RecipeModel({
+  id: 'recipeLegumineId1',
+  name: 'Recipe Legumine 1',
+  slug: 'recipe-legumine-1',
+  type: RecipeTypeKeyEnum.gratin,
+  recipeIngredients: [
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 3,
+    },
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 7,
+    },
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 1,
+      unit: MeasureUnitKeyEnum.kilogram
+    },
+  ]
+});
+
+export const recipeVegetableMock = new RecipeModel({
+  id: 'recipeVegetableId1',
+  name: 'Recipe Vegetable 1',
+  slug: 'recipe-vegetable-1',
   type: RecipeTypeKeyEnum.gratin,
   recipeIngredients: [
     {
@@ -43,11 +70,37 @@ export const recipeVegeMock = new RecipeModel({
   ]
 });
 
+export const recipeVegeMock = new RecipeModel({
+  id: 'recipeVegeId1',
+  name: 'Recipe Vege 1',
+  slug: 'recipe-vege-1',
+  recipeIngredients: [
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 1,
+      measure: 'barquette',
+    },
+    {
+      ingredient: ingredientAnimalFatMock,
+      quantity: 3,
+    },
+    {
+      recipe: recipeLegumineMock,
+      quantity: 1,
+    },
+  ]
+});
+
 export const recipeVeganMock = new RecipeModel({
   id: 'recipeVeganId1',
   name: 'Recipe Vegan 1',
   slug: 'recipe-vegan-1',
   recipeIngredients: [
+    {
+      ingredient: ingredientVegetableMock,
+      quantity: 1,
+      unit: MeasureUnitKeyEnum.liter
+    },
     {
       ingredient: ingredientLegumineMock,
       quantity: 1,
@@ -78,6 +131,51 @@ export const recipeMeatMock = new RecipeModel({
     {
       recipe: recipeIngredientMock,
       quantity: 3,
+    },
+  ]
+});
+
+export const recipeFishMock = new RecipeModel({
+  id: 'recipeFishId1',
+  name: 'Recipe Fish 1',
+  slug: 'recipe-fish-1',
+  recipeIngredients: [
+    {
+      ingredient: ingredientVegetableOutOfSeasonMock,
+      quantity: 2,
+    },
+    {
+      ingredient: ingredientFishMock,
+      quantity: 5,
+    },
+  ]
+});
+
+export const recipeOptionsMock = new RecipeModel({
+  id: 'recipeOptions1',
+  name: 'Recipe Options 1',
+  slug: 'recipe-options-1',
+  type: RecipeTypeKeyEnum.ingredient,
+  recipeIngredients: [
+    {
+      ingredient: ingredientLegumineMock,
+      quantity: 1,
+      unit: MeasureUnitKeyEnum.liter
+    },
+    {
+      ingredient: ingredientMeatMock,
+      quantity: 2,
+      optionCarne: true
+    },
+    {
+      recipe: recipeIngredientMock,
+      quantity: 3,
+      optionVege: true,
+    },
+    {
+      ingredient: ingredientVegetableFatMock,
+      optionVegan: true,
+      quantity: 2,
     },
   ]
 });

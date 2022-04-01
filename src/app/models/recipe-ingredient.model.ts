@@ -33,8 +33,8 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   optionVegan?: boolean;
 
   constructor(recipeIngredient: RecipeIngredientInterface) {
-    this.id = recipeIngredient.id;
-    this.quantity = parseInt(recipeIngredient.quantity?.toString()!) || null;
+    this.id = recipeIngredient.id ?? '';
+    this.quantity = recipeIngredient.quantity ?? null;
     this.measure = recipeIngredient.measure?.trim() || '';
     this.unit = recipeIngredient.unit || null;
 
@@ -42,12 +42,16 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     this.optionVege = recipeIngredient.optionVege || false;
     this.optionVegan = recipeIngredient.optionVegan || false;
 
-    this.ingredientId = recipeIngredient.ingredientId;
+    if (recipeIngredient.ingredientId) {
+      this.ingredientId = recipeIngredient.ingredientId;
+    }
     if (recipeIngredient.ingredient) {
       this.ingredient = new IngredientModel(recipeIngredient.ingredient);
     }
 
-    this.recipeId = recipeIngredient.recipeId;
+    if (recipeIngredient.recipeId) {
+      this.recipeId = recipeIngredient.recipeId;
+    }
     if (recipeIngredient.recipe) {
       this.recipe = new RecipeModel(recipeIngredient.recipe);
     }
@@ -81,50 +85,52 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     return {count: quantity, measure: this.measure};
   }
 
+  get ingredientIds(): string[] {
+    if (this.ingredient) {
+      return [ this.ingredient.id! ];
+    } else if (this.recipe) {
+      return this.recipe.ingredientIds;
+    }
+    return [];
+  }
+
+  hasOption(option: string): boolean {
+    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
+      return true;
+    }
+    if (option === DietTypeLabelEnum.vege && this.optionVege) {
+      return true;
+    }
+    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
+  }
+
   static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
     const recipeIngredient = {...recipeIngredientForm};
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
-    if (ingredientOrRecipe instanceof RecipeModel) {
-      recipeIngredient.recipe = ingredientOrRecipe;
-    } else {
-      recipeIngredient.ingredient = ingredientOrRecipe;
-    }
+    delete recipeIngredient.ingredientOrRecipe;
 
-    const unitOrMeasure = recipeIngredientForm.unitOrMeasure;
-    let value = measureUnits.find(measureUnit => measureUnit.label === unitOrMeasure || measureUnit.key === unitOrMeasure)?.key!;
-    let isUnit = false;
-
-    if (!value) {
-      recipeIngredient.unit = null;
-      recipeIngredient.measure = '';
-      return recipeIngredient;
-    }
-
-    if (MeasureUnits.get(value) !== undefined) {
-      isUnit = true;
-    } else {
-      const measureUnitKeys = Object.keys(MeasureUnitLabelEnum);
-      const keyIndex = measureUnitKeys.indexOf(unitOrMeasure!);
-      if (keyIndex > -1) {
-        isUnit = true;
-        value = measureUnits[keyIndex].key;
+    if (ingredientOrRecipe) {
+      if (ingredientOrRecipe instanceof RecipeModel) {
+        recipeIngredient.recipe = ingredientOrRecipe;
       } else {
-        const measureUnitValues = Object.values(MeasureUnitLabelEnum);
-        const valueIndex = measureUnitValues.indexOf(unitOrMeasure as MeasureUnitLabelEnum);
-        if (valueIndex > -1) {
-          isUnit = true;
-          value = measureUnits[valueIndex].key;
-        }
+        recipeIngredient.ingredient = ingredientOrRecipe;
       }
     }
 
-    if (isUnit) {
-      recipeIngredient.unit = value as MeasureUnitKeyEnum;
-      recipeIngredient.measure = '';
-    } else {
-      recipeIngredient.measure = value;
-      recipeIngredient.unit = null;
+    const unitOrMeasure = recipeIngredientForm.unitOrMeasure;
+    delete recipeIngredient.unitOrMeasure;
+
+    if (unitOrMeasure) {
+      let value = measureUnits.find(measureUnit => measureUnit.label === unitOrMeasure || measureUnit.key === unitOrMeasure)?.key!;
+
+      if (MeasureUnits.get(value) !== undefined) {
+        recipeIngredient.unit = value as MeasureUnitKeyEnum;
+        recipeIngredient.measure = '';
+      } else {
+        recipeIngredient.measure = unitOrMeasure;
+        recipeIngredient.unit = null;
+      }
     }
 
     return recipeIngredient;
@@ -135,12 +141,12 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
     if (recipeIngredient.measure) {
       unitOrMeasure = recipeIngredient.measure;
     } else if (recipeIngredient.unit) {
-      unitOrMeasure = measureUnits.find(measure => measure.key === recipeIngredient.unit)?.label!;
+      unitOrMeasure = measureUnits.find(measure => measure.key === recipeIngredient.unit)!.label;
     }
 
     return recipeIngredient.quantity && unitOrMeasure
       ? `${ recipeIngredient.quantity } ${ unitOrMeasure }`
-      : recipeIngredient.quantity?.toString();
+      : recipeIngredient.quantity?.toString() ?? '';
   }
 
   static recipeIngredientToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyLabelInterface[]): string {
@@ -164,33 +170,27 @@ export class RecipeIngredientModel implements RecipeIngredientInterface {
   }
 
   static orderRecipeIngredients<T extends HasIngredient>(recipeIngredients: T[]): T[] {
-    return recipeIngredients.sort((a, b) => {
+    return [ ...recipeIngredients ].sort((a, b) => {
       return RecipeIngredientModel.orderTwoRecipeIngredients(a, b);
     });
   }
 
   static orderTwoRecipeIngredients(a: HasIngredient, b: HasIngredient): number {
-    const aNumber = RecipeIngredientModel.ingredientTypes.indexOf(a.ingredient?.type!);
-    let bNumber = RecipeIngredientModel.ingredientTypes.indexOf(b.ingredient?.type!);
+    if (!a.ingredient || !b.ingredient || !a.ingredient.name || !b.ingredient.name || !a.ingredient.type || !b.ingredient.type) {
+      return 0;
+    }
+
+    const aNumber = RecipeIngredientModel.ingredientTypes.indexOf(a.ingredient.type);
+    let bNumber = RecipeIngredientModel.ingredientTypes.indexOf(b.ingredient.type);
 
     if (aNumber == bNumber) {
-      const aString = a.ingredient?.name!;
-      const bString = b.ingredient?.name!;
+      const aString = a.ingredient.name;
+      const bString = b.ingredient.name;
 
       return (aString > bString) ? 1 : ((bString > aString) ? -1 : 0);
     }
 
-    return (aNumber > bNumber) ? 1 : ((bNumber > aNumber) ? -1 : 0);
-  }
-
-  hasOption(option: string): boolean {
-    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
-      return true;
-    }
-    if (option === DietTypeLabelEnum.vege && this.optionVege) {
-      return true;
-    }
-    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
+    return (aNumber > bNumber) ? 1 : -1;
   }
 }
 
