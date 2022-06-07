@@ -55,64 +55,64 @@ describe('RecipeModel', () => {
 
   describe('RecipeModel.ingredientIds', () => {
     it.each([
-      {recipe: recipeIngredientMock, ingredientIds: [ ingredientVegetableFatMock.id, ingredientAnimalFatMock.id, ]},
+      { recipe: recipeIngredientMock, ingredientIds: [ ingredientVegetableFatMock.id, ingredientAnimalFatMock.id, ] },
       {
         recipe: recipeMeatMock,
         ingredientIds: [ ingredientLegumineMock.id, ingredientMeatMock.id, ingredientVegetableFatMock.id, ingredientAnimalFatMock.id ]
       }
     ])
-    ('$recipe.name should return ingredient ids', ({recipe, ingredientIds}) => {
+    ('$recipe.name should return ingredient ids', ({ recipe, ingredientIds }) => {
       expect(recipe.ingredientIds).toEqual(ingredientIds);
     });
   });
 
   describe('RecipeModel.diet', () => {
     it.each([
-      {recipe: recipeIngredientMock, expectedDiet: DietTypeLabelEnum.vege},
-      {recipe: recipeLegumineMock, expectedDiet: DietTypeLabelEnum.vegan},
-      {recipe: recipeVegetableMock, expectedDiet: DietTypeLabelEnum.vege},
-      {recipe: recipeVegeMock, expectedDiet: DietTypeLabelEnum.vege},
-      {recipe: recipeVeganMock, expectedDiet: DietTypeLabelEnum.vegan},
-      {recipe: recipeMeatMock, expectedDiet: DietTypeLabelEnum.meat},
-      {recipe: recipeFishMock, expectedDiet: DietTypeLabelEnum.fish},
-      {recipe: new RecipeModel({}), expectedDiet: null},
+      { recipe: recipeIngredientMock, expectedDiet: DietTypeLabelEnum.vege },
+      { recipe: recipeLegumineMock, expectedDiet: DietTypeLabelEnum.vegan },
+      { recipe: recipeVegetableMock, expectedDiet: DietTypeLabelEnum.vege },
+      { recipe: recipeVegeMock, expectedDiet: DietTypeLabelEnum.vege },
+      { recipe: recipeVeganMock, expectedDiet: DietTypeLabelEnum.vegan },
+      { recipe: recipeMeatMock, expectedDiet: DietTypeLabelEnum.meat },
+      { recipe: recipeFishMock, expectedDiet: DietTypeLabelEnum.fish },
+      { recipe: new RecipeModel({}), expectedDiet: '' },
     ])
-    ('$recipe.name should return $expectedDiet', ({recipe, expectedDiet}) => {
+    ('$recipe.name should return $expectedDiet', ({ recipe, expectedDiet }) => {
       expect(recipe.diet).toEqual(expectedDiet);
     });
   });
 
   describe('RecipeModel.dietClassName', () => {
     it.each([
-      {recipe: recipeIngredientMock, expectedDietClassname: 'warning'},
-      {recipe: recipeLegumineMock, expectedDietClassname: 'success'},
-      {recipe: recipeMeatMock, expectedDietClassname: 'danger'},
-      {recipe: recipeFishMock, expectedDietClassname: 'primary'},
-      {recipe: new RecipeModel({}), expectedDietClassname: null},
+      { recipe: recipeIngredientMock, expectedDietClassname: 'warning' },
+      { recipe: recipeLegumineMock, expectedDietClassname: 'success' },
+      { recipe: recipeMeatMock, expectedDietClassname: 'danger' },
+      { recipe: recipeFishMock, expectedDietClassname: 'primary' },
+      { recipe: new RecipeModel({}), expectedDietClassname: '' },
     ])
-    ('$recipe.name should return $expectedDietClassname', ({recipe, expectedDietClassname}) => {
+    ('$recipe.name should return $expectedDietClassname', ({ recipe, expectedDietClassname }) => {
       expect(recipe.dietClassName).toEqual(expectedDietClassname);
     });
   });
 
   describe('RecipeModel.nameContain', () => {
     it.each([
-      {recipe: recipeIngredientMock, search: ' Ingredient', result: true},
-      {recipe: recipeLegumineMock, search: '-legumine', result: true},
-      {recipe: recipeMeatMock, search: 'Meat', result: true},
-      {recipe: recipeFishMock, search: 'test', result: false},
-    ])('$recipe.name should return $result', ({recipe, search, result}) => {
+      { recipe: recipeIngredientMock, search: ' Ingredient', result: true },
+      { recipe: recipeLegumineMock, search: '-legumine', result: true },
+      { recipe: recipeMeatMock, search: 'Meat', result: true },
+      { recipe: recipeFishMock, search: 'test', result: false },
+    ])('$recipe.name should return $result', ({ recipe, search, result }) => {
       expect(recipe.nameContain(search)).toEqual(result);
     });
   });
 
   describe('RecipeModel.dietIs', () => {
     it.each([
-      {recipe: recipeIngredientMock, diet: DietTypeLabelEnum.vege, result: true},
-      {recipe: recipeLegumineMock, diet: DietTypeLabelEnum.vege, result: true},
-      {recipe: recipeMeatMock, diet: DietTypeLabelEnum.meat, result: true},
-      {recipe: recipeFishMock, diet: DietTypeLabelEnum.meat, result: false},
-    ])('$recipe.name should return $result', ({recipe, diet, result}) => {
+      { recipe: recipeIngredientMock, diet: DietTypeLabelEnum.vege, result: true },
+      { recipe: recipeLegumineMock, diet: DietTypeLabelEnum.vege, result: true },
+      { recipe: recipeMeatMock, diet: DietTypeLabelEnum.meat, result: true },
+      { recipe: recipeFishMock, diet: DietTypeLabelEnum.meat, result: false },
+    ])('$recipe.name should return $result', ({ recipe, diet, result }) => {
       expect(recipe.dietIs(diet)).toEqual(result);
     });
   });
@@ -125,63 +125,63 @@ describe('RecipeModel', () => {
     });
 
     it.each([
-      {recipe: recipeVeganMock, result: true},
-      {recipe: recipeVegetableMock, result: true},
-      {recipe: recipeFishMock, result: false},
+      { recipe: recipeVeganMock, result: true },
+      { recipe: recipeVegetableMock, result: true },
+      { recipe: recipeFishMock, result: false },
     ])
-    ('$recipe.name should return $result', ({recipe, result}) => {
+    ('$recipe.name should return $result', ({ recipe, result }) => {
       expect(recipe.isSeason()).toEqual(result);
     });
   });
 
   describe('RecipeModel.isVegan', () => {
     it.each([
-      {recipe: recipeVeganMock, result: true},
-      {recipe: recipeVegetableMock, result: false},
-      {recipe: recipeMeatMock, result: false},
-      {recipe: recipeFishMock, result: false},
-      {recipe: recipeWithOnlyRecipe, result: false},
+      { recipe: recipeVeganMock, result: true },
+      { recipe: recipeVegetableMock, result: false },
+      { recipe: recipeMeatMock, result: false },
+      { recipe: recipeFishMock, result: false },
+      { recipe: recipeWithOnlyRecipe, result: false },
     ])
-    ('$recipe.name should return $result', ({recipe, result}) => {
+    ('$recipe.name should return $result', ({ recipe, result }) => {
       expect(recipe.isVegan()).toEqual(result);
     });
   });
 
   describe('RecipeModel.isVege', () => {
     it.each([
-      {recipe: recipeVeganMock, result: true},
-      {recipe: recipeVegetableMock, result: true},
-      {recipe: recipeMeatMock, result: false},
-      {recipe: recipeFishMock, result: false},
-      {recipe: recipeWithOnlyRecipe, result: false},
+      { recipe: recipeVeganMock, result: true },
+      { recipe: recipeVegetableMock, result: true },
+      { recipe: recipeMeatMock, result: false },
+      { recipe: recipeFishMock, result: false },
+      { recipe: recipeWithOnlyRecipe, result: false },
     ])
-    ('$recipe.name should return $result', ({recipe, result}) => {
+    ('$recipe.name should return $result', ({ recipe, result }) => {
       expect(recipe.isVege()).toEqual(result);
     });
   });
 
   describe('RecipeModel.isMeat', () => {
     it.each([
-      {recipe: recipeVeganMock, result: false},
-      {recipe: recipeVegetableMock, result: false},
-      {recipe: recipeMeatMock, result: true},
-      {recipe: recipeFishMock, result: false},
-      {recipe: recipeWithOnlyRecipe, result: true},
+      { recipe: recipeVeganMock, result: false },
+      { recipe: recipeVegetableMock, result: false },
+      { recipe: recipeMeatMock, result: true },
+      { recipe: recipeFishMock, result: false },
+      { recipe: recipeWithOnlyRecipe, result: true },
     ])
-    ('$recipe.name should return $result', ({recipe, result}) => {
+    ('$recipe.name should return $result', ({ recipe, result }) => {
       expect(recipe.isMeat()).toEqual(result);
     });
   });
 
   describe('RecipeModel.isFish', () => {
     it.each([
-      {recipe: recipeVeganMock, result: false},
-      {recipe: recipeVegetableMock, result: false},
-      {recipe: recipeMeatMock, result: false},
-      {recipe: recipeFishMock, result: true},
-      {recipe: recipeWithOnlyRecipe, result: true},
+      { recipe: recipeVeganMock, result: false },
+      { recipe: recipeVegetableMock, result: false },
+      { recipe: recipeMeatMock, result: false },
+      { recipe: recipeFishMock, result: true },
+      { recipe: recipeWithOnlyRecipe, result: true },
     ])
-    ('$recipe.name should return $result', ({recipe, result}) => {
+    ('$recipe.name should return $result', ({ recipe, result }) => {
       expect(recipe.isFish()).toEqual(result);
     });
   });
@@ -204,7 +204,7 @@ describe('RecipeModel', () => {
         ingredientIds: [ ingredientLegumineMock.id, ingredientVegetableFatMock.id ]
       }
     ])
-    ('$recipe.name with option $option should return $ingredientIds', ({recipe, option, ingredientIds}) => {
+    ('$recipe.name with option $option should return $ingredientIds', ({ recipe, option, ingredientIds }) => {
       const recipeIngredients = recipe.recipeIngredientsOption(option);
       const recipeIngredientIds = recipeIngredients.map(recipeIngredient => recipeIngredient.ingredient ? recipeIngredient.ingredient.id : recipeIngredient.recipe?.id);
 
@@ -233,40 +233,40 @@ describe('RecipeModel', () => {
 
   describe('RecipeModel.isSweet', () => {
     const nullRecipe = new RecipeModel({});
-    const patePizzaRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza'});
-    const pateSableeRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée'});
-    const saltyRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeMeatMock} ]});
-    const sweetRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeVeganMock} ]});
+    const patePizzaRecipe = new RecipeModel({ type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza' });
+    const pateSableeRecipe = new RecipeModel({ type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée' });
+    const saltyRecipe = new RecipeModel({ recipeIngredients: [ { recipe: recipeMeatMock } ] });
+    const sweetRecipe = new RecipeModel({ recipeIngredients: [ { recipe: recipeVeganMock } ] });
 
     it.each([
-      {recipe: nullRecipe, result: null},
-      {recipe: patePizzaRecipe, result: null},
-      {recipe: pateSableeRecipe, result: true},
-      {recipe: recipeMeatMock, result: false},
-      {recipe: recipeVeganMock, result: true},
-      {recipe: saltyRecipe, result: false},
-      {recipe: sweetRecipe, result: true},
-    ])('$recipe.name should be $result', ({recipe, result}) => {
+      { recipe: nullRecipe, result: null },
+      { recipe: patePizzaRecipe, result: null },
+      { recipe: pateSableeRecipe, result: true },
+      { recipe: recipeMeatMock, result: false },
+      { recipe: recipeVeganMock, result: true },
+      { recipe: saltyRecipe, result: false },
+      { recipe: sweetRecipe, result: true },
+    ])('$recipe.name should be $result', ({ recipe, result }) => {
       expect(recipe.isSweet()).toBe(result);
     });
   });
 
   describe('RecipeModel.isSalty', () => {
     const nullRecipe = new RecipeModel({});
-    const patePizzaRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza'});
-    const pateSableeRecipe = new RecipeModel({type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée'});
-    const saltyRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeMeatMock} ]});
-    const sweetRecipe = new RecipeModel({recipeIngredients: [ {recipe: recipeVeganMock} ]});
+    const patePizzaRecipe = new RecipeModel({ type: RecipeTypeKeyEnum.ingredient, name: 'pâte à pizza' });
+    const pateSableeRecipe = new RecipeModel({ type: RecipeTypeKeyEnum.ingredient, name: 'pâte sablée' });
+    const saltyRecipe = new RecipeModel({ recipeIngredients: [ { recipe: recipeMeatMock } ] });
+    const sweetRecipe = new RecipeModel({ recipeIngredients: [ { recipe: recipeVeganMock } ] });
 
     it.each([
-      {recipe: nullRecipe, result: null},
-      {recipe: pateSableeRecipe, result: null},
-      {recipe: patePizzaRecipe, result: true},
-      {recipe: recipeVeganMock, result: false},
-      {recipe: recipeMeatMock, result: true},
-      {recipe: sweetRecipe, result: false},
-      {recipe: saltyRecipe, result: true},
-    ])('$recipe.name should be $result', ({recipe, result}) => {
+      { recipe: nullRecipe, result: null },
+      { recipe: pateSableeRecipe, result: null },
+      { recipe: patePizzaRecipe, result: true },
+      { recipe: recipeVeganMock, result: false },
+      { recipe: recipeMeatMock, result: true },
+      { recipe: sweetRecipe, result: false },
+      { recipe: saltyRecipe, result: true },
+    ])('$recipe.name should be $result', ({ recipe, result }) => {
       expect(recipe.isSalty()).toBe(result);
     });
   });
