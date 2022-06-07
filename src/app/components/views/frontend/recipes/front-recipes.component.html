@@ -15,7 +15,7 @@
         <div class="flex flex-row justify-content-between">
           <div class="flex align-items-center" style="width:80px">
             <p-tag *ngIf="recipe.diet"
-                   [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
+                   [severity]="recipe.dietClassName">{{ recipe.diet ? (recipe.diet | translate) : '' }}</p-tag>
           </div>
           <h5 class="text-center flex-grow-1">
             {{ recipe.name }}

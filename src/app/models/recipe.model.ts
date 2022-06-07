@@ -63,7 +63,7 @@ export class RecipeModel implements RecipeInterface {
     return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredientIds!).flat();
   }
 
-  get diet(): DietTypeLabelEnum | null {
+  get diet(): DietTypeLabelEnum | string {
     if (this.recipeIngredients.length > 0) {
       if (this.isVegan()) {
         return DietTypeLabelEnum.vegan;
@@ -75,10 +75,10 @@ export class RecipeModel implements RecipeInterface {
         return DietTypeLabelEnum.meat;
       }
     }
-    return null;
+    return '';
   }
 
-  get dietClassName(): string | null {
+  get dietClassName(): string {
     if (this.recipeIngredients.length > 0) {
       if (this.diet === DietTypeLabelEnum.vegan) {
         return 'success';
@@ -93,7 +93,7 @@ export class RecipeModel implements RecipeInterface {
         return 'primary';
       }
     }
-    return null;
+    return '';
   }
 
   nameContain(search: string): boolean {
