@@ -83,12 +83,26 @@ p-dropdown.ng-touched.p-invalid > div {
 }
 
 .p-datatable {
-  .p-datatable-thead > tr > th {
-    padding: 0.7rem 1rem;
-  }
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
 
-  .p-datatable-tbody > tr > td {
-    padding: 0.9rem 1rem;
+  .p-datatable-wrapper {
+    height: 100%;
+
+    .p-datatable-thead > tr > th {
+      padding: 0.7rem 1rem;
+    }
+
+    .p-datatable-tbody > tr > td {
+      padding: 0.9rem 1rem;
+      vertical-align: middle;
+    }
+  }
+  
+  .p-paginator-bottom {
+    border-top: 1px solid #0b213f;
   }
 }
 

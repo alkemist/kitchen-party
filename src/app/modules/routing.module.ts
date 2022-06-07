@@ -20,22 +20,21 @@ const routes: Routes = [
     loadChildren: () => import('./user/user.module')
       .then(mod => mod.UserModule)
   },
-  {path: 'about', component: AboutComponent, data: {title: 'About', showAppName: true}},
-  {path: 'calendar', component: CalendarComponent, data: {title: 'Calendar', showAppName: true}},
-  {path: 'logged', redirectTo: '/admin', pathMatch: 'full'},
+  { path: 'about', component: AboutComponent, data: { title: 'About', showAppName: true } },
+  { path: 'calendar', component: CalendarComponent, data: { title: 'Calendar', showAppName: true } },
   {
     path: 'shopping/:slugs', component: ShoppingComponent,
     resolve: {
       recipes: RecipesResolver
     },
-    data: {title: 'Shopping list', showAppName: true}
+    data: { title: 'Shopping list', showAppName: true }
   },
   {
     path: ':slug', component: FrontRecipeComponent,
     resolve: {
       recipe: RecipeResolver
     },
-    data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
+    data: { title: 'Recipe', hideHeader: true, enableNoSleep: true }
   },
   {
     path: ':slug/:diet', component: FrontRecipeComponent,
@@ -43,9 +42,9 @@ const routes: Routes = [
       recipe: RecipeResolver,
       diet: DietResolver,
     },
-    data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
+    data: { title: 'Recipe', hideHeader: true, enableNoSleep: true }
   },
-  {path: '', component: FrontRecipesComponent, data: {showFilters: true}},
+  { path: '', component: FrontRecipesComponent, data: { showFilters: true } },
 ];
 
 @NgModule({
