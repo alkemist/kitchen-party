@@ -29,25 +29,25 @@
                class="col info flex align-items-center"
                tooltipPosition="bottom">
             <i *ngIf="recipe.preparationDuration" class="material-icons">av_timer</i>
-            {{ recipe.preparationDuration }}
+            <span *ngIf="recipe.preparationDuration">{{ recipe.preparationDuration }}</span>
           </div>
           <div [pTooltip]="recipe.cookingDuration ? ('Cooking duration' | translate) : ''"
                class="col flex align-items-center"
                tooltipPosition="bottom">
             <i *ngIf="recipe.cookingDuration" class="material-icons">microwave</i>
-            {{ recipe.cookingDuration }}
+            <span *ngIf="recipe.cookingDuration">{{ recipe.cookingDuration }}</span>
           </div>
           <div [pTooltip]="recipe.waitingDuration ? ('Waiting duration' | translate) : ''"
                class="col flex align-items-center"
                tooltipPosition="bottom">
             <i *ngIf="recipe.waitingDuration" class="material-icons">snooze</i>
-            {{ recipe.waitingDuration }}
+            <span *ngIf="recipe.waitingDuration">{{ recipe.waitingDuration }}</span>
           </div>
           <div [pTooltip]="recipe.nbSlices ? ('Number of slices' | translate) : ''"
                class="col flex align-items-center"
                tooltipPosition="bottom">
             <i *ngIf="recipe.nbSlices" class="material-icons">local_pizza</i>
-            {{ recipe.nbSlices }}
+            <span *ngIf="recipe.nbSlices">{{ recipe.nbSlices }}</span>
           </div>
           <div [pTooltip]="'Number of ingredients' | translate" class="col flex align-items-center"
                tooltipPosition="bottom">
@@ -65,7 +65,7 @@
     <div *ngIf="loading" class="loader">
       <i class="pi pi-spin pi-spinner" style=""></i>
     </div>
-    <div *ngIf="!loading && filteredRecipes.length === 0">
+    <div style="margin-top: 20px;" *ngIf="!loading && filteredRecipes.length === 0">
       {{ 'No recipes found.' | translate }}
     </div>
   </div>
