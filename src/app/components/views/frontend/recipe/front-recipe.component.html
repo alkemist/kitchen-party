@@ -12,7 +12,7 @@
           <h5 class="text-center flex-grow-1">{{ recipe.name }}</h5>
         </div>
         <div class="details flex flex-row flex-wrap align-items-center justify-content-center">
-          <p-tag [severity]="recipe.dietClassName">{{ recipe.diet | translate }}</p-tag>
+          <p-tag [severity]="recipe.dietClassName">{{ recipe.diet ? (recipe.diet | translate) : '' }}</p-tag>
           <div *ngIf="recipe.preparationDuration" [pTooltip]="'Preparation duration' | translate"
                class="flex align-items-center"
                tooltipPosition="bottom">

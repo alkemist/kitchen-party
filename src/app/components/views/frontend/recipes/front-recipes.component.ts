@@ -94,6 +94,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.filteredRecipes = recipes;
       this.filter(this.filteringService.getFilters().value);
       this.loading = false;
+      this.filter(this.filteringService.getFilters().value);
     });
   }
 
