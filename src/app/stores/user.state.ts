@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { UserInterface } from '@interfaces';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { UserInterface } from '../interfaces';
 import { UserLogin, UserLogout } from './user.action';
 
 export class UserStateModel {
@@ -22,14 +22,14 @@ export class UserState {
   }
 
   @Action(UserLogin)
-  login({ getState, patchState }: StateContext<UserStateModel>, { payload }: UserLogin) {
+  login({getState, patchState}: StateContext<UserStateModel>, {payload}: UserLogin) {
     patchState({
       logged: payload
     });
   }
 
   @Action(UserLogout)
-  logout({ patchState }: StateContext<UserStateModel>) {
+  logout({patchState}: StateContext<UserStateModel>) {
     patchState({
       logged: undefined
     });

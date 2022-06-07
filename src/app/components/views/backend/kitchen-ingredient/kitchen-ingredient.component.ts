@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MeasureUnitLabelEnum, MeasureUnits } from '@enums';
+import { KitchenIngredientInterface, RecipeIngredientFormInterface } from '@interfaces';
+import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel } from '@models';
+import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '@services';
+import { EnumHelper, slugify } from '@tools';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { MeasureUnitLabelEnum, MeasureUnits } from '../../../../enums';
-import { KitchenIngredientInterface, RecipeIngredientFormInterface } from '../../../../interfaces';
-import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel } from '../../../../models';
-import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '../../../../services';
-import { EnumHelper, slugify } from '../../../../tools';
 
 @Component({
   selector: 'app-kitchen-ingredient',

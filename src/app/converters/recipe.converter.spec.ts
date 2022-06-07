@@ -1,9 +1,8 @@
-import { recipeConverter } from './recipe.converter';
-import { recipeIngredientMock, recipeMeatMock } from '../mocks/recipe.mock';
-import { MeasureUnitKeyEnum } from '../enums';
-import { RecipeInterface } from '../interfaces';
-import { ingredientLegumineMock, ingredientMeatMock } from '../mocks/ingredient.mock';
+import { MeasureUnitKeyEnum } from '@enums';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
+import { RecipeInterface } from '@interfaces';
+import { ingredientLegumineMock, ingredientMeatMock, recipeIngredientMock, recipeMeatMock } from '@mocks';
+import { recipeConverter } from './recipe.converter';
 
 describe('recipeConverter', () => {
   const recipeInFirestore: RecipeInterface = {
@@ -54,15 +53,15 @@ describe('recipeConverter', () => {
 
   it('toFirestore', () => {
     expect(recipeConverter.toFirestore(recipeMeatMock)).toEqual(recipeInFirestore);
-  })
+  });
 
   it('fromFirestore', () => {
     expect(recipeConverter.fromFirestore(
       {
         data: () => {
-          return recipeInFirestore
+          return recipeInFirestore;
         }
       } as unknown as QueryDocumentSnapshot<RecipeInterface>
     )).toEqual(recipeInFirestore);
-  })
+  });
 });

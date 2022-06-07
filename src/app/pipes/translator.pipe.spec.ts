@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockProvider } from 'ng-mocks';
-import { TranslatorService } from '../services';
+import { TranslatorService } from '@services';
 import { TranslatorPipe } from './translator.pipe';
 
 describe('TranslatorPipe', () => {

@@ -1,4 +1,4 @@
-import { IngredientTypeKeyEnum } from '../enums';
+import { IngredientTypeKeyEnum } from '@enums';
 
 export const ingredientTypeMeatMap: Map<IngredientTypeKeyEnum, boolean> = new Map<IngredientTypeKeyEnum, boolean>(
   [

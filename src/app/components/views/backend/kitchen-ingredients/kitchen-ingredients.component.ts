@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IngredientTypeLabelEnum } from '../../../../enums';
-import { KitchenIngredientModel } from '../../../../models';
-import { KitchenIngredientService, TranslatorService } from '../../../../services';
-import { EnumHelper } from '../../../../tools';
+import { IngredientTypeLabelEnum } from '@enums';
+import { KitchenIngredientModel } from '@models';
+import { KitchenIngredientService, TranslatorService } from '@services';
+import { EnumHelper } from '@tools';
 
 @Component({
   selector: 'app-kitchen-ingredients',

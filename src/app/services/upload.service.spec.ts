@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UploadService } from './upload.service';
+import { LoggerService, UploadService } from '@services';
 import { MockProvider } from 'ng-mocks';
-import { LoggerService } from './logger.service';
 
 jest.mock('firebase/storage', () => ({
   ...(jest.requireActual('firebase/storage')),

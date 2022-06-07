@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IngredientTypeLabelEnum } from '@enums';
+import { IngredientInterface } from '@interfaces';
+import { IngredientModel } from '@models';
+import { IngredientService, TranslatorService } from '@services';
+import { EnumHelper, slugify } from '@tools';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { IngredientTypeLabelEnum } from '../../../../enums';
-import { IngredientInterface } from '../../../../interfaces';
-import { IngredientModel } from '../../../../models';
-import { IngredientService, TranslatorService } from '../../../../services';
-import { EnumHelper, slugify } from '../../../../tools';
 
 @Component({
   selector: 'app-back-ingredient',

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockProvider } from 'ng-mocks';
-import { RecipeService } from '../services';
+import { RecipeService } from '@services';
 import { RecipesResolver } from './recipes.resolver';
 
 describe('RecipesResolver', () => {
@@ -17,7 +17,7 @@ describe('RecipesResolver', () => {
     recipeServiceMock = TestBed.inject(RecipeService);
   });
 
-  describe('RecipesResolver.constructor', function () {
+  describe('RecipesResolver.constructor', () => {
     it('should construct', () => {
       expect(new RecipesResolver(recipeServiceMock)).toBeDefined();
     });

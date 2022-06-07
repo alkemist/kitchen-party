@@ -1,5 +1,5 @@
+import { dateMock } from '@mocks';
 import { DateHelper } from './date.helper';
-import { dateMock } from '../mocks/date.mock';
 
 describe('DateHelper', () => {
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { IngredientModel } from '../models';
-import { IngredientService } from '../services';
+import { IngredientModel } from '@models';
+import { IngredientService } from '@services';
 
 @Injectable({providedIn: 'root'})
 export class IngredientResolver implements Resolve<IngredientModel | undefined> {

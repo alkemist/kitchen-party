@@ -1,0 +1,7 @@
+[dev]
+    functionsPort = 1234
+    targetPort = 4020
+    port = 4242
+
+[functions."backup"]
+    schedule = "@weekly"

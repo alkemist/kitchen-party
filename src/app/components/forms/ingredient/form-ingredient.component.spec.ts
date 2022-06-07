@@ -9,8 +9,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { BlockUIModule } from 'primeng/blockui';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EnumHelper } from '../../../tools';
-import { IngredientTypeLabelEnum } from '../../../enums';
+import { EnumHelper } from '@tools';
+import { IngredientTypeLabelEnum } from '@enums';
 
 describe('IngredientComponent', () => {
   let component: FormIngredientComponent;

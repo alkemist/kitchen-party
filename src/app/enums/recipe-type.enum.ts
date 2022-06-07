@@ -1,4 +1,4 @@
-import { EnumHelper } from '../tools';
+import { EnumHelper } from '@tools';
 
 export enum RecipeTypeKeyEnum {
   soup = 'soup',

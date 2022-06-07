@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { ShoppingComponent } from '@components';
 import { TranslateModule } from '@ngx-translate/core';
+import { ShoppingService } from '@services';
 import { MockModule, MockProvider } from 'ng-mocks';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
-import { ShoppingService } from '../../../../services';
-
-import { ShoppingComponent } from './shopping.component';
 
 describe('ShoppingComponent', () => {
   let component: ShoppingComponent;
@@ -38,11 +38,11 @@ describe('ShoppingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('ShoppingComponent.cartOrderedByChecked', function () {
+  describe('ShoppingComponent.cartOrderedByChecked', () => {
 
   });
 
-  describe('ShoppingComponent.ngOnInit', function () {
+  describe('ShoppingComponent.ngOnInit', () => {
 
   });
 });

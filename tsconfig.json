@@ -5,6 +5,7 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -22,47 +23,59 @@
       "dom"
     ],
     "paths": {
-      "@components/(.*)": [
-        "src/app/components/$1"
+      "@app/*": [
+        "src/app/*"
       ],
-      "@converters/(.*)": [
-        "src/app/converters/$1"
+      "@components": [
+        "src/app/components"
       ],
-      "@enums/(.*)": [
-        "src/app/enums/$1"
+      "@consts": [
+        "src/app/consts"
       ],
-      "@errors/(.*)": [
-        "src/app/models/$1"
+      "@converters": [
+        "src/app/converters"
       ],
-      "@guards/(.*)": [
-        "src/app/guards/$1"
+      "@enums": [
+        "src/app/enums"
       ],
-      "@handlers/(.*)": [
-        "src/app/handlers/$1"
+      "@errors": [
+        "src/app/errors"
       ],
-      "@interfaces/(.*)": [
-        "src/app/models/$1"
+      "@guards": [
+        "src/app/guards"
       ],
-      "@models/(.*)": [
-        "src/app/models/$1"
+      "@handlers": [
+        "src/app/handlers"
       ],
-      "@modules/(.*)": [
-        "src/app/modules/$1"
+      "@interfaces": [
+        "src/app/interfaces"
       ],
-      "@resolvers/(.*)": [
-        "src/app/resolvers/$1"
+      "@mocks": [
+        "src/app/mocks"
       ],
-      "@services/(.*)": [
-        "src/app/services/$1"
+      "@models": [
+        "src/app/models"
       ],
-      "@stores/(.*)": [
-        "src/app/stores/$1"
+      "@modules": [
+        "src/app/modules"
       ],
-      "@tools/(.*)": [
-        "src/app/tools/$1"
+      "@pipes": [
+        "src/app/pipes"
       ],
-      "@validators/(.*)": [
-        "src/app/tools/$1"
+      "@resolvers": [
+        "src/app/resolvers"
+      ],
+      "@services": [
+        "src/app/services"
+      ],
+      "@stores": [
+        "src/app/stores"
+      ],
+      "@tools": [
+        "src/app/tools"
+      ],
+      "@validators": [
+        "src/app/validators"
       ]
     }
   },

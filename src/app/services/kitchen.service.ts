@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
+import { kitchenIngredientConverter } from '@converters';
+import { DocumentNotFoundError } from '@errors';
+import { KitchenIngredientInterface } from '@interfaces';
+import { KitchenIngredientModel } from '@models';
 import { Select, Store } from '@ngxs/store';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
-import { kitchenIngredientConverter } from '../converters/kitchen-ingredient.converter';
-import { DocumentNotFoundError } from '../errors';
-import { KitchenIngredientInterface } from '../interfaces';
-import { KitchenIngredientModel } from '../models';
+import { FirestoreService, IngredientService, LoggerService, RecipeService } from '@services';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
+  KitchenIngredientState,
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
-} from '../stores/kitchen.action';
-import { KitchenIngredientState } from '../stores/kitchen.state';
-import { ArrayHelper } from '../tools';
-import { FirestoreService } from './firestore.service';
-import { IngredientService } from './ingredient.service';
-import { LoggerService } from './logger.service';
-import { RecipeService } from './recipe.service';
+} from '@stores';
+import { ArrayHelper } from '@tools';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -46,21 +44,25 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     }
 
     this.promise = new Promise<KitchenIngredientModel[]>(resolve => {
-      this.all$?.pipe(first()).subscribe(async kitchenIngredients => {
-        if (kitchenIngredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-          kitchenIngredients = await this.refreshList();
-        }
+      if (this.getAll$()) {
+        this.getAll$()?.pipe(first()).subscribe(async kitchenIngredients => {
+          if (kitchenIngredients.length === 0 && !this.refreshed || this.storeIsOutdated()) {
+            kitchenIngredients = await this.refreshList();
+          }
 
-        this.all = [];
-        for (const kitchenIngredient of kitchenIngredients) {
-          const kitchenIngredientModel = new KitchenIngredientModel(kitchenIngredient);
-          await this.hydrate(kitchenIngredientModel);
-          this.all.push(kitchenIngredientModel);
-        }
-        this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
-        this.synchronized = true;
+          this.all = [];
+          for (const kitchenIngredient of kitchenIngredients) {
+            const kitchenIngredientModel = new KitchenIngredientModel(kitchenIngredient);
+            await this.hydrate(kitchenIngredientModel);
+            this.all.push(kitchenIngredientModel);
+          }
+          this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
+          this.synchronized = true;
+          resolve(this.all);
+        });
+      } else {
         resolve(this.all);
-      });
+      }
     });
     return this.promise;
   }
@@ -148,7 +150,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     if (kitchenIngredient.recipeId) {
       kitchenIngredient.recipe = await this.recipeService.getById(kitchenIngredient.recipeId);
     }
-    delete kitchenIngredient.ingredientId;
+    delete kitchenIngredient.recipeId;
   }
 }
 

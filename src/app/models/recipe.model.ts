@@ -1,6 +1,6 @@
-import { DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes } from '../enums';
-import { RecipeInterface } from '../interfaces';
-import { slugify } from '../tools';
+import { DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes } from '@enums';
+import { RecipeInterface } from '@interfaces';
+import { slugify } from '@tools';
 import { RecipeIngredientModel } from './recipe-ingredient.model';
 
 export class RecipeModel implements RecipeInterface {
@@ -29,7 +29,7 @@ export class RecipeModel implements RecipeInterface {
   recipeIngredients: RecipeIngredientModel[] = [];
 
   constructor(recipe: RecipeInterface) {
-    this.id = recipe.id;
+    this.id = recipe.id ?? '';
     this.name = recipe.name ?? '';
     this.slug = recipe.slug ?? '';
 
@@ -60,36 +60,40 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get ingredientIds(): string[] {
-    return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredient?.id!);
+    return this.recipeIngredients.map(recipeIngredient => recipeIngredient.ingredientIds!).flat();
   }
 
-  get diet(): string {
-    if (this.isVegan()) {
-      return DietTypeLabelEnum.vegan;
-    } else if (this.isVege()) {
-      return DietTypeLabelEnum.vege;
-    } else if (this.isFish()) {
-      return DietTypeLabelEnum.fish;
-    } else if (this.isMeat()) {
-      return DietTypeLabelEnum.meat;
+  get diet(): DietTypeLabelEnum | null {
+    if (this.recipeIngredients.length > 0) {
+      if (this.isVegan()) {
+        return DietTypeLabelEnum.vegan;
+      } else if (this.isVege()) {
+        return DietTypeLabelEnum.vege;
+      } else if (this.isFish()) {
+        return DietTypeLabelEnum.fish;
+      } else if (this.isMeat()) {
+        return DietTypeLabelEnum.meat;
+      }
     }
-    return '';
+    return null;
   }
 
-  get dietClassName(): string {
-    if (this.diet === DietTypeLabelEnum.vegan) {
-      return 'success';
+  get dietClassName(): string | null {
+    if (this.recipeIngredients.length > 0) {
+      if (this.diet === DietTypeLabelEnum.vegan) {
+        return 'success';
+      }
+      if (this.diet === DietTypeLabelEnum.vege) {
+        return 'warning';
+      }
+      if (this.diet === DietTypeLabelEnum.meat) {
+        return 'danger';
+      }
+      if (this.diet === DietTypeLabelEnum.fish) {
+        return 'primary';
+      }
     }
-    if (this.diet === DietTypeLabelEnum.vege) {
-      return 'warning';
-    }
-    if (this.diet === DietTypeLabelEnum.meat) {
-      return 'danger';
-    }
-    if (this.diet === DietTypeLabelEnum.fish) {
-      return 'primary';
-    }
-    return '';
+    return null;
   }
 
   nameContain(search: string): boolean {
@@ -98,7 +102,7 @@ export class RecipeModel implements RecipeInterface {
     return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
   }
 
-  dietIs(diet: string) {
+  dietIs(diet: string): boolean {
     if (diet === DietTypeLabelEnum.vege) {
       return this.diet === DietTypeLabelEnum.vegan || this.diet === DietTypeLabelEnum.vege;
     }
@@ -107,7 +111,7 @@ export class RecipeModel implements RecipeInterface {
 
   isSeason(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (!recipeIngredient.ingredient?.isSeason()) {
+      if (recipeIngredient.ingredient && !recipeIngredient.ingredient?.isSeason()) {
         return false;
       }
     }
@@ -116,8 +120,14 @@ export class RecipeModel implements RecipeInterface {
 
   isVegan(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (!recipeIngredient.ingredient?.isVegan()) {
-        return false;
+      if (recipeIngredient.ingredient) {
+        if (!recipeIngredient.ingredient.isVegan()) {
+          return false;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (!recipeIngredient.recipe.isVegan()) {
+          return false;
+        }
       }
     }
     return true;
@@ -126,13 +136,13 @@ export class RecipeModel implements RecipeInterface {
   isVege(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
       if (recipeIngredient.ingredient) {
-        if (!recipeIngredient.ingredient?.isVege()) {
+        if (!recipeIngredient.ingredient.isVege()) {
           return false;
         }
       } else if (recipeIngredient.recipe) {
-        /*if (!recipeIngredient.recipe?.isVege()) {
+        if (!recipeIngredient.recipe.isVege()) {
           return false;
-        }*/
+        }
       }
     }
     return true;
@@ -140,8 +150,14 @@ export class RecipeModel implements RecipeInterface {
 
   isMeat(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isMeat()) {
-        return true;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient.isMeat()) {
+          return true;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe.isMeat()) {
+          return true;
+        }
       }
     }
     return false;
@@ -149,14 +165,20 @@ export class RecipeModel implements RecipeInterface {
 
   isFish(): boolean {
     for (const recipeIngredient of this.recipeIngredients) {
-      if (recipeIngredient.ingredient?.isFish()) {
-        return true;
+      if (recipeIngredient.ingredient) {
+        if (recipeIngredient.ingredient.isFish()) {
+          return true;
+        }
+      } else if (recipeIngredient.recipe) {
+        if (recipeIngredient.recipe.isFish()) {
+          return true;
+        }
       }
     }
     return false;
   }
 
-  recipeIngredientsOption(option?: string): RecipeIngredientModel[] {
+  recipeIngredientsOption(option: DietTypeLabelEnum | string): RecipeIngredientModel[] {
     const recipeIngredients = [];
 
     for (const recipeIngredient of this.recipeIngredients) {

@@ -1,6 +1,6 @@
-import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '../enums';
-import { IngredientFormInterface, IngredientInterface } from '../interfaces';
-import { DateHelper, EnumHelper, slugify } from '../tools';
+import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '@enums';
+import { IngredientFormInterface, IngredientInterface } from '@interfaces';
+import { DateHelper, EnumHelper, slugify } from '@tools';
 
 
 export class IngredientModel implements IngredientInterface {
@@ -23,7 +23,7 @@ export class IngredientModel implements IngredientInterface {
   isLiquid: boolean | null;
 
   constructor(ingredient: IngredientInterface) {
-    this.id = ingredient.id;
+    this.id = ingredient.id ?? '';
     this.name = ingredient.name?.trim() ?? '';
     this.slug = ingredient.slug ?? '';
     this.type = ingredient.type ?? '';
@@ -56,11 +56,12 @@ export class IngredientModel implements IngredientInterface {
     return this.name.search(regexName) > -1 || this.slug.search(regexSlug) > -1;
   }
 
-  hydrate(ingredient: IngredientInterface) {
+  hydrate(ingredient: IngredientInterface): IngredientModel {
     this.name = ingredient.name ?? '';
     this.slug = ingredient.slug ?? '';
     this.type = ingredient.type ?? '';
     this.isLiquid = ingredient.isLiquid || null;
+    return this;
   }
 
   isVege(): boolean {
@@ -102,7 +103,6 @@ export class IngredientModel implements IngredientInterface {
   }
 
   isSeason(): boolean {
-
     if (IngredientTypes.get(this.type) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms && this.monthBegin && this.monthEnd) {
       const date = new Date();
       let monthCurrent = date.getMonth() + 1;

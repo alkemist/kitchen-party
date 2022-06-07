@@ -1,4 +1,4 @@
-import { KeyLabelInterface } from '../interfaces';
+import { KeyLabelInterface } from '@interfaces';
 import { ArrayHelper } from './array.helper';
 
 export abstract class EnumHelper {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IngredientModel, KitchenIngredientModel, RecipeModel } from '../../../models';
-import { KeyLabelInterface } from '../../../interfaces';
+import { IngredientModel, KitchenIngredientModel, RecipeModel } from '@models';
+import { KeyLabelInterface } from '@interfaces';
 
 @Component({
   selector: 'app-form-kitchen-ingredient',

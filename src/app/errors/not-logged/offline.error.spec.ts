@@ -1,7 +1,7 @@
-import { OfflineError } from './offline.error';
+import { OfflineError } from '@app/errors';
 
 describe('OfflineError', () => {
-  describe('OfflineError.constructor', function () {
+  describe('OfflineError.constructor', () => {
     it('should construct', () => {
       expect(new OfflineError()).toBeDefined();
     });

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockProvider } from 'ng-mocks';
-import { KitchenIngredientService } from '../services';
+import { KitchenIngredientService } from '@services';
 import { KitchenResolver } from './kitchen.resolver';
 
 describe('KitchenResolver', () => {
@@ -17,7 +17,7 @@ describe('KitchenResolver', () => {
     kitchenServiceMock = TestBed.inject(KitchenIngredientService);
   });
 
-  describe('KitchenResolver.constructor', function () {
+  describe('KitchenResolver.constructor', () => {
     it('should construct', () => {
       expect(new KitchenResolver(kitchenServiceMock)).toBeDefined();
     });

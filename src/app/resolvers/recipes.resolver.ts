@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { RecipeModel } from '../models';
-import { RecipeService } from '../services';
+import { RecipeModel } from '@models';
+import { RecipeService } from '@services';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class RecipesResolver implements Resolve<RecipeModel[]> {
   constructor(private service: RecipeService) {
   }

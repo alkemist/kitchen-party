@@ -3,19 +3,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/layouts/header/header.component';
-import { AboutComponent } from './components/views/frontend/about/about.component';
-import { CalendarComponent } from './components/views/frontend/calendar/calendar.component';
-import { FrontRecipeComponent } from './components/views/frontend/recipe/front-recipe.component';
-import { FrontRecipesComponent } from './components/views/frontend/recipes/front-recipes.component';
-import { ShoppingComponent } from './components/views/frontend/shopping/shopping.component';
 import './app.database';
-import { ServicesModule } from './modules/services.module';
-import { StoringModule } from './modules/storing.module';
-import { TranslatorPipe } from './pipes/translator.pipe';
+import {
+  AboutComponent,
+  CalendarComponent,
+  FrontRecipeComponent,
+  FrontRecipesComponent,
+  HeaderComponent,
+  ShoppingComponent
+} from './components';
 import { RoutingModule } from './modules/routing.module';
+import { ServicesModule } from './modules/services.module';
 import { SharingModule } from './modules/sharing.module';
+import { StoringModule } from './modules/storing.module';
 import { TranslatingRootModule } from './modules/translating.module';
+import { TranslatorPipe } from './pipes';
 
 @NgModule({
   declarations: [

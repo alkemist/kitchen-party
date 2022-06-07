@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IngredientTypeLabelEnum } from '@enums';
+import { IngredientInterface } from '@interfaces';
+import { IngredientModel } from '@models';
+import { IngredientService, TranslatorService } from '@services';
+import { EnumHelper, slugify } from '@tools';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { IngredientTypeLabelEnum } from '../../../enums';
-import { IngredientInterface } from '../../../interfaces';
-import { IngredientModel } from '../../../models';
-import { IngredientService, TranslatorService } from '../../../services';
-import { EnumHelper, slugify } from '../../../tools';
 
 @Component({
   selector: 'app-dialog-ingredient',

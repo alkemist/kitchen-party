@@ -1,16 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToolbarFilters } from '@app/components';
+import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '@enums';
+import { IngredientModel, RecipeModel } from '@models';
+import { FilteringService, IngredientService, RecipeService, ShoppingService, TranslatorService } from '@services';
 import { Subscription } from 'rxjs';
-import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '../../../../enums';
-import { IngredientModel, RecipeModel } from '../../../../models';
-import {
-  FilteringService,
-  IngredientService,
-  RecipeService,
-  ShoppingService,
-  TranslatorService
-} from '../../../../services';
-import { ToolbarFilters } from '../../../layouts/header/header.component';
 
 @Component({
   selector: 'app-front-recipes',
@@ -98,6 +92,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.recipeService.getListOrRefresh().then(recipes => {
       this.recipes = recipes;
       this.filteredRecipes = recipes;
+      this.filter(this.filteringService.getFilters().value);
       this.loading = false;
       this.filter(this.filteringService.getFilters().value);
     });

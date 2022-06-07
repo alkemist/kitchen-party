@@ -6,20 +6,60 @@
     "outDir": "./out-tsc/app",
     "types": [],
     "paths": {
-      "@components/(.*)": ["src/app/components/$1"],
-      "@converters/(.*)": ["src/app/converters/$1"],
-      "@enums/(.*)": ["src/app/enums/$1"],
-      "@errors/(.*)": ["src/app/models/$1"],
-      "@guards/(.*)": ["src/app/guards/$1"],
-      "@handlers/(.*)": ["src/app/handlers/$1"],
-      "@interfaces/(.*)": ["src/app/models/$1"],
-      "@models/(.*)": ["src/app/models/$1"],
-      "@modules/(.*)": ["src/app/modules/$1"],
-      "@resolvers/(.*)": ["src/app/resolvers/$1"],
-      "@services/(.*)": ["src/app/services/$1"],
-      "@stores/(.*)": ["src/app/stores/$1"],
-      "@tools/(.*)": ["src/app/tools/$1"],
-      "@validators/(.*)": ["src/app/tools/$1"]
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@components": [
+        "src/app/components"
+      ],
+      "@consts": [
+        "src/app/consts"
+      ],
+      "@converters": [
+        "src/app/converters"
+      ],
+      "@enums": [
+        "src/app/enums"
+      ],
+      "@errors": [
+        "src/app/errors"
+      ],
+      "@guards": [
+        "src/app/guards"
+      ],
+      "@handlers": [
+        "src/app/handlers"
+      ],
+      "@interfaces": [
+        "src/app/interfaces"
+      ],
+      "@mocks": [
+        "src/app/mocks"
+      ],
+      "@models": [
+        "src/app/models"
+      ],
+      "@modules": [
+        "src/app/modules"
+      ],
+      "@pipes": [
+        "src/app/pipes"
+      ],
+      "@resolvers": [
+        "src/app/resolvers"
+      ],
+      "@services": [
+        "src/app/services"
+      ],
+      "@stores": [
+        "src/app/stores"
+      ],
+      "@tools": [
+        "src/app/tools"
+      ],
+      "@validators": [
+        "src/app/validators"
+      ]
     }
   },
   "files": [

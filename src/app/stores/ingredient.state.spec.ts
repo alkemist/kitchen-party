@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { IngredientInterface } from '@interfaces';
+import { dateMock } from '@mocks';
 import { NgxsModule, Store } from '@ngxs/store';
-import { IngredientInterface } from '../interfaces';
-import { dateMock } from '../mocks/date.mock';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 import { IngredientState } from './ingredient.state';
 

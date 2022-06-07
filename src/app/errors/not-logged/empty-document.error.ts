@@ -1,4 +1,4 @@
-import { DataObjectInterface } from '../../interfaces';
+import { DataObjectInterface } from '@interfaces';
 
 export class EmptyDocumentError<T extends DataObjectInterface> extends Error {
   private readonly collectionName: string;

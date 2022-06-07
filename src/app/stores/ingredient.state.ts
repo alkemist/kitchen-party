@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { IngredientTypeLabelEnum, IngredientTypes } from '@enums';
+import { IngredientInterface } from '@interfaces';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { IngredientTypeLabelEnum, IngredientTypes } from '../enums';
-import { IngredientInterface } from '../interfaces';
 import { AddIngredient, FillIngredients, RemoveIngredient, UpdateIngredient } from './ingredient.action';
 
 export interface IngredientStateInterface {

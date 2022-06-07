@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MeasureUnitLabelEnum } from '../enums';
-import { CartElement } from '../interfaces/cart-element.interface';
-import { RecipeIngredientModel, RecipeModel } from '../models';
-import { KitchenIngredientService } from './kitchen.service';
-import { TranslatorService } from './translator.service';
+import { MeasureUnitLabelEnum } from '@enums';
+import { CartElement } from '@interfaces';
+import { RecipeIngredientModel, RecipeModel } from '@models';
+import { KitchenIngredientService, TranslatorService } from '@services';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +29,7 @@ export class ShoppingService {
     });
   }
 
-  async initIndexes() {
+  async initIndexes(): Promise<void> {
     const kitchenIngredients = await this.kitchenService.getListOrRefresh();
     this.kitchenIndexes = kitchenIngredients.map(kitchenIngredient => kitchenIngredient.ingredient?.id!);
   }
@@ -41,18 +40,16 @@ export class ShoppingService {
         if (recipeIngredient.recipe) {
           const subRecipe = recipeIngredient.recipe;
           for (const subRecipeIngredient of subRecipe.recipeIngredients) {
-            this.addToCart(subRecipeIngredient);
+            this.addToCart(subRecipeIngredient, recipeIngredient.quantity ?? 1);
           }
         } else {
           this.addToCart(recipeIngredient);
         }
       }
     }
-
-    this.cart = RecipeIngredientModel.orderRecipeIngredients(this.cart);
   }
 
-  private addToCart(recipeIngredient: RecipeIngredientModel) {
+  private addToCart(recipeIngredient: RecipeIngredientModel, multiplier: number = 1): void {
     let cartIndex = this.cartIndexes.indexOf(recipeIngredient.ingredient?.id!);
 
     if (cartIndex === -1) {
@@ -91,13 +88,13 @@ export class ShoppingService {
     if (quantityType === 'undefined') {
       this.cart[cartIndex].quantities[quantityType] = 1;
     } else {
-      this.cart[cartIndex].quantities[quantityType] += quantityInformations.count;
+      this.cart[cartIndex].quantities[quantityType] += quantityInformations.count * multiplier;
     }
   }
 
-  async mergeCart() {
+  async mergeCart(): Promise<void> {
     for (const cartElement of this.cart) {
-      if (this.kitchenIndexes.indexOf(cartElement.ingredient?.id!) > -1) {
+      if (this.kitchenIndexes.indexOf(cartElement.ingredient.id!) > -1) {
         cartElement.inKitchen = true;
       }
 

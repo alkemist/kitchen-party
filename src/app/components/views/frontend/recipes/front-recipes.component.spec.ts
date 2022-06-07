@@ -1,20 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FrontRecipesComponent } from './front-recipes.component';
+import { FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockModule, MockProvider } from 'ng-mocks';
+
+import { FrontRecipesComponent } from '@components';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  FilteringService,
-  IngredientService,
-  RecipeService,
-  ShoppingService,
-  TranslatorService
-} from '../../../../services';
+import { FilteringService, IngredientService, RecipeService, ShoppingService, TranslatorService } from '@services';
+import { MockModule, MockProvider } from 'ng-mocks';
+import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { TagModule } from 'primeng/tag';
-import { ButtonModule } from 'primeng/button';
-import { FormGroup } from '@angular/forms';
 
 describe('FrontRecipesComponent', () => {
   let component: FrontRecipesComponent;

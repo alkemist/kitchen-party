@@ -1,14 +1,24 @@
-import { IngredientModel } from '../models';
-import { IngredientTypeKeyEnum } from '../enums';
+import { IngredientTypeKeyEnum } from '@enums';
+import { IngredientModel } from '@models';
 
 export const ingredientVegetableMock = new IngredientModel({
   id: 'ingredientVegetableId1',
-  name: 'Ingredient Vegetable 1',
+  name: 'Fraise',
   slug: 'ingredient-vegetable-1',
   type: IngredientTypeKeyEnum.fruits_vegetables_mushrooms,
   isLiquid: false,
   monthBegin: 1,
   monthEnd: 3
+});
+
+export const ingredientVegetableOutOfSeasonMock = new IngredientModel({
+  id: 'ingredientVegetableId1',
+  name: 'Ingredient Vegetable 1',
+  slug: 'ingredient-vegetable-1',
+  type: IngredientTypeKeyEnum.fruits_vegetables_mushrooms,
+  isLiquid: false,
+  monthBegin: 10,
+  monthEnd: 1
 });
 
 export const ingredientLegumineMock = new IngredientModel({
@@ -41,4 +51,12 @@ export const ingredientVegetableFatMock = new IngredientModel({
   slug: 'ingredient-vegetable-fat-1',
   isLiquid: true,
   type: IngredientTypeKeyEnum.vegetable_fats
+});
+
+export const ingredientFishMock = new IngredientModel({
+  id: 'ingredientFishId4',
+  name: 'Ingredient Fish 1',
+  slug: 'ingredient-fish-1',
+  isLiquid: true,
+  type: IngredientTypeKeyEnum.fishes_seafoods
 });

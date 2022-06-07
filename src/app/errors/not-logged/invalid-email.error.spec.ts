@@ -1,7 +1,7 @@
-import { InvalidEmailError } from './invalid-email.error';
+import { InvalidEmailError } from '@app/errors';
 
 describe('InvalidEmailError', () => {
-  describe('InvalidEmailError.constructor', function () {
+  describe('InvalidEmailError.constructor', () => {
     it('should construct', () => {
       expect(new InvalidEmailError()).toBeDefined();
     });
