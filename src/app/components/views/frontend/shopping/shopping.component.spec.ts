@@ -38,11 +38,11 @@ describe('ShoppingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*describe('ShoppingComponent.cartOrderedByChecked', () => {
+  describe('ShoppingComponent.cartOrderedByChecked', () => {
 
   });
 
   describe('ShoppingComponent.ngOnInit', () => {
 
-  });*/
+  });
 });
