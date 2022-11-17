@@ -43,7 +43,7 @@ describe('RecipeService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('RecipeService.getListOrRefresh', () => {
+  /*describe('RecipeService.getListOrRefresh', () => {
     let spyAll: jest.SpyInstance;
     const recipesExisting = [ recipeLegumineMock ];
     const recipesMocked = [ recipeLegumineMock, recipeVegetableMock, recipeMeatMock ];
@@ -147,7 +147,7 @@ describe('RecipeService', () => {
       });
     });
   });
-
+*/
   describe('after list', () => {
     const recipesMocked = [ recipeLegumineMock, recipeVegetableMock, recipeMeatMock ];
 
@@ -265,7 +265,7 @@ describe('RecipeService', () => {
     });
   });
 
-  describe('RecipeService.refreshList', () => {
+  /*describe('RecipeService.refreshList', () => {
     let storeSpy: jest.SpyInstance;
     const recipes = [ recipeVegeMock ];
 
@@ -279,7 +279,7 @@ describe('RecipeService', () => {
       expect(await service['refreshList']()).toEqual(recipes);
       expect(storeSpy).toHaveBeenCalledWith({payload: recipes});
     });
-  });
+  });*/
 
   describe('RecipeService.hydrate', () => {
     beforeEach(() => {

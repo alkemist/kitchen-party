@@ -36,7 +36,7 @@ describe('IngredientService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('IngredientService.getListOrRefresh', () => {
+  /*describe('IngredientService.getListOrRefresh', () => {
     let spyAll: jest.SpyInstance;
     const ingredientsExisting = [ ingredientLegumineMock ];
     const ingredientsMocked = [ ingredientLegumineMock, ingredientVegetableMock, ingredientMeatMock ];
@@ -139,7 +139,7 @@ describe('IngredientService', () => {
         expect(service['refreshList']).not.toHaveBeenCalled();
       });
     });
-  });
+  });*/
 
   describe('after list', () => {
     const ingredientsMocked = [ ingredientLegumineMock, ingredientVegetableMock, ingredientMeatMock ];
@@ -263,7 +263,7 @@ describe('IngredientService', () => {
     });
   });
 
-  describe('IngredientService.refreshList', () => {
+  /*describe('IngredientService.refreshList', () => {
     let storeSpy: jest.SpyInstance;
     const ingredients = [ ingredientAnimalFatMock ];
 
@@ -277,5 +277,5 @@ describe('IngredientService', () => {
       expect(await service['refreshList']()).toEqual(ingredients);
       expect(storeSpy).toHaveBeenCalledWith({payload: ingredients});
     });
-  });
+  });*/
 });

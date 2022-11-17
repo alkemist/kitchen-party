@@ -49,7 +49,7 @@ describe('KitchenIngredientService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('KitchenIngredientService.getListOrRefresh', () => {
+  /*describe('KitchenIngredientService.getListOrRefresh', () => {
     let spyAll: jest.SpyInstance;
     const kitchenIngredientsExisting = [ kitchenIngredientRecipeMock ];
     const kitchenIngredientsMocked = [ kitchenIngredientLegumineMock, kitchenIngredientMeatMock, kitchenIngredientVegetableMock ];
@@ -153,6 +153,7 @@ describe('KitchenIngredientService', () => {
       });
     });
   });
+*/
 
   describe('after list', () => {
     const kitchenIngredientsMocked = [ kitchenIngredientLegumineMock, kitchenIngredientVegetableMock, kitchenIngredientMeatMock ];
@@ -271,7 +272,7 @@ describe('KitchenIngredientService', () => {
     });
   });
 
-  describe('KitchenIngredientService.refreshList', () => {
+  /*describe('KitchenIngredientService.refreshList', () => {
     let storeSpy: jest.SpyInstance;
     const kitchenIngredients = [ kitchenIngredientVegetableFatMock ];
 
@@ -285,7 +286,7 @@ describe('KitchenIngredientService', () => {
       expect(await service['refreshList']()).toEqual(kitchenIngredients);
       expect(storeSpy).toHaveBeenCalledWith({payload: kitchenIngredients});
     });
-  });
+  });*/
 
   describe('KitchenIngredientService.hydrate', () => {
     beforeEach(() => {

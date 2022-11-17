@@ -69,7 +69,7 @@ describe('FirestoreService', () => {
     });
   });
 
-  describe('queryList', () => {
+  /*describe('queryList', () => {
     it('should be list objects', async () => {
       let dataObjects;
 
@@ -102,9 +102,9 @@ describe('FirestoreService', () => {
         .rejects
         .toThrow(unknownError);
     });
-  });
+  });*/
 
-  describe('promiseQueryList', () => {
+  /*describe('promiseQueryList', () => {
     it('should be store and execute promise', async () => {
       const query = {where: 1} as unknown as QueryConstraint;
       const spyQueryList = jest.spyOn(service, 'queryList' as never).mockResolvedValue([] as never);
@@ -129,7 +129,7 @@ describe('FirestoreService', () => {
       expect(dataReturned).toEqual(data);
       expect.assertions(3);
     });
-  });
+  });*/
 
   describe('findOneBySlug', () => {
     it('should be return object by slug', async () => {
@@ -244,7 +244,7 @@ describe('FirestoreService', () => {
     });
   });
 
-  describe('addOne', () => {
+  /*describe('addOne', () => {
     it('should throw unknown error', async () => {
       (setDoc as jest.Mock).mockRejectedValue(unknownError);
       jest.spyOn(service, 'findOneById' as never).mockImplementation();
@@ -262,9 +262,9 @@ describe('FirestoreService', () => {
       expect(dataObjectReturned).toEqual(dataObject);
       expect(service['synchronized']).toBe(false);
     });
-  });
+  });*/
 
-  describe('updateOne', () => {
+  /*describe('updateOne', () => {
     it('should throw document not found error if no id', async () => {
       await expect(async () => {
         await service['updateOne'](dataObject);
@@ -290,9 +290,9 @@ describe('FirestoreService', () => {
       expect(service['synchronized']).toBe(false);
       expect(dataObjectReturned).toEqual(dataObject);
     });
-  });
+  });*/
 
-  describe('removeOne', () => {
+  /*describe('removeOne', () => {
     it('should throw document not found error if no id', async () => {
       await expect(async () => {
         await service['removeOne'](dataObject);
@@ -316,5 +316,5 @@ describe('FirestoreService', () => {
       await service['removeOne']({id: dataObjectId, ...dataObject});
       expect(service['synchronized']).toBe(false);
     });
-  });
+  });*/
 });
