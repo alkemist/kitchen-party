@@ -50,7 +50,7 @@
 			<p-dropdown [autoDisplayFirst]="false" [options]="sweetOrSalty"
                   [showClear]="true" formControlName="sweetOrSalty"
                   optionValue="key"></p-dropdown>
-				<label for="float-input" translate="">Sweet / Salty</label>
+      <label for="float-input" translate="">Sweet / Salty</label>
 		</span>
     <span class="p-float-label">
       <p-multiSelect [autofocusFilter]="true"
@@ -60,6 +60,10 @@
                      formControlName="ingredients" optionLabel="name" optionValue="id">
       </p-multiSelect>
       <label for="float-input" translate="">Ingredients</label>
+    </span>
+    <span class="p-float-label">
+      <input id="nbSlices" type="number" pInputText formControlName="nbSlices">
+      <label for="nbSlices" translate="">Slices</label>
     </span>
     <span class="p-float-label">
       <p-toggleButton [offLabel]="'In season' | translate" [onLabel]="'In season' | translate"

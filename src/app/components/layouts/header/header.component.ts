@@ -19,6 +19,7 @@ export interface ToolbarFilters {
   type: string,
   name: string,
   sweetOrSalty: string,
+  nbSlices: number | null,
   isSeason: boolean,
   ingredients: string[]
 }
@@ -61,6 +62,7 @@ export class HeaderComponent implements OnInit {
       diet: new FormControl(null, []),
       type: new FormControl(null, []),
       name: new FormControl(null, []),
+      nbSlices: new FormControl(null, []),
       sweetOrSalty: new FormControl(null, []),
       isSeason: new FormControl(false, []),
       ingredients: new FormControl([], []),
@@ -144,6 +146,7 @@ export class HeaderComponent implements OnInit {
       diet: '',
       type: '',
       sweetOrSalty: '',
+      nbSlices: null,
       isSeason: false,
       ingredients: []
     } as ToolbarFilters);

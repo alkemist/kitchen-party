@@ -9,7 +9,7 @@
       <div class="media">
         <div *ngIf="recipe.imagePath"
              [style.background-image]="recipe.imagePath ? 'url(' + recipe.imagePath + ')' : ''"
-             class="center-cropped"><img [src]="recipe.imagePath ? recipe.imagePath : ''"/></div>
+             class="center-cropped"><img [alt]="recipe.name" [src]="recipe.imagePath ? recipe.imagePath : ''"/></div>
       </div>
       <div class="informations flex flex-column justify-content-between">
         <div class="flex flex-row justify-content-between">
@@ -54,10 +54,10 @@
             <i class="material-icons">inventory</i>
             {{ recipe.recipeIngredients.length }}
           </div>
-          <button (click)="gotoRecipe(recipe)" [pTooltip]="'View recipe' | translate" class="p-button-rounded"
+          <a [routerLink]="gotoRecipe(recipe)" [pTooltip]="'View recipe' | translate" class="p-button-rounded"
                   icon="pi pi-eye"
                   pButton pRipple
-                  tooltipPosition="bottom"></button>
+                  tooltipPosition="bottom"></a>
         </div>
       </div>
     </div>

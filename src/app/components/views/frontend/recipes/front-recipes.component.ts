@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToolbarFilters } from '@app/components';
 import { DietTypes, RecipeTypes, SweetSalty, SweetSaltyLabelEnum } from '@enums';
 import { IngredientModel, RecipeModel } from '@models';
@@ -27,8 +26,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     private ingredientService: IngredientService,
     private filteringService: FilteringService,
     private shoppingService: ShoppingService,
-    private translatorService: TranslatorService,
-    private router: Router
+    private translatorService: TranslatorService
   ) {
   }
 
@@ -41,7 +39,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   }
 
   filter(filters: ToolbarFilters) {
-    this.fillFilterSummary(filters);
+    void this.fillFilterSummary(filters);
     let recipes: RecipeModel[] = this.recipes;
 
     if (filters.diet) {
@@ -63,6 +61,9 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       }
       if (valid && filters.type) {
         valid = recipe.type! && recipe.type === filters.type;
+      }
+      if (valid && filters.nbSlices) {
+        valid = recipe.nbSlices !== undefined && recipe.nbSlices >= filters.nbSlices;
       }
       if (valid && filters.sweetOrSalty) {
         valid = recipe.isSweet() && SweetSalty.get(filters.sweetOrSalty) === SweetSaltyLabelEnum.sweet
@@ -109,8 +110,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     if (this.filteringService.getFilters().get('diet')?.value) {
       route.push(this.filteringService.getFilters().get('diet')?.value);
     }
-
-    this.router.navigate(route);
+    return route;
   }
 
   private async fillFilterSummary(filters: ToolbarFilters) {
@@ -122,24 +122,35 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
         value: `${ await this.translatorService.instant('Name contain') } "${ filters.name }"`
       });
     }
+
     if (filters.diet) {
       this.filterSummary.push({
         key: 'diet',
         value: await this.translatorService.instant(DietTypes.get(filters.diet)!)
       });
     }
+
     if (filters.type) {
       this.filterSummary.push({
         key: 'type',
         value: await this.translatorService.instant(RecipeTypes.get(filters.type)!)
       });
     }
+
+    if (filters.nbSlices) {
+      this.filterSummary.push({
+        key: 'nbSlices',
+        value: `${ filters.nbSlices.toString() } ${ await this.translatorService.instant('Slices') }`
+      });
+    }
+
     if (filters.sweetOrSalty) {
       this.filterSummary.push({
         key: 'sweetOrSalty',
         value: await this.translatorService.instant(SweetSalty.get(filters.sweetOrSalty)!)
       });
     }
+
     if (filters.ingredients && filters.ingredients.length > 0) {
       const ingredients: string[] = [];
       for (const ingredientId of filters.ingredients) {
@@ -151,6 +162,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
         value: ingredients.join(', ')
       });
     }
+
     if (filters.isSeason) {
       this.filterSummary.push({
         key: 'isSeason',

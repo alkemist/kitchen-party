@@ -206,14 +206,12 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
 
   /** La variable "all" n'est plus à jour et doit être rechargé */
   protected invalidLocalData() {
-    console.info(`-- [${this.collectionName}] Invalid local data`);
     this.loaded = false;
   }
 
   /** Le store n'est plus à jour, et doit être rechargé */
   protected invalidStore() {
     this.invalidLocalData();
-    console.info(`-- [${this.collectionName}] Invalid store`);
     this.lastUpdated = undefined;
   }
 }
