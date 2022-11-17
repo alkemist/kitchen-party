@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngredientTypeLabelEnum } from '@enums';
@@ -16,7 +16,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     class: 'page-container'
   }
 })
-export class IngredientComponent implements OnInit {
+export class IngredientComponent implements OnInit, AfterViewChecked {
   ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
@@ -31,6 +31,7 @@ export class IngredientComponent implements OnInit {
     private translatorService: TranslatorService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -53,6 +54,10 @@ export class IngredientComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.ingredientTypes = await this.translatorService.translateLabels(this.ingredientTypes);
     this.loadData();
+  }
+
+  ngAfterViewChecked(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   loadData() {

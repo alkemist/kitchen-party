@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogIngredientComponent } from '@components';
@@ -19,7 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     class: 'page-container'
   }
 })
-export class RecipeComponent implements OnInit {
+export class RecipeComponent implements OnInit, AfterViewChecked {
   recipe = new RecipeModel({});
   DietTypeEnum = DietTypeLabelEnum;
   recipeTypes: KeyLabelInterface[] = [];
@@ -47,6 +47,7 @@ export class RecipeComponent implements OnInit {
     private dialogService: DialogService,
     private filterService: FilterService,
     private uploadService: UploadService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -117,6 +118,10 @@ export class RecipeComponent implements OnInit {
         }
         this.loading = false;
       }));
+  }
+
+  ngAfterViewChecked(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   async loadData(recipe: RecipeModel) {

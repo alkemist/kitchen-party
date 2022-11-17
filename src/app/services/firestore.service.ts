@@ -20,26 +20,14 @@ import { Observable } from 'rxjs';
 
 
 export abstract class FirestoreService<T extends DataObjectInterface> {
+  // Heritage du selecteur du store
   protected lastUpdated$?: Observable<Date>;
+  // Heritage du selecteur du store
   protected all$?: Observable<T[]>;
+
   protected lastUpdated?: Date;
-  /**
-   * True : La liste a été mis à jour
-   * False : la liste n'a pas été encore mis à jour
-   * @protected
-   */
-  protected refreshed = false;
-  /**
-   * True : Un élément a été modifié, la liste doit être mise à jour
-   * False : La liste est synchronisé
-   * @protected
-   */
-  protected synchronized = false;
-  /**
-   * Liste des requètes en cours, la clé étant la signature de la requète
-   * @protected
-   */
-  protected promises: { [key: string]: Promise<T[]> | null } = {};
+
+  protected loaded: boolean = false;
 
   private readonly collectionName: string;
   private readonly converter: FirestoreDataConverter<T>;
@@ -94,22 +82,6 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     return !!dataObjectDocument;
   }
 
-  protected async promiseQueryList(...queryConstraints: QueryConstraint[]): Promise<T[]> {
-    const sign = JSON.stringify(queryConstraints);
-    if (!this.promises[sign]) {
-      this.promises[sign] = this.queryList(...queryConstraints);
-    }
-
-    return new Promise<T[]>((resolve, reject) => {
-      this.promises[sign]!.then(documents => {
-        delete this.promises[sign];
-        resolve(documents);
-      }).catch(e => {
-        reject(e);
-      });
-    });
-  }
-
   protected async findOneById(id: string): Promise<T> {
     let docSnapshot;
     try {
@@ -137,7 +109,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     let list: T[] = [];
 
     try {
-      list = await this.promiseQueryList(where('slug', '==', slug));
+      list = await this.queryList(where('slug', '==', slug));
     } catch (e) {
       this.loggerService.error(new DatabaseError((e as Error).message, {slug}));
     }
@@ -145,7 +117,6 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     if (list.length === 0) {
       throw new DocumentNotFoundError<T>(this.collectionName, {slug} as T);
     }
-
     return list[0];
   }
 
@@ -156,7 +127,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       const ref = doc(this.ref, id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.synchronized = false;
+      this.invalidLocalData();
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -172,7 +143,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await setDoc(ref, document);
-      this.synchronized = false;
+      this.invalidLocalData();
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
@@ -187,31 +158,41 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       const ref = doc(this.ref, document.id).withConverter(this.converter);
       await deleteDoc(ref);
-      this.synchronized = false;
+      this.invalidLocalData();
     } catch (error) {
       this.loggerService.error(new DatabaseError((error as Error).message, document));
     }
   }
 
-  private async queryList(...queryConstraints: QueryConstraint[]): Promise<T[]> {
+  /**
+   * On récupère la liste des documents
+   * @param queryConstraints
+   * @private
+   */
+  protected async queryList(...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const q = query(this.ref, ...queryConstraints).withConverter(this.converter);
     const documents: T[] = [];
+
     try {
       const querySnapshot = await getDocs(q);
+
       querySnapshot.forEach((doc) => {
         const document = doc.data();
         document.id = doc.id;
         documents.push(document);
       });
+
     } catch (e) {
       const er = e as Error;
+
       if (er.message === 'Quota exceeded.') {
         this.loggerService.error(new QuotaExceededError());
       } else {
         throw e;
       }
     }
-    this.refreshed = true;
+
+    // this.refreshed = true;
     return documents;
   }
 
@@ -221,5 +202,18 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     }
 
     document.slug = slugify(document.name);
+  }
+
+  /** La variable "all" n'est plus à jour et doit être rechargé */
+  protected invalidLocalData() {
+    console.info(`-- [${this.collectionName}] Invalid local data`);
+    this.loaded = false;
+  }
+
+  /** Le store n'est plus à jour, et doit être rechargé */
+  protected invalidStore() {
+    this.invalidLocalData();
+    console.info(`-- [${this.collectionName}] Invalid store`);
+    this.lastUpdated = undefined;
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { recipeConverter } from '@converters';
 import { DocumentNotFoundError } from '@errors';
-import { KeyLabelInterface, RecipeInterface } from '@interfaces';
-import { RecipeModel } from '@models';
+import {KeyLabelInterface, RecipeInterface} from '@interfaces';
+import {RecipeModel} from '@models';
 import { Select, Store } from '@ngxs/store';
 import { FirestoreService, IngredientService, LoggerService } from '@services';
-import { AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe } from '@stores';
+import {AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe} from '@stores';
 import { ArrayHelper } from '@tools';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
@@ -16,12 +16,13 @@ import { first, Observable } from 'rxjs';
 export class RecipeService extends FirestoreService<RecipeInterface> {
   customMeasures: KeyLabelInterface[] = [];
   @Select(RecipeState.lastUpdated) protected override lastUpdated$?: Observable<Date>;
-  @Select(RecipeState.all) protected override all$?: Observable<RecipeInterface[]>;
 
+  // Données du store
+  @Select(RecipeState.all) protected override all$?: Observable<RecipeInterface[]>;
   @Select(RecipeState.customMeasure) private customMeasures$?: Observable<KeyLabelInterface[]>;
 
+  // Données du service
   private all: RecipeModel[] = [];
-  private promise: Promise<RecipeModel[]> | undefined;
 
   constructor(private logger: LoggerService, private store: Store, private ingredientService: IngredientService) {
     super(logger, 'recipe', recipeConverter);
@@ -31,36 +32,40 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   }
 
   async getListOrRefresh(): Promise<RecipeModel[]> {
-    if (this.promise) {
-      return this.promise;
-    }
-
-    if ((this.all.length > 0 || this.refreshed) && this.synchronized) {
-      return this.all;
-    }
-
-    this.promise = new Promise<RecipeModel[]>((resolve) => {
-      if (this.getAll$()) {
-        this.getAll$()?.pipe(first()).subscribe(async recipes => {
-          if (recipes.length === 0 && !this.refreshed || this.storeIsOutdated()) {
-            recipes = await this.refreshList();
-          }
-
-          this.all = [];
-          for (const recipe of recipes) {
-            const recipeModel = new RecipeModel(recipe);
-            await this.hydrate(recipeModel, recipes);
-            this.all.push(recipeModel);
-          }
-          this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
-          this.synchronized = true;
-          resolve(this.all);
-        });
-      } else {
+    return new Promise<RecipeModel[]>(async resolve => {
+      // Si les données ont déjà été chargé dans le service
+      if (this.loaded) {
         resolve(this.all);
       }
+      // Sinon, si des données à jour sont dans le store
+      else if (this.all$ && !this.storeIsOutdated()) {
+
+        this.getAll$()?.pipe(first()).subscribe(async recipes => {
+          resolve(this.refreshList(recipes));
+        })
+
+      }
+      // Sinon on rafraichit le store
+      else {
+        const recipes = await super.queryList(orderBy('name'));
+        this.store.dispatch(new FillRecipes(recipes));
+
+        resolve(this.refreshList(recipes));
+      }
     });
-    return this.promise;
+  }
+
+  async refreshList(recipes: RecipeInterface[]): Promise<RecipeModel[]> {
+    this.all = [];
+    for (const recipe of recipes) {
+      const recipeModel = new RecipeModel(recipe);
+      await this.hydrate(recipeModel, recipes);
+      this.all.push(recipeModel);
+    }
+    this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
+    this.loaded = true;
+
+    return this.all;
   }
 
   async search(query: string): Promise<RecipeModel[]> {
@@ -95,7 +100,10 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     if (!recipe) {
       try {
         let recipeData = await super.findOneBySlug(slug);
-        return new RecipeModel(this.addToStore(recipeData));
+        await this.addToStore(recipeData);
+        this.invalidLocalData();
+
+        return new RecipeModel(recipeData);
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
           return undefined;
@@ -123,13 +131,6 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
 
   override async exist(name: string): Promise<boolean> {
     return await super.exist(name);
-  }
-
-  private async refreshList(): Promise<RecipeInterface[]> {
-    const recipes = await super.promiseQueryList(orderBy('name'));
-
-    this.store.dispatch(new FillRecipes(recipes));
-    return recipes;
   }
 
   private addToStore(recipe: RecipeInterface): RecipeInterface {
