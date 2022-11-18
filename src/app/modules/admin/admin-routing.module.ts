@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {
   IngredientComponent,
   IngredientsComponent,
@@ -8,15 +8,13 @@ import {
   RecipeComponent,
   RecipesComponent
 } from '@components';
-import { LoggedGuard } from '@guards';
-import { IngredientResolver, KitchenResolver, RecipeResolver } from '@resolvers';
+import {IngredientResolver, KitchenResolver, RecipeResolver} from '@resolvers';
 
 const routes: Routes = [
   {path: '', redirectTo: '/admin/recipes', pathMatch: 'full'},
   {
     path: 'ingredients',
     component: IngredientsComponent,
-    canActivate: [ LoggedGuard ],
     data: {title: 'Ingredients'}
   },
   {
@@ -35,7 +33,6 @@ const routes: Routes = [
   {
     path: 'recipes',
     component: RecipesComponent,
-    canActivate: [ LoggedGuard ],
     data: {title: 'Recipes'}
   },
   {
@@ -44,19 +41,16 @@ const routes: Routes = [
     resolve: {
       recipe: RecipeResolver
     },
-    canActivate: [ LoggedGuard ],
     data: {title: 'Recipe'},
   },
   {
     path: 'recipe',
     component: RecipeComponent,
-    canActivate: [ LoggedGuard ],
     data: {title: 'Recipe'},
   },
   {
     path: 'kitchen-ingredients',
     component: KitchenIngredientsComponent,
-    canActivate: [ LoggedGuard ],
     data: {title: 'Kitchen ingredients'}
   },
   {
@@ -65,13 +59,11 @@ const routes: Routes = [
     resolve: {
       kitchenIngredient: KitchenResolver
     },
-    canActivate: [ LoggedGuard ],
     data: {title: 'Kitchen ingredient'},
   },
   {
     path: 'kitchen-ingredient',
     component: KitchenIngredientComponent,
-    canActivate: [ LoggedGuard ],
     data: {title: 'Kitchen ingredient'},
   },
 ];

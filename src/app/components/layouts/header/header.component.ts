@@ -84,7 +84,13 @@ export class HeaderComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.router.events.subscribe((route: any) => {
       if (route instanceof RoutesRecognized) {
-        const routeData = route.state.root.firstChild?.data;
+        let routeData = route.state.root.firstChild?.data as Record<string, any>;
+
+        // Submodule route data
+        if (Object.keys(routeData).length === 0) {
+          routeData = route.state.root.children[0].children[0].data;
+        }
+
         if (routeData && typeof routeData !== 'undefined') {
           this.initVariables(routeData);
         }
