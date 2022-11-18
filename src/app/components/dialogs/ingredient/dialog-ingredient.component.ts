@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IngredientTypeLabelEnum } from '@enums';
-import { IngredientInterface } from '@interfaces';
-import { IngredientModel } from '@models';
-import { IngredientService, TranslatorService } from '@services';
-import { EnumHelper, slugify } from '@tools';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {IngredientTypeLabelEnum} from '@enums';
+import {IngredientInterface} from '@interfaces';
+import {IngredientModel} from '@models';
+import {IngredientService, TranslatorService} from '@services';
+import {EnumHelper, slugify} from '@tools';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-dialog-ingredient',
   templateUrl: './dialog-ingredient.component.html',
-  styleUrls: [ './dialog-ingredient.component.scss' ]
+  styleUrls: ['./dialog-ingredient.component.scss']
 })
 export class DialogIngredientComponent implements OnInit {
   ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
-  form: FormGroup = new FormGroup({});
+  form: UntypedFormGroup = new UntypedFormGroup({});
   loading = false;
   error: string = '';
 
@@ -27,22 +27,22 @@ export class DialogIngredientComponent implements OnInit {
     private messageService: MessageService,
     private ref: DynamicDialogRef
   ) {
-    this.form = new FormGroup({
-      name: new FormControl('', [
+    this.form = new UntypedFormGroup({
+      name: new UntypedFormControl('', [
         Validators.required
       ]),
-      type: new FormControl('', [
+      type: new UntypedFormControl('', [
         Validators.required,
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeLabelEnum)))
       ]),
-      isLiquid: new FormControl('', []),
-      dateBegin: new FormControl('', []),
-      dateEnd: new FormControl('', []),
+      isLiquid: new UntypedFormControl('', []),
+      dateBegin: new UntypedFormControl('', []),
+      dateEnd: new UntypedFormControl('', []),
     });
   }
 
-  get name(): FormControl {
-    return this.form?.get('name') as FormControl;
+  get name(): UntypedFormControl {
+    return this.form?.get('name') as UntypedFormControl;
   }
 
   async ngOnInit() {

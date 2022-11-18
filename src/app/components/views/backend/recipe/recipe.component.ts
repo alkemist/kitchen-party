@@ -1,20 +1,20 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogIngredientComponent } from '@components';
-import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '@enums';
-import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '@interfaces';
-import { IngredientModel, RecipeIngredientModel, RecipeModel } from '@models';
-import { IngredientService, RecipeService, SearchService, TranslatorService, UploadService } from '@services';
-import { EnumHelper, slugify } from '@tools';
-import { recipeIngredientValidator } from '@validators';
-import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DialogIngredientComponent} from '@components';
+import {DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum} from '@enums';
+import {KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface} from '@interfaces';
+import {IngredientModel, RecipeIngredientModel, RecipeModel} from '@models';
+import {IngredientService, RecipeService, SearchService, TranslatorService, UploadService} from '@services';
+import {EnumHelper, slugify} from '@tools';
+import {recipeIngredientValidator} from '@validators';
+import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-back-recipe',
   templateUrl: './recipe.component.html',
-  styleUrls: [ './recipe.component.scss' ],
+  styleUrls: ['./recipe.component.scss'],
   host: {
     class: 'page-container'
   }
@@ -26,7 +26,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   measureUnits: KeyLabelInterface[] = [];
   unitsOrMeasures: KeyLabelInterface[] = [];
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
-  form: FormGroup = new FormGroup({});
+  form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
   uploading = false;
   error: string = '';
@@ -49,60 +49,60 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
     private uploadService: UploadService,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
-    this.form = new FormGroup({
-      name: new FormControl('', [
+    this.form = new UntypedFormGroup({
+      name: new UntypedFormControl('', [
         Validators.required
       ]),
-      type: new FormControl('', []),
-      image: new FormControl('', []),
-      imagePath: new FormControl('', []),
-      source: new FormControl('', []),
-      cookingDuration: new FormControl('', []),
-      preparationDuration: new FormControl('', []),
-      waitingDuration: new FormControl('', []),
-      nbSlices: new FormControl('', []),
-      recipeIngredientForms: new FormArray([ RecipeComponent.createRecipeIngredient() ], []),
-      instructions: new FormArray([ RecipeComponent.createInstructionRow() ], [])
+      type: new UntypedFormControl('', []),
+      image: new UntypedFormControl('', []),
+      imagePath: new UntypedFormControl('', []),
+      source: new UntypedFormControl('', []),
+      cookingDuration: new UntypedFormControl('', []),
+      preparationDuration: new UntypedFormControl('', []),
+      waitingDuration: new UntypedFormControl('', []),
+      nbSlices: new UntypedFormControl('', []),
+      recipeIngredientForms: new UntypedFormArray([RecipeComponent.createRecipeIngredient()], []),
+      instructions: new UntypedFormArray([RecipeComponent.createInstructionRow()], [])
     });
   }
 
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
+  get name(): UntypedFormControl {
+    return this.form.get('name') as UntypedFormControl;
   }
 
-  get image(): FormControl {
-    return this.form.get('image') as FormControl;
+  get image(): UntypedFormControl {
+    return this.form.get('image') as UntypedFormControl;
   }
 
-  get imagePath(): FormControl {
-    return this.form.get('imagePath') as FormControl;
+  get imagePath(): UntypedFormControl {
+    return this.form.get('imagePath') as UntypedFormControl;
   }
 
-  get type(): FormControl {
-    return this.form.get('type') as FormControl;
+  get type(): UntypedFormControl {
+    return this.form.get('type') as UntypedFormControl;
   }
 
-  get recipeIngredients(): FormArray {
-    return this.form.get('recipeIngredientForms') as FormArray;
+  get recipeIngredients(): UntypedFormArray {
+    return this.form.get('recipeIngredientForms') as UntypedFormArray;
   }
 
-  get instructionRows(): FormArray {
-    return this.form.get('instructions') as FormArray;
+  get instructionRows(): UntypedFormArray {
+    return this.form.get('instructions') as UntypedFormArray;
   }
 
-  private static createRecipeIngredient(): FormGroup {
-    return new FormGroup({
-      quantity: new FormControl('', []),
-      unitOrMeasure: new FormControl('', []),
-      ingredientOrRecipe: new FormControl('', [ Validators.required ]),
-      optionCarne: new FormControl('', []),
-      optionVege: new FormControl('', []),
-      optionVegan: new FormControl('', []),
-    }, [ recipeIngredientValidator() ]);
+  private static createRecipeIngredient(): UntypedFormGroup {
+    return new UntypedFormGroup({
+      quantity: new UntypedFormControl('', []),
+      unitOrMeasure: new UntypedFormControl('', []),
+      ingredientOrRecipe: new UntypedFormControl('', [Validators.required]),
+      optionCarne: new UntypedFormControl('', []),
+      optionVege: new UntypedFormControl('', []),
+      optionVegan: new UntypedFormControl('', []),
+    }, [recipeIngredientValidator()]);
   }
 
-  private static createInstructionRow(): FormControl {
-    return new FormControl('', [ Validators.required ]);
+  private static createInstructionRow(): UntypedFormControl {
+    return new UntypedFormControl('', [Validators.required]);
   }
 
   ngOnInit(): void {
@@ -267,8 +267,8 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  getFormGroupRecipeIngredient(i: number): FormGroup {
-    return this.recipeIngredients.at(i) as FormGroup;
+  getFormGroupRecipeIngredient(i: number): UntypedFormGroup {
+    return this.recipeIngredients.at(i) as UntypedFormGroup;
   }
 
   selectImage($event: { files: File[], currentFiles: File[] }) {

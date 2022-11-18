@@ -1,38 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserService } from '@services';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {UserService} from '@services';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: [ './login.component.scss' ],
+  styleUrls: ['./login.component.scss'],
   host: {
     class: 'page-container'
   }
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   error: string = '';
 
   constructor(private userService: UserService, private router: Router) {
-    this.form = new FormGroup({
-      email: new FormControl('', [
+    this.form = new UntypedFormGroup({
+      email: new UntypedFormControl('', [
         Validators.required,
         Validators.email,
       ]),
-      password: new FormControl('', [
+      password: new UntypedFormControl('', [
         Validators.required,
       ]),
     });
   }
 
-  get email(): FormControl {
-    return this.form.get('email') as FormControl;
+  get email(): UntypedFormControl {
+    return this.form.get('email') as UntypedFormControl;
   }
 
-  get password(): FormControl {
-    return this.form.get('password') as FormControl;
+  get password(): UntypedFormControl {
+    return this.form.get('password') as UntypedFormControl;
   }
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
 import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
 import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
@@ -58,14 +58,14 @@ export class HeaderComponent implements OnInit {
     this.ingredients$?.subscribe((ingredients: IngredientModel[]) => {
       this.ingredients = ingredients;
     });
-    this.filteringService.setFilters(new FormGroup({
-      diet: new FormControl(null, []),
-      type: new FormControl(null, []),
-      name: new FormControl(null, []),
-      nbSlices: new FormControl(null, []),
-      sweetOrSalty: new FormControl(null, []),
-      isSeason: new FormControl(false, []),
-      ingredients: new FormControl([], []),
+    this.filteringService.setFilters(new UntypedFormGroup({
+      diet: new UntypedFormControl(null, []),
+      type: new UntypedFormControl(null, []),
+      name: new UntypedFormControl(null, []),
+      nbSlices: new UntypedFormControl(null, []),
+      sweetOrSalty: new UntypedFormControl(null, []),
+      isSeason: new UntypedFormControl(false, []),
+      ingredients: new UntypedFormControl([], []),
     }));
   }
 

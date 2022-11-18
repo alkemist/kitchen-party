@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MeasureUnitLabelEnum, MeasureUnits } from '@enums';
-import { KitchenIngredientInterface, RecipeIngredientFormInterface } from '@interfaces';
-import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel } from '@models';
-import { KitchenIngredientService, RecipeService, SearchService, TranslatorService } from '@services';
-import { EnumHelper, slugify } from '@tools';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MeasureUnitLabelEnum, MeasureUnits} from '@enums';
+import {KitchenIngredientInterface, RecipeIngredientFormInterface} from '@interfaces';
+import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel} from '@models';
+import {KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
+import {EnumHelper, slugify} from '@tools';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-kitchen-ingredient',
   templateUrl: './kitchen-ingredient.component.html',
-  styleUrls: [ './kitchen-ingredient.component.scss' ],
+  styleUrls: ['./kitchen-ingredient.component.scss'],
   host: {
     class: 'page-container'
   }
@@ -21,7 +21,7 @@ export class KitchenIngredientComponent implements OnInit {
   measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
   ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
 
-  form: FormGroup = new FormGroup({});
+  form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
   error: string = '';
 
@@ -35,10 +35,10 @@ export class KitchenIngredientComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
   ) {
-    this.form = new FormGroup({
-      quantity: new FormControl('', []),
-      unitOrMeasure: new FormControl('', []),
-      ingredientOrRecipe: new FormControl('', [ Validators.required ]),
+    this.form = new UntypedFormGroup({
+      quantity: new UntypedFormControl('', []),
+      unitOrMeasure: new UntypedFormControl('', []),
+      ingredientOrRecipe: new UntypedFormControl('', [Validators.required]),
     });
   }
 

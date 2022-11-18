@@ -1,17 +1,17 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IngredientTypeLabelEnum } from '@enums';
-import { IngredientInterface } from '@interfaces';
-import { IngredientModel } from '@models';
-import { IngredientService, TranslatorService } from '@services';
-import { EnumHelper, slugify } from '@tools';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IngredientTypeLabelEnum} from '@enums';
+import {IngredientInterface} from '@interfaces';
+import {IngredientModel} from '@models';
+import {IngredientService, TranslatorService} from '@services';
+import {EnumHelper, slugify} from '@tools';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-back-ingredient',
   templateUrl: './ingredient.component.html',
-  styleUrls: [ './ingredient.component.scss' ],
+  styleUrls: ['./ingredient.component.scss'],
   host: {
     class: 'page-container'
   }
@@ -20,7 +20,7 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
   ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
 
-  form: FormGroup = new FormGroup({});
+  form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
   error: string = '';
 
@@ -33,22 +33,22 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
     private messageService: MessageService,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
-    this.form = new FormGroup({
-      name: new FormControl('', [
+    this.form = new UntypedFormGroup({
+      name: new UntypedFormControl('', [
         Validators.required
       ]),
-      type: new FormControl('', [
+      type: new UntypedFormControl('', [
         Validators.required,
         Validators.pattern(new RegExp(EnumHelper.enumToRegex(IngredientTypeLabelEnum)))
       ]),
-      isLiquid: new FormControl('', []),
-      dateBegin: new FormControl('', []),
-      dateEnd: new FormControl('', []),
+      isLiquid: new UntypedFormControl('', []),
+      dateBegin: new UntypedFormControl('', []),
+      dateEnd: new UntypedFormControl('', []),
     });
   }
 
-  get name(): FormControl {
-    return this.form?.get('name') as FormControl;
+  get name(): UntypedFormControl {
+    return this.form?.get('name') as UntypedFormControl;
   }
 
   async ngOnInit(): Promise<void> {

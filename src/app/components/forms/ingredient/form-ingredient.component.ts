@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { IngredientTypeLabelEnum, IngredientTypes } from '@enums';
-import { KeyLabelInterface } from '@interfaces';
-import { IngredientModel } from '@models';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {IngredientTypeLabelEnum, IngredientTypes} from '@enums';
+import {KeyLabelInterface} from '@interfaces';
+import {IngredientModel} from '@models';
 
 @Component({
   selector: 'app-form-ingredient',
   templateUrl: './form-ingredient.component.html',
-  styleUrls: [ './form-ingredient.component.scss' ]
+  styleUrls: ['./form-ingredient.component.scss']
 })
 export class FormIngredientComponent implements OnInit {
   @Input() ingredient: IngredientModel | undefined = undefined;
   @Input() loading = true;
   @Input() ingredientTypes: KeyLabelInterface[] = [];
-  @Input() form: FormGroup = new FormGroup({});
+  @Input() form: UntypedFormGroup = new UntypedFormGroup({});
   @Input() dialogMode = false;
   @Output() onSubmit = new EventEmitter<IngredientModel>();
   @Output() onRemove = new EventEmitter<void>();
@@ -26,16 +26,16 @@ export class FormIngredientComponent implements OnInit {
     return IngredientTypes.get(this.type.value) === IngredientTypeLabelEnum.fruits_vegetables_mushrooms;
   }
 
-  get name(): FormControl {
-    return this.form?.get('name') as FormControl;
+  get name(): UntypedFormControl {
+    return this.form?.get('name') as UntypedFormControl;
   }
 
-  get type(): FormControl {
-    return this.form?.get('type') as FormControl;
+  get type(): UntypedFormControl {
+    return this.form?.get('type') as UntypedFormControl;
   }
 
-  get isLiquid(): FormControl {
-    return this.form?.get('isLiquid') as FormControl;
+  get isLiquid(): UntypedFormControl {
+    return this.form?.get('isLiquid') as UntypedFormControl;
   }
 
   ngOnInit(): void {

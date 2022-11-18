@@ -7,7 +7,7 @@
              pButton
              pRipple
              type="button"></a>
-          <h5 class="text-center flex-grow-1">{{ recipe.name ?? ('New recipe' | translate) }}</h5>
+          <h5 class="text-center flex-grow-1">{{ recipe.name === '' ? ('New recipe' | translate) : recipe.name }}</h5>
         </div>
       </ng-template>
 
@@ -42,7 +42,7 @@
           <div class="field grid">
             <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
                    class="col-12 mb-2 md:col-4 md:mb-0"
-                   for="type" translate="">Type</label>
+                   translate="">Type</label>
             <div class="col-12 md:col-8">
               <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
                           [placeholder]="'Select a type' | translate"
@@ -104,22 +104,22 @@
           </h5>
           <div class="formgrid grid">
             <div class="field col-12 md:col-3">
-              <label for="preparationDuration" translate="">Preparation</label>
+              <label translate="">Preparation</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="preparationDuration"
                              inputId="preparationDuration" suffix=" min"></p-inputNumber>
             </div>
             <div class="field col-12 md:col-3">
-              <label for="cookingDuration" translate="">Cooking</label>
+              <label translate="">Cooking</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="cookingDuration"
                              inputId="cookingDuration" suffix=" min"></p-inputNumber>
             </div>
             <div class="field col-12 md:col-3">
-              <label for="waitingDuration" translate="">Waiting</label>
+              <label translate="">Waiting</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="waitingDuration"
                              inputId="waitingDuration" suffix=" min"></p-inputNumber>
             </div>
             <div class="field col-12 md:col-3">
-              <label for="nbSlices" translate="">Slices</label>
+              <label translate="">Slices</label>
               <p-inputNumber [min]="0" class="inputfield w-full" formControlName="nbSlices"
                              inputId="nbSlices"></p-inputNumber>
             </div>

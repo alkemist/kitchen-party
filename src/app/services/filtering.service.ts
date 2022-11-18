@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {ToolbarFilters} from "@components";
 import {DietTypes, RecipeTypes, SweetSalty} from "@enums";
 import {TranslatorService} from "@app/services/translator.service";
@@ -9,7 +9,7 @@ import {IngredientService} from "@app/services/ingredient.service";
   providedIn: 'root'
 })
 export class FilteringService {
-  private filters: FormGroup = new FormGroup({});
+  private filters: UntypedFormGroup = new UntypedFormGroup({});
   protected filterSummary: { key: string, value: string }[] = [];
   private ingredientService?: IngredientService;
 
@@ -18,11 +18,11 @@ export class FilteringService {
   ) {
   }
 
-  getFilters(): FormGroup {
+  getFilters(): UntypedFormGroup {
     return this.filters;
   }
 
-  setFilters(form: FormGroup): void {
+  setFilters(form: UntypedFormGroup): void {
     this.filters = form;
   }
 
