@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { kitchenIngredientConverter } from '@converters';
-import { DocumentNotFoundError } from '@errors';
+import {Injectable} from '@angular/core';
+import {kitchenIngredientConverter} from '@converters';
+import {DocumentNotFoundError} from '@errors';
 import {KitchenIngredientInterface} from '@interfaces';
 import {KitchenIngredientModel} from '@models';
-import { Select, Store } from '@ngxs/store';
-import { FirestoreService, IngredientService, LoggerService, RecipeService } from '@services';
+import {Select, Store} from '@ngxs/store';
+import {FirestoreService, IngredientService, LoggerService, RecipeService} from '@services';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -12,9 +12,9 @@ import {
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
 } from '@stores';
-import { ArrayHelper } from '@tools';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
+import {ArrayHelper} from '@tools';
+import {orderBy} from 'firebase/firestore';
+import {first, Observable} from 'rxjs';
 
 
 @Injectable({
@@ -51,7 +51,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
       }
       // Sinon on rafraichit le store
       else {
-        const kitchenIngredients = await super.queryList(orderBy('name'));
+        const kitchenIngredients = await super.queryList(orderBy('slug'));
         this.store.dispatch(new FillKitchenIngredients(kitchenIngredients));
 
         resolve(this.refreshList(kitchenIngredients));
@@ -64,7 +64,7 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     for (const kitchenIngredient of kitchenIngredients) {
       const kitchenIngredientModel = new KitchenIngredientModel(kitchenIngredient);
       await this.hydrate(kitchenIngredientModel);
-      this.all.push();
+      this.all.push(kitchenIngredientModel);
     }
     this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
     this.loaded = true;
