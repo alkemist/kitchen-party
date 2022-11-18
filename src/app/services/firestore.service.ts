@@ -1,8 +1,8 @@
-import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '@errors';
-import { FirestoreDataConverter } from '@firebase/firestore';
-import { DataObjectInterface } from '@interfaces';
-import { LoggerService } from '@services';
-import { generatePushID, slugify, TimeHelper } from '@tools';
+import {DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError} from '@errors';
+import {FirestoreDataConverter} from '@firebase/firestore';
+import {DataObjectInterface} from '@interfaces';
+import {LoggerService} from '@services';
+import {generatePushID, slugify, TimeHelper} from '@tools';
 import {
   collection,
   CollectionReference,
@@ -16,7 +16,7 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 
 export abstract class FirestoreService<T extends DataObjectInterface> {
@@ -207,11 +207,5 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
   /** La variable "all" n'est plus à jour et doit être rechargé */
   protected invalidLocalData() {
     this.loaded = false;
-  }
-
-  /** Le store n'est plus à jour, et doit être rechargé */
-  protected invalidStore() {
-    this.invalidLocalData();
-    this.lastUpdated = undefined;
   }
 }

@@ -1,17 +1,17 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Router, RoutesRecognized } from '@angular/router';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
-import { UserInterface } from '@interfaces';
-import { IngredientModel } from '@models';
-import { Select } from '@ngxs/store';
-import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
-import { IngredientState } from '@stores';
-import { EnumHelper } from '@tools';
-import { default as NoSleep } from 'nosleep.js';
-import { MenuItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Router, RoutesRecognized} from '@angular/router';
+import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
+import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
+import {UserInterface} from '@interfaces';
+import {IngredientModel} from '@models';
+import {Select} from '@ngxs/store';
+import {FilteringService, IngredientService, ShoppingService, TranslatorService, UserService} from '@services';
+import {IngredientState} from '@stores';
+import {EnumHelper} from '@tools';
+import {default as NoSleep} from 'nosleep.js';
+import {MenuItem} from 'primeng/api';
+import {Observable} from 'rxjs';
 
 
 export interface ToolbarFilters {
@@ -75,6 +75,10 @@ export class HeaderComponent implements OnInit {
 
   get selectedRecipes() {
     return this.shoppingService.selectedRecipes;
+  }
+
+  get filterSummary() {
+    return this.filteringService.getFilterSummary();
   }
 
   async ngOnInit(): Promise<void> {

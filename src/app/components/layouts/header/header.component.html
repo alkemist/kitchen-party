@@ -23,12 +23,15 @@
     </span>
     <button (click)="resetFilters()" [pTooltip]="'Clear filters' | translate" class="p-button-rounded p-button-text"
             icon="pi pi-times"
-            pButton
+            [disabled]="filterSummary.length === 0" pButton
             pRipple type="button"></button>
+    <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
     <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
             [pTooltip]="'Create shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
-            pButton pRipple type="button"></button>
+            pButton pRipple type="button">
+    </button>
+    <p-badge *ngIf="selectedRecipes.length > 0" [value]="selectedRecipes.length.toString()" styleClass="mr-2"></p-badge>
   </div>
   <!-- End Toolbar Middle -->
 
