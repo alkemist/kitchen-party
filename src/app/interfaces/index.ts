@@ -7,6 +7,7 @@ export * from './key-label.interface';
 export * from './kitchen-ingredient.interface';
 export * from './month-calendar.interface';
 export * from './recipe.interface';
+export * from './relation-ingredient.interface';
 export * from './recipe-ingredient.interface';
 export * from './recipe-ingredient-form.interface';
 export * from './user.interface';

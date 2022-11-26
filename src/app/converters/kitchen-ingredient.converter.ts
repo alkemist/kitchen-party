@@ -1,7 +1,7 @@
-import { FirestoreDataConverter } from '@firebase/firestore';
-import { KitchenIngredientInterface } from '@interfaces';
-import { KitchenIngredientModel } from '@models';
-import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import {FirestoreDataConverter} from '@firebase/firestore';
+import {KitchenIngredientInterface} from '@interfaces';
+import {KitchenIngredientModel} from '@models';
+import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 
 export const kitchenIngredientConverter: FirestoreDataConverter<KitchenIngredientModel> = {
   toFirestore: (kitchenIngredient: KitchenIngredientModel) => {
@@ -10,9 +10,6 @@ export const kitchenIngredientConverter: FirestoreDataConverter<KitchenIngredien
 
     kitchenIngredientFields.ingredientId = kitchenIngredientFields.ingredient?.id! || '';
     delete kitchenIngredientFields.ingredient;
-
-    kitchenIngredientFields.recipeId = kitchenIngredientFields.recipe?.id! || '';
-    delete kitchenIngredientFields.recipe;
 
     return kitchenIngredientFields;
   },

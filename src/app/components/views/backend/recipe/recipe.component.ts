@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DialogIngredientComponent} from '@components';
 import {DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum} from '@enums';
 import {KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface} from '@interfaces';
-import {IngredientModel, RecipeIngredientModel, RecipeModel} from '@models';
+import {IngredientModel, RecipeIngredientModel, RecipeModel, RelationIngredientModel} from '@models';
 import {IngredientService, RecipeService, SearchService, TranslatorService, UploadService} from '@services';
 import {EnumHelper, slugify} from '@tools';
 import {recipeIngredientValidator} from '@validators';
@@ -177,7 +177,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
     const recipeIngredient = RecipeIngredientModel.format(recipeIngredientData, this.measureUnits);
-    const recipeIngredientString = RecipeIngredientModel.recipeIngredientToString(recipeIngredient, this.measureUnits);
+    const recipeIngredientString = RelationIngredientModel.relationIngredientToString(recipeIngredient, this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${ this.ingredientTranslation } ${ i + 1 }`;
   }
 

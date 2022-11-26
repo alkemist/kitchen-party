@@ -3,17 +3,17 @@
     <div class="field col-12 md:col-4">
       <label
         [for]="'quantity' + i"
-        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         translate="">Quantity</label>
       <p-inputNumber
         [inputId]="'quantity' + i"
         [min]="0"
-        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         [step]="0.1"
         class="inputfield w-full"
         formControlName="quantity"></p-inputNumber>
       <div
-        *ngIf="form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)"
+        *ngIf="form.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)"
         class="p-error">
         <small *ngIf="form.errors?.['invalid']"
                translate="">
@@ -24,14 +24,14 @@
     <div class="field col-12 md:col-4">
       <label
         [for]="'unit' + i"
-        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         translate="">Unit</label>
       <p-dropdown
         [autoDisplayFirst]="false"
         [editable]="true"
         [filter]="true"
         [inputId]="'unit' + i"
-        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         [options]="measureUnits"
         [showClear]="true"
         formControlName="unitOrMeasure" optionValue="key"
@@ -44,7 +44,7 @@
         </ng-template>
       </p-dropdown>
       <div
-        *ngIf="form.invalid && (form.dirty || form.get('ingredientOrRecipe')?.touched)"
+        *ngIf="form.invalid && (form.dirty || form.get('ingredient')?.touched)"
         class="p-error">
         <small *ngIf="form.errors?.['invalid']"
                translate="">
@@ -55,42 +55,25 @@
     <div class="field col-12 md:col-4">
       <label
         [for]="'ingredient' + i"
-        [ngClass]="{'p-error':form.get('ingredientOrRecipe')?.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [ngClass]="{'p-error':form.get('ingredient')?.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         translate="">Ingredient</label>
-      <p-autoComplete (completeMethod)="searchIngredientOrRecipe($event)"
+      <p-autoComplete (completeMethod)="searchIngredient($event)"
                       [dropdown]="true"
                       [forceSelection]="true"
-                      [suggestions]="ingredientsOrRecipes" class="inputfield w-full"
+                      [suggestions]="ingredients" class="inputfield w-full"
                       dataKey="id"
-                      field="name" formControlName="ingredientOrRecipe">
+                      field="name" formControlName="ingredient">
       </p-autoComplete>
       <div
-        *ngIf="form.get('ingredientOrRecipe')?.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)"
+        *ngIf="form.get('ingredient')?.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)"
         class="p-error">
-        <small *ngIf="form.get('ingredientOrRecipe')?.errors?.['required']"
+        <small *ngIf="form.get('ingredient')?.errors?.['required']"
                translate="">
           Required.
         </small>
-        <small *ngIf="form.get('ingredientOrRecipe')?.errors?.['exist']" translate="">
+        <small *ngIf="form.get('ingredient')?.errors?.['exist']" translate="">
           Ingredient already in kitchen.
         </small>
-      </div>
-    </div>
-    <div *ngIf="!isKitchen" class="field grid col-12 md:col-12">
-      <div class="field col-12 md:col-3">
-        <label translate="">Options</label>
-      </div>
-      <div class="field field-checkbox col-4 md:col-3">
-        <p-checkbox [binary]="true" formControlName="optionCarne" inputId="optionCarne"></p-checkbox>
-        <label for="optionCarne" translate="">Meat</label>
-      </div>
-      <div class="field field-checkbox col-4 md:col-3">
-        <p-checkbox [binary]="true" formControlName="optionVege" inputId="optionVege"></p-checkbox>
-        <label for="optionVege" translate="">Vege</label>
-      </div>
-      <div class="field field-checkbox col-4 md:col-3">
-        <p-checkbox [binary]="true" formControlName="optionVegan" inputId="optionVegan"></p-checkbox>
-        <label for="optionVegan" translate="">Vegan</label>
       </div>
     </div>
   </div>

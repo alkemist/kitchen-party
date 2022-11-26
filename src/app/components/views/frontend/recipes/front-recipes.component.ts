@@ -29,17 +29,19 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.filteringService.setIngredientService(ingredientService);
   }
 
-  get selectedRecipes() {
-    return this.shoppingService.selectedRecipes;
-  }
-
   get filterSummary() {
     return this.filteringService.getFilterSummary();
   }
 
-  set selectedRecipes(selectedRecipes) {
+  // @TODO Remove
+  /*get selectedRecipes() {
+    return this.shoppingService.selectedRecipes;
+  }*/
+
+  // @TODO Remove
+  /*set selectedRecipes(selectedRecipes) {
     this.shoppingService.selectedRecipes = selectedRecipes;
-  }
+  }*/
 
   filter(filters: ToolbarFilters) {
     void this.filteringService.fillFilterSummary(filters);
@@ -91,7 +93,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.subscription = this.filteringService.getFilters().valueChanges
         .subscribe((filters) => {
           this.filter(filters);
-          this.selectedRecipes = [];
+          // this.selectedRecipes = [];
         });
     }
     this.recipeService.getListOrRefresh().then(recipes => {
@@ -115,5 +117,9 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       route.push(this.filteringService.getFilters().get('diet')?.value);
     }
     return route;
+  }
+
+  addToCart(recipe: RecipeModel) {
+    this.shoppingService.addRecipe(recipe);
   }
 }

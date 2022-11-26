@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
-import { MeasureUnitLabelEnum } from '@enums';
-import { CartElement } from '@interfaces';
-import { RecipeIngredientModel, RecipeModel } from '@models';
-import { KitchenIngredientService, TranslatorService } from '@services';
+import {Injectable} from '@angular/core';
+import {MeasureUnitLabelEnum} from '@enums';
+import {CartElement} from '@interfaces';
+import {RecipeIngredientModel, RecipeModel, RelationIngredientModel} from '@models';
+import {KitchenIngredientService, TranslatorService} from '@services';
+import {MenuItem} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingService {
-  selectedRecipes: RecipeModel[] = [];
+  selectedRecipes: Map<string, SelectedRecipe>;
+  cartItems: MenuItem[] = [];
 
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
@@ -18,14 +20,109 @@ export class ShoppingService {
     private kitchenService: KitchenIngredientService,
     private translatorService: TranslatorService,
   ) {
+    this.selectedRecipes  = new Map<string, SelectedRecipe>();
+  }
 
+  addRecipe(recipe: RecipeModel) {
+    if (!recipe.id) {
+      return;
+    }
+
+    if (!this.selectedRecipes.has(recipe.id)) {
+      this.selectedRecipes.set(recipe.id, {
+        quantity: 0,
+        recipe: recipe
+      });
+    }
+
+    const selectedRecipe = this.selectedRecipes.get(recipe.id);
+
+    if (selectedRecipe) {
+      selectedRecipe.quantity++;
+      this.selectedRecipes.set(recipe.id, selectedRecipe);
+    }
+
+    this.buildCartItems();
+  }
+
+  removeRecipe(recipeId: string) {
+    const selectedRecipe = this.selectedRecipes.get(recipeId);
+
+    if (selectedRecipe) {
+      selectedRecipe.quantity--;
+
+      if (selectedRecipe.quantity <= 0) {
+        this.selectedRecipes.delete(recipeId);
+      }
+    }
+
+    this.buildCartItems();
+  }
+
+  removeAllRecipe(recipeId: string) {
+    if (this.selectedRecipes.has(recipeId)) {
+      this.selectedRecipes.delete(recipeId);
+    }
+
+    this.buildCartItems();
+  }
+
+  buildCartItems() {
+    const cartItems = Array.from(this.selectedRecipes.values())
+      .sort((a, b) => a.recipe.name.localeCompare(b.recipe.name));
+
+    this.cartItems = cartItems.map((item) => {
+      return {
+        label: item.recipe.name,
+        badge: item.quantity > 1 ? item.quantity.toString() : '',
+        items: [
+          {
+            label: this.translatorService.translate('Add'),
+            icon: 'pi pi-plus',
+            recipe: item.recipe,
+            command: (event) => {
+              this.addRecipe(event.item.recipe);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete one'),
+            icon: 'pi pi-minus',
+            recipe: item.recipe,
+            command: (event) => {
+              this.removeRecipe(event.item.recipe.id);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete all'),
+            icon: 'pi pi-trash',
+            recipe: item.recipe,
+            command: (event) => {
+              this.removeAllRecipe(event.item.recipe.id);
+            }
+          }
+        ],
+        routerLink: `/${item.recipe.slug}`
+      };
+    });
+
+    if (cartItems.length > 0) {
+      this.cartItems.push(
+        {
+          separator: true
+        });
+      this.cartItems.push(
+        {
+          label: 'Shopping list',
+          routerLink: `/shopping`
+        });
+    }
   }
 
   get cartOrderedByChecked(): CartElement[] {
     return this.cart.sort((a, b) => {
       const aValue = a.inKitchen ? 1 : -1;
       const bValue = b.inKitchen ? 1 : -1;
-      return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : RecipeIngredientModel.orderTwoRecipeIngredients(a, b));
+      return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : RelationIngredientModel.orderTwoRelationIngredients(a, b));
     });
   }
 
@@ -118,4 +215,9 @@ export class ShoppingService {
       cartElement.quantity = quantities.join(', ');
     }
   }
+}
+
+interface SelectedRecipe {
+  quantity: number,
+  recipe: RecipeModel
 }

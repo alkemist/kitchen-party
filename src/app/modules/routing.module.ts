@@ -7,7 +7,7 @@ import {
   FrontRecipesComponent,
   ShoppingComponent
 } from '@components';
-import {DietResolver, RecipeResolver, RecipesResolver} from '@resolvers';
+import {DietResolver, RecipeResolver} from '@resolvers';
 import {LoggedGuard} from "@guards";
 import {Title} from '@angular/platform-browser';
 import {TranslatorService} from "@services";
@@ -59,10 +59,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent, data: { title: 'About', showAppName: true } },
   { path: 'calendar', component: CalendarComponent, data: { title: 'Calendar', showAppName: true } },
   {
-    path: 'shopping/:slugs', component: ShoppingComponent,
-    resolve: {
-      recipes: RecipesResolver
-    },
+    path: 'shopping', component: ShoppingComponent,
     data: { title: 'Shopping list', showAppName: true }
   },
   {

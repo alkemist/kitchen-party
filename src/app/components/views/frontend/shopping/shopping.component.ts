@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MeasureUnitLabelEnum } from '@enums';
-import { CartElement } from '@interfaces';
-import { RecipeModel } from '@models';
-import { ShoppingService } from '@services';
-import { EnumHelper } from '@tools';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {MeasureUnitLabelEnum} from '@enums';
+import {RecipeModel} from '@models';
+import {ShoppingService} from '@services';
+import {EnumHelper} from '@tools';
 
 @Component({
   selector: 'app-shopping',
@@ -26,12 +25,14 @@ export class ShoppingComponent implements OnInit {
   ) {
   }
 
-  get cart(): CartElement[] {
+  // @TODO Remove
+  /*get cart(): CartElement[] {
     return this.shoppingService.cartOrderedByChecked;
-  }
+  }*/
 
   ngOnInit(): void {
-    this.route.data.subscribe(
+    // @TODO Remove
+    /*this.route.data.subscribe(
       (async (data: any) => {
         if (data && data['recipes']) {
           this.recipes = data['recipes'];
@@ -43,6 +44,6 @@ export class ShoppingComponent implements OnInit {
 
           this.loading = false;
         }
-      }));
+      }));*/
   }
 }

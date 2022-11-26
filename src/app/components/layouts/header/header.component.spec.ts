@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
-import { TranslatingRootModule } from '@app/modules/translating.module';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {Router, RouterEvent, RouterStateSnapshot, RoutesRecognized} from '@angular/router';
+import {TranslatingRootModule} from '@app/modules/translating.module';
 
-import { HeaderComponent } from '@components';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { IngredientModel, UserInterface } from '@models';
-import { NgxsModule } from '@ngxs/store';
-import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
-import { IngredientState } from '@stores';
-import { MockModule, MockProvider } from 'ng-mocks';
-import { default as NoSleep } from 'nosleep.js';
-import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { SidebarModule } from 'primeng/sidebar';
-import { TieredMenuModule } from 'primeng/tieredmenu';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { ToolbarModule } from 'primeng/toolbar';
-import { Subject } from 'rxjs';
+import {HeaderComponent} from '@components';
+import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
+import {IngredientModel, UserInterface} from '@models';
+import {NgxsModule} from '@ngxs/store';
+import {FilteringService, IngredientService, ShoppingService, TranslatorService, UserService} from '@services';
+import {IngredientState} from '@stores';
+import {MockModule, MockProvider} from 'ng-mocks';
+import {default as NoSleep} from 'nosleep.js';
+import {MenuItem} from 'primeng/api';
+import {ButtonModule} from 'primeng/button';
+import {DropdownModule} from 'primeng/dropdown';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {SidebarModule} from 'primeng/sidebar';
+import {TieredMenuModule} from 'primeng/tieredmenu';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+import {ToolbarModule} from 'primeng/toolbar';
+import {Subject} from 'rxjs';
 
 
 describe('HeaderComponent', () => {
@@ -79,7 +79,8 @@ describe('HeaderComponent', () => {
     ingredientServiceMock = TestBed.inject(IngredientService);
     translatorServiceMock = TestBed.inject(TranslatorService);
     filteringService = TestBed.inject(FilteringService);
-    shoppingServiceMock.selectedRecipes = [];
+    // @TODO Remove
+    // shoppingServiceMock.selectedRecipes = [];
   });
 
   beforeEach(() => {
@@ -269,10 +270,11 @@ describe('HeaderComponent', () => {
     } ])).toEqual([ {label: translatedLabel, items: [ {label: translatedLabel} ]} ]);
   });
 
-  it('should go to shopping', async () => {
+  // @TODO Remove
+  /*it('should go to shopping', async () => {
     const routerSpy = jest.spyOn(routerMock, 'navigate');
     component.gotoShopping();
 
     expect(routerSpy).toBeCalled();
-  });
+  });*/
 });

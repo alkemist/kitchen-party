@@ -1,6 +1,6 @@
-import { RecipeIngredientInterface } from './recipe-ingredient.interface';
+import {RelationIngredientInterface} from "@app/interfaces/relation-ingredient.interface";
 
-export interface KitchenIngredientInterface extends RecipeIngredientInterface {
+export interface KitchenIngredientInterface extends RelationIngredientInterface {
   slug?: string;
   name?: string;
 }

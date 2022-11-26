@@ -147,11 +147,6 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
       kitchenIngredient.ingredient = await this.ingredientService.getById(kitchenIngredient.ingredientId);
     }
     delete kitchenIngredient.ingredientId;
-
-    if (kitchenIngredient.recipeId) {
-      kitchenIngredient.recipe = await this.recipeService.getById(kitchenIngredient.recipeId);
-    }
-    delete kitchenIngredient.recipeId;
   }
 }
 

@@ -3,8 +3,8 @@ import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MeasureUnitLabelEnum, MeasureUnits} from '@enums';
 import {KitchenIngredientInterface, RecipeIngredientFormInterface} from '@interfaces';
-import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel} from '@models';
-import {KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
+import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel} from '@models';
+import {IngredientService, KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
 import {EnumHelper, slugify} from '@tools';
 import {ConfirmationService, MessageService} from 'primeng/api';
 
@@ -19,7 +19,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 export class KitchenIngredientComponent implements OnInit {
   kitchenIngredient = new KitchenIngredientModel({});
   measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
-  ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
+  ingredients: IngredientModel[] = [];
 
   form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
@@ -29,6 +29,7 @@ export class KitchenIngredientComponent implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private searchService: SearchService,
+    private ingredientService: IngredientService,
     private kitchenIngredientService: KitchenIngredientService,
     private routerService: Router,
     private translatorService: TranslatorService,
@@ -38,7 +39,7 @@ export class KitchenIngredientComponent implements OnInit {
     this.form = new UntypedFormGroup({
       quantity: new UntypedFormControl('', []),
       unitOrMeasure: new UntypedFormControl('', []),
-      ingredientOrRecipe: new UntypedFormControl('', [Validators.required]),
+      ingredient: new UntypedFormControl('', [Validators.required]),
     });
   }
 
@@ -52,7 +53,7 @@ export class KitchenIngredientComponent implements OnInit {
           this.kitchenIngredient = data['kitchenIngredient'];
 
           const kitchenIngredientForm: RecipeIngredientFormInterface = {...this.kitchenIngredient};
-          kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.recipe ? this.kitchenIngredient.recipe : this.kitchenIngredient.ingredient!;
+          kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit
             : this.kitchenIngredient.measure;
@@ -63,9 +64,9 @@ export class KitchenIngredientComponent implements OnInit {
       });
   }
 
-  searchIngredientOrRecipe(event: { query: string }): void {
-    this.searchService.searchIngredientsOrRecipes(event.query).then(ingredientsOrRecipes => {
-      this.ingredientsOrRecipes = ingredientsOrRecipes;
+  searchIngredient(event: { query: string }): void {
+    this.ingredientService.search(event.query).then(ingredients => {
+      this.ingredients = ingredients;
     });
   }
 

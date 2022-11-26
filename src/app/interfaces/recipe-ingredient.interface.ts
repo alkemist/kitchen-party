@@ -1,16 +1,7 @@
-import { MeasureUnitKeyEnum } from '@enums';
-import { HasIngredient } from './has-ingredient.interface';
-import { IngredientInterface } from './ingredient.interface';
-import { RecipeInterface } from './recipe.interface';
+import {RecipeInterface} from './recipe.interface';
+import {RelationIngredientInterface} from "@app/interfaces/relation-ingredient.interface";
 
-export interface RecipeIngredientInterface extends HasIngredient {
-  id?: string,
-  quantity?: number | null,
-  measure?: string,
-  unit?: MeasureUnitKeyEnum | null,
-
-  ingredient?: IngredientInterface,
-  ingredientId?: string,
+export interface RecipeIngredientInterface extends RelationIngredientInterface {
   recipe?: RecipeInterface,
   recipeId?: string,
 

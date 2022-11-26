@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormKitchenIngredientComponent} from './form-kitchen-ingredient.component';
+import {FormRecipeIngredientComponent} from './form-recipe-ingredient.component';
 import {MockModule} from 'ng-mocks';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -8,8 +8,8 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {CheckboxModule} from 'primeng/checkbox';
 
 describe('FormKitchenIngredientComponent', () => {
-  let component: FormKitchenIngredientComponent;
-  let fixture: ComponentFixture<FormKitchenIngredientComponent>;
+  let component: FormRecipeIngredientComponent;
+  let fixture: ComponentFixture<FormRecipeIngredientComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,13 +20,13 @@ describe('FormKitchenIngredientComponent', () => {
         MockModule(AutoCompleteModule),
         MockModule(CheckboxModule),
       ],
-      declarations: [ FormKitchenIngredientComponent ]
+      declarations: [ FormRecipeIngredientComponent ]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormKitchenIngredientComponent);
+    fixture = TestBed.createComponent(FormRecipeIngredientComponent);
     component = fixture.componentInstance;
     component.form = new FormGroup({
       quantity: new FormControl('', []),
@@ -41,7 +41,7 @@ describe('FormKitchenIngredientComponent', () => {
   });
 
   it('should emit event', () => {
-    const eventSpy = jest.spyOn(component.searchIngredientEvent, 'emit');
+    const eventSpy = jest.spyOn(component.searchIngredientOrRecipeEvent, 'emit');
     const event = { query: 'test' };
     component.searchIngredientOrRecipe(event);
     expect(eventSpy).toBeCalledWith(event);

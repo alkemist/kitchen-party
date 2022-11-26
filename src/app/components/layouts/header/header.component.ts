@@ -81,6 +81,17 @@ export class HeaderComponent implements OnInit {
     return this.filteringService.getFilterSummary();
   }
 
+  get cartItems(): MenuItem[] {
+    return this.shoppingService.cartItems;
+  }
+
+  get cartSize(): number {
+    const cartItems = Array.from(this.shoppingService.selectedRecipes.values());
+
+    return cartItems.map(item => item.quantity)
+      .reduce((quantity, total) => quantity + total);
+  }
+
   async ngOnInit(): Promise<void> {
     this.router.events.subscribe((route: any) => {
       if (route instanceof RoutesRecognized) {
@@ -162,10 +173,11 @@ export class HeaderComponent implements OnInit {
     } as ToolbarFilters);
   }
 
-  gotoShopping() {
+  // @TODO Remove
+  /*gotoShopping() {
     this.sidebarShowed = false;
     this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]).then();
-  }
+  }*/
 
   private initVariables(routeData: any) {
     if (typeof routeData['title'] === 'string') {

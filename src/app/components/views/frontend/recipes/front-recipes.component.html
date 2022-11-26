@@ -20,9 +20,14 @@
           <h5 class="text-center flex-grow-1">
             {{ recipe.name }}
           </h5>
-          <div class="flex align-items-center">
+          <!-- @TODO Remove -->
+          <!--<div class="flex align-items-center">
             <p-checkbox [(ngModel)]="selectedRecipes" [value]="recipe.slug"></p-checkbox>
-          </div>
+          </div>-->
+          <button (click)="addToCart(recipe)" [pTooltip]="'Add to cart shopping' | translate" class="p-button-rounded"
+             icon="pi pi-shopping-cart"
+             pButton pRipple
+             tooltipPosition="bottom"></button>
         </div>
         <div class="details grid">
           <div [pTooltip]="recipe.preparationDuration ? ('Preparation duration' | translate) : ''"

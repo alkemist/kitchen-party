@@ -3,7 +3,7 @@
   <div class="p-toolbar-group-left">
     <button *ngIf="loading" [disabled]="true"
             class="p-button-rounded p-button-text" icon="pi pi-spin pi-spinner" pButton></button>
-    <button (click)="menu.toggle($event)" *ngIf="!loading" class="p-button-rounded p-button-text"
+    <button (click)="menuEl.toggle($event)" *ngIf="!loading" class="p-button-rounded p-button-text"
             icon="pi pi-align-justify" pButton pRipple
             type="button"></button>
     <a [class.mobile-hidden]="!showAppName" [class.showFilters]="showFilters" [routerLink]="['/']" class="header__logo">
@@ -26,12 +26,18 @@
             [disabled]="filterSummary.length === 0" pButton
             pRipple type="button"></button>
     <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
-    <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+
+    <!--@TODO Remove -->
+    <!--<button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
             [pTooltip]="'Create shopping cart' | translate"
+            class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
+            pButton pRipple type="button">-->
+    <button (click)="cartEl.toggle($event)" [disabled]="selectedRecipes.size === 0"
+            [pTooltip]="'Shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
             pButton pRipple type="button">
     </button>
-    <p-badge *ngIf="selectedRecipes.length > 0" [value]="selectedRecipes.length.toString()" styleClass="mr-2"></p-badge>
+    <p-badge *ngIf="selectedRecipes.size > 0" [value]="cartSize.toString()" styleClass="mr-2"></p-badge>
   </div>
   <!-- End Toolbar Middle -->
 
@@ -77,11 +83,12 @@
               class="p-button-rounded p-button-text"
               icon="pi pi-times" pButton
               pRipple type="button"></button>
-      <button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
+      <!--@TODO Remove -->
+      <!--<button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
               [pTooltip]="'Create shopping cart' | translate"
               class="p-button-rounded p-button-text"
               icon="pi pi-shopping-cart" pButton
-              pRipple type="button"></button>
+              pRipple type="button"></button>-->
     </div>
   </p-sidebar>
   <!-- End Sidebar -->
@@ -95,4 +102,5 @@
   </div>
   <!-- End Toolbar Right -->
 </p-toolbar>
-<p-tieredMenu #menu [autoDisplay]="true" [model]="menuItems" [popup]="true"></p-tieredMenu>
+<p-tieredMenu #menuEl [autoDisplay]="true" [model]="menuItems" [popup]="true"></p-tieredMenu>
+<p-tieredMenu #cartEl [autoDisplay]="true" [model]="cartItems" [popup]="true"></p-tieredMenu>
