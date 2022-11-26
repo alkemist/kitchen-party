@@ -4,7 +4,7 @@ import {DocumentNotFoundError} from '@errors';
 import {KitchenIngredientInterface} from '@interfaces';
 import {KitchenIngredientModel} from '@models';
 import {Select, Store} from '@ngxs/store';
-import {FirestoreService, IngredientService, LoggerService, RecipeService} from '@services';
+import {FirestoreService, IngredientService, LoggerService} from '@services';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -31,7 +31,6 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
 
   constructor(private logger: LoggerService, private store: Store,
               private ingredientService: IngredientService,
-              private recipeService: RecipeService
   ) {
     super(logger, 'kitchen', kitchenIngredientConverter);
   }

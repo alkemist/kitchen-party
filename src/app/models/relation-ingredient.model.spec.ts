@@ -31,8 +31,8 @@ describe('RelationIngredientModel', () => {
       expect(new RelationIngredientModel({
         ingredientId: '',
         ingredient: ingredientLegumineMock,
-        recipeId: '',
-        recipe: recipeIngredientLegumineMock
+        // recipeId: '',
+        // recipe: recipeIngredientLegumineMock
       })).toBeDefined();
     });
   });

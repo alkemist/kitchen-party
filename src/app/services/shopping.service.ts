@@ -70,8 +70,13 @@ export class ShoppingService {
   buildCartItems() {
     const cartItems = Array.from(this.selectedRecipes.values())
       .sort((a, b) => a.recipe.name.localeCompare(b.recipe.name));
+    let totalSlice = 0;
 
     this.cartItems = cartItems.map((item) => {
+      if (item.recipe.nbSlices) {
+        totalSlice += item.recipe.nbSlices * item.quantity;
+      }
+
       return {
         label: item.recipe.name,
         badge: item.quantity > 1 ? item.quantity.toString() : '',
@@ -112,7 +117,8 @@ export class ShoppingService {
         });
       this.cartItems.push(
         {
-          label: 'Shopping list',
+          label: this.translatorService.translate('Shopping list'),
+          badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
           routerLink: `/shopping`
         });
     }

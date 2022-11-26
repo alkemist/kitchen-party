@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MeasureUnitLabelEnum, MeasureUnits} from '@enums';
-import {KitchenIngredientInterface, RecipeIngredientFormInterface} from '@interfaces';
+import {KitchenIngredientInterface} from '@interfaces';
 import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel} from '@models';
 import {IngredientService, KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
 import {EnumHelper, slugify} from '@tools';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {RelationIngredientFormInterface} from "@app/interfaces/relation-ingredient-form.interface";
 
 @Component({
   selector: 'app-kitchen-ingredient',
@@ -52,8 +53,8 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm: RecipeIngredientFormInterface = {...this.kitchenIngredient};
-          kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.ingredient!;
+          const kitchenIngredientForm: RelationIngredientFormInterface = {...this.kitchenIngredient};
+          kitchenIngredientForm.ingredient = this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit
             : this.kitchenIngredient.measure;
