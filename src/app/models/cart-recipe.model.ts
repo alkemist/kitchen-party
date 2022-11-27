@@ -3,14 +3,14 @@ import {RecipeModel} from "@app/models/recipe.model";
 
 export class CartRecipeModel implements CartRecipeInterface {
   id?: string;
-  quantity: number | null;
+  quantity: number | 0;
 
   recipe?: RecipeModel;
   recipeId?: string;
 
   constructor(cartRecipe: CartRecipeInterface) {
     this.id = cartRecipe.id ?? '';
-    this.quantity = cartRecipe.quantity ?? null;
+    this.quantity = cartRecipe.quantity ?? 0;
 
     this.recipeId = cartRecipe.recipeId ?? '';
 

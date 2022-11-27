@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {cartRecipeConverter} from '@converters';
 import {DocumentNotFoundError} from '@errors';
 import {CartRecipeInterface} from '@interfaces';
-import {CartRecipeModel} from '@models';
+import {CartRecipeModel, RecipeModel} from '@models';
 import {Select, Store} from '@ngxs/store';
 import {FirestoreService, LoggerService, RecipeService} from '@services';
 import {AddCartRecipe, CartRecipeState, FillCartRecipes, RemoveCartRecipe, UpdateCartRecipe} from '@stores';
@@ -72,10 +72,10 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
     });
   }
 
-  async getBySlug(slug: string): Promise<CartRecipeModel | undefined> {
+  async getByRecipeId(recipeId: string): Promise<CartRecipeModel | undefined> {
     const cartRecipes = await this.getListOrRefresh();
     const cartRecipe = cartRecipes.find((cartRecipe: CartRecipeModel) => {
-      return cartRecipe.recipe?.slug === slug;
+      return cartRecipe.recipe?.id === recipeId;
     })!;
     return cartRecipe ?? undefined;
   }
@@ -88,15 +88,15 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
     return cartRecipe ?? undefined;
   }
 
-  async get(slug: string): Promise<CartRecipeModel | undefined> {
-    if (!slug) {
+  async get(recipeId: string): Promise<CartRecipeModel | undefined> {
+    if (!recipeId) {
       return undefined;
     }
 
-    let cartRecipe = await this.getBySlug(slug);
+    let cartRecipe = await this.getByRecipeId(recipeId);
     if (!cartRecipe) {
       try {
-        let cartRecipeData = await super.findOneBySlug(slug);
+        let cartRecipeData = await super.findOneBy('recipeId', recipeId);
         await this.addToStore(cartRecipeData);
         this.invalidLocalData();
 
@@ -108,6 +108,38 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
       }
     }
     return cartRecipe;
+  }
+
+  async updateOrCreate(recipe: RecipeModel): Promise<void> {
+    if (!recipe.id) {
+      return undefined;
+    }
+
+    let cartRecipe = await this.get(recipe.id);
+
+    if (!cartRecipe) {
+      const cartRecipeCreated = await this.add({
+        recipe: recipe,
+        quantity: 0,
+      });
+      if (cartRecipeCreated?.id) {
+        cartRecipe = await this.getById(cartRecipeCreated.id);
+      }
+    }
+
+    if (cartRecipe) {
+      await this.updateQuantity(cartRecipe, 1);
+    }
+  }
+
+  async updateQuantity(cartRecipe: CartRecipeModel, quantity: number): Promise<void> {
+    cartRecipe.quantity = cartRecipe.quantity + quantity;
+
+    if (cartRecipe.quantity <= 0) {
+      await this.remove(cartRecipe);
+    } else {
+      await this.update(cartRecipe);
+    }
   }
 
   async add(cartRecipe: CartRecipeInterface): Promise<CartRecipeInterface | undefined> {

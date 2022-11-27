@@ -105,19 +105,23 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     return document;
   }
 
-  protected async findOneBySlug(slug: string): Promise<T> {
+  protected async findOneBy(property: string, value: string): Promise<T> {
     let list: T[] = [];
 
     try {
-      list = await this.queryList(where('slug', '==', slug));
+      list = await this.queryList(where(property, '==', value));
     } catch (e) {
-      this.loggerService.error(new DatabaseError((e as Error).message, {slug}));
+      this.loggerService.error(new DatabaseError((e as Error).message, {[property]: value}));
     }
 
     if (list.length === 0) {
-      throw new DocumentNotFoundError<T>(this.collectionName, {slug} as T);
+      throw new DocumentNotFoundError<T>(this.collectionName);
     }
     return list[0];
+  }
+
+  protected async findOneBySlug(slug: string): Promise<T> {
+    return this.findOneBy('slug', slug);
   }
 
   protected async addOne(document: T): Promise<T> {

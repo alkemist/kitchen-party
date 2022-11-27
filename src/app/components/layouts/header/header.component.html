@@ -32,12 +32,12 @@
             [pTooltip]="'Create shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
             pButton pRipple type="button">-->
-    <button (click)="cartEl.toggle($event)" [disabled]="selectedRecipes.size === 0"
+    <button (click)="cartEl.toggle($event)" [disabled]="cartItems.length === 0"
             [pTooltip]="'Shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
             pButton pRipple type="button">
     </button>
-    <p-badge *ngIf="selectedRecipes.size > 0" [value]="cartSize.toString()" styleClass="mr-2"></p-badge>
+    <p-badge *ngIf="cartItems.length > 0" [value]="cartItems.length.toString()" styleClass="mr-2"></p-badge>
   </div>
   <!-- End Toolbar Middle -->
 

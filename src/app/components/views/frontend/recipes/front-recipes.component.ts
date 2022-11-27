@@ -4,6 +4,7 @@ import {DietTypes, SweetSalty, SweetSaltyLabelEnum} from '@enums';
 import {IngredientModel, RecipeModel} from '@models';
 import {FilteringService, IngredientService, RecipeService, ShoppingService} from '@services';
 import {Subscription} from 'rxjs';
+import {CartRecipeService} from "@app/services/cart-recipe.service";
 
 @Component({
   selector: 'app-front-recipes',
@@ -25,6 +26,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     private filteringService: FilteringService,
     private ingredientService: IngredientService,
     private shoppingService: ShoppingService,
+    private cartRecipeService: CartRecipeService,
   ) {
     this.filteringService.setIngredientService(ingredientService);
   }
@@ -93,7 +95,6 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.subscription = this.filteringService.getFilters().valueChanges
         .subscribe((filters) => {
           this.filter(filters);
-          // this.selectedRecipes = [];
         });
     }
     this.recipeService.getListOrRefresh().then(recipes => {
@@ -112,14 +113,14 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   }
 
   gotoRecipe(recipe: RecipeModel) {
-    const route = [ '/', recipe.slug ];
+    const route = ['/', recipe.slug];
     if (this.filteringService.getFilters().get('diet')?.value) {
       route.push(this.filteringService.getFilters().get('diet')?.value);
     }
     return route;
   }
 
-  addToCart(recipe: RecipeModel) {
-    this.shoppingService.addRecipe(recipe);
+  async addToCart(recipe: RecipeModel) {
+    await this.cartRecipeService.updateOrCreate(recipe);
   }
 }

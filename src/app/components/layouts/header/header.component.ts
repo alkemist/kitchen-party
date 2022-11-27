@@ -1,17 +1,18 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Router, RoutesRecognized} from '@angular/router';
 import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
 import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
 import {UserInterface} from '@interfaces';
-import {IngredientModel} from '@models';
+import {CartRecipeModel, IngredientModel} from '@models';
 import {Select} from '@ngxs/store';
-import {FilteringService, IngredientService, ShoppingService, TranslatorService, UserService} from '@services';
-import {IngredientState} from '@stores';
+import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
+import {CartRecipeState, IngredientState} from '@stores';
 import {EnumHelper} from '@tools';
 import {default as NoSleep} from 'nosleep.js';
 import {MenuItem} from 'primeng/api';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import {CartRecipeService} from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -27,12 +28,12 @@ export interface ToolbarFilters {
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: [ './header.component.scss' ]
+  styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
-  ingredients: IngredientModel[] = [];
+export class HeaderComponent implements OnInit, OnDestroy {
   loggedUser?: UserInterface;
   menuItems: MenuItem[] = [];
+  cartItems: MenuItem[] = [];
   title: string = '';
 
   showFilters = false;
@@ -45,19 +46,37 @@ export class HeaderComponent implements OnInit {
   loading = true;
   sidebarShowed = false;
   noSleep = new NoSleep();
+  subscriptions: Subscription[] = [];
+
+  ingredients: IngredientModel[] = [];
   @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
+
+  cartRecipes: CartRecipeModel[] = [];
+  @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeModel[]>;
 
   constructor(
     private userService: UserService,
     private router: Router,
     private translatorService: TranslatorService,
     private ingredientService: IngredientService,
+    private cartRecipeService: CartRecipeService,
     private filteringService: FilteringService,
-    private shoppingService: ShoppingService,
   ) {
-    this.ingredients$?.subscribe((ingredients: IngredientModel[]) => {
-      this.ingredients = ingredients;
-    });
+    if (this.ingredients$) {
+      this.subscriptions.push(
+        this.ingredients$.subscribe(async (ingredients: IngredientModel[]) => {
+          this.ingredients = this.ingredientService.refreshList(ingredients);
+        })
+      );
+    }
+    if (this.cartRecipes$) {
+      this.subscriptions.push(
+        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
+          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
+          this.buildCartItems();
+        })
+      );
+    }
     this.filteringService.setFilters(new UntypedFormGroup({
       diet: new UntypedFormControl(null, []),
       type: new UntypedFormControl(null, []),
@@ -69,27 +88,18 @@ export class HeaderComponent implements OnInit {
     }));
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    })
+  }
+
   get form() {
     return this.filteringService.getFilters();
   }
 
-  get selectedRecipes() {
-    return this.shoppingService.selectedRecipes;
-  }
-
   get filterSummary() {
     return this.filteringService.getFilterSummary();
-  }
-
-  get cartItems(): MenuItem[] {
-    return this.shoppingService.cartItems;
-  }
-
-  get cartSize(): number {
-    const cartItems = Array.from(this.shoppingService.selectedRecipes.values());
-
-    return cartItems.map(item => item.quantity)
-      .reduce((quantity, total) => quantity + total);
   }
 
   async ngOnInit(): Promise<void> {
@@ -130,11 +140,6 @@ export class HeaderComponent implements OnInit {
         menuItems = menuItems.concat(notLoggedMenuItems);
       }
       this.menuItems = await this.translateMenu(menuItems);
-    });
-
-    this.ingredientService.getListOrRefresh().then(ingredients => {
-      this.ingredients = ingredients;
-      this.loading = false;
     });
   }
 
@@ -212,6 +217,61 @@ export class HeaderComponent implements OnInit {
       if (this.noSleep.isEnabled) {
         this.noSleep.disable();
       }
+    }
+  }
+
+  buildCartItems() {
+    let totalSlice = 0;
+
+    this.cartItems = this.cartRecipes.map((item) => {
+      if (item.recipe?.nbSlices) {
+        totalSlice += item.recipe.nbSlices * item.quantity;
+      }
+
+      return {
+        label: item.recipe?.name,
+        badge: item.quantity > 1 ? item.quantity.toString() : '',
+        items: [
+          {
+            label: this.translatorService.translate('Add'),
+            icon: 'pi pi-plus',
+            cartItem: item,
+            command: async (event) => {
+              await this.cartRecipeService.updateQuantity(event.item.cartItem, 1);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete one'),
+            icon: 'pi pi-minus',
+            cartItem: item,
+            command: async (event) => {
+              await this.cartRecipeService.updateQuantity(event.item.cartItem, -1);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete all'),
+            icon: 'pi pi-trash',
+            cartItem: item,
+            command: async (event) => {
+              await this.cartRecipeService.remove(event.item.cartItem);
+            }
+          }
+        ],
+        routerLink: `/${item.recipe?.slug}`
+      };
+    });
+
+    if (this.cartItems.length > 0) {
+      this.cartItems.push(
+        {
+          separator: true
+        });
+      this.cartItems.push(
+        {
+          label: this.translatorService.translate('Shopping list'),
+          badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
+          routerLink: `/shopping`
+        });
     }
   }
 }

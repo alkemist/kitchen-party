@@ -9,7 +9,7 @@ export const cartRecipeConverter: FirestoreDataConverter<CartRecipeModel> = {
     delete cartRecipeFields.id;
 
     cartRecipeFields.recipeId = cartRecipeFields.recipe?.id! || '';
-    delete cartRecipeFields.recipeId;
+    delete cartRecipeFields.recipe;
 
     return cartRecipeFields;
   },
