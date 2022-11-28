@@ -27,17 +27,12 @@
             pRipple type="button"></button>
     <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
 
-    <!--@TODO Remove -->
-    <!--<button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
-            [pTooltip]="'Create shopping cart' | translate"
-            class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
-            pButton pRipple type="button">-->
-    <button (click)="cartEl.toggle($event)" [disabled]="cartItems.length === 0"
+    <button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0"
             [pTooltip]="'Shopping cart' | translate"
             class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
             pButton pRipple type="button">
     </button>
-    <p-badge *ngIf="cartItems.length > 0" [value]="cartItems.length.toString()" styleClass="mr-2"></p-badge>
+    <p-badge *ngIf="cartRecipesSize > 0" [value]="cartRecipesSize.toString()" styleClass="mr-2"></p-badge>
   </div>
   <!-- End Toolbar Middle -->
 
@@ -83,12 +78,6 @@
               class="p-button-rounded p-button-text"
               icon="pi pi-times" pButton
               pRipple type="button"></button>
-      <!--@TODO Remove -->
-      <!--<button (click)="gotoShopping()" [disabled]="selectedRecipes.length === 0"
-              [pTooltip]="'Create shopping cart' | translate"
-              class="p-button-rounded p-button-text"
-              icon="pi pi-shopping-cart" pButton
-              pRipple type="button"></button>-->
     </div>
   </p-sidebar>
   <!-- End Sidebar -->
@@ -104,3 +93,13 @@
 </p-toolbar>
 <p-tieredMenu #menuEl [autoDisplay]="true" [model]="menuItems" [popup]="true"></p-tieredMenu>
 <p-tieredMenu #cartEl [autoDisplay]="true" [model]="cartItems" [popup]="true" id="cartMenu"></p-tieredMenu>
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+            pRipple
+            type="button"></button>
+    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+            pRipple
+            type="button"></button>
+  </p-footer>
+</p-confirmDialog>

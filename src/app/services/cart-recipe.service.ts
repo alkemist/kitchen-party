@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {cartRecipeConverter} from '@converters';
-import {DocumentNotFoundError} from '@errors';
-import {CartRecipeInterface} from '@interfaces';
-import {CartRecipeModel, RecipeModel} from '@models';
-import {Select, Store} from '@ngxs/store';
-import {FirestoreService, LoggerService, RecipeService} from '@services';
-import {AddCartRecipe, CartRecipeState, FillCartRecipes, RemoveCartRecipe, UpdateCartRecipe} from '@stores';
-import {ArrayHelper} from '@tools';
-import {orderBy} from 'firebase/firestore';
-import {first, Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { cartRecipeConverter } from '@converters';
+import { DocumentNotFoundError } from '@errors';
+import { CartRecipeInterface } from '@interfaces';
+import { CartRecipeModel, RecipeModel } from '@models';
+import { Select, Store } from '@ngxs/store';
+import { FirestoreService, LoggerService, RecipeService } from '@services';
+import { AddCartRecipe, CartRecipeState, FillCartRecipes, RemoveCartRecipe, UpdateCartRecipe } from '@stores';
+import { ArrayHelper } from '@tools';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -118,16 +118,11 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
     let cartRecipe = await this.get(recipe.id);
 
     if (!cartRecipe) {
-      const cartRecipeCreated = await this.add({
+      await this.add({
         recipe: recipe,
-        quantity: 0,
+        quantity: 1,
       });
-      if (cartRecipeCreated?.id) {
-        cartRecipe = await this.getById(cartRecipeCreated.id);
-      }
-    }
-
-    if (cartRecipe) {
+    } else {
       await this.updateQuantity(cartRecipe, 1);
     }
   }
@@ -172,6 +167,12 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
       cartRecipe.recipe = await this.recipeService.getById(cartRecipe.recipeId);
     }
     delete cartRecipe.recipeId;
+  }
+
+  async removeAll() {
+    this.all.forEach((cartRecipe) => {
+      this.remove(cartRecipe);
+    });
   }
 }
 

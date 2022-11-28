@@ -1,18 +1,18 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
-import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
-import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
-import {UserInterface} from '@interfaces';
-import {CartRecipeModel, IngredientModel} from '@models';
-import {Select} from '@ngxs/store';
-import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
-import {CartRecipeState, IngredientState} from '@stores';
-import {EnumHelper} from '@tools';
-import {default as NoSleep} from 'nosleep.js';
-import {MenuItem} from 'primeng/api';
-import {Observable, Subscription} from 'rxjs';
-import {CartRecipeService} from "@app/services/cart-recipe.service";
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Router, RoutesRecognized } from '@angular/router';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
+import { UserInterface } from '@interfaces';
+import { CartRecipeModel, IngredientModel } from '@models';
+import { Select } from '@ngxs/store';
+import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
+import { CartRecipeState, IngredientState } from '@stores';
+import { EnumHelper } from '@tools';
+import { default as NoSleep } from 'nosleep.js';
+import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { CartRecipeService } from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -28,7 +28,7 @@ export interface ToolbarFilters {
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   loggedUser?: UserInterface;
@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
 
   cartRecipes: CartRecipeModel[] = [];
+  cartRecipesSize = 0;
   @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeModel[]>;
 
   constructor(
@@ -61,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private ingredientService: IngredientService,
     private cartRecipeService: CartRecipeService,
     private filteringService: FilteringService,
+    private confirmationService: ConfirmationService,
   ) {
     if (this.ingredients$) {
       this.subscriptions.push(
@@ -146,14 +148,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
     const menuItemsTranslated = [];
     for (const item of menuItems) {
-      const itemTranslated = {...item};
+      const itemTranslated = { ...item };
       if (item.label) {
         itemTranslated.label = await this.translatorService.instant(item.label);
       }
       if (item.items) {
         itemTranslated.items = [];
         for (const subItem of item.items) {
-          const subItemTranslated = {...subItem};
+          const subItemTranslated = { ...subItem };
           if (subItem.label) {
             subItemTranslated.label = await this.translatorService.instant(subItem.label);
           }
@@ -177,12 +179,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ingredients: []
     } as ToolbarFilters);
   }
-
-  // @TODO Remove
-  /*gotoShopping() {
-    this.sidebarShowed = false;
-    this.router.navigate([ '/', 'shopping', this.selectedRecipes.join(',') ]).then();
-  }*/
 
   private initVariables(routeData: any) {
     if (typeof routeData['title'] === 'string') {
@@ -222,18 +218,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   buildCartItems() {
     let totalSlice = 0;
+    this.cartRecipesSize = 0;
 
     this.cartItems = this.cartRecipes.map((item) => {
       if (item.recipe?.nbSlices) {
         totalSlice += item.recipe.nbSlices * item.quantity;
       }
+      this.cartRecipesSize += item.quantity;
 
       return {
+        icon: 'pi pi-eye',
         label: item.recipe?.name,
         badge: item.quantity > 1 ? item.quantity.toString() : '',
         items: [
           {
-            label: this.translatorService.translate('Add'),
+            label: this.translatorService.translate('Add one'),
             icon: 'pi pi-plus',
             cartItem: item,
             command: async (event) => {
@@ -253,11 +252,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
             icon: 'pi pi-trash',
             cartItem: item,
             command: async (event) => {
-              await this.cartRecipeService.remove(event.item.cartItem);
+              this.confirmationService.confirm({
+                  message: `${ await this.translatorService.instant('Are you sure you want to delete it ?') }
+                  ${ item.recipe?.name }`,
+                  accept: async () => {
+                    await this.cartRecipeService.remove(event.item.cartItem);
+                  }
+                }
+              );
             }
           }
         ],
-        routerLink: `/${item.recipe?.slug}`
+        routerLink: `/${ item.recipe?.slug }`
       };
     });
 
@@ -266,10 +272,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
         {
           separator: true
         });
+      this.cartItems.push({
+        label: this.translatorService.translate('Empty the cart'),
+        icon: 'pi pi-trash',
+        command: async () => {
+          this.confirmationService.confirm({
+              message: await this.translatorService.instant('Are you sure you want to empty the cart ?'),
+              accept: async () => {
+                await this.cartRecipeService.removeAll();
+              }
+            }
+          );
+        }
+      });
       this.cartItems.push(
         {
           label: this.translatorService.translate('Shopping list'),
-          badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
+          icon: 'pi pi-shopping-cart',
+          badge: totalSlice > 0 ? `${ totalSlice } ${ this.translatorService.translate('Slices') }` : '',
           routerLink: `/shopping`
         });
     }
