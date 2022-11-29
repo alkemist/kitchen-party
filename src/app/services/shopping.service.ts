@@ -1,14 +1,10 @@
 import {Injectable} from '@angular/core';
-import {MeasureUnitLabelEnum} from '@enums';
-import {CartElement} from '@interfaces';
-import {RecipeIngredientModel, RecipeModel, RelationIngredientModel} from '@models';
-import {KitchenIngredientService, TranslatorService} from '@services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingService {
-  selectedRecipes: Map<string, SelectedRecipe>;
+  /*selectedRecipes: Map<string, SelectedRecipe>;
 
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
@@ -117,10 +113,5 @@ export class ShoppingService {
       }
       cartElement.quantity = quantities.join(', ');
     }
-  }
-}
-
-interface SelectedRecipe {
-  quantity: number,
-  recipe: RecipeModel
+  }*/
 }

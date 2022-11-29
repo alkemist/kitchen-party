@@ -237,7 +237,7 @@
 <p-blockUI [blocked]="loading" [target]="pnl">
   <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>
-<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="recipeConfirm">
   <p-footer>
     <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
             pRipple

@@ -60,7 +60,7 @@ const routes: Routes = [
   { path: 'calendar', component: CalendarComponent, data: { title: 'Calendar', showAppName: true } },
   {
     path: 'shopping', component: ShoppingComponent,
-    data: { title: 'Shopping list', showAppName: true }
+    data: {title: 'Shopping list', showAppName: true, showFilters: true}
   },
   {
     path: ':slug', component: FrontRecipeComponent,

@@ -29,7 +29,7 @@
 
     <button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0"
             [pTooltip]="'Shopping cart' | translate"
-            class="p-button-rounded p-button-text mobile-hidden" icon="pi pi-shopping-cart"
+            class="p-button-rounded p-button-text" icon="pi pi-shopping-cart"
             pButton pRipple type="button">
     </button>
     <p-badge *ngIf="cartRecipesSize > 0" [value]="cartRecipesSize.toString()" styleClass="mr-2"></p-badge>
@@ -93,7 +93,7 @@
 </p-toolbar>
 <p-tieredMenu #menuEl [autoDisplay]="true" [model]="menuItems" [popup]="true"></p-tieredMenu>
 <p-tieredMenu #cartEl [autoDisplay]="true" [model]="cartItems" [popup]="true" id="cartMenu"></p-tieredMenu>
-<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="headerConfirm">
   <p-footer>
     <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
             pRipple

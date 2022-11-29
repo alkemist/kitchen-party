@@ -1,49 +1,170 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {MeasureUnitLabelEnum} from '@enums';
-import {RecipeModel} from '@models';
-import {ShoppingService} from '@services';
-import {EnumHelper} from '@tools';
+import {CartRecipeModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel} from '@models';
+import {KitchenIngredientService, ShoppingService, TranslatorService} from '@services';
+import {Select} from "@ngxs/store";
+import {CartRecipeState, KitchenIngredientState} from "@stores";
+import {Observable, Subscription} from "rxjs";
+import {CartRecipeService} from "@app/services/cart-recipe.service";
+import {CartElement} from "@interfaces";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: [ './shopping.component.scss' ],
+  styleUrls: ['./shopping.component.scss'],
   host: {
     class: 'page-container'
   }
 })
 export class ShoppingComponent implements OnInit {
-  measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
-  recipes: RecipeModel[] = [];
-
   loading = true;
+  subscriptions: Subscription[] = [];
+
+  cartRecipes: CartRecipeModel[] = [];
+  cart: CartElement[] = [];
+  cartIndexes: string[] = [];
+  kitchenIndexes: string[] = [];
+  @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeModel[]>;
+  @Select(KitchenIngredientState.all) private kitchenIngredients$?: Observable<KitchenIngredientModel[]>;
 
   constructor(
-    private route: ActivatedRoute,
     private shoppingService: ShoppingService,
+    private cartRecipeService: CartRecipeService,
+    private translatorService: TranslatorService,
+    private kitchenIngredientService: KitchenIngredientService,
+    private confirmationService: ConfirmationService,
   ) {
   }
 
-  // @TODO Remove
-  /*get cart(): CartElement[] {
-    return this.shoppingService.cartOrderedByChecked;
-  }*/
+  get cartOrderedByChecked(): CartElement[] {
+    return this.cart.sort((a, b) => {
+      const aValue = a.inKitchen ? 1 : -1;
+      const bValue = b.inKitchen ? 1 : -1;
+      return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : RelationIngredientModel.orderTwoRelationIngredients(a, b));
+    });
+  }
 
-  ngOnInit(): void {
-    // @TODO Remove
-    /*this.route.data.subscribe(
-      (async (data: any) => {
-        if (data && data['recipes']) {
-          this.recipes = data['recipes'];
-
-          await this.shoppingService.initIndexes();
-
-          this.shoppingService.initCart(data['recipes']);
-          await this.shoppingService.mergeCart();
-
+  async ngOnInit(): Promise<void> {
+    /**
+     * Si la liste a déjà été récupéré, on peut utiliser les selecteurs
+     */
+    if (this.cartRecipes$) {
+      this.subscriptions.push(
+        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
+          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
           this.loading = false;
+        })
+      );
+    }
+    /**
+     * Sinon il faut rafraichir la liste
+     */
+    await this.kitchenIngredientService.getListOrRefresh().then((kitchenIngredients) => {
+      this.kitchenIndexes = kitchenIngredients.map(kitchenIngredient => kitchenIngredient.ingredient?.id!);
+    })
+  }
+
+  async confirmBuild() {
+    this.confirmationService.confirm({
+        key: "shoppingConfirm",
+        message: await this.translatorService.instant('Are you sure you want to rebuild the shopping list ?'),
+        accept: async () => {
+          await this.buildShoppingList();
         }
-      }));*/
+      }
+    );
+  }
+
+  async buildShoppingList() {
+    this.cart = [];
+    this.cartIndexes = [];
+
+    for (const cartRecipe of this.cartRecipes) {
+      if (cartRecipe.recipe) {
+        for (const recipeIngredient of cartRecipe.recipe.recipeIngredients) {
+          if (recipeIngredient.recipe) {
+            const subRecipe = recipeIngredient.recipe;
+            for (const subRecipeIngredient of subRecipe.recipeIngredients) {
+              const quantity = recipeIngredient.quantity ?? 1;
+              this.addToShoppingList(subRecipeIngredient, quantity * cartRecipe.quantity);
+            }
+          } else {
+            this.addToShoppingList(recipeIngredient, cartRecipe.quantity);
+          }
+        }
+      }
+    }
+    await this.finalizeShoppingList();
+  }
+
+  addToShoppingList(recipeIngredient: RecipeIngredientModel, multiplier: number = 1) {
+    let cartIndex = this.cartIndexes.indexOf(recipeIngredient.ingredient?.id!);
+
+    if (cartIndex === -1) {
+      cartIndex = this.cartIndexes.length;
+      this.cartIndexes.push(recipeIngredient.ingredient?.id!);
+
+      const quantities: any = {};
+      quantities[''] = 0;
+      quantities['undefined'] = 0;
+      quantities[MeasureUnitLabelEnum.gram] = 0;
+      quantities[MeasureUnitLabelEnum.milliliter] = 0;
+
+      this.cart.push({
+        ingredient: recipeIngredient.ingredient!,
+        inKitchen: false,
+        quantities: quantities,
+        quantity: ''
+      });
+
+    }
+    const quantityInformations = recipeIngredient.baseQuantity;
+
+    let quantityType: string = '';
+    if (quantityInformations.unit) {
+      quantityType = quantityInformations.unit;
+    } else if (quantityInformations.measure) {
+      quantityType = quantityInformations.measure;
+    } else if (quantityInformations.count === 0) {
+      quantityType = 'undefined';
+    }
+
+    if (typeof this.cart[cartIndex].quantities[quantityType] === 'undefined') {
+      this.cart[cartIndex].quantities[quantityType] = 0;
+    }
+
+    if (quantityType === 'undefined') {
+      this.cart[cartIndex].quantities[quantityType] = 1;
+    } else {
+      this.cart[cartIndex].quantities[quantityType] += quantityInformations.count * multiplier;
+    }
+  }
+
+  async finalizeShoppingList() {
+    for (const cartElement of this.cart) {
+      if (this.kitchenIndexes.indexOf(cartElement.ingredient.id!) > -1) {
+        cartElement.inKitchen = true;
+      }
+
+      const quantities = [];
+      for (let quantityType in cartElement.quantities) {
+        const count = cartElement.quantities[quantityType];
+        if (quantityType === MeasureUnitLabelEnum.gram || quantityType === MeasureUnitLabelEnum.milliliter) {
+          quantityType = await this.translatorService.instant(quantityType);
+        }
+
+        if (count) {
+          if (quantityType == '') {
+            quantities.push(`${count}`);
+          } else if (quantityType == 'undefined') {
+            quantities.push(`∞`);
+          } else {
+            quantities.push(`${count} ${quantityType}`);
+          }
+        }
+      }
+      cartElement.quantity = quantities.join(', ');
+    }
   }
 }

@@ -127,6 +127,7 @@ export class KitchenIngredientComponent implements OnInit {
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
+      key: "kitchenIngredientConfirm",
       message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
         this.kitchenIngredientService.remove(this.kitchenIngredient).then(async () => {
@@ -135,7 +136,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredients' ]);
+          await this.routerService.navigate(['/', 'admin', 'kitchen-ingredients']);
         });
       }
     });

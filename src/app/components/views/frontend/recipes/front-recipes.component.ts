@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ToolbarFilters} from '@app/components';
 import {DietTypes, SweetSalty, SweetSaltyLabelEnum} from '@enums';
 import {IngredientModel, RecipeModel} from '@models';
-import {FilteringService, IngredientService, RecipeService, ShoppingService} from '@services';
+import {FilteringService, IngredientService, RecipeService} from '@services';
 import {Subscription} from 'rxjs';
 import {CartRecipeService} from "@app/services/cart-recipe.service";
 
@@ -25,7 +25,6 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private filteringService: FilteringService,
     private ingredientService: IngredientService,
-    private shoppingService: ShoppingService,
     private cartRecipeService: CartRecipeService,
   ) {
     this.filteringService.setIngredientService(ingredientService);
@@ -34,16 +33,6 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   get filterSummary() {
     return this.filteringService.getFilterSummary();
   }
-
-  // @TODO Remove
-  /*get selectedRecipes() {
-    return this.shoppingService.selectedRecipes;
-  }*/
-
-  // @TODO Remove
-  /*set selectedRecipes(selectedRecipes) {
-    this.shoppingService.selectedRecipes = selectedRecipes;
-  }*/
 
   filter(filters: ToolbarFilters) {
     void this.filteringService.fillFilterSummary(filters);

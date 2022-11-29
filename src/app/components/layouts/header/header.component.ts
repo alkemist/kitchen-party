@@ -1,18 +1,18 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Router, RoutesRecognized } from '@angular/router';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
-import { UserInterface } from '@interfaces';
-import { CartRecipeModel, IngredientModel } from '@models';
-import { Select } from '@ngxs/store';
-import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
-import { CartRecipeState, IngredientState } from '@stores';
-import { EnumHelper } from '@tools';
-import { default as NoSleep } from 'nosleep.js';
-import { ConfirmationService, MenuItem } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
-import { CartRecipeService } from "@app/services/cart-recipe.service";
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {Router, RoutesRecognized} from '@angular/router';
+import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
+import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
+import {UserInterface} from '@interfaces';
+import {CartRecipeModel, IngredientModel} from '@models';
+import {Select} from '@ngxs/store';
+import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
+import {CartRecipeState, IngredientState} from '@stores';
+import {EnumHelper} from '@tools';
+import {default as NoSleep} from 'nosleep.js';
+import {ConfirmationService, MenuItem} from 'primeng/api';
+import {Observable, Subscription} from 'rxjs';
+import {CartRecipeService} from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -71,14 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         })
       );
     }
-    if (this.cartRecipes$) {
-      this.subscriptions.push(
-        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
-          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
-          this.buildCartItems();
-        })
-      );
-    }
+
     this.filteringService.setFilters(new UntypedFormGroup({
       diet: new UntypedFormControl(null, []),
       type: new UntypedFormControl(null, []),
@@ -105,6 +98,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    console.info("-- ngOnInit");
+
     this.router.events.subscribe((route: any) => {
       if (route instanceof RoutesRecognized) {
         let routeData = route.state.root.firstChild?.data as Record<string, any>;
@@ -123,6 +118,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dietTypes = await this.translatorService.translateLabels(this.dietTypes);
     this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
     this.sweetOrSalty = await this.translatorService.translateLabels(this.sweetOrSalty);
+
+    if (this.cartRecipes$) {
+      await this.cartRecipeService.getListOrRefresh();
+      this.subscriptions.push(
+        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
+          console.info('-- update cart', cartRecipes);
+          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
+          console.info('-- update cart after', this.cartRecipes);
+          this.buildCartItems();
+        })
+      );
+    }
 
     await this.userService.getLoggedUser(async (loggedUser) => {
       this.loading = false;
@@ -220,11 +227,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     let totalSlice = 0;
     this.cartRecipesSize = 0;
 
+    console.info('buildCartItems', this.cartRecipes);
+
     this.cartItems = this.cartRecipes.map((item) => {
       if (item.recipe?.nbSlices) {
         totalSlice += item.recipe.nbSlices * item.quantity;
       }
       this.cartRecipesSize += item.quantity;
+
+      console.info('build item', item);
 
       return {
         icon: 'pi pi-eye',
@@ -253,8 +264,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             cartItem: item,
             command: async (event) => {
               this.confirmationService.confirm({
-                  message: `${ await this.translatorService.instant('Are you sure you want to delete it ?') }
-                  ${ item.recipe?.name }`,
+                  key: "headerConfirm",
+                  message: `${await this.translatorService.instant('Are you sure you want to delete it ?')}
+                  ${item.recipe?.name}`,
                   accept: async () => {
                     await this.cartRecipeService.remove(event.item.cartItem);
                   }
@@ -277,6 +289,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         icon: 'pi pi-trash',
         command: async () => {
           this.confirmationService.confirm({
+              key: "headerConfirm",
               message: await this.translatorService.instant('Are you sure you want to empty the cart ?'),
               accept: async () => {
                 await this.cartRecipeService.removeAll();

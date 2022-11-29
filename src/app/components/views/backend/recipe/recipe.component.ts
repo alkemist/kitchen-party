@@ -238,6 +238,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
+      key: "recipeConfirm",
       message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
         this.loading = true;
@@ -247,7 +248,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          this.routerService.navigate([ '/', 'admin', 'recipes' ]);
+          this.routerService.navigate(['/', 'admin', 'recipes']);
         });
       }
     });
