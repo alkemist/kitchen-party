@@ -36,7 +36,9 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
       // Sinon, si des données à jour sont dans le store
       else if (this.all$ && !this.storeIsOutdated()) {
         this.getAll$()?.pipe(first()).subscribe(async ingredients => {
-          resolve(this.refreshList(ingredients));
+          this.refreshList(ingredients);
+          this.loaded = true;
+          resolve(this.all);
         })
 
       }
@@ -45,7 +47,9 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
         const ingredients = await super.queryList(orderBy('name'));
         this.store.dispatch(new FillIngredients(ingredients));
 
-        resolve(this.refreshList(ingredients));
+        this.refreshList(ingredients);
+        this.loaded = true;
+        resolve(this.all);
       }
     });
   }
@@ -56,8 +60,6 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
       this.all.push(new IngredientModel(ingredient));
     }
     this.all = ArrayHelper.sortBy<IngredientModel>(this.all, 'slug');
-    this.loaded = true;
-
     return this.all;
   }
 

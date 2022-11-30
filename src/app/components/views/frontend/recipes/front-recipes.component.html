@@ -20,14 +20,11 @@
           <h5 class="text-center flex-grow-1">
             {{ recipe.name }}
           </h5>
-          <!-- @TODO Remove -->
-          <!--<div class="flex align-items-center">
-            <p-checkbox [(ngModel)]="selectedRecipes" [value]="recipe.slug"></p-checkbox>
-          </div>-->
-          <button (click)="addToCart(recipe)" [pTooltip]="'Add to cart shopping' | translate" class="p-button-rounded"
-             icon="pi pi-shopping-cart"
-             pButton pRipple
-             tooltipPosition="bottom"></button>
+          <button *ngIf="loggedUser" (click)="addToCart(recipe)" [pTooltip]="'Add to cart shopping' | translate"
+                  class="p-button-rounded"
+                  icon="pi pi-shopping-cart"
+                  pButton pRipple
+                  tooltipPosition="bottom"></button>
         </div>
         <div class="details grid">
           <div [pTooltip]="recipe.preparationDuration ? ('Preparation duration' | translate) : ''"
@@ -60,9 +57,9 @@
             {{ recipe.recipeIngredients.length }}
           </div>
           <a [routerLink]="gotoRecipe(recipe)" [pTooltip]="'View recipe' | translate" class="p-button-rounded"
-                  icon="pi pi-eye"
-                  pButton pRipple
-                  tooltipPosition="bottom"></a>
+             icon="pi pi-eye"
+             pButton pRipple
+             tooltipPosition="bottom"></a>
         </div>
       </div>
     </div>

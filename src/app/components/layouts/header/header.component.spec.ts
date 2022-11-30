@@ -1,32 +1,32 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Router, RouterEvent, RouterStateSnapshot, RoutesRecognized} from '@angular/router';
-import {TranslatingRootModule} from '@app/modules/translating.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterEvent, RouterStateSnapshot, RoutesRecognized } from '@angular/router';
+import { TranslatingRootModule } from '@app/modules/translating.module';
 
-import {HeaderComponent} from '@components';
-import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
-import {IngredientModel, UserInterface} from '@models';
-import {NgxsModule} from '@ngxs/store';
-import {FilteringService, IngredientService, ShoppingService, TranslatorService, UserService} from '@services';
-import {IngredientState} from '@stores';
-import {MockModule, MockProvider} from 'ng-mocks';
-import {default as NoSleep} from 'nosleep.js';
-import {MenuItem} from 'primeng/api';
-import {ButtonModule} from 'primeng/button';
-import {DropdownModule} from 'primeng/dropdown';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {SidebarModule} from 'primeng/sidebar';
-import {TieredMenuModule} from 'primeng/tieredmenu';
-import {ToggleButtonModule} from 'primeng/togglebutton';
-import {ToolbarModule} from 'primeng/toolbar';
-import {Subject} from 'rxjs';
+import { HeaderComponent } from '@components';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
+import { IngredientModel } from '@models';
+import { NgxsModule } from '@ngxs/store';
+import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
+import { IngredientState } from '@stores';
+import { MockModule, MockProvider } from 'ng-mocks';
+import { default as NoSleep } from 'nosleep.js';
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SidebarModule } from 'primeng/sidebar';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ToolbarModule } from 'primeng/toolbar';
+import { Subject } from 'rxjs';
+import { UserInterface } from '@interfaces';
 
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let userServiceMock: UserService;
-  let shoppingServiceMock: ShoppingService;
   let ingredientServiceMock: IngredientService;
   let translatorServiceMock: TranslatorService;
   let filteringService: FilteringService;
@@ -68,14 +68,12 @@ describe('HeaderComponent', () => {
           MockProvider(TranslatorService),
           MockProvider(IngredientService),
           MockProvider(FilteringService),
-          MockProvider(ShoppingService),
           MockProvider(Router, routerMock)
         ],
     })
       .compileComponents();
 
     userServiceMock = TestBed.inject(UserService);
-    shoppingServiceMock = TestBed.inject(ShoppingService);
     ingredientServiceMock = TestBed.inject(IngredientService);
     translatorServiceMock = TestBed.inject(TranslatorService);
     filteringService = TestBed.inject(FilteringService);
@@ -157,7 +155,7 @@ describe('HeaderComponent', () => {
       noSleepDisableSpy.mockReset();
       noSleepEnableSpy.mockReset();
       title = '';
-      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
+      state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
       noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
@@ -266,8 +264,8 @@ describe('HeaderComponent', () => {
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
     expect(await component.translateMenu([ {
       label: 'test',
-      items: [ {label: 'test'} ]
-    } ])).toEqual([ {label: translatedLabel, items: [ {label: translatedLabel} ]} ]);
+      items: [ { label: 'test' } ]
+    } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
   });
 
   // @TODO Remove

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MeasureUnitLabelEnum } from '@enums';
-import { CartRecipeModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel } from '@models';
-import { KitchenIngredientService, ShoppingService, TranslatorService } from '@services';
+import { KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel } from '@models';
+import { KitchenIngredientService, TranslatorService } from '@services';
 import { Select } from "@ngxs/store";
 import { KitchenIngredientState } from "@stores";
 import { Observable, Subscription } from "rxjs";
 import { CartRecipeService } from "@app/services/cart-recipe.service";
 import { CartElement } from "@interfaces";
 import { ConfirmationService } from "primeng/api";
+import { CartIngredientService } from '@app/services/cart-ingredient.service';
 
 @Component({
   selector: 'app-shopping',
@@ -27,16 +28,12 @@ export class ShoppingComponent implements OnInit {
   @Select(KitchenIngredientState.all) private kitchenIngredients$?: Observable<KitchenIngredientModel[]>;
 
   constructor(
-    private shoppingService: ShoppingService,
     private cartRecipeService: CartRecipeService,
+    private cartIngredientService: CartIngredientService,
     private translatorService: TranslatorService,
     private kitchenIngredientService: KitchenIngredientService,
     private confirmationService: ConfirmationService,
   ) {
-  }
-
-  get cartRecipes(): CartRecipeModel[] {
-    return this.shoppingService.cartRecipes;
   }
 
   get cartOrderedByChecked(): CartElement[] {
@@ -71,7 +68,9 @@ export class ShoppingComponent implements OnInit {
     this.cart = [];
     this.cartIndexes = [];
 
-    for (const cartRecipe of this.cartRecipes) {
+    const cartRecipes = await this.cartRecipeService.getListOrRefresh();
+
+    for (const cartRecipe of cartRecipes) {
       if (cartRecipe.recipe) {
         for (const recipeIngredient of cartRecipe.recipe.recipeIngredients) {
           if (recipeIngredient.recipe) {
@@ -86,6 +85,7 @@ export class ShoppingComponent implements OnInit {
         }
       }
     }
+
     await this.finalizeShoppingList();
   }
 

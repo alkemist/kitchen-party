@@ -6,7 +6,6 @@ import {
   LoggerService,
   RecipeService,
   SearchService,
-  ShoppingService,
   TranslatorService,
   UploadService,
   UserService
@@ -19,7 +18,6 @@ import {
     RecipeService,
     UploadService,
     SearchService,
-    ShoppingService,
     FilterService,
     TranslatorService,
     KitchenIngredientService,

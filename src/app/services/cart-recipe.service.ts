@@ -38,7 +38,9 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
       // Sinon, si des données à jour sont dans le store
       else if (this.all$ && !this.storeIsOutdated()) {
         this.getAll$()?.pipe(first()).subscribe(async cartRecipes => {
-          resolve(this.refreshList(cartRecipes));
+          await this.refreshList(cartRecipes);
+          this.loaded = true;
+          resolve(this.all);
         })
 
       }
@@ -46,8 +48,9 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
       else {
         const cartRecipes = await super.queryList(orderBy('slug'));
         this.store.dispatch(new FillCartRecipes(cartRecipes));
-
-        resolve(this.refreshList(cartRecipes));
+        await this.refreshList(cartRecipes);
+        this.loaded = true;
+        resolve(this.all);
       }
     });
   }
@@ -61,8 +64,6 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
       this.all.push(cartRecipeModel);
     }
     this.all = ArrayHelper.sortBy<CartRecipeModel>(this.all, 'slug');
-    this.loaded = true;
-
     return this.all;
   }
 

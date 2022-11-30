@@ -27,12 +27,12 @@
             pRipple type="button"></button>
     <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
 
-    <button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0"
-            [pTooltip]="'Shopping cart' | translate"
+    <button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0" *ngIf="loggedUser"
+            [pTooltip]="'Recipes Cart' | translate"
             class="p-button-rounded p-button-text" icon="pi pi-shopping-cart"
             pButton pRipple type="button">
     </button>
-    <p-badge *ngIf="cartRecipesSize > 0" [value]="cartRecipesSize.toString()" styleClass="mr-2"></p-badge>
+    <p-badge *ngIf="loggedUser && cartRecipesSize > 0" [value]="cartRecipesSize.toString()" styleClass="mr-2"></p-badge>
   </div>
   <!-- End Toolbar Middle -->
 
