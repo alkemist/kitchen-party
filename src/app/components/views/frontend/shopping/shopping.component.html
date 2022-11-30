@@ -5,12 +5,20 @@
         <h5 class="text-center" translate="">Shopping list</h5>
       </ng-template>
 
-      <div *ngFor="let cartElement of cartOrderedByChecked" [class.checked]="cartElement.inKitchen"
+      <div *ngFor="let cartElement of cartOrderedByChecked; let i = index" [class.checked]="cartElement.inKitchen"
            class="ingredient flex align-items-center justify-content-between">
-        <p-checkbox [(ngModel)]="cartElement.inKitchen" [binary]="true"
-                    [label]="cartElement.ingredient.name">test
+        <p-checkbox (onChange)="onCheck($event, cartElement)" *ngIf="cartElement.ingredient || cartElement.other"
+                    [(ngModel)]="cartElement.inKitchen"
+                    [binary]="true"
+                    [label]="cartElement.ingredient?.name ?? cartElement.other ?? ''">test
         </p-checkbox>
-        <div class="quantity">{{ cartElement.quantity }}</div>
+        <div class="flex flex-row align-items-center gap-4">
+          <div class="quantity">{{ cartElement.quantity }}</div>
+          <button pButton pRipple type="button" icon="pi pi-pencil" (click)="edit(i, cartElement)"
+                  class="p-button-rounded p-button-text"></button>
+          <button pButton pRipple type="button" icon="pi pi-trash" (click)="remove(i)"
+                  class="p-button-rounded p-button-text"></button>
+        </div>
       </div>
 
       <ng-template pTemplate="footer">

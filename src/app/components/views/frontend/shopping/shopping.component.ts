@@ -1,14 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { MeasureUnitLabelEnum } from '@enums';
-import { KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel } from '@models';
+import {
+  CartIngredientModel,
+  IngredientModel,
+  KitchenIngredientModel,
+  RecipeIngredientModel,
+  RelationIngredientModel
+} from '@models';
 import { KitchenIngredientService, TranslatorService } from '@services';
 import { Select } from "@ngxs/store";
 import { KitchenIngredientState } from "@stores";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { CartRecipeService } from "@app/services/cart-recipe.service";
 import { CartElement } from "@interfaces";
 import { ConfirmationService } from "primeng/api";
 import { CartIngredientService } from '@app/services/cart-ingredient.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { recipeIngredientValidator } from '@validators';
 
 @Component({
   selector: 'app-shopping',
@@ -20,8 +28,11 @@ import { CartIngredientService } from '@app/services/cart-ingredient.service';
 })
 export class ShoppingComponent implements OnInit {
   loading = true;
-  subscriptions: Subscription[] = [];
 
+  form: FormGroup;
+  showForm: boolean = false;
+
+  cartIngredient: CartIngredientModel[] = [];
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
   kitchenIndexes: string[] = [];
@@ -34,6 +45,11 @@ export class ShoppingComponent implements OnInit {
     private kitchenIngredientService: KitchenIngredientService,
     private confirmationService: ConfirmationService,
   ) {
+    this.form = new FormGroup({
+      quantity: new FormControl<number | null>(null),
+      unitOrMeasure: new FormControl(),
+      ingredientOrOther: new FormControl<IngredientModel | string>('', [ Validators.required ]),
+    }, [ recipeIngredientValidator() ]);
   }
 
   get cartOrderedByChecked(): CartElement[] {
@@ -45,9 +61,6 @@ export class ShoppingComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    /**
-     * Sinon il faut rafraichir la liste
-     */
     await this.kitchenIngredientService.getListOrRefresh().then((kitchenIngredients) => {
       this.kitchenIndexes = kitchenIngredients.map(kitchenIngredient => kitchenIngredient.ingredient?.id!);
     })
@@ -134,7 +147,7 @@ export class ShoppingComponent implements OnInit {
 
   async finalizeShoppingList() {
     for (const cartElement of this.cart) {
-      if (this.kitchenIndexes.indexOf(cartElement.ingredient.id!) > -1) {
+      if (cartElement?.ingredient && this.kitchenIndexes.indexOf(cartElement.ingredient.id!) > -1) {
         cartElement.inKitchen = true;
       }
 
@@ -157,5 +170,28 @@ export class ShoppingComponent implements OnInit {
       }
       cartElement.quantity = quantities.join(', ');
     }
+  }
+
+  edit(index: number, cartElement: CartElement) {
+    this.form.patchValue({
+      quantity: cartElement.quantity,
+      unitOrMeasure: cartElement.unit ?? cartElement.measure,
+      ingredientOrOther: cartElement.ingredient ?? cartElement.other,
+    });
+    this.showForm = true;
+  }
+
+  remove(index: number) {
+
+  }
+
+  save() {
+    if (this.form.valid) {
+      this.showForm = false;
+    }
+  }
+
+  onCheck($event: { checked: boolean }, cartElement: CartElement) {
+
   }
 }

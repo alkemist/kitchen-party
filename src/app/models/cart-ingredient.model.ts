@@ -1,14 +1,16 @@
-import {KitchenIngredientInterface} from '@interfaces';
-import {RelationIngredientModel} from "./relation-ingredient.model";
-import {CartIngredientInterface} from "@app/interfaces/cart-ingredient.interface";
+import { KitchenIngredientInterface } from '@interfaces';
+import { RelationIngredientModel } from "./relation-ingredient.model";
+import { CartIngredientInterface } from "@app/interfaces/cart-ingredient.interface";
 
 
 export class CartIngredientModel extends RelationIngredientModel implements KitchenIngredientInterface {
   other?: string;
+  checked: boolean;
 
-  constructor(kitchenIngredient: CartIngredientInterface) {
-    super(kitchenIngredient);
-    this.other = kitchenIngredient.other ?? '';
+  constructor(cartIngredient: CartIngredientInterface) {
+    super(cartIngredient);
+    this.other = cartIngredient.other ?? '';
+    this.checked = cartIngredient.checked;
   }
 
   get name(): string | undefined {
