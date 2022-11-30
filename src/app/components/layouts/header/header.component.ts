@@ -1,18 +1,18 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
-import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
-import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
-import {UserInterface} from '@interfaces';
-import {CartRecipeModel, IngredientModel} from '@models';
-import {Select} from '@ngxs/store';
-import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
-import {CartRecipeState, IngredientState} from '@stores';
-import {EnumHelper} from '@tools';
-import {default as NoSleep} from 'nosleep.js';
-import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Observable, Subscription} from 'rxjs';
-import {CartRecipeService} from "@app/services/cart-recipe.service";
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Router, RoutesRecognized } from '@angular/router';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
+import { CartRecipeInterface, IngredientInterface, UserInterface } from '@interfaces';
+import { CartRecipeModel, IngredientModel } from '@models';
+import { Select } from '@ngxs/store';
+import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
+import { CartRecipeState, IngredientState } from '@stores';
+import { EnumHelper } from '@tools';
+import { default as NoSleep } from 'nosleep.js';
+import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { CartRecipeService } from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -49,11 +49,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   ingredients: IngredientModel[] = [];
-  @Select(IngredientState.all) private ingredients$?: Observable<IngredientModel[]>;
+  @Select(IngredientState.all) private ingredients$?: Observable<IngredientInterface[]>;
 
-  cartRecipes: CartRecipeModel[] = [];
   cartRecipesSize = 0;
-  @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeModel[]>;
+  @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeInterface[]>;
 
   constructor(
     private userService: UserService,
@@ -63,10 +62,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private cartRecipeService: CartRecipeService,
     private filteringService: FilteringService,
     private confirmationService: ConfirmationService,
+    private shoppingService: ShoppingService,
   ) {
     if (this.ingredients$) {
       this.subscriptions.push(
-        this.ingredients$.subscribe(async (ingredients: IngredientModel[]) => {
+        this.ingredients$.subscribe(async (ingredients: IngredientInterface[]) => {
           this.ingredients = this.ingredientService.refreshList(ingredients);
         })
       );
@@ -97,9 +97,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.filteringService.getFilterSummary();
   }
 
-  async ngOnInit(): Promise<void> {
-    console.info("-- ngOnInit");
+  get cartRecipes(): CartRecipeModel[] {
+    return this.shoppingService.cartRecipes;
+  }
 
+  async ngOnInit(): Promise<void> {
     this.router.events.subscribe((route: any) => {
       if (route instanceof RoutesRecognized) {
         let routeData = route.state.root.firstChild?.data as Record<string, any>;
@@ -120,12 +122,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sweetOrSalty = await this.translatorService.translateLabels(this.sweetOrSalty);
 
     if (this.cartRecipes$) {
-      await this.cartRecipeService.getListOrRefresh();
       this.subscriptions.push(
-        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
-          console.info('-- update cart', cartRecipes);
-          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
-          console.info('-- update cart after', this.cartRecipes);
+        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeInterface[]) => {
+          this.shoppingService.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
           this.buildCartItems();
         })
       );
@@ -227,15 +226,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     let totalSlice = 0;
     this.cartRecipesSize = 0;
 
-    console.info('buildCartItems', this.cartRecipes);
-
     this.cartItems = this.cartRecipes.map((item) => {
       if (item.recipe?.nbSlices) {
         totalSlice += item.recipe.nbSlices * item.quantity;
       }
       this.cartRecipesSize += item.quantity;
-
-      console.info('build item', item);
 
       return {
         icon: 'pi pi-eye',
@@ -265,8 +260,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             command: async (event) => {
               this.confirmationService.confirm({
                   key: "headerConfirm",
-                  message: `${await this.translatorService.instant('Are you sure you want to delete it ?')}
-                  ${item.recipe?.name}`,
+                  message: `${ await this.translatorService.instant('Are you sure you want to delete it ?') }
+                  ${ item.recipe?.name }`,
                   accept: async () => {
                     await this.cartRecipeService.remove(event.item.cartItem);
                   }

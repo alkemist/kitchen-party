@@ -1,9 +1,12 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { CartRecipeModel } from '@models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingService {
+  cartRecipes: CartRecipeModel[] = [];
+
   /*selectedRecipes: Map<string, SelectedRecipe>;
 
   cart: CartElement[] = [];

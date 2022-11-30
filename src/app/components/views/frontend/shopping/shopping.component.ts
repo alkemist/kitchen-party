@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {MeasureUnitLabelEnum} from '@enums';
-import {CartRecipeModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel} from '@models';
-import {KitchenIngredientService, ShoppingService, TranslatorService} from '@services';
-import {Select} from "@ngxs/store";
-import {CartRecipeState, KitchenIngredientState} from "@stores";
-import {Observable, Subscription} from "rxjs";
-import {CartRecipeService} from "@app/services/cart-recipe.service";
-import {CartElement} from "@interfaces";
-import {ConfirmationService} from "primeng/api";
+import { Component, OnInit } from '@angular/core';
+import { MeasureUnitLabelEnum } from '@enums';
+import { CartRecipeModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel } from '@models';
+import { KitchenIngredientService, ShoppingService, TranslatorService } from '@services';
+import { Select } from "@ngxs/store";
+import { KitchenIngredientState } from "@stores";
+import { Observable, Subscription } from "rxjs";
+import { CartRecipeService } from "@app/services/cart-recipe.service";
+import { CartElement } from "@interfaces";
+import { ConfirmationService } from "primeng/api";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: ['./shopping.component.scss'],
+  styleUrls: [ './shopping.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -21,11 +21,9 @@ export class ShoppingComponent implements OnInit {
   loading = true;
   subscriptions: Subscription[] = [];
 
-  cartRecipes: CartRecipeModel[] = [];
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
   kitchenIndexes: string[] = [];
-  @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeModel[]>;
   @Select(KitchenIngredientState.all) private kitchenIngredients$?: Observable<KitchenIngredientModel[]>;
 
   constructor(
@@ -37,6 +35,10 @@ export class ShoppingComponent implements OnInit {
   ) {
   }
 
+  get cartRecipes(): CartRecipeModel[] {
+    return this.shoppingService.cartRecipes;
+  }
+
   get cartOrderedByChecked(): CartElement[] {
     return this.cart.sort((a, b) => {
       const aValue = a.inKitchen ? 1 : -1;
@@ -46,17 +48,6 @@ export class ShoppingComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    /**
-     * Si la liste a déjà été récupéré, on peut utiliser les selecteurs
-     */
-    if (this.cartRecipes$) {
-      this.subscriptions.push(
-        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeModel[]) => {
-          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
-          this.loading = false;
-        })
-      );
-    }
     /**
      * Sinon il faut rafraichir la liste
      */
@@ -156,11 +147,11 @@ export class ShoppingComponent implements OnInit {
 
         if (count) {
           if (quantityType == '') {
-            quantities.push(`${count}`);
+            quantities.push(`${ count }`);
           } else if (quantityType == 'undefined') {
             quantities.push(`∞`);
           } else {
-            quantities.push(`${count} ${quantityType}`);
+            quantities.push(`${ count } ${ quantityType }`);
           }
         }
       }
