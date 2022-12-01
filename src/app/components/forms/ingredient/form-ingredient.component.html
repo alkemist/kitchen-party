@@ -36,12 +36,13 @@
     <div class="field grid">
       <label [ngClass]="{'p-error':type.invalid && (type.dirty || type.touched)}"
              class="col-12 mb-2 md:col-4 md:mb-0"
-             for="type" translate="">Type</label>
+             translate="">Type</label>
       <div class="col-12 md:col-8">
         <p-dropdown [autoDisplayFirst]="false"
                     [ngClass]="{'p-invalid':type.invalid && (type.dirty || type.touched)}"
                     [options]="ingredientTypes" [placeholder]="'Select a type' | translate"
                     formControlName="type"
+                    appendTo="body"
                     inputId="type" optionValue="key"
                     styleClass="inputfield w-full"></p-dropdown>
       </div>
@@ -55,7 +56,7 @@
 
     <div class="field grid">
       <label class="col-12 mb-2 md:col-4 md:mb-0"
-             for="isLiquid" translate="">Liquid ?</label>
+             translate="">Liquid ?</label>
       <div class="col-12 md:col-8">
         <p-toggleButton formControlName="isLiquid" inputId="isLiquid" offIcon="pi pi-check"
                         onIcon="pi pi-check"></p-toggleButton>

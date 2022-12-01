@@ -1,18 +1,18 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Router, RoutesRecognized } from '@angular/router';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
-import { CartRecipeInterface, IngredientInterface, UserInterface } from '@interfaces';
-import { CartRecipeModel, IngredientModel } from '@models';
-import { Select } from '@ngxs/store';
-import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
-import { CartRecipeState, IngredientState } from '@stores';
-import { EnumHelper } from '@tools';
-import { default as NoSleep } from 'nosleep.js';
-import { ConfirmationService, MenuItem } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
-import { CartRecipeService } from "@app/services/cart-recipe.service";
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {Router, RoutesRecognized} from '@angular/router';
+import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
+import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
+import {CartRecipeInterface, IngredientInterface, UserInterface} from '@interfaces';
+import {CartRecipeModel, IngredientModel} from '@models';
+import {Select} from '@ngxs/store';
+import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
+import {CartRecipeState, IngredientState} from '@stores';
+import {EnumHelper} from '@tools';
+import {default as NoSleep} from 'nosleep.js';
+import {ConfirmationService, MenuItem} from 'primeng/api';
+import {Observable, Subscription} from 'rxjs';
+import {CartRecipeService} from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title: string = '';
 
   showFilters = false;
+  showShopping = false;
   showAppName = false;
   @HostBinding('class.hideHeader') hideHeader = false;
 
@@ -198,6 +199,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.showFilters = routeData['showFilters'];
     } else {
       this.showFilters = false;
+    }
+
+    if (typeof routeData['showShopping'] === 'boolean') {
+      this.showShopping = routeData['showShopping'];
+    } else {
+      this.showShopping = false;
     }
 
     if (typeof routeData['hideHeader'] === 'boolean') {

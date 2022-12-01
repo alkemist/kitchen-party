@@ -1,9 +1,10 @@
-import { RelationIngredientInterface } from "@app/interfaces/relation-ingredient.interface";
+import {CartIngredientFormInterface} from "@app/interfaces/cart-ingredient-form.interface";
 
 
-export interface CartIngredientInterface extends RelationIngredientInterface {
+export interface CartIngredientInterface extends CartIngredientFormInterface {
   slug?: string;
-  name?: string;
-  other?: string;
+
   checked: boolean;
+
+  ingredientId?: string;
 }

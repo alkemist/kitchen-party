@@ -2,7 +2,7 @@
   <p-card #pnl class="ingredient">
     <ng-template pTemplate="title">
       <div class="flex flex-row align-items-center">
-        <h5 class="text-center flex-grow-1"><!--{{ ingredient?.name ?? ('New cart ingredient' | translate) }}--></h5>
+        <h5 class="text-center flex-grow-1">{{ name ?? ('New item' | translate) }}</h5>
         <button (click)="close()"
                 class="p-button-rounded p-button-text" icon="pi pi-times"
                 pButton
@@ -10,105 +10,74 @@
       </div>
     </ng-template>
 
-    <div class="field grid">
+    <div class="field grid col-12">
       <label
-        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        [ngClass]="{'p-error':form.get('quantity')?.invalid && (form.get('quantity')?.dirty || form.get('quantity')?.touched)}"
         translate="">Quantity</label>
-      <p-inputNumber
-        [min]="0"
-        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
-        [step]="0.1"
+      <input
+        [ngClass]="{'p-invalid':form.get('quantity')?.invalid && (form.get('quantity')?.dirty || form.get('quantity')?.touched)}"
         class="inputfield w-full"
-        formControlName="quantity"
-        inputId="quantity"></p-inputNumber>
-      <div
-        *ngIf="form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)"
-        class="p-error">
-        <small *ngIf="form.errors?.['invalid']"
-               translate="">
-          Required.
-        </small>
-      </div>
+        formControlName="quantity" pInputText/>
     </div>
 
-    <div class="field grid">
+    <div class="field grid col-12">
       <label
-        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
-        translate="">Unit</label>
-      <p-dropdown
-        [autoDisplayFirst]="false"
-        [editable]="true"
-        [filter]="true"
-        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
-        [options]="measureUnits"
-        [showClear]="true"
-        formControlName="unitOrMeasure"
-        inputId="unit" optionValue="key"
-        styleClass="inputfield w-full">
-        <ng-template let-selectItem pTemplate="selectedItem">
-          {{ selectItem.label }}
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          {{ item.label }}
-        </ng-template>
-      </p-dropdown>
-      <div
-        *ngIf="form.invalid && (form.dirty || form.get('ingredientOrOther')?.touched)"
-        class="p-error">
-        <small *ngIf="form.errors?.['invalid']"
-               translate="">
-          Required.
-        </small>
-      </div>
-    </div>
-
-    <div class="field grid">
-      <label
-        [ngClass]="{'p-error':form.get('ingredientOrOther')?.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        [ngClass]="{'p-error':form.get('ingredient')?.invalid && (form.get('ingredient')?.dirty || form.get('ingredient')?.touched)}"
         translate="">Ingredient</label>
-      <p-dropdown
-        [autoDisplayFirst]="false"
-        [editable]="true"
-        [filter]="true"
-        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
-        [options]="ingredients"
-        [showClear]="true"
-        appendTo="body"
-        formControlName="ingredientOrOther"
-        inputId="unit" optionLabel="name"
-        styleClass="inputfield w-full">
-        <ng-template let-selectItem pTemplate="selectedItem">
-          {{ selectItem.name }}
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          {{ item.name }}
-        </ng-template>
-      </p-dropdown>
-      <div
-        *ngIf="form.get('ingredientOrOther')?.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)"
-        class="p-error">
-        <small *ngIf="form.get('ingredientOrOther')?.errors?.['required']"
-               translate="">
-          Required.
-        </small>
-        <small *ngIf="form.get('ingredientOrOther')?.errors?.['exist']" translate="">
-          Cart ingredient already in shopping list.
-        </small>
-      </div>
+      <p-autoComplete (completeMethod)="searchIngredient($event)"
+                      (onClear)="form.get('ingredient')?.setValue(null)"
+                      [dropdown]="true"
+                      [forceSelection]="true"
+                      [required]="false"
+                      [showClear]="true"
+                      [suggestions]="ingredients"
+                      appendTo="body" class="inputfield w-full"
+                      dataKey="id"
+                      field="name" formControlName="ingredient">
+      </p-autoComplete>
+    </div>
+
+    <div class="field grid col-12">
+      <label [ngClass]="{'p-error':form.get('other')?.invalid && (form.get('other')?.dirty || form.get('other')?.touched)}"
+             class="w-full"
+             translate="">Other</label>
+      <span class="p-input-icon-right w-full">
+          <i (click)="form.get('other')?.setValue('')" class="pi pi-times"></i>
+          <input
+            [ngClass]="{'p-invalid':form.get('other')?.invalid && (form.get('other')?.dirty || form.get('other')?.touched)}"
+            class="inputfield w-full"
+            formControlName="other" pInputText/>
+      </span>
+    </div>
+
+    <div *ngIf="form.invalid && (form.dirty || form.touched)" class="col-12 p-error">
+      <small *ngIf="form.errors?.['invalid']" translate="">
+        Ingredient or other is required.
+      </small>
     </div>
 
     <ng-template pTemplate="footer">
       <div class="flex flex-row">
-        <!--*ngIf="ingredient?.id"-->
-        <button (click)="remove()" [label]="('Remove' | translate)"
+        <button (click)="confirmRemove()" *ngIf="cartElement" [label]="('Remove' | translate)"
                 class="p-button-danger"
                 icon="pi pi-trash" pButton pRipple
                 type="button"></button>
         <div class="flex-grow-1"></div>
-        <!--[label]="(ingredient?.id ? 'Update' : 'Add') | translate"-->
-        <button icon="pi pi-check" pButton pRipple
+        <button [disabled]="form.invalid && (form.dirty || form.touched)" [label]="(cartElement ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton
+                pRipple
                 type="submit"></button>
       </div>
     </ng-template>
   </p-card>
 </form>
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle"
+                 key="cartIngredientConfirm">
+  <p-footer>
+    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+            pRipple
+            type="button"></button>
+    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+            pRipple
+            type="button"></button>
+  </p-footer>
+</p-confirmDialog>

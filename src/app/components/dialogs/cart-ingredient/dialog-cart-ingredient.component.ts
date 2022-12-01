@@ -1,13 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {MeasureUnitLabelEnum} from '@enums';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, UntypedFormGroup} from '@angular/forms';
 import {CartIngredientFormInterface, IngredientInterface} from '@interfaces';
 import {IngredientModel} from '@models';
 import {IngredientService, RecipeService, TranslatorService} from '@services';
-import {EnumHelper} from '@tools';
-import {MessageService} from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {recipeIngredientValidator} from "@validators";
+import {Dropdown} from "primeng/dropdown";
+import {cartIngredientValidator} from "@app/validators/cart-ingredient.validator";
 
 @Component({
   selector: 'app-dialog-cart-ingredient',
@@ -15,12 +14,13 @@ import {recipeIngredientValidator} from "@validators";
   styleUrls: ['./dialog-cart-ingredient.component.scss']
 })
 export class DialogCartIngredientComponent implements OnInit {
-  measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
-
   form: UntypedFormGroup = new UntypedFormGroup({});
   loading = false;
   error: string = '';
   ingredients: IngredientModel[] = [];
+
+  @ViewChild('dropdown') dropdown: Dropdown | undefined;
+  selectedIngredient: IngredientModel | string | undefined;
 
   cartElement?: CartIngredientFormInterface;
 
@@ -29,28 +29,45 @@ export class DialogCartIngredientComponent implements OnInit {
     private recipeService: RecipeService,
     private translatorService: TranslatorService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private ref: DynamicDialogRef,
     public config: DynamicDialogConfig
   ) {
-    this.cartElement = config.data;
-    console.info("cartElement", config.data);
+    this.cartElement = config.data.cartElement as CartIngredientFormInterface;
 
     this.form = new FormGroup({
-      quantity: new FormControl<number | null>(null),
-      unitOrMeasure: new FormControl(),
-      ingredientOrOther: new FormControl<IngredientModel | string>('', [Validators.required]),
-    }, [recipeIngredientValidator()]);
+      ingredient: new FormControl<IngredientModel | null>(null),
+      other: new FormControl<string>(''),
+      quantity: new FormControl<string>(''),
+    }, [cartIngredientValidator()]);
   }
 
-  get name(): UntypedFormControl {
-    return this.form?.get('name') as UntypedFormControl;
+  get name(): string | undefined {
+    if (!this.cartElement) {
+      return undefined;
+    }
+
+    const item = this.cartElement.ingredient ? this.cartElement.ingredient.name : this.cartElement.other;
+
+    return `${this.cartElement.quantity} ${item}`;
   }
 
   async ngOnInit() {
     this.ingredients = await this.ingredientService.getListOrRefresh();
-    console.info("ingredients", this.ingredients);
-    this.measureUnits = await this.translatorService.translateLabels(EnumHelper.enumToObject(MeasureUnitLabelEnum));
-    this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
+
+    if (this.cartElement) {
+      this.form.patchValue({
+        ingredient: this.cartElement.ingredient,
+        other: this.cartElement.other,
+        quantity: this.cartElement.quantity,
+      });
+    }
+  }
+
+  searchIngredient(event: { query: string }): void {
+    this.ingredientService.search(event.query).then(ingredients => {
+      this.ingredients = ingredients;
+    });
   }
 
   async handleSubmit(): Promise<void> {
@@ -99,7 +116,18 @@ export class DialogCartIngredientComponent implements OnInit {
     });*/
   }
 
-  remove() {
+  async confirmRemove() {
+    this.confirmationService.confirm({
+        key: "cartIngredientConfirm",
+        message: await this.translatorService.instant('Are you sure you want to remove ingredient cart ?'),
+        accept: async () => {
+          this.remove();
+        }
+      }
+    );
+  }
+
+  private remove() {
 
   }
 }

@@ -169,16 +169,16 @@ export class ShoppingComponent implements OnInit {
       data: {
         cartElement
       }
-    });
+    })
   }
 
   edit(index: number, cartElement: CartElement) {
-    // @TODO convert cartElement.quantity(string) to quantity(number) + unitOrMeasure(string)
+    console.info("edit", cartElement);
     this.showIngredientCartModal({
       id: cartElement.id,
-      quantity: null,
-      unitOrMeasure: cartElement.unit ?? cartElement.measure,
-      ingredientOrOther: cartElement.ingredient ?? cartElement.other,
+      quantity: cartElement.quantity,
+      ingredient: cartElement.ingredient,
+      other: cartElement.other,
     });
   }
 

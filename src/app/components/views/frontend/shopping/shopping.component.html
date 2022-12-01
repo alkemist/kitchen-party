@@ -21,10 +21,14 @@
 
       <ng-template pTemplate="footer">
         <div class="flex flex-row align-items-center justify-content-between">
-          <p-button (click)="confirmBuild()" [label]="'Add recipes cart' | translate" class=""
-                    icon="pi pi-shopping-cart"></p-button>
-          <p-button (click)="showIngredientCartModal()" [label]="'Add ingredient cart' | translate" class=""
-                    icon="pi pi-plus"></p-button>
+          <button (click)="confirmBuild()" [label]="'Add recipes cart' | translate" class="p-button-danger"
+                  icon="pi pi-shopping-cart"
+                  pButton
+                  pRipple></button>
+          <button (click)="showIngredientCartModal()" [label]="'Add ingredient cart' | translate" class=""
+                  icon="pi pi-plus"
+                  pButton
+                  pRipple></button>
         </div>
       </ng-template>
     </p-card>

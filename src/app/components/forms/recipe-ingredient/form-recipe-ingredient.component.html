@@ -34,7 +34,7 @@
         [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
         [options]="measureUnits"
         [showClear]="true"
-        formControlName="unitOrMeasure" optionValue="key"
+        formControlName="unitOrMeasure"
         styleClass="inputfield w-full">
         <ng-template let-selectItem pTemplate="selectedItem">
           {{ selectItem.label }}

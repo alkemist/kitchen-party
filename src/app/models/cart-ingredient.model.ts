@@ -1,22 +1,39 @@
-import { KitchenIngredientInterface } from '@interfaces';
-import { RelationIngredientModel } from "./relation-ingredient.model";
-import { CartIngredientInterface } from "@app/interfaces/cart-ingredient.interface";
+import {CartIngredientInterface} from "@app/interfaces/cart-ingredient.interface";
+import {IngredientModel} from "@app/models/ingredient.model";
 
 
-export class CartIngredientModel extends RelationIngredientModel implements KitchenIngredientInterface {
+export class CartIngredientModel implements CartIngredientInterface {
+  id?: string;
+  quantity: string;
+
   other?: string;
   checked: boolean;
 
+  ingredient?: IngredientModel;
+  ingredientId?: string;
+
   constructor(cartIngredient: CartIngredientInterface) {
-    super(cartIngredient);
+    this.id = cartIngredient.id;
+    this.quantity = cartIngredient.quantity;
+
     this.other = cartIngredient.other ?? '';
     this.checked = cartIngredient.checked;
+
+    if (cartIngredient.ingredientId) {
+      this.ingredientId = cartIngredient.ingredientId;
+    }
+    if (cartIngredient.ingredient) {
+      this.ingredient = new IngredientModel(cartIngredient.ingredient);
+    }
   }
 
   get name(): string | undefined {
     return this.ingredient?.name;
   }
 
+  toString(): string {
+    return this.ingredient?.name ?? '';
+  }
 }
 
 

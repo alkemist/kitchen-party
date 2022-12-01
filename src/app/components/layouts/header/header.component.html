@@ -16,23 +16,18 @@
   <!-- End Toolbar Left -->
 
   <!-- Begin Toolbar Middle -->
-  <div *ngIf="showFilters" class="filter-name flex flex-row align-items-center">
-    <span class="p-float-label">
+  <div class="filter-name flex flex-row align-items-center">
+    <div *ngIf="showFilters" class="filter-name flex flex-row align-items-center">
+      <span class="p-float-label">
           <input formControlName="name" id="float-input" pInputText type="text">
           <label for="float-input" translate="">Name</label>
-    </span>
-    <button (click)="resetFilters()" [pTooltip]="'Clear filters' | translate" class="p-button-rounded p-button-text"
-            icon="pi pi-times"
-            [disabled]="filterSummary.length === 0" pButton
-            pRipple type="button"></button>
-    <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
-
-    <button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0" *ngIf="loggedUser"
-            [pTooltip]="'Recipes Cart' | translate"
-            class="p-button-rounded p-button-text" icon="pi pi-shopping-cart"
-            pButton pRipple type="button">
-    </button>
-    <p-badge *ngIf="loggedUser && cartRecipesSize > 0" [value]="cartRecipesSize.toString()" styleClass="mr-2"></p-badge>
+      </span>
+      <button (click)="resetFilters()" [disabled]="filterSummary.length === 0" [pTooltip]="'Clear filters' | translate"
+              class="p-button-rounded p-button-text"
+              icon="pi pi-times" pButton
+              pRipple type="button"></button>
+      <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
+    </div>
   </div>
   <!-- End Toolbar Middle -->
 
@@ -83,8 +78,17 @@
   <!-- End Sidebar -->
 
   <!-- Begin Toolbar Right -->
-  <div *ngIf="showFilters" class="p-toolbar-group-right">
-    <button (click)="sidebarShowed = true" class="p-button-rounded p-button-text"
+  <div class="p-toolbar-group-right">
+    <div *ngIf="showShopping" class="filter-name flex flex-row align-items-center">
+      <button (click)="cartEl.toggle($event)" *ngIf="loggedUser" [disabled]="cartRecipesSize === 0"
+              [pTooltip]="'Recipes Cart' | translate"
+              class="p-button-rounded p-button-text" icon="pi pi-shopping-cart"
+              pButton pRipple type="button">
+      </button>
+      <p-badge *ngIf="loggedUser && cartRecipesSize > 0" [value]="cartRecipesSize.toString()"
+               styleClass="mr-2"></p-badge>
+    </div>
+    <button (click)="sidebarShowed = true" *ngIf="showFilters" class="p-button-rounded p-button-text"
             icon="pi pi-chevron-left"
             pButton
             pRipple></button>
