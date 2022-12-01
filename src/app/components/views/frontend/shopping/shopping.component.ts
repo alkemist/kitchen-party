@@ -1,36 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { MeasureUnitLabelEnum } from '@enums';
-import {
-  CartIngredientModel,
-  IngredientModel,
-  KitchenIngredientModel,
-  RecipeIngredientModel,
-  RelationIngredientModel
-} from '@models';
-import { KitchenIngredientService, TranslatorService } from '@services';
-import { Select } from "@ngxs/store";
-import { KitchenIngredientState } from "@stores";
-import { Observable } from "rxjs";
-import { CartRecipeService } from "@app/services/cart-recipe.service";
-import { CartElement } from "@interfaces";
-import { ConfirmationService } from "primeng/api";
-import { CartIngredientService } from '@app/services/cart-ingredient.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { recipeIngredientValidator } from '@validators';
+import {Component, OnInit} from '@angular/core';
+import {MeasureUnitLabelEnum} from '@enums';
+import {CartIngredientModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel} from '@models';
+import {KitchenIngredientService, TranslatorService} from '@services';
+import {Select} from "@ngxs/store";
+import {KitchenIngredientState} from "@stores";
+import {Observable} from "rxjs";
+import {CartRecipeService} from "@app/services/cart-recipe.service";
+import {CartElement, CartIngredientFormInterface} from "@interfaces";
+import {ConfirmationService} from "primeng/api";
+import {CartIngredientService} from '@app/services/cart-ingredient.service';
+import {DialogService} from "primeng/dynamicdialog";
+import {DialogCartIngredientComponent} from "@app/components/dialogs/cart-ingredient/dialog-cart-ingredient.component";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: [ './shopping.component.scss' ],
+  styleUrls: ['./shopping.component.scss'],
   host: {
     class: 'page-container'
   }
 })
 export class ShoppingComponent implements OnInit {
   loading = true;
-
-  form: FormGroup;
-  showForm: boolean = false;
 
   cartIngredient: CartIngredientModel[] = [];
   cart: CartElement[] = [];
@@ -44,12 +35,9 @@ export class ShoppingComponent implements OnInit {
     private translatorService: TranslatorService,
     private kitchenIngredientService: KitchenIngredientService,
     private confirmationService: ConfirmationService,
+    private dialogService: DialogService,
   ) {
-    this.form = new FormGroup({
-      quantity: new FormControl<number | null>(null),
-      unitOrMeasure: new FormControl(),
-      ingredientOrOther: new FormControl<IngredientModel | string>('', [ Validators.required ]),
-    }, [ recipeIngredientValidator() ]);
+
   }
 
   get cartOrderedByChecked(): CartElement[] {
@@ -69,7 +57,7 @@ export class ShoppingComponent implements OnInit {
   async confirmBuild() {
     this.confirmationService.confirm({
         key: "shoppingConfirm",
-        message: await this.translatorService.instant('Are you sure you want to rebuild the shopping list ?'),
+        message: await this.translatorService.instant('Are you sure you want to add recipes cart ?'),
         accept: async () => {
           await this.buildShoppingList();
         }
@@ -116,6 +104,7 @@ export class ShoppingComponent implements OnInit {
       quantities[MeasureUnitLabelEnum.milliliter] = 0;
 
       this.cart.push({
+        id: recipeIngredient.id,
         ingredient: recipeIngredient.ingredient!,
         inKitchen: false,
         quantities: quantities,
@@ -164,7 +153,7 @@ export class ShoppingComponent implements OnInit {
           } else if (quantityType == 'undefined') {
             quantities.push(`∞`);
           } else {
-            quantities.push(`${ count } ${ quantityType }`);
+            quantities.push(`${count} ${quantityType}`);
           }
         }
       }
@@ -172,23 +161,25 @@ export class ShoppingComponent implements OnInit {
     }
   }
 
+  showIngredientCartModal(cartElement?: CartIngredientFormInterface) {
+    this.dialogService.open(DialogCartIngredientComponent, {
+      showHeader: false,
+      width: '400px',
+      styleClass: 'ingredient',
+      data: {
+        cartElement
+      }
+    });
+  }
+
   edit(index: number, cartElement: CartElement) {
-    this.form.patchValue({
-      quantity: cartElement.quantity,
+    // @TODO convert cartElement.quantity(string) to quantity(number) + unitOrMeasure(string)
+    this.showIngredientCartModal({
+      id: cartElement.id,
+      quantity: null,
       unitOrMeasure: cartElement.unit ?? cartElement.measure,
       ingredientOrOther: cartElement.ingredient ?? cartElement.other,
     });
-    this.showForm = true;
-  }
-
-  remove(index: number) {
-
-  }
-
-  save() {
-    if (this.form.valid) {
-      this.showForm = false;
-    }
   }
 
   onCheck($event: { checked: boolean }, cartElement: CartElement) {

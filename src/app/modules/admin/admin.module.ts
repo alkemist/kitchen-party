@@ -4,6 +4,7 @@ import {AdminRoutingModule} from '@app/modules/admin/admin-routing.module';
 import {SharingModule} from '@app/modules/sharing.module';
 import {TranslatingChildModule} from '@app/modules/translating.module';
 import {
+  DialogCartIngredientComponent,
   DialogIngredientComponent,
   FormIngredientComponent,
   FormKitchenIngredientComponent,
@@ -25,6 +26,7 @@ import {
     RecipesComponent,
     FormIngredientComponent,
     DialogIngredientComponent,
+    DialogCartIngredientComponent,
     KitchenIngredientComponent,
     KitchenIngredientsComponent,
     FormKitchenIngredientComponent,

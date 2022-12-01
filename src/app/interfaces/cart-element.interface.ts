@@ -1,7 +1,9 @@
-import { IngredientModel } from '@models';
-import { MeasureUnitKeyEnum } from '@enums';
+import {IngredientModel} from '@models';
+import {MeasureUnitKeyEnum} from '@enums';
 
 export interface CartElement {
+  id?: string,
+
   inKitchen: boolean,
   ingredient?: IngredientModel,
   other?: string,

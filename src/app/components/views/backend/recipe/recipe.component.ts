@@ -114,7 +114,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
         this.measureUnits = this.measureUnits.concat(this.recipeService.customMeasures);
 
         if (data && data['recipe']) {
-          this.loadData(data['recipe']);
+          await this.loadData(data['recipe']);
         }
         this.loading = false;
       }));
@@ -231,7 +231,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
           severity: 'success',
           detail: await this.translatorService.instant(`Added recipe`)
         });
-        this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
+        await this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug]);
       });
     }
   }
@@ -248,7 +248,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          this.routerService.navigate(['/', 'admin', 'recipes']);
+          await this.routerService.navigate(['/', 'admin', 'recipes']);
         });
       }
     });
@@ -257,7 +257,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   showNewIngredientModal() {
     this.dialogService.open(DialogIngredientComponent, {
       showHeader: false,
-      width: '70%',
+      width: '400px',
       styleClass: 'ingredient'
     });
   }

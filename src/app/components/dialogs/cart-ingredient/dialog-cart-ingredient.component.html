@@ -1,0 +1,114 @@
+<form (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
+  <p-card #pnl class="ingredient">
+    <ng-template pTemplate="title">
+      <div class="flex flex-row align-items-center">
+        <h5 class="text-center flex-grow-1"><!--{{ ingredient?.name ?? ('New cart ingredient' | translate) }}--></h5>
+        <button (click)="close()"
+                class="p-button-rounded p-button-text" icon="pi pi-times"
+                pButton
+                pRipple type="button"></button>
+      </div>
+    </ng-template>
+
+    <div class="field grid">
+      <label
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        translate="">Quantity</label>
+      <p-inputNumber
+        [min]="0"
+        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        [step]="0.1"
+        class="inputfield w-full"
+        formControlName="quantity"
+        inputId="quantity"></p-inputNumber>
+      <div
+        *ngIf="form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)"
+        class="p-error">
+        <small *ngIf="form.errors?.['invalid']"
+               translate="">
+          Required.
+        </small>
+      </div>
+    </div>
+
+    <div class="field grid">
+      <label
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        translate="">Unit</label>
+      <p-dropdown
+        [autoDisplayFirst]="false"
+        [editable]="true"
+        [filter]="true"
+        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        [options]="measureUnits"
+        [showClear]="true"
+        formControlName="unitOrMeasure"
+        inputId="unit" optionValue="key"
+        styleClass="inputfield w-full">
+        <ng-template let-selectItem pTemplate="selectedItem">
+          {{ selectItem.label }}
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          {{ item.label }}
+        </ng-template>
+      </p-dropdown>
+      <div
+        *ngIf="form.invalid && (form.dirty || form.get('ingredientOrOther')?.touched)"
+        class="p-error">
+        <small *ngIf="form.errors?.['invalid']"
+               translate="">
+          Required.
+        </small>
+      </div>
+    </div>
+
+    <div class="field grid">
+      <label
+        [ngClass]="{'p-error':form.get('ingredientOrOther')?.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        translate="">Ingredient</label>
+      <p-dropdown
+        [autoDisplayFirst]="false"
+        [editable]="true"
+        [filter]="true"
+        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)}"
+        [options]="ingredients"
+        [showClear]="true"
+        appendTo="body"
+        formControlName="ingredientOrOther"
+        inputId="unit" optionLabel="name"
+        styleClass="inputfield w-full">
+        <ng-template let-selectItem pTemplate="selectedItem">
+          {{ selectItem.name }}
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          {{ item.name }}
+        </ng-template>
+      </p-dropdown>
+      <div
+        *ngIf="form.get('ingredientOrOther')?.invalid && (form.get('ingredientOrOther')?.dirty || form.get('ingredientOrOther')?.touched)"
+        class="p-error">
+        <small *ngIf="form.get('ingredientOrOther')?.errors?.['required']"
+               translate="">
+          Required.
+        </small>
+        <small *ngIf="form.get('ingredientOrOther')?.errors?.['exist']" translate="">
+          Cart ingredient already in shopping list.
+        </small>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex flex-row">
+        <!--*ngIf="ingredient?.id"-->
+        <button (click)="remove()" [label]="('Remove' | translate)"
+                class="p-button-danger"
+                icon="pi pi-trash" pButton pRipple
+                type="button"></button>
+        <div class="flex-grow-1"></div>
+        <!--[label]="(ingredient?.id ? 'Update' : 'Add') | translate"-->
+        <button icon="pi pi-check" pButton pRipple
+                type="submit"></button>
+      </div>
+    </ng-template>
+  </p-card>
+</form>

@@ -16,14 +16,16 @@
           <div class="quantity">{{ cartElement.quantity }}</div>
           <button pButton pRipple type="button" icon="pi pi-pencil" (click)="edit(i, cartElement)"
                   class="p-button-rounded p-button-text"></button>
-          <button pButton pRipple type="button" icon="pi pi-trash" (click)="remove(i)"
-                  class="p-button-rounded p-button-text"></button>
         </div>
       </div>
 
       <ng-template pTemplate="footer">
-        <p-button (click)="confirmBuild()" [label]="'Rebuild the shopping list' | translate" class=""
-                  icon="pi pi-shopping-cart"></p-button>
+        <div class="flex flex-row align-items-center justify-content-between">
+          <p-button (click)="confirmBuild()" [label]="'Add recipes cart' | translate" class=""
+                    icon="pi pi-shopping-cart"></p-button>
+          <p-button (click)="showIngredientCartModal()" [label]="'Add ingredient cart' | translate" class=""
+                    icon="pi pi-plus"></p-button>
+        </div>
       </ng-template>
     </p-card>
   </div>
