@@ -36,29 +36,29 @@
   <!-- End Toolbar Middle -->
 
   <!-- Begin Sidebar -->
-  <p-sidebar [(visible)]="sidebarShowed" [fullScreen]="true" position="right">
+  <p-sidebar [(visible)]="sidebarShowed" [fullScreen]="false" position="right">
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="dietTypes"
-                  [showClear]="true" formControlName="diet"
+                  [showClear]="true" appendTo="body" formControlName="diet"
                   optionValue="key"></p-dropdown>
       <label for="float-input" translate="">Diet</label>
     </span>
     <span class="p-float-label">
       <p-dropdown [autoDisplayFirst]="false" [options]="recipeTypes"
-                  [showClear]="true" formControlName="type"
+                  [showClear]="true" appendTo="body" formControlName="type"
                   optionValue="key"></p-dropdown>
       <label for="float-input" translate="">Type</label>
     </span>
     <span class="p-float-label">
 			<p-dropdown [autoDisplayFirst]="false" [options]="sweetOrSalty"
-                  [showClear]="true" formControlName="sweetOrSalty"
+                  [showClear]="true" appendTo="body" formControlName="sweetOrSalty"
                   optionValue="key"></p-dropdown>
       <label for="float-input" translate="">Sweet / Salty</label>
 		</span>
     <span class="p-float-label">
       <p-multiSelect [autofocusFilter]="true"
                      [emptyFilterMessage]="'No ingredients found.' | translate"
-                     [options]="ingredients"
+                     [options]="ingredients" appendTo="body"
                      [selectionLimit]="3"
                      formControlName="ingredients" optionLabel="name" optionValue="id">
       </p-multiSelect>
