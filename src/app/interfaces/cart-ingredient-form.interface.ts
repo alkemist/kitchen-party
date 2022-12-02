@@ -5,4 +5,5 @@ export interface CartIngredientFormInterface {
   ingredient?: IngredientModel;
   other?: string;
   quantity: string;
+  checked: boolean;
 }

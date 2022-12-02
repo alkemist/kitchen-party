@@ -1,12 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, UntypedFormGroup} from '@angular/forms';
-import {CartIngredientFormInterface, IngredientInterface} from '@interfaces';
+import {CartIngredientFormInterface, CartIngredientInterface} from '@interfaces';
 import {IngredientModel} from '@models';
 import {IngredientService, RecipeService, TranslatorService} from '@services';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {Dropdown} from "primeng/dropdown";
 import {cartIngredientValidator} from "@app/validators/cart-ingredient.validator";
+import {CartIngredientService} from "@app/services/cart-ingredient.service";
+import {slugify} from "@tools";
 
 @Component({
   selector: 'app-dialog-cart-ingredient',
@@ -19,13 +20,11 @@ export class DialogCartIngredientComponent implements OnInit {
   error: string = '';
   ingredients: IngredientModel[] = [];
 
-  @ViewChild('dropdown') dropdown: Dropdown | undefined;
-  selectedIngredient: IngredientModel | string | undefined;
-
   cartElement?: CartIngredientFormInterface;
 
   constructor(
     private ingredientService: IngredientService,
+    private cartIngredientService: CartIngredientService,
     private recipeService: RecipeService,
     private translatorService: TranslatorService,
     private messageService: MessageService,
@@ -71,31 +70,31 @@ export class DialogCartIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(IngredientModel.format(this.form.value));
+    await this.preSubmit();
   }
 
-  async preSubmit(ingredient: IngredientInterface): Promise<void> {
+  async preSubmit(): Promise<void> {
     this.form.markAllAsTouched();
 
-    console.info('submit', this.form.valid, this.form.value);
-
     if (this.form.valid) {
-      /*if (this.ingredient.id) {
-        ingredient.id = this.ingredient.id;
-      }
+      const data = this.form.value;
+      const name = data.ingredient?.name ?? data.other;
+      const oldName = this.cartElement ? this.cartElement.ingredient?.name ?? this.cartElement?.other : '';
 
-      const checkExist = !this.ingredient.id || slugify(ingredient.name) !== slugify(this.ingredient.name);
+      const checkExist = !this.cartElement?.id || slugify(oldName) !== slugify(name);
 
       if (checkExist) {
-        this.ingredientService.exist(ingredient.name!).then(async exist => {
-          if (exist) {
-            return this.name.setErrors({'exist': true});
-          }
-          await this.submit(ingredient);
-        });
+        if (!await this.cartIngredientService.exist(name)) {
+          await this.submit(data);
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            detail: await this.translatorService.instant(`Element already exist in shopping list.`),
+          });
+        }
       } else {
-        await this.submit(ingredient);
-      }*/
+        await this.submit(data);
+      }
     }
   }
 
@@ -103,17 +102,26 @@ export class DialogCartIngredientComponent implements OnInit {
     this.ref.close();
   }
 
-  async submit(localDocument: IngredientInterface): Promise<void> {
-    /*this.loading = true;
-    await this.ingredientService.add(localDocument).then(async ingredient => {
-      this.ingredient = new IngredientModel(ingredient!);
-      this.loading = false;
-      this.messageService.add({
-        severity: 'success',
-        detail: await this.translatorService.instant(`Added ingredient`),
-      });
-      this.close();
-    });*/
+  async submit(localDocument: CartIngredientFormInterface): Promise<void> {
+    this.loading = true;
+    if (this.cartElement?.id) {
+      await this.cartIngredientService.update({
+        id: this.cartElement.id,
+        quantity: localDocument.quantity,
+        ingredient: localDocument.ingredient,
+        other: localDocument.other,
+        checked: this.cartElement.checked,
+      })
+    } else {
+      await this.cartIngredientService.add({
+        quantity: localDocument.quantity,
+        ingredient: localDocument.ingredient,
+        other: localDocument.other,
+        checked: false,
+      })
+    }
+    this.loading = false;
+    this.ref.close();
   }
 
   async confirmRemove() {
@@ -121,13 +129,18 @@ export class DialogCartIngredientComponent implements OnInit {
         key: "cartIngredientConfirm",
         message: await this.translatorService.instant('Are you sure you want to remove ingredient cart ?'),
         accept: async () => {
-          this.remove();
+          this.loading = true;
+          await this.remove();
+          this.loading = false;
+          this.close();
         }
       }
     );
   }
 
-  private remove() {
-
+  private async remove() {
+    if (this.cartElement) {
+      await this.cartIngredientService.remove(this.cartElement as CartIngredientInterface);
+    }
   }
 }

@@ -5,27 +5,37 @@
         <h5 class="text-center" translate="">Shopping list</h5>
       </ng-template>
 
-      <div *ngFor="let cartElement of cartOrderedByChecked; let i = index" [class.checked]="cartElement.inKitchen"
+      <div *ngFor="let cartElement of cartOrderedByChecked; let i = index" [class.checked]="cartElement.checked"
            class="ingredient flex align-items-center justify-content-between">
         <p-checkbox (onChange)="onCheck($event, cartElement)" *ngIf="cartElement.ingredient || cartElement.other"
-                    [(ngModel)]="cartElement.inKitchen"
+                    [(ngModel)]="cartElement.checked"
+                    [disabled]="loading"
                     [binary]="true"
                     [label]="cartElement.ingredient?.name ?? cartElement.other ?? ''">test
         </p-checkbox>
         <div class="flex flex-row align-items-center gap-4">
           <div class="quantity">{{ cartElement.quantity }}</div>
-          <button pButton pRipple type="button" icon="pi pi-pencil" (click)="edit(i, cartElement)"
+          <button (click)="edit(i, cartElement)" [disabled]="loading || cartElement.checked" icon="pi pi-pencil" pButton pRipple
+                  type="button"
                   class="p-button-rounded p-button-text"></button>
         </div>
       </div>
 
       <ng-template pTemplate="footer">
-        <div class="flex flex-row align-items-center justify-content-between">
-          <button (click)="confirmBuild()" [label]="'Add recipes cart' | translate" class="p-button-danger"
+        <div class="flex flex-row align-items-center justify-content-between gap-4">
+          <button (click)="confirmBuild()" [disabled]="loading" [pTooltip]="'Add recipes cart' | translate"
+                  class="p-button-danger"
                   icon="pi pi-shopping-cart"
                   pButton
                   pRipple></button>
-          <button (click)="showIngredientCartModal()" [label]="'Add ingredient cart' | translate" class=""
+          <button (click)="confirmRemove()" [disabled]="loading" [pTooltip]="'Empty the shopping list' | translate"
+                  class="p-button-danger"
+                  icon="pi pi-trash"
+                  pButton
+                  pRipple></button>
+          <div class="flex-grow-1"></div>
+          <button (click)="showIngredientCartModal()" [disabled]="loading" [label]="'Add ingredient cart' | translate"
+                  class=""
                   icon="pi pi-plus"
                   pButton
                   pRipple></button>

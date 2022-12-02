@@ -6,9 +6,9 @@ export class CartIngredientModel implements CartIngredientInterface {
   id?: string;
   quantity: string;
 
-  other?: string;
   checked: boolean;
 
+  other?: string;
   ingredient?: IngredientModel;
   ingredientId?: string;
 
@@ -28,7 +28,7 @@ export class CartIngredientModel implements CartIngredientInterface {
   }
 
   get name(): string | undefined {
-    return this.ingredient?.name;
+    return this.ingredient?.name ?? this.other;
   }
 
   toString(): string {

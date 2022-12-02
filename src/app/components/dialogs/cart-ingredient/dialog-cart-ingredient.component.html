@@ -59,11 +59,12 @@
     <ng-template pTemplate="footer">
       <div class="flex flex-row">
         <button (click)="confirmRemove()" *ngIf="cartElement" [label]="('Remove' | translate)"
-                class="p-button-danger"
+                [disabled]="loading" class="p-button-danger"
                 icon="pi pi-trash" pButton pRipple
                 type="button"></button>
         <div class="flex-grow-1"></div>
-        <button [disabled]="form.invalid && (form.dirty || form.touched)" [label]="(cartElement ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton
+        <button [disabled]="loading || form.invalid && (form.dirty || form.touched)"
+                [label]="(cartElement ? 'Update' : 'Add') | translate" icon="pi pi-check" pButton
                 pRipple
                 type="submit"></button>
       </div>
