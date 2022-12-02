@@ -15,14 +15,14 @@
 
       <app-form-kitchen-ingredient
         (searchIngredientEvent)="searchIngredient($event)"
-          [form]="form" [ingredients]="ingredients"
+        [form]="form" [ingredients]="ingredients"
         [kitchenIngredient]="kitchenIngredient" [loading]="loading" [measureUnits]="measureUnits"
       ></app-form-kitchen-ingredient>
 
       <ng-template pTemplate="footer">
         <div class="flex flex-row">
           <button (click)="remove()" *ngIf="kitchenIngredient.id" [label]="('Delete' | translate)"
-                  class="p-button-danger"
+                  class="p-button-danger hide-label-mobile"
                   icon="pi pi-trash" pButton pRipple
                   type="button"></button>
           <div class="flex-grow-1"></div>

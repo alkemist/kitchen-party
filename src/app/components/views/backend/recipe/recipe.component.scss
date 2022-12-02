@@ -12,7 +12,7 @@ textarea {
   height: 90px;
 }
 
-::ng-deep .p-dialog.ingredient .p-dialog-content {
+#recipe ::ng-deep .p-dialog.ingredient .p-dialog-content {
   padding: 0 !important;
   overflow: initial;
 }

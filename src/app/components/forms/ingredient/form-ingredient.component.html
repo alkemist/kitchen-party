@@ -1,4 +1,4 @@
-<form (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
+<form id="formIngredient" (submit)="handleSubmit()" [formGroup]="form" class="page-container__content__center">
   <p-card #pnl class="ingredient">
     <ng-template pTemplate="title">
       <div class="flex flex-row align-items-center">
@@ -81,7 +81,7 @@
     <ng-template pTemplate="footer">
       <div class="flex flex-row">
         <button (click)="remove()" *ngIf="ingredient?.id" [label]="('Delete' | translate)"
-                class="p-button-danger"
+                class="p-button-danger hide-label-mobile"
                 icon="pi pi-trash" pButton pRipple
                 type="button"></button>
         <div class="flex-grow-1"></div>

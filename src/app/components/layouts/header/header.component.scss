@@ -1,6 +1,6 @@
 @import "/src/assets/styles/variables";
 
-::ng-deep .p-toolbar {
+#topToolbar ::ng-deep .p-toolbar {
   height: $header-desktop-height;
 
   @media screen and (max-width: $mobile-breakpoint-width) {
@@ -59,7 +59,7 @@
   }
 }
 
-::ng-deep .p-sidebar {
+#topToolbar ::ng-deep .p-sidebar {
   .p-sidebar-content {
     height: 100%;
 
@@ -79,14 +79,16 @@
 
 
 #cartMenu ::ng-deep .p-tieredmenu {
+  width: 16rem;
+
   .p-submenu-list {
     max-width: none;
     min-width: auto;
+
+    /* right: 100%;
+    left: unset; */
   }
 
-  @media screen and (min-width: $mobile-tablet-width) {
-    width: 20rem;
-  }
 
   @media screen and (max-width: $mobile-tablet-width) {
     .subItem .p-menuitem-text {

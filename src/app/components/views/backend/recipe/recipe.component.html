@@ -1,4 +1,4 @@
-<div class="page-container__content">
+<div id="recipe" class="page-container__content">
   <form (submit)="handleSubmit()" [formGroup]="form">
     <p-card #pnl class="recipe">
       <ng-template pTemplate="title">
@@ -206,10 +206,10 @@
                         type="button"></button>
               </ng-template>
               <app-form-recipe-ingredient (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
-                                           [form]="getFormGroupRecipeIngredient(i)"
-                                           [i]="i"
-                                           [ingredientsOrRecipes]="ingredientsOrRecipes"
-                                           [measureUnits]="measureUnits"
+                                          [form]="getFormGroupRecipeIngredient(i)"
+                                          [i]="i"
+                                          [ingredientsOrRecipes]="ingredientsOrRecipes"
+                                          [measureUnits]="measureUnits"
               ></app-form-recipe-ingredient>
             </p-accordionTab>
           </p-accordion>
@@ -219,31 +219,31 @@
       <ng-template pTemplate="footer">
         <div class="flex flex-row">
           <button (click)="remove()" *ngIf="recipe.id" [label]="('Delete' | translate)"
-                  class="p-button-danger"
+                  class="p-button-danger hide-label-mobile"
                   icon="pi pi-trash" pButton pRipple
                   type="button"></button>
           <div class="flex-grow-1"></div>
           <button (click)="showNewIngredientModal()" [label]="'Add a new ingredient' | translate"
-                  class="p-button-text p-button-secondary" icon="pi pi-plus" pButton
+                  class="p-button-text p-button-secondary hide-label-mobile" icon="pi pi-plus" pButton
                   pRipple style="margin-right: 20px;" type="button"></button>
           <button [label]="((recipe.id ? 'Update' : 'Add') + ' recipe') | translate" icon="pi pi-check"
-                  pButton pRipple
+                  pButton pRipple class="hide-label-mobile"
                   type="submit"></button>
         </div>
       </ng-template>
     </p-card>
   </form>
+  <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="recipeConfirm">
+    <p-footer>
+      <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+              pRipple
+              type="button"></button>
+      <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+              pRipple
+              type="button"></button>
+    </p-footer>
+  </p-confirmDialog>
 </div>
 <p-blockUI [blocked]="loading" [target]="pnl">
   <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>
-<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="recipeConfirm">
-  <p-footer>
-    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
-            pRipple
-            type="button"></button>
-    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
-            pRipple
-            type="button"></button>
-  </p-footer>
-</p-confirmDialog>

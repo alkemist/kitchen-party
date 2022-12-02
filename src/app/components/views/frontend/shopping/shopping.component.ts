@@ -1,21 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {MeasureUnitLabelEnum} from '@enums';
-import {CartIngredientModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel} from '@models';
-import {KitchenIngredientService, TranslatorService} from '@services';
-import {Select} from "@ngxs/store";
-import {CartIngredientState, KitchenIngredientState} from "@stores";
-import {Observable, Subscription} from "rxjs";
-import {CartRecipeService} from "@app/services/cart-recipe.service";
-import {CartElement, CartIngredientFormInterface, CartIngredientInterface} from "@interfaces";
-import {ConfirmationService} from "primeng/api";
-import {CartIngredientService} from '@app/services/cart-ingredient.service';
-import {DialogService} from "primeng/dynamicdialog";
-import {DialogCartIngredientComponent} from "@app/components/dialogs/cart-ingredient/dialog-cart-ingredient.component";
+import { Component, OnInit } from '@angular/core';
+import { MeasureUnitLabelEnum } from '@enums';
+import { CartIngredientModel, KitchenIngredientModel, RecipeIngredientModel, RelationIngredientModel } from '@models';
+import { KitchenIngredientService, TranslatorService } from '@services';
+import { Select } from "@ngxs/store";
+import { CartIngredientState, KitchenIngredientState } from "@stores";
+import { Observable, Subscription } from "rxjs";
+import { CartRecipeService } from "@app/services/cart-recipe.service";
+import { CartElement, CartIngredientFormInterface, CartIngredientInterface } from "@interfaces";
+import { ConfirmationService } from "primeng/api";
+import { CartIngredientService } from '@app/services/cart-ingredient.service';
+import { DialogService } from "primeng/dynamicdialog";
+import {
+  DialogCartIngredientComponent
+} from "@app/components/dialogs/cart-ingredient/dialog-cart-ingredient.component";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: ['./shopping.component.scss'],
+  styleUrls: [ './shopping.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -23,6 +25,7 @@ import {DialogCartIngredientComponent} from "@app/components/dialogs/cart-ingred
 export class ShoppingComponent implements OnInit {
   loading = true;
 
+  totalSlice: number = 0;
   cartIngredients: CartIngredientModel[] = [];
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
@@ -156,11 +159,11 @@ export class ShoppingComponent implements OnInit {
 
         if (count) {
           if (quantityType == '') {
-            quantities.push(`${count}`);
+            quantities.push(`${ count }`);
           } else if (quantityType == 'undefined') {
             quantities.push(`∞`);
           } else {
-            quantities.push(`${count} ${quantityType}`);
+            quantities.push(`${ count } ${ quantityType }`);
           }
         }
       }
@@ -216,6 +219,10 @@ export class ShoppingComponent implements OnInit {
     const cartRecipes = await this.cartRecipeService.getListOrRefresh();
 
     for (const cartRecipe of cartRecipes) {
+      if (cartRecipe.recipe?.nbSlices) {
+        this.totalSlice += cartRecipe.recipe.nbSlices * cartRecipe.quantity;
+      }
+
       if (cartRecipe.recipe) {
         for (const recipeIngredient of cartRecipe.recipe.recipeIngredients) {
           if (recipeIngredient.recipe) {
