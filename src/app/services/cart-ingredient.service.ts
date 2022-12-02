@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {cartIngredientConverter} from '@converters';
-import {DocumentNotFoundError} from '@errors';
-import {CartIngredientInterface} from '@interfaces';
-import {CartIngredientModel} from '@models';
-import {Select, Store} from '@ngxs/store';
-import {FirestoreService, IngredientService, LoggerService} from '@services';
+import { Injectable } from '@angular/core';
+import { cartIngredientConverter } from '@converters';
+import { DocumentNotFoundError } from '@errors';
+import { CartIngredientInterface } from '@interfaces';
+import { CartIngredientModel } from '@models';
+import { Select, Store } from '@ngxs/store';
+import { FirestoreService, IngredientService, LoggerService } from '@services';
 import {
   AddCartIngredient,
   CartIngredientState,
@@ -12,9 +12,9 @@ import {
   RemoveCartIngredient,
   UpdateCartIngredient
 } from '@stores';
-import {ArrayHelper} from '@tools';
-import {orderBy} from 'firebase/firestore';
-import {first, Observable} from 'rxjs';
+import { ArrayHelper } from '@tools';
+import { orderBy } from 'firebase/firestore';
+import { first, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -33,6 +33,10 @@ export class CartIngredientService extends FirestoreService<CartIngredientInterf
               private ingredientService: IngredientService,
   ) {
     super(logger, 'shopping', cartIngredientConverter);
+  }
+
+  override storeIsOutdated(): boolean {
+    return true;
   }
 
   async getListOrRefresh(): Promise<CartIngredientModel[]> {

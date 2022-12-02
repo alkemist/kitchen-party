@@ -68,7 +68,15 @@ export const loggedMenuItems: MenuItem[] = [ {
   },
   {
     separator: true
-  }
+  },
+  {
+    label: 'Shopping list',
+    icon: 'pi pi-shopping-cart',
+    routerLink: [ '/', 'shopping' ]
+  },
+  {
+    separator: true
+  },
 ];
 
 export const logoutMenuItem: MenuItem = {

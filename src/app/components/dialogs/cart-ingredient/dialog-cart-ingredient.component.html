@@ -38,9 +38,10 @@
     </div>
 
     <div class="field grid col-12">
-      <label [ngClass]="{'p-error':form.get('other')?.invalid && (form.get('other')?.dirty || form.get('other')?.touched)}"
-             class="w-full"
-             translate="">Other</label>
+      <label
+        [ngClass]="{'p-error':form.get('other')?.invalid && (form.get('other')?.dirty || form.get('other')?.touched)}"
+        class="w-full"
+        translate="">Other</label>
       <span class="p-input-icon-right w-full">
           <i (click)="form.get('other')?.setValue('')" class="pi pi-times"></i>
           <input
@@ -59,7 +60,7 @@
     <ng-template pTemplate="footer">
       <div class="flex flex-row">
         <button (click)="confirmRemove()" *ngIf="cartElement" [label]="('Remove' | translate)"
-                [disabled]="loading" class="p-button-danger"
+                [disabled]="loading" class="p-button-danger hide-label-mobile"
                 icon="pi pi-trash" pButton pRipple
                 type="button"></button>
         <div class="flex-grow-1"></div>

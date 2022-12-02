@@ -1,5 +1,5 @@
-import {Injectable, NgModule} from '@angular/core';
-import {RouterModule, RouterStateSnapshot, Routes, TitleStrategy} from '@angular/router';
+import { Injectable, NgModule } from '@angular/core';
+import { RouterModule, RouterStateSnapshot, Routes, TitleStrategy } from '@angular/router';
 import {
   AboutComponent,
   CalendarComponent,
@@ -7,10 +7,10 @@ import {
   FrontRecipesComponent,
   ShoppingComponent
 } from '@components';
-import {DietResolver, RecipeResolver} from '@resolvers';
-import {LoggedGuard} from "@guards";
-import {Title} from '@angular/platform-browser';
-import {TranslatorService} from "@services";
+import { DietResolver, RecipeResolver } from '@resolvers';
+import { LoggedGuard } from "@guards";
+import { Title } from '@angular/platform-browser';
+import { TranslatorService } from "@services";
 
 @Injectable()
 export class CustomTitleStrategy extends TitleStrategy {
@@ -61,14 +61,14 @@ const routes: Routes = [
   {
     canActivate: [ LoggedGuard ],
     path: 'shopping', component: ShoppingComponent,
-    data: {title: 'Shopping list', showAppName: true, showFilters: false, showShopping: true}
+    data: { title: 'Shopping list', showAppName: false, showFilters: false, showShopping: true }
   },
   {
     path: ':slug', component: FrontRecipeComponent,
     resolve: {
       recipe: RecipeResolver
     },
-    data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
+    data: { title: 'Recipe', hideHeader: true, enableNoSleep: true }
   },
   {
     path: ':slug/:diet', component: FrontRecipeComponent,
@@ -76,9 +76,9 @@ const routes: Routes = [
       recipe: RecipeResolver,
       diet: DietResolver,
     },
-    data: {title: 'Recipe', hideHeader: true, enableNoSleep: true}
+    data: { title: 'Recipe', hideHeader: true, enableNoSleep: true }
   },
-  {path: '', component: FrontRecipesComponent, data: {showFilters: true, showShopping: true}},
+  { path: '', component: FrontRecipesComponent, data: { showFilters: true, showShopping: true } },
 ];
 
 @NgModule({

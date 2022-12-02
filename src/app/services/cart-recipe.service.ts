@@ -28,6 +28,10 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
   ) {
     super(logger, 'cart', cartRecipeConverter);
   }
+  
+  override storeIsOutdated(): boolean {
+    return true;
+  }
 
   async getListOrRefresh(): Promise<CartRecipeModel[]> {
     return new Promise<CartRecipeModel[]>(async resolve => {
@@ -42,7 +46,6 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
           this.loaded = true;
           resolve(this.all);
         })
-
       }
       // Sinon on rafraichit le store
       else {

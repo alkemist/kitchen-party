@@ -15,7 +15,8 @@
         </p-checkbox>
         <div class="flex flex-row align-items-center gap-4">
           <div class="quantity">{{ cartElement.quantity }}</div>
-          <button (click)="edit(i, cartElement)" [disabled]="loading || cartElement.checked" icon="pi pi-pencil" pButton pRipple
+          <button (click)="edit(i, cartElement)" [disabled]="loading || cartElement.checked" icon="pi pi-pencil" pButton
+                  pRipple
                   type="button"
                   class="p-button-rounded p-button-text"></button>
         </div>
@@ -35,7 +36,7 @@
                   pRipple></button>
           <div class="flex-grow-1"></div>
           <button (click)="showIngredientCartModal()" [disabled]="loading" [label]="'Add ingredient cart' | translate"
-                  class=""
+                  class="hide-label-mobile"
                   icon="pi pi-plus"
                   pButton
                   pRipple></button>

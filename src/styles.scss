@@ -125,7 +125,15 @@ p-dropdown.ng-touched.p-invalid > div {
 .mobile-hidden {
   display: initial;
   @media screen and (max-width: $mobile-tablet-width) {
-    display: none;
+    display: none !important;
+  }
+}
+
+.hide-label-mobile {
+  @media screen and (max-width: $mobile-tablet-width) {
+    .p-button-label {
+      display: none;
+    }
   }
 }
 

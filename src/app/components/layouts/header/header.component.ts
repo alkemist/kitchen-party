@@ -1,18 +1,18 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
-import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
-import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
-import {CartRecipeInterface, IngredientInterface, UserInterface} from '@interfaces';
-import {CartRecipeModel, IngredientModel} from '@models';
-import {Select} from '@ngxs/store';
-import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
-import {CartRecipeState, IngredientState} from '@stores';
-import {EnumHelper} from '@tools';
-import {default as NoSleep} from 'nosleep.js';
-import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Observable, Subscription} from 'rxjs';
-import {CartRecipeService} from "@app/services/cart-recipe.service";
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Router, RoutesRecognized } from '@angular/router';
+import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
+import { CartRecipeInterface, IngredientInterface, UserInterface } from '@interfaces';
+import { CartRecipeModel, IngredientModel } from '@models';
+import { Select } from '@ngxs/store';
+import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
+import { CartRecipeState, IngredientState } from '@stores';
+import { EnumHelper } from '@tools';
+import { default as NoSleep } from 'nosleep.js';
+import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { CartRecipeService } from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -241,13 +241,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.cartRecipesSize += item.quantity;
 
       return {
-        icon: 'pi pi-eye',
         label: item.recipe?.name,
         badge: item.quantity > 1 ? item.quantity.toString() : '',
         items: [
           {
             label: this.translatorService.translate('Add one'),
             icon: 'pi pi-plus',
+            styleClass: 'subItem',
             cartItem: item,
             command: async (event) => {
               await this.cartRecipeService.updateQuantity(event.item.cartItem, 1);
@@ -256,6 +256,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           {
             label: this.translatorService.translate('Delete one'),
             icon: 'pi pi-minus',
+            styleClass: 'subItem',
             cartItem: item,
             command: async (event) => {
               await this.cartRecipeService.updateQuantity(event.item.cartItem, -1);
@@ -264,6 +265,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           {
             label: this.translatorService.translate('Delete all'),
             icon: 'pi pi-trash',
+            styleClass: 'subItem',
             cartItem: item,
             command: async (event) => {
               this.confirmationService.confirm({
@@ -278,7 +280,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
           }
         ],
-        routerLink: `/${ item.recipe?.slug }`
       };
     });
 
