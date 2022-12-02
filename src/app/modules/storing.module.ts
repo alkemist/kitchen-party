@@ -1,14 +1,24 @@
-import { NgModule } from '@angular/core';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
-import { NgxsModule } from '@ngxs/store';
-import { IngredientState, KitchenIngredientState, RecipeState, TranslationState, UserState } from '@stores';
-import { environment } from '../../environments/environment';
+import {NgModule} from '@angular/core';
+import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
+import {NgxsStoragePluginModule} from '@ngxs/storage-plugin';
+import {NgxsModule} from '@ngxs/store';
+import {
+  CartIngredientState,
+  CartRecipeState,
+  IngredientState,
+  KitchenIngredientState,
+  RecipeState,
+  TranslationState,
+  UserState
+} from '@stores';
+import {environment} from '../../environments/environment';
 
 
 const states = [
   UserState,
+  CartIngredientState,
+  CartRecipeState,
   IngredientState,
   RecipeState,
   KitchenIngredientState,

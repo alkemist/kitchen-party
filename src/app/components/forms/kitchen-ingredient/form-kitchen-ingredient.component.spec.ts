@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormKitchenIngredientComponent } from './form-kitchen-ingredient.component';
-import { MockModule } from 'ng-mocks';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CheckboxModule } from 'primeng/checkbox';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormKitchenIngredientComponent} from './form-kitchen-ingredient.component';
+import {MockModule} from 'ng-mocks';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {DropdownModule} from 'primeng/dropdown';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import {CheckboxModule} from 'primeng/checkbox';
 
 describe('FormKitchenIngredientComponent', () => {
   let component: FormKitchenIngredientComponent;
@@ -41,7 +41,7 @@ describe('FormKitchenIngredientComponent', () => {
   });
 
   it('should emit event', () => {
-    const eventSpy = jest.spyOn(component.searchIngredientOrRecipeEvent, 'emit');
+    const eventSpy = jest.spyOn(component.searchIngredientEvent, 'emit');
     const event = { query: 'test' };
     component.searchIngredientOrRecipe(event);
     expect(eventSpy).toBeCalledWith(event);

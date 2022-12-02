@@ -100,7 +100,7 @@ p-dropdown.ng-touched.p-invalid > div {
       vertical-align: middle;
     }
   }
-  
+
   .p-paginator-bottom {
     border-top: 1px solid #0b213f;
   }
@@ -129,3 +129,11 @@ p-dropdown.ng-touched.p-invalid > div {
   }
 }
 
+.p-dialog-content .p-card {
+  margin-bottom: 0;
+  margin-top: 10px;
+
+  .p-card-body {
+    padding: 0;
+  }
+}

@@ -2,30 +2,55 @@
   <div class="page-container__content__center">
     <p-card>
       <ng-template pTemplate="title">
-        <h5 class="text-center" translate="">Recipes</h5>
-      </ng-template>
-
-      <div *ngFor="let recipe of recipes" class="recipe">
-        <div>{{ recipe.name }}</div>
-      </div>
-    </p-card>
-    <p-card>
-      <ng-template pTemplate="title">
         <h5 class="text-center" translate="">Shopping list</h5>
       </ng-template>
 
-      <div *ngFor="let cartElement of cart" [class.checked]="cartElement.inKitchen"
+      <div *ngFor="let cartElement of cartOrderedByChecked; let i = index" [class.checked]="cartElement.checked"
            class="ingredient flex align-items-center justify-content-between">
-        <p-checkbox [(ngModel)]="cartElement.inKitchen" [binary]="true"
-                    [label]="cartElement.ingredient.name">test
+        <p-checkbox (onChange)="onCheck($event, cartElement)" *ngIf="cartElement.ingredient || cartElement.other"
+                    [(ngModel)]="cartElement.checked"
+                    [disabled]="loading"
+                    [binary]="true"
+                    [label]="cartElement.ingredient?.name ?? cartElement.other ?? ''">test
         </p-checkbox>
-        <div class="quantity">{{ cartElement.quantity }}</div>
+        <div class="flex flex-row align-items-center gap-4">
+          <div class="quantity">{{ cartElement.quantity }}</div>
+          <button (click)="edit(i, cartElement)" [disabled]="loading || cartElement.checked" icon="pi pi-pencil" pButton pRipple
+                  type="button"
+                  class="p-button-rounded p-button-text"></button>
+        </div>
       </div>
 
       <ng-template pTemplate="footer">
-
+        <div class="flex flex-row align-items-center justify-content-between gap-4">
+          <button (click)="confirmBuild()" [disabled]="loading" [pTooltip]="'Add recipes cart' | translate"
+                  class="p-button-danger"
+                  icon="pi pi-shopping-cart"
+                  pButton
+                  pRipple></button>
+          <button (click)="confirmRemove()" [disabled]="loading" [pTooltip]="'Empty the shopping list' | translate"
+                  class="p-button-danger"
+                  icon="pi pi-trash"
+                  pButton
+                  pRipple></button>
+          <div class="flex-grow-1"></div>
+          <button (click)="showIngredientCartModal()" [disabled]="loading" [label]="'Add ingredient cart' | translate"
+                  class=""
+                  icon="pi pi-plus"
+                  pButton
+                  pRipple></button>
+        </div>
       </ng-template>
     </p-card>
   </div>
 </div>
-
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="shoppingConfirm">
+  <p-footer>
+    <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
+            pRipple
+            type="button"></button>
+    <button (click)="cd.accept()" [label]="'Yes' | translate" class="p-button-danger" icon="pi pi-check" pButton
+            pRipple
+            type="button"></button>
+  </p-footer>
+</p-confirmDialog>

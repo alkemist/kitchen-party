@@ -5,9 +5,9 @@ import { TranslatingRootModule } from '@app/modules/translating.module';
 
 import { HeaderComponent } from '@components';
 import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { IngredientModel, UserInterface } from '@models';
+import { IngredientModel } from '@models';
 import { NgxsModule } from '@ngxs/store';
-import { FilteringService, IngredientService, ShoppingService, TranslatorService, UserService } from '@services';
+import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
 import { IngredientState } from '@stores';
 import { MockModule, MockProvider } from 'ng-mocks';
 import { default as NoSleep } from 'nosleep.js';
@@ -20,13 +20,13 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
+import { UserInterface } from '@interfaces';
 
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let userServiceMock: UserService;
-  let shoppingServiceMock: ShoppingService;
   let ingredientServiceMock: IngredientService;
   let translatorServiceMock: TranslatorService;
   let filteringService: FilteringService;
@@ -68,18 +68,17 @@ describe('HeaderComponent', () => {
           MockProvider(TranslatorService),
           MockProvider(IngredientService),
           MockProvider(FilteringService),
-          MockProvider(ShoppingService),
           MockProvider(Router, routerMock)
         ],
     })
       .compileComponents();
 
     userServiceMock = TestBed.inject(UserService);
-    shoppingServiceMock = TestBed.inject(ShoppingService);
     ingredientServiceMock = TestBed.inject(IngredientService);
     translatorServiceMock = TestBed.inject(TranslatorService);
     filteringService = TestBed.inject(FilteringService);
-    shoppingServiceMock.selectedRecipes = [];
+    // @TODO Remove
+    // shoppingServiceMock.selectedRecipes = [];
   });
 
   beforeEach(() => {
@@ -156,7 +155,7 @@ describe('HeaderComponent', () => {
       noSleepDisableSpy.mockReset();
       noSleepEnableSpy.mockReset();
       title = '';
-      state = {root: {firstChild: {data: {}}}} as unknown as RouterStateSnapshot;
+      state = { root: { firstChild: { data: {} } } } as unknown as RouterStateSnapshot;
       noSleepMock.isEnabled = false;
       routerEventsSubject.next(new RoutesRecognized(1, '/', '', state));
       expect(component.title).toBe(title);
@@ -265,14 +264,15 @@ describe('HeaderComponent', () => {
     jest.spyOn(translatorServiceMock, 'instant').mockResolvedValue(translatedLabel);
     expect(await component.translateMenu([ {
       label: 'test',
-      items: [ {label: 'test'} ]
-    } ])).toEqual([ {label: translatedLabel, items: [ {label: translatedLabel} ]} ]);
+      items: [ { label: 'test' } ]
+    } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
   });
 
-  it('should go to shopping', async () => {
+  // @TODO Remove
+  /*it('should go to shopping', async () => {
     const routerSpy = jest.spyOn(routerMock, 'navigate');
     component.gotoShopping();
 
     expect(routerSpy).toBeCalled();
-  });
+  });*/
 });

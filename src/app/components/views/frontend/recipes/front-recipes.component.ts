@@ -1,14 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ToolbarFilters} from '@app/components';
-import {DietTypes, SweetSalty, SweetSaltyLabelEnum} from '@enums';
-import {IngredientModel, RecipeModel} from '@models';
-import {FilteringService, IngredientService, RecipeService, ShoppingService} from '@services';
-import {Subscription} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToolbarFilters } from '@app/components';
+import { DietTypes, SweetSalty, SweetSaltyLabelEnum } from '@enums';
+import { IngredientModel, RecipeModel } from '@models';
+import { FilteringService, IngredientService, RecipeService, UserService } from '@services';
+import { Subscription } from 'rxjs';
+import { CartRecipeService } from "@app/services/cart-recipe.service";
+import { UserInterface } from '@interfaces';
 
 @Component({
   selector: 'app-front-recipes',
   templateUrl: './front-recipes.component.html',
-  styleUrls: ['./front-recipes.component.scss'],
+  styleUrls: [ './front-recipes.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -19,26 +21,20 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   filteredRecipes: RecipeModel[] = [];
   loading = true;
   subscription?: Subscription;
+  loggedUser: UserInterface | undefined;
 
   constructor(
     private recipeService: RecipeService,
     private filteringService: FilteringService,
     private ingredientService: IngredientService,
-    private shoppingService: ShoppingService,
+    private cartRecipeService: CartRecipeService,
+    private userService: UserService,
   ) {
     this.filteringService.setIngredientService(ingredientService);
   }
 
-  get selectedRecipes() {
-    return this.shoppingService.selectedRecipes;
-  }
-
   get filterSummary() {
     return this.filteringService.getFilterSummary();
-  }
-
-  set selectedRecipes(selectedRecipes) {
-    this.shoppingService.selectedRecipes = selectedRecipes;
   }
 
   filter(filters: ToolbarFilters) {
@@ -86,12 +82,11 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
     this.filteringService.getFilters().get(key)?.patchValue('');
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (!this.subscription) {
       this.subscription = this.filteringService.getFilters().valueChanges
         .subscribe((filters) => {
           this.filter(filters);
-          this.selectedRecipes = [];
         });
     }
     this.recipeService.getListOrRefresh().then(recipes => {
@@ -100,6 +95,9 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.filter(this.filteringService.getFilters().value);
       this.loading = false;
       this.filter(this.filteringService.getFilters().value);
+    });
+    await this.userService.getLoggedUser(async (loggedUser) => {
+      this.loggedUser = loggedUser;
     });
   }
 
@@ -115,5 +113,9 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       route.push(this.filteringService.getFilters().get('diet')?.value);
     }
     return route;
+  }
+
+  async addToCart(recipe: RecipeModel) {
+    await this.cartRecipeService.updateOrCreate(recipe);
   }
 }

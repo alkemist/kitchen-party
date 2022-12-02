@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { recipeConverter } from '@converters';
 import { DocumentNotFoundError } from '@errors';
-import {KeyLabelInterface, RecipeInterface} from '@interfaces';
-import {RecipeModel} from '@models';
+import { KeyLabelInterface, RecipeInterface } from '@interfaces';
+import { RecipeModel } from '@models';
 import { Select, Store } from '@ngxs/store';
 import { FirestoreService, IngredientService, LoggerService } from '@services';
-import {AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe} from '@stores';
+import { AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe } from '@stores';
 import { ArrayHelper } from '@tools';
 import { orderBy } from 'firebase/firestore';
 import { first, Observable } from 'rxjs';
@@ -41,7 +41,9 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
       else if (this.all$ && !this.storeIsOutdated()) {
 
         this.getAll$()?.pipe(first()).subscribe(async recipes => {
-          resolve(this.refreshList(recipes));
+          await this.refreshList(recipes);
+          this.loaded = true;
+          resolve(this.all);
         })
 
       }
@@ -50,7 +52,9 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         const recipes = await super.queryList(orderBy('name'));
         this.store.dispatch(new FillRecipes(recipes));
 
-        resolve(this.refreshList(recipes));
+        await this.refreshList(recipes);
+        this.loaded = true;
+        resolve(this.all);
       }
     });
   }
@@ -63,8 +67,6 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
       this.all.push(recipeModel);
     }
     this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
-    this.loaded = true;
-
     return this.all;
   }
 

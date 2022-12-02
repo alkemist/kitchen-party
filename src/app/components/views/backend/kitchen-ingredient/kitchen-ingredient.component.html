@@ -14,9 +14,9 @@
       </ng-template>
 
       <app-form-kitchen-ingredient
-        (searchIngredientOrRecipeEvent)="searchIngredientOrRecipe($event)"
-        [form]="form" [ingredientsOrRecipes]="ingredientsOrRecipes"
-        [isKitchen]="true" [kitchenIngredient]="kitchenIngredient" [loading]="loading" [measureUnits]="measureUnits"
+        (searchIngredientEvent)="searchIngredient($event)"
+          [form]="form" [ingredients]="ingredients"
+        [kitchenIngredient]="kitchenIngredient" [loading]="loading" [measureUnits]="measureUnits"
       ></app-form-kitchen-ingredient>
 
       <ng-template pTemplate="footer">
@@ -38,7 +38,8 @@
 <p-blockUI [blocked]="loading" [target]="pnl">
   <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </p-blockUI>
-<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+<p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle"
+                 key="kitchenIngredientConfirm">
   <p-footer>
     <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
             pRipple

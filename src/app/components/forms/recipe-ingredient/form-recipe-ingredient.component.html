@@ -1,0 +1,97 @@
+<div [formGroup]="form" class="ingredients">
+  <div class="formgrid grid">
+    <div class="field col-12 md:col-4">
+      <label
+        [for]="'quantity' + i"
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        translate="">Quantity</label>
+      <p-inputNumber
+        [inputId]="'quantity' + i"
+        [min]="0"
+        [ngClass]="{'p-invalid': form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [step]="0.1"
+        class="inputfield w-full"
+        formControlName="quantity"></p-inputNumber>
+      <div
+        *ngIf="form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)"
+        class="p-error">
+        <small *ngIf="form.errors?.['invalid']"
+               translate="">
+          Required.
+        </small>
+      </div>
+    </div>
+    <div class="field col-12 md:col-4">
+      <label
+        [for]="'unit' + i"
+        [ngClass]="{'p-error':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        translate="">Unit</label>
+      <p-dropdown
+        [autoDisplayFirst]="false"
+        [editable]="true"
+        [filter]="true"
+        [inputId]="'unit' + i"
+        [ngClass]="{'p-invalid':form.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        [options]="measureUnits"
+        [showClear]="true"
+        formControlName="unitOrMeasure"
+        styleClass="inputfield w-full">
+        <ng-template let-selectItem pTemplate="selectedItem">
+          {{ selectItem.label }}
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          {{ item.label }}
+        </ng-template>
+      </p-dropdown>
+      <div
+        *ngIf="form.invalid && (form.dirty || form.get('ingredientOrRecipe')?.touched)"
+        class="p-error">
+        <small *ngIf="form.errors?.['invalid']"
+               translate="">
+          Required.
+        </small>
+      </div>
+    </div>
+    <div class="field col-12 md:col-4">
+      <label
+        [for]="'ingredient' + i"
+        [ngClass]="{'p-error':form.get('ingredientOrRecipe')?.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)}"
+        translate="">Ingredient</label>
+      <p-autoComplete (completeMethod)="searchIngredientOrRecipe($event)"
+                      [dropdown]="true"
+                      [forceSelection]="true"
+                      [suggestions]="ingredientsOrRecipes" class="inputfield w-full"
+                      dataKey="id"
+                      field="name" formControlName="ingredientOrRecipe">
+      </p-autoComplete>
+      <div
+        *ngIf="form.get('ingredientOrRecipe')?.invalid && (form.get('ingredientOrRecipe')?.dirty || form.get('ingredientOrRecipe')?.touched)"
+        class="p-error">
+        <small *ngIf="form.get('ingredientOrRecipe')?.errors?.['required']"
+               translate="">
+          Required.
+        </small>
+        <small *ngIf="form.get('ingredientOrRecipe')?.errors?.['exist']" translate="">
+          Ingredient already in kitchen.
+        </small>
+      </div>
+    </div>
+    <div class="field grid col-12 md:col-12">
+      <div class="field col-12 md:col-3">
+        <label translate="">Options</label>
+      </div>
+      <div class="field field-checkbox col-4 md:col-3">
+        <p-checkbox [binary]="true" formControlName="optionCarne" inputId="optionCarne"></p-checkbox>
+        <label translate="">Meat</label>
+      </div>
+      <div class="field field-checkbox col-4 md:col-3">
+        <p-checkbox [binary]="true" formControlName="optionVege" inputId="optionVege"></p-checkbox>
+        <label translate="">Vege</label>
+      </div>
+      <div class="field field-checkbox col-4 md:col-3">
+        <p-checkbox [binary]="true" formControlName="optionVegan" inputId="optionVegan"></p-checkbox>
+        <label translate="">Vegan</label>
+      </div>
+    </div>
+  </div>
+</div>

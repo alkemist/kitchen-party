@@ -131,6 +131,7 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
+      key: "ingredientConfirm",
       message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
         this.ingredientService.remove(this.ingredient).then(async () => {
@@ -139,7 +140,7 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate([ '/', 'admin', 'ingredients' ]);
+          await this.routerService.navigate(['/', 'admin', 'ingredients']);
         });
       }
     });

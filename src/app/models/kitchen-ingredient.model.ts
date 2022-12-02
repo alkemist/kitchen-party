@@ -1,8 +1,8 @@
-import { KitchenIngredientInterface } from '@interfaces';
-import { RecipeIngredientModel } from './recipe-ingredient.model';
+import {KitchenIngredientInterface} from '@interfaces';
+import {RelationIngredientModel} from "./relation-ingredient.model";
 
 
-export class KitchenIngredientModel extends RecipeIngredientModel implements KitchenIngredientInterface {
+export class KitchenIngredientModel extends RelationIngredientModel implements KitchenIngredientInterface {
   slug?: string = '';
 
   constructor(kitchenIngredient: KitchenIngredientInterface) {

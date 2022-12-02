@@ -4,7 +4,6 @@ import {
   ingredientLegumineMock,
   kitchenIngredientLegumineMock,
   kitchenIngredientMeatMock,
-  kitchenIngredientRecipeMock,
   kitchenIngredientVegetableFatMock,
   kitchenIngredientVegetableMock,
   recipeLegumineMock
@@ -14,7 +13,6 @@ import { NgxsModule, Store } from '@ngxs/store';
 import { FirestoreService, IngredientService, KitchenIngredientService, LoggerService, RecipeService } from '@services';
 import { KitchenIngredientState } from '@stores';
 import { MockProvider } from 'ng-mocks';
-import { of } from 'rxjs';
 
 
 describe('KitchenIngredientService', () => {
@@ -23,7 +21,6 @@ describe('KitchenIngredientService', () => {
   let recipeService: RecipeService;
   let store: Store;
   let loggerService: LoggerService;
-  let kitchenIngredients: KitchenIngredientModel[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -227,7 +224,7 @@ describe('KitchenIngredientService', () => {
 
     it('should store kitchenIngredient', async () => {
       expect(await service.add(kitchenIngredientVegetableFatMock)).toEqual(kitchenIngredientVegetableFatMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: kitchenIngredientVegetableFatMock});
+      expect(storeSpy).toHaveBeenCalledWith({ payload: kitchenIngredientVegetableFatMock });
     });
   });
 
@@ -242,7 +239,7 @@ describe('KitchenIngredientService', () => {
 
     it('should store kitchenIngredient', async () => {
       expect(await service.update(kitchenIngredientVegetableFatMock)).toEqual(kitchenIngredientVegetableFatMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: kitchenIngredientVegetableFatMock});
+      expect(storeSpy).toHaveBeenCalledWith({ payload: kitchenIngredientVegetableFatMock });
     });
   });
 
@@ -257,7 +254,7 @@ describe('KitchenIngredientService', () => {
 
     it('should store kitchenIngredient', async () => {
       await service.remove(kitchenIngredientVegetableFatMock);
-      expect(storeSpy).toHaveBeenCalledWith({payload: kitchenIngredientVegetableFatMock});
+      expect(storeSpy).toHaveBeenCalledWith({ payload: kitchenIngredientVegetableFatMock });
     });
   });
 
@@ -302,7 +299,6 @@ describe('KitchenIngredientService', () => {
         id: 'kitchenIngredientVeganId1',
         name: 'KitchenIngredient Vegan 1',
         slug: 'kitchenIngredient-vegan-1',
-        recipeId: recipeLegumineMock.id,
         ingredientId: ingredientLegumineMock.id,
       });
 
@@ -310,7 +306,6 @@ describe('KitchenIngredientService', () => {
         id: 'kitchenIngredientVeganId1',
         name: 'KitchenIngredient Vegan 1',
         slug: 'kitchenIngredient-vegan-1',
-        recipe: recipeLegumineMock,
         ingredient: ingredientLegumineMock,
       });
 

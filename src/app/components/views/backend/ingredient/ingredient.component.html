@@ -2,7 +2,7 @@
   <app-form-ingredient (onRemove)="remove()" (onSubmit)="handleSubmit()" [form]="form"
                        [ingredientTypes]="ingredientTypes" [ingredient]="ingredient"
                        [loading]="loading"></app-form-ingredient>
-  <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle">
+  <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="ingredientConfirm">
     <p-footer>
       <button (click)="cd.reject()" [label]="'No' | translate" icon="pi pi-times" pButton
               pRipple

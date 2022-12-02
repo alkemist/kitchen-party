@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MeasureUnitLabelEnum, MeasureUnits} from '@enums';
-import {KitchenIngredientInterface, RecipeIngredientFormInterface} from '@interfaces';
-import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel, RecipeModel} from '@models';
-import {KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
+import {KitchenIngredientInterface} from '@interfaces';
+import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel} from '@models';
+import {IngredientService, KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
 import {EnumHelper, slugify} from '@tools';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {RelationIngredientFormInterface} from "@app/interfaces/relation-ingredient-form.interface";
 
 @Component({
   selector: 'app-kitchen-ingredient',
@@ -19,7 +20,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 export class KitchenIngredientComponent implements OnInit {
   kitchenIngredient = new KitchenIngredientModel({});
   measureUnits = EnumHelper.enumToObject(MeasureUnitLabelEnum);
-  ingredientsOrRecipes: (IngredientModel | RecipeModel)[] = [];
+  ingredients: IngredientModel[] = [];
 
   form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
@@ -29,6 +30,7 @@ export class KitchenIngredientComponent implements OnInit {
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private searchService: SearchService,
+    private ingredientService: IngredientService,
     private kitchenIngredientService: KitchenIngredientService,
     private routerService: Router,
     private translatorService: TranslatorService,
@@ -38,7 +40,7 @@ export class KitchenIngredientComponent implements OnInit {
     this.form = new UntypedFormGroup({
       quantity: new UntypedFormControl('', []),
       unitOrMeasure: new UntypedFormControl('', []),
-      ingredientOrRecipe: new UntypedFormControl('', [Validators.required]),
+      ingredient: new UntypedFormControl('', [Validators.required]),
     });
   }
 
@@ -51,8 +53,8 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm: RecipeIngredientFormInterface = {...this.kitchenIngredient};
-          kitchenIngredientForm.ingredientOrRecipe = this.kitchenIngredient.recipe ? this.kitchenIngredient.recipe : this.kitchenIngredient.ingredient!;
+          const kitchenIngredientForm: RelationIngredientFormInterface = {...this.kitchenIngredient};
+          kitchenIngredientForm.ingredient = this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit
             : this.kitchenIngredient.measure;
@@ -63,9 +65,9 @@ export class KitchenIngredientComponent implements OnInit {
       });
   }
 
-  searchIngredientOrRecipe(event: { query: string }): void {
-    this.searchService.searchIngredientsOrRecipes(event.query).then(ingredientsOrRecipes => {
-      this.ingredientsOrRecipes = ingredientsOrRecipes;
+  searchIngredient(event: { query: string }): void {
+    this.ingredientService.search(event.query).then(ingredients => {
+      this.ingredients = ingredients;
     });
   }
 
@@ -125,6 +127,7 @@ export class KitchenIngredientComponent implements OnInit {
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
+      key: "kitchenIngredientConfirm",
       message: await this.translatorService.instant('Are you sure you want to delete it ?'),
       accept: () => {
         this.kitchenIngredientService.remove(this.kitchenIngredient).then(async () => {
@@ -133,7 +136,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredients' ]);
+          await this.routerService.navigate(['/', 'admin', 'kitchen-ingredients']);
         });
       }
     });

@@ -1,7 +1,8 @@
-import { DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes } from '@enums';
-import { RecipeInterface } from '@interfaces';
-import { slugify } from '@tools';
-import { RecipeIngredientModel } from './recipe-ingredient.model';
+import {DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes} from '@enums';
+import {RecipeInterface} from '@interfaces';
+import {slugify} from '@tools';
+import {RecipeIngredientModel} from "./recipe-ingredient.model";
+import {RelationIngredientModel} from "./relation-ingredient.model";
 
 export class RecipeModel implements RecipeInterface {
   static saltyNames = [
@@ -52,7 +53,7 @@ export class RecipeModel implements RecipeInterface {
   }
 
   get orderedRecipeIngredients(): RecipeIngredientModel[] {
-    return RecipeIngredientModel.orderRecipeIngredients(this.recipeIngredients) as RecipeIngredientModel[];
+    return RelationIngredientModel.orderRelationIngredients<RecipeIngredientModel>(this.recipeIngredients);
   }
 
   get typeName(): string {
