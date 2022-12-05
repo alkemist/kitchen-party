@@ -1,6 +1,6 @@
-import {IngredientTypeLabelEnum, MeasureUnitKeyEnum, MeasureUnitLabelEnum, MeasureUnits} from '@enums';
-import {HasIngredient, KeyLabelInterface, RelationIngredientInterface,} from '@interfaces';
-import {IngredientModel} from './ingredient.model';
+import { IngredientTypeLabelEnum, MeasureUnitKeyEnum, MeasureUnitLabelEnum, MeasureUnits } from '@enums';
+import { HasIngredient, KeyLabelInterface, RelationIngredientInterface, } from '@interfaces';
+import { IngredientModel } from './ingredient.model';
 
 export class RelationIngredientModel implements RelationIngredientInterface {
   static ingredientTypes = Object.keys(IngredientTypeLabelEnum);
@@ -15,6 +15,7 @@ export class RelationIngredientModel implements RelationIngredientInterface {
   constructor(relationIngredient: RelationIngredientInterface) {
     this.id = relationIngredient.id ?? '';
     this.quantity = relationIngredient.quantity ?? null;
+
     this.measure = relationIngredient.measure?.trim() || '';
     this.unit = relationIngredient.unit || null;
 
@@ -42,14 +43,14 @@ export class RelationIngredientModel implements RelationIngredientInterface {
           unit: this.ingredient?.isLiquid ? MeasureUnitLabelEnum.milliliter : MeasureUnitLabelEnum.gram
         };
       case MeasureUnitLabelEnum.centiliter:
-        return {count: quantity * 10, unit: MeasureUnitLabelEnum.milliliter};
+        return { count: quantity * 10, unit: MeasureUnitLabelEnum.milliliter };
       case MeasureUnitLabelEnum.kilogram:
-        return {count: quantity * 1000, unit: MeasureUnitLabelEnum.gram};
+        return { count: quantity * 1000, unit: MeasureUnitLabelEnum.gram };
       case MeasureUnitLabelEnum.gram:
-        return {count: quantity, unit: MeasureUnitLabelEnum.gram};
+        return { count: quantity, unit: MeasureUnitLabelEnum.gram };
     }
 
-    return {count: quantity, measure: this.measure};
+    return { count: quantity, measure: this.measure };
   }
 
   get ingredientIds(): string[] {
@@ -61,10 +62,12 @@ export class RelationIngredientModel implements RelationIngredientInterface {
 
   static unitOrMeasureToString(relationIngredient: RelationIngredientInterface, measureUnits: KeyLabelInterface[]): string | undefined {
     let unitOrMeasure = '';
+
     if (relationIngredient.measure) {
       unitOrMeasure = relationIngredient.measure;
     } else if (relationIngredient.unit) {
-      unitOrMeasure = measureUnits.find(measure => measure.key === relationIngredient.unit)!.label;
+      unitOrMeasure = measureUnits
+        .find(measure => measure.key === relationIngredient.unit)!.label;
     }
 
     return relationIngredient.quantity && unitOrMeasure

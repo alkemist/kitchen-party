@@ -1,7 +1,7 @@
-import {DietTypeLabelEnum, MeasureUnitKeyEnum, MeasureUnits} from '@enums';
-import {KeyLabelInterface, RecipeIngredientFormInterface, RecipeIngredientInterface,} from '@interfaces';
-import {RecipeModel} from './recipe.model';
-import {RelationIngredientModel} from "@app/models/relation-ingredient.model";
+import { DietTypeLabelEnum, MeasureUnitKeyEnum, MeasureUnits } from '@enums';
+import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeIngredientInterface, } from '@interfaces';
+import { RecipeModel } from './recipe.model';
+import { RelationIngredientModel } from "@app/models/relation-ingredient.model";
 
 
 export class RecipeIngredientModel extends RelationIngredientModel implements RecipeIngredientInterface {
@@ -28,7 +28,7 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
   }
 
   static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
-    const recipeIngredient = {...recipeIngredientForm};
+    const recipeIngredient = { ...recipeIngredientForm };
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     delete recipeIngredient.ingredientOrRecipe;
@@ -41,7 +41,12 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
       }
     }
 
-    const unitOrMeasure = recipeIngredientForm.unitOrMeasure;
+    // @TODO à refactoriser
+    let unitOrMeasure = recipeIngredientForm.unitOrMeasure;
+    if ((unitOrMeasure as KeyLabelInterface).key !== undefined) {
+      unitOrMeasure = (unitOrMeasure as KeyLabelInterface).key;
+    }
+
     delete recipeIngredient.unitOrMeasure;
 
     if (unitOrMeasure) {
@@ -51,7 +56,7 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
         recipeIngredient.unit = value as MeasureUnitKeyEnum;
         recipeIngredient.measure = '';
       } else {
-        recipeIngredient.measure = unitOrMeasure;
+        recipeIngredient.measure = unitOrMeasure as string;
         recipeIngredient.unit = null;
       }
     }
