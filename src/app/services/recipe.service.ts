@@ -24,6 +24,8 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
   // Données du service
   private all: RecipeModel[] = [];
 
+  protected override maxHourOutdated = 6;
+
   constructor(private logger: LoggerService, private store: Store, private ingredientService: IngredientService) {
     super(logger, 'recipe', recipeConverter);
     this.customMeasures$?.subscribe(customMeasures => {

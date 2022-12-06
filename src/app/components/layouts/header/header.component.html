@@ -22,13 +22,16 @@
           <input formControlName="name" id="float-input" pInputText type="text">
           <label for="float-input" translate="">Name</label>
       </span>
-      <div class="mobile-hidden">
+      <div class="flex flex-row align-items-center mobile-hidden">
         <button (click)="resetFilters()" [disabled]="filterSummary.length === 0"
                 [pTooltip]="'Clear filters' | translate"
                 class="p-button-rounded p-button-text"
                 icon="pi pi-times" pButton
                 pRipple type="button"></button>
-        <p-badge *ngIf="filterSummary.length > 0" [value]="filterSummary.length.toString()" styleClass="mr-2"></p-badge>
+        <p-badge *ngIf="filterSummary.length > 0"
+                 [value]="filterSummary.length.toString()"
+                 styleClass="mr-2"
+        ></p-badge>
       </div>
     </div>
   </div>

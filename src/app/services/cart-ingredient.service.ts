@@ -29,14 +29,12 @@ export class CartIngredientService extends FirestoreService<CartIngredientInterf
   // Données du service
   private all: CartIngredientModel[] = [];
 
+  protected override maxHourOutdated = 0;
+
   constructor(private logger: LoggerService, private store: Store,
               private ingredientService: IngredientService,
   ) {
     super(logger, 'shopping', cartIngredientConverter);
-  }
-
-  override storeIsOutdated(): boolean {
-    return true;
   }
 
   async getListOrRefresh(): Promise<CartIngredientModel[]> {

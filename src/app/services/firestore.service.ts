@@ -1,8 +1,8 @@
-import {DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError} from '@errors';
-import {FirestoreDataConverter} from '@firebase/firestore';
-import {DataObjectInterface} from '@interfaces';
-import {LoggerService} from '@services';
-import {generatePushID, slugify, TimeHelper} from '@tools';
+import { DatabaseError, DocumentNotFoundError, EmptyDocumentError, QuotaExceededError } from '@errors';
+import { FirestoreDataConverter } from '@firebase/firestore';
+import { DataObjectInterface } from '@interfaces';
+import { LoggerService } from '@services';
+import { generatePushID, slugify, TimeHelper } from '@tools';
 import {
   collection,
   CollectionReference,
@@ -16,7 +16,7 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 export abstract class FirestoreService<T extends DataObjectInterface> {
@@ -33,6 +33,8 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
   private readonly converter: FirestoreDataConverter<T>;
   private readonly ref: CollectionReference;
   private readonly loggerService: LoggerService;
+
+  protected maxHourOutdated = 24;
 
   protected constructor(logger: LoggerService, collectionName: string, converter: FirestoreDataConverter<T>) {
     this.loggerService = logger;
@@ -61,7 +63,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       return true;
     }
     const nbHours = TimeHelper.calcHoursAfter(this.lastUpdated);
-    return nbHours > 24;
+    return nbHours >= this.maxHourOutdated;
   }
 
   public async exist(name: string): Promise<boolean> {
@@ -88,7 +90,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
       const ref = doc(this.ref, id).withConverter(this.converter);
       docSnapshot = await getDoc(ref);
     } catch (error) {
-      this.loggerService.error(new DatabaseError((error as Error).message, {id}));
+      this.loggerService.error(new DatabaseError((error as Error).message, { id }));
     }
 
     if (!docSnapshot) {
@@ -111,7 +113,7 @@ export abstract class FirestoreService<T extends DataObjectInterface> {
     try {
       list = await this.queryList(where(property, '==', value));
     } catch (e) {
-      this.loggerService.error(new DatabaseError((e as Error).message, {[property]: value}));
+      this.loggerService.error(new DatabaseError((e as Error).message, { [property]: value }));
     }
 
     if (list.length === 0) {
