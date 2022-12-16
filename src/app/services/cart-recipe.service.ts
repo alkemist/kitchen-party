@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { cartRecipeConverter } from '@converters';
-import { DocumentNotFoundError } from '@errors';
-import { CartRecipeInterface } from '@interfaces';
-import { CartRecipeModel, RecipeModel } from '@models';
-import { Select, Store } from '@ngxs/store';
-import { FirestoreService, LoggerService, RecipeService } from '@services';
-import { AddCartRecipe, CartRecipeState, FillCartRecipes, RemoveCartRecipe, UpdateCartRecipe } from '@stores';
-import { ArrayHelper } from '@tools';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {cartRecipeConverter} from '@converters';
+import {DocumentNotFoundError} from '@errors';
+import {CartRecipeInterface} from '@interfaces';
+import {CartRecipeModel, RecipeModel} from '@models';
+import {Select, Store} from '@ngxs/store';
+import {FirestoreService, LoggerService, RecipeService} from '@services';
+import {AddCartRecipe, CartRecipeState, FillCartRecipes, RemoveCartRecipe, UpdateCartRecipe} from '@stores';
+import {ArrayHelper} from '@tools';
+import {orderBy} from 'firebase/firestore';
+import {first, Observable} from 'rxjs';
 
 
 @Injectable({
@@ -58,13 +58,15 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
 
   async refreshList(cartRecipes: CartRecipeInterface[]): Promise<CartRecipeModel[]> {
     this.all = [];
+    const all = [];
 
     for (const cartRecipe of cartRecipes) {
       const cartRecipeModel = new CartRecipeModel(cartRecipe);
       await this.hydrate(cartRecipeModel);
-      this.all.push(cartRecipeModel);
+      all.push(cartRecipeModel);
     }
-    this.all = ArrayHelper.sortBy<CartRecipeModel>(this.all, 'slug');
+
+    this.all = ArrayHelper.sortBy<CartRecipeModel>(all, 'slug');
     return this.all;
   }
 

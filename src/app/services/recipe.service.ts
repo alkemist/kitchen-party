@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { recipeConverter } from '@converters';
-import { DocumentNotFoundError } from '@errors';
-import { KeyLabelInterface, RecipeInterface } from '@interfaces';
-import { RecipeModel } from '@models';
-import { Select, Store } from '@ngxs/store';
-import { FirestoreService, IngredientService, LoggerService } from '@services';
-import { AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe } from '@stores';
-import { ArrayHelper } from '@tools';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {recipeConverter} from '@converters';
+import {DocumentNotFoundError} from '@errors';
+import {KeyLabelInterface, RecipeInterface} from '@interfaces';
+import {RecipeModel} from '@models';
+import {Select, Store} from '@ngxs/store';
+import {FirestoreService, IngredientService, LoggerService} from '@services';
+import {AddRecipe, FillRecipes, RecipeState, RemoveRecipe, UpdateRecipe} from '@stores';
+import {ArrayHelper} from '@tools';
+import {orderBy} from 'firebase/firestore';
+import {first, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -63,12 +63,15 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
 
   async refreshList(recipes: RecipeInterface[]): Promise<RecipeModel[]> {
     this.all = [];
+    const all = [];
+
     for (const recipe of recipes) {
       const recipeModel = new RecipeModel(recipe);
       await this.hydrate(recipeModel, recipes);
-      this.all.push(recipeModel);
+      all.push(recipeModel);
     }
-    this.all = ArrayHelper.sortBy<RecipeModel>(this.all, 'slug');
+
+    this.all = ArrayHelper.sortBy<RecipeModel>(all, 'slug');
     return this.all;
   }
 

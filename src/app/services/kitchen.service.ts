@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { kitchenIngredientConverter } from '@converters';
-import { DocumentNotFoundError } from '@errors';
-import { KitchenIngredientInterface } from '@interfaces';
-import { KitchenIngredientModel } from '@models';
-import { Select, Store } from '@ngxs/store';
-import { FirestoreService, IngredientService, LoggerService } from '@services';
+import {Injectable} from '@angular/core';
+import {kitchenIngredientConverter} from '@converters';
+import {DocumentNotFoundError} from '@errors';
+import {KitchenIngredientInterface} from '@interfaces';
+import {KitchenIngredientModel} from '@models';
+import {Select, Store} from '@ngxs/store';
+import {FirestoreService, IngredientService, LoggerService} from '@services';
 import {
   AddKitchenIngredient,
   FillKitchenIngredients,
@@ -12,9 +12,9 @@ import {
   RemoveKitchenIngredient,
   UpdateKitchenIngredient
 } from '@stores';
-import { ArrayHelper } from '@tools';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
+import {ArrayHelper} from '@tools';
+import {orderBy} from 'firebase/firestore';
+import {first, Observable} from 'rxjs';
 
 
 @Injectable({
@@ -64,13 +64,15 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
 
   async refreshList(kitchenIngredients: KitchenIngredientInterface[]): Promise<KitchenIngredientModel[]> {
     this.all = [];
+    const all = [];
 
     for (const kitchenIngredient of kitchenIngredients) {
       const kitchenIngredientModel = new KitchenIngredientModel(kitchenIngredient);
       await this.hydrate(kitchenIngredientModel);
-      this.all.push(kitchenIngredientModel);
+      all.push(kitchenIngredientModel);
     }
-    this.all = ArrayHelper.sortBy<KitchenIngredientModel>(this.all, 'slug');
+
+    this.all = ArrayHelper.sortBy<KitchenIngredientModel>(all, 'slug');
     return this.all;
   }
 

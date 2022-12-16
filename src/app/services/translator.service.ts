@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { TranslationError } from '@errors';
-import { KeyLabelInterface, KeyValueInterface } from '@interfaces';
-import { TranslateService } from '@ngx-translate/core';
-import { Select, Store } from '@ngxs/store';
-import { LoggerService } from '@services';
-import { FillTranslations, TranslationState } from '@stores';
-import { ArrayHelper, TimeHelper } from '@tools';
-import { first, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {TranslationError} from '@errors';
+import {KeyLabelInterface, KeyValueInterface} from '@interfaces';
+import {TranslateService} from '@ngx-translate/core';
+import {Select, Store} from '@ngxs/store';
+import {LoggerService} from '@services';
+import {FillTranslations, TranslationState} from '@stores';
+import {ArrayHelper, TimeHelper} from '@tools';
+import {first, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class TranslatorService {
       return true;
     }
     const nbHours = TimeHelper.calcHoursAfter(this.lastUpdated);
-    return nbHours > 24;
+    return nbHours >= 24;
   }
 
   async instant(key: string): Promise<string> {

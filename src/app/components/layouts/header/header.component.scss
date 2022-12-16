@@ -85,14 +85,16 @@
     max-width: none;
     min-width: auto;
 
-    /* right: 100%;
-    left: unset; */
+    left: -69%;
   }
 
 
   @media screen and (max-width: $mobile-tablet-width) {
     .subItem .p-menuitem-text {
       display: none;
+    }
+    .p-submenu-list {
+      left: -26%;
     }
   }
 }

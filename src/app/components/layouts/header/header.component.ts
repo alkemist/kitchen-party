@@ -1,18 +1,18 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Router, RoutesRecognized } from '@angular/router';
-import { baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems } from '@consts';
-import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
-import { CartRecipeInterface, IngredientInterface, UserInterface } from '@interfaces';
-import { CartRecipeModel, IngredientModel } from '@models';
-import { Select } from '@ngxs/store';
-import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
-import { CartRecipeState, IngredientState } from '@stores';
-import { EnumHelper } from '@tools';
-import { default as NoSleep } from 'nosleep.js';
-import { ConfirmationService, MenuItem } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
-import { CartRecipeService } from "@app/services/cart-recipe.service";
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {Router, RoutesRecognized} from '@angular/router';
+import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
+import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
+import {CartRecipeInterface, IngredientInterface, UserInterface} from '@interfaces';
+import {CartRecipeModel, IngredientModel} from '@models';
+import {Select} from '@ngxs/store';
+import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
+import {CartRecipeState, IngredientState} from '@stores';
+import {EnumHelper} from '@tools';
+import {default as NoSleep} from 'nosleep.js';
+import {ConfirmationService, MenuItem} from 'primeng/api';
+import {Observable, Subscription} from 'rxjs';
+import {CartRecipeService} from "@app/services/cart-recipe.service";
 
 
 export interface ToolbarFilters {
@@ -125,10 +125,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.cartRecipes$) {
       await this.cartRecipeService.getListOrRefresh();
       this.subscriptions.push(
-        this.cartRecipes$.subscribe(async (cartRecipes: CartRecipeInterface[]) => {
-          this.cartRecipes = await this.cartRecipeService.refreshList(cartRecipes);
-          this.buildCartItems();
-        })
+        this.cartRecipes$
+          .subscribe(async (cartRecipes: CartRecipeInterface[]) => {
+            const cartRecipesModel = await this.cartRecipeService.refreshList(cartRecipes);
+            this.buildCartItems(cartRecipesModel);
+          })
       );
     }
 
@@ -230,11 +231,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildCartItems() {
+  buildCartItems(cartRecipes: CartRecipeModel[]) {
     let totalSlice = 0;
     this.cartRecipesSize = 0;
 
-    this.cartItems = this.cartRecipes.map((item) => {
+    const cartItems: MenuItem[] = cartRecipes.map((item) => {
       if (item.recipe?.nbSlices) {
         totalSlice += item.recipe.nbSlices * item.quantity;
       }
@@ -284,11 +285,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     if (this.cartItems.length > 0) {
-      this.cartItems.push(
+      cartItems.push(
         {
           separator: true
         });
-      this.cartItems.push({
+
+      cartItems.push({
         label: this.translatorService.translate('Empty the cart'),
         icon: 'pi pi-trash',
         command: async () => {
@@ -302,13 +304,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
           );
         }
       });
-      this.cartItems.push(
+
+      cartItems.push(
         {
           label: this.translatorService.translate('Shopping list'),
           icon: 'pi pi-shopping-cart',
-          badge: totalSlice > 0 ? `${ totalSlice } ${ this.translatorService.translate('Slices') }` : '',
+          badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
           routerLink: `/shopping`
         });
     }
+
+    this.cartItems = cartItems;
   }
 }
