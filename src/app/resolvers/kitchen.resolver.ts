@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { KitchenIngredientModel } from '@models';
-import { KitchenIngredientService } from '@services';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {KitchenIngredientModel} from '@models';
+import {KitchenIngredientService} from '@services';
 
 @Injectable({providedIn: 'root'})
 export class KitchenResolver implements Resolve<KitchenIngredientModel | undefined> {
@@ -12,7 +12,7 @@ export class KitchenResolver implements Resolve<KitchenIngredientModel | undefin
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<KitchenIngredientModel | undefined> {
-    const kitchenIngredient = await this.service.get(route.paramMap.get('slug') ?? '');
+    const kitchenIngredient = await this.service.getBySlug(route.paramMap.get('slug') ?? '');
     if (kitchenIngredient) {
       return kitchenIngredient;
     }

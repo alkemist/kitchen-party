@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { RecipeModel } from '@models';
-import { RecipeService } from '@services';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {RecipeModel} from '@models';
+import {RecipeService} from '@services';
 
 @Injectable({providedIn: 'root'})
 export class RecipesResolver implements Resolve<RecipeModel[]> {
@@ -17,7 +17,7 @@ export class RecipesResolver implements Resolve<RecipeModel[]> {
 
     if (slugs.length > 0) {
       for (const slug of slugs) {
-        const recipe = await this.service.get(slug);
+        const recipe = await this.service.getBySlug(slug);
         if (recipe) {
           recipes.push(recipe);
         }

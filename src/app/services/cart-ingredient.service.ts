@@ -84,34 +84,22 @@ export class CartIngredientService extends FirestoreService<CartIngredientInterf
   }
 
   async getBySlug(slug: string): Promise<CartIngredientModel | undefined> {
-    const cartIngredients = await this.getListOrRefresh();
-    const cartIngredient = cartIngredients.find((cartIngredient: CartIngredientModel) => {
-      return cartIngredient.ingredient?.slug === slug;
-    })!;
-    return cartIngredient ?? undefined;
-  }
-
-  async getById(id: string): Promise<CartIngredientModel | undefined> {
-    const cartIngredients = await this.getListOrRefresh();
-    const cartIngredient = cartIngredients.find((cartIngredient: CartIngredientModel) => {
-      return cartIngredient.id === id;
-    })!;
-    return cartIngredient ?? undefined;
-  }
-
-  async get(slug: string): Promise<CartIngredientModel | undefined> {
     if (!slug) {
       return undefined;
     }
 
-    let cartIngredient = await this.getBySlug(slug);
+    const cartIngredients = await this.getListOrRefresh();
+    const cartIngredient = cartIngredients.find((cartIngredient: CartIngredientModel) => {
+      return cartIngredient.ingredient?.slug === slug;
+    })!;
+
     if (!cartIngredient) {
       try {
         let cartIngredientData = await super.findOneBySlug(slug);
         await this.addToStore(cartIngredientData);
         this.invalidLocalData();
 
-        return new CartIngredientModel(cartIngredientData);
+        return this.hydrate(new CartIngredientModel(cartIngredientData));
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
           return undefined;
@@ -146,11 +134,13 @@ export class CartIngredientService extends FirestoreService<CartIngredientInterf
     return cartIngredient;
   }
 
-  private async hydrate(cartIngredient: CartIngredientModel): Promise<void> {
+  private async hydrate(cartIngredient: CartIngredientModel): Promise<CartIngredientModel> {
     if (cartIngredient.ingredientId) {
       cartIngredient.ingredient = await this.ingredientService.getById(cartIngredient.ingredientId);
     }
     delete cartIngredient.ingredientId;
+
+    return cartIngredient;
   }
 }
 

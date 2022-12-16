@@ -77,35 +77,23 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
     });
   }
 
-  async getByRecipeId(recipeId: string): Promise<CartRecipeModel | undefined> {
-    const cartRecipes = await this.getListOrRefresh();
-    const cartRecipe = cartRecipes.find((cartRecipe: CartRecipeModel) => {
-      return cartRecipe.recipe?.id === recipeId;
-    })!;
-    return cartRecipe ?? undefined;
-  }
-
-  async getById(id: string): Promise<CartRecipeModel | undefined> {
-    const cartRecipes = await this.getListOrRefresh();
-    const cartRecipe = cartRecipes.find((cartRecipe: CartRecipeModel) => {
-      return cartRecipe.id === id;
-    })!;
-    return cartRecipe ?? undefined;
-  }
-
   async get(recipeId: string): Promise<CartRecipeModel | undefined> {
     if (!recipeId) {
       return undefined;
     }
 
-    let cartRecipe = await this.getByRecipeId(recipeId);
+    const cartRecipes = await this.getListOrRefresh();
+    const cartRecipe = cartRecipes.find((cartRecipe: CartRecipeModel) => {
+      return cartRecipe.recipe?.id === recipeId;
+    })!;
+
     if (!cartRecipe) {
       try {
         let cartRecipeData = await super.findOneBy('recipeId', recipeId);
         await this.addToStore(cartRecipeData);
         this.invalidLocalData();
 
-        return new CartRecipeModel(cartRecipeData);
+        return this.hydrate(new CartRecipeModel(cartRecipeData));
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
           return undefined;
@@ -167,11 +155,13 @@ export class CartRecipeService extends FirestoreService<CartRecipeInterface> {
     return cartRecipe;
   }
 
-  private async hydrate(cartRecipe: CartRecipeModel): Promise<void> {
+  private async hydrate(cartRecipe: CartRecipeModel): Promise<CartRecipeModel> {
     if (cartRecipe.recipeId) {
       cartRecipe.recipe = await this.recipeService.getById(cartRecipe.recipeId);
     }
     delete cartRecipe.recipeId;
+
+    return cartRecipe;
   }
 
   async removeAll() {

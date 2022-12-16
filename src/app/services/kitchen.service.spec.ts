@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-import { DocumentNotFoundError } from '@errors';
+import {TestBed} from '@angular/core/testing';
+import {DocumentNotFoundError} from '@errors';
 import {
   ingredientLegumineMock,
   kitchenIngredientLegumineMock,
@@ -8,11 +8,11 @@ import {
   kitchenIngredientVegetableMock,
   recipeLegumineMock
 } from '@mocks';
-import { KitchenIngredientModel } from '@models';
-import { NgxsModule, Store } from '@ngxs/store';
-import { FirestoreService, IngredientService, KitchenIngredientService, LoggerService, RecipeService } from '@services';
-import { KitchenIngredientState } from '@stores';
-import { MockProvider } from 'ng-mocks';
+import {KitchenIngredientModel} from '@models';
+import {NgxsModule, Store} from '@ngxs/store';
+import {FirestoreService, IngredientService, KitchenIngredientService, LoggerService, RecipeService} from '@services';
+import {KitchenIngredientState} from '@stores';
+import {MockProvider} from 'ng-mocks';
 
 
 describe('KitchenIngredientService', () => {
@@ -192,15 +192,15 @@ describe('KitchenIngredientService', () => {
       });
 
       it('should return undefined if no name', async () => {
-        expect(await service.get('')).toBe(undefined);
+        expect(await service.getBySlug('')).toBe(undefined);
       });
 
       it('should call findOneBySlug if slug exist', async () => {
-        expect(await service.get(kitchenIngredientLegumineMock.slug!)).toEqual(kitchenIngredientLegumineMock);
+        expect(await service.getBySlug(kitchenIngredientLegumineMock.slug!)).toEqual(kitchenIngredientLegumineMock);
       });
 
       it('should call findOneBySlug if slug don\'t exist', async () => {
-        expect(await service.get(kitchenIngredientVegetableFatMock.slug!)).toEqual(kitchenIngredientVegetableFatMock);
+        expect(await service.getBySlug(kitchenIngredientVegetableFatMock.slug!)).toEqual(kitchenIngredientVegetableFatMock);
         expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(kitchenIngredientVegetableFatMock.slug);
       });
 
@@ -208,7 +208,7 @@ describe('KitchenIngredientService', () => {
         const error = new DocumentNotFoundError('test');
         (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockRejectedValue(error);
 
-        expect(await service.get(kitchenIngredientVegetableFatMock.slug!)).toBe(undefined);
+        expect(await service.getBySlug(kitchenIngredientVegetableFatMock.slug!)).toBe(undefined);
       });
     });
   });

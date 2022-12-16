@@ -83,35 +83,49 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     });
   }
 
-  async getBySlug(slug: string): Promise<KitchenIngredientModel | undefined> {
-    const kitchenIngredients = await this.getListOrRefresh();
-    const kitchenIngredient = kitchenIngredients.find((kitchenIngredient: KitchenIngredientModel) => {
-      return kitchenIngredient.ingredient?.slug === slug;
-    })!;
-    return kitchenIngredient ?? undefined;
-  }
-
   async getById(id: string): Promise<KitchenIngredientModel | undefined> {
+    if (!id) {
+      return undefined;
+    }
+
     const kitchenIngredients = await this.getListOrRefresh();
     const kitchenIngredient = kitchenIngredients.find((kitchenIngredient: KitchenIngredientModel) => {
       return kitchenIngredient.id === id;
     })!;
-    return kitchenIngredient ?? undefined;
+
+    if (!kitchenIngredient) {
+      try {
+        let kitchenIngredientData = await super.findOneById(id);
+        await this.addToStore(kitchenIngredientData);
+        this.invalidLocalData();
+
+        return await this.hydrate(new KitchenIngredientModel(kitchenIngredientData));
+      } catch (e) {
+        if (e instanceof DocumentNotFoundError) {
+          return undefined;
+        }
+      }
+    }
+    return kitchenIngredient;
   }
 
-  async get(slug: string): Promise<KitchenIngredientModel | undefined> {
+  async getBySlug(slug: string): Promise<KitchenIngredientModel | undefined> {
     if (!slug) {
       return undefined;
     }
 
-    let kitchenIngredient = await this.getBySlug(slug);
+    const kitchenIngredients = await this.getListOrRefresh();
+    const kitchenIngredient = kitchenIngredients.find((kitchenIngredient: KitchenIngredientModel) => {
+      return kitchenIngredient.slug === slug;
+    })!;
+
     if (!kitchenIngredient) {
       try {
         let kitchenIngredientData = await super.findOneBySlug(slug);
         await this.addToStore(kitchenIngredientData);
         this.invalidLocalData();
 
-        return new KitchenIngredientModel(kitchenIngredientData);
+        return await this.hydrate(new KitchenIngredientModel(kitchenIngredientData));
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
           return undefined;
@@ -146,11 +160,13 @@ export class KitchenIngredientService extends FirestoreService<KitchenIngredient
     return kitchenIngredient;
   }
 
-  private async hydrate(kitchenIngredient: KitchenIngredientModel): Promise<void> {
+  private async hydrate(kitchenIngredient: KitchenIngredientModel): Promise<KitchenIngredientModel> {
     if (kitchenIngredient.ingredientId) {
       kitchenIngredient.ingredient = await this.ingredientService.getById(kitchenIngredient.ingredientId);
     }
     delete kitchenIngredient.ingredientId;
+
+    return kitchenIngredient;
   }
 }
 

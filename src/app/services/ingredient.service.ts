@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ingredientConverter } from '@converters';
-import { DocumentNotFoundError } from '@errors';
-import { IngredientInterface } from '@interfaces';
-import { IngredientModel } from '@models';
-import { Select, Store } from '@ngxs/store';
-import { FirestoreService, LoggerService } from '@services';
-import { AddIngredient, FillIngredients, IngredientState, RemoveIngredient, UpdateIngredient } from '@stores';
-import { ArrayHelper } from '@tools';
-import { orderBy } from 'firebase/firestore';
-import { first, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ingredientConverter} from '@converters';
+import {DocumentNotFoundError} from '@errors';
+import {IngredientInterface} from '@interfaces';
+import {IngredientModel} from '@models';
+import {Select, Store} from '@ngxs/store';
+import {FirestoreService, LoggerService} from '@services';
+import {AddIngredient, FillIngredients, IngredientState, RemoveIngredient, UpdateIngredient} from '@stores';
+import {ArrayHelper} from '@tools';
+import {orderBy} from 'firebase/firestore';
+import {first, Observable} from 'rxjs';
 
 
 @Injectable({
@@ -70,28 +70,44 @@ export class IngredientService extends FirestoreService<IngredientInterface> {
     });
   }
 
-  async getBySlug(slug: string): Promise<IngredientModel | undefined> {
-    const ingredients = await this.getListOrRefresh();
-    const ingredient = ingredients.find((ingredient: IngredientModel) => {
-      return ingredient.slug === slug;
-    })!;
-    return ingredient ?? undefined;
-  }
+  async getById(id: string, forceRefresh = false): Promise<IngredientModel | undefined> {
+    if (!id) {
+      return undefined;
+    }
 
-  async getById(id: string): Promise<IngredientModel | undefined> {
     const ingredients = await this.getListOrRefresh();
     const ingredient = ingredients.find((ingredient: IngredientModel) => {
       return ingredient.id === id;
     })!;
-    return ingredient ?? undefined;
+
+    if (!ingredient || forceRefresh) {
+      try {
+        const ingredientData = await super.findOneById(id);
+
+        await this.addToStore(ingredientData);
+        this.invalidLocalData();
+
+        return new IngredientModel(ingredientData);
+      } catch (e) {
+        if (e instanceof DocumentNotFoundError) {
+          return undefined;
+        }
+      }
+    }
+
+    return ingredient;
   }
 
-  async get(slug: string, forceRefresh = false): Promise<IngredientModel | undefined> {
+  async getBySlug(slug: string, forceRefresh = false): Promise<IngredientModel | undefined> {
     if (!slug) {
       return undefined;
     }
 
-    let ingredient = await this.getBySlug(slug);
+    const ingredients = await this.getListOrRefresh();
+    const ingredient = ingredients.find((ingredient: IngredientModel) => {
+      return ingredient.slug === slug;
+    })!;
+
     if (!ingredient || forceRefresh) {
       try {
         const ingredientData = await super.findOneBySlug(slug);

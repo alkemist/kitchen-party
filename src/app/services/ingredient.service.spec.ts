@@ -1,13 +1,12 @@
-import { TestBed } from '@angular/core/testing';
-import { DocumentNotFoundError } from '@errors';
-import { ingredientAnimalFatMock, ingredientLegumineMock, ingredientMeatMock, ingredientVegetableMock } from '@mocks';
-import { IngredientModel } from '@models';
-import { NgxsModule, Store } from '@ngxs/store';
+import {TestBed} from '@angular/core/testing';
+import {DocumentNotFoundError} from '@errors';
+import {ingredientAnimalFatMock, ingredientLegumineMock, ingredientMeatMock, ingredientVegetableMock} from '@mocks';
+import {IngredientModel} from '@models';
+import {NgxsModule, Store} from '@ngxs/store';
 
-import { FirestoreService, IngredientService, LoggerService } from '@services';
-import { IngredientState } from '@stores';
-import { MockProvider } from 'ng-mocks';
-import { of } from 'rxjs';
+import {FirestoreService, IngredientService, LoggerService} from '@services';
+import {IngredientState} from '@stores';
+import {MockProvider} from 'ng-mocks';
 
 
 describe('IngredientService', () => {
@@ -181,20 +180,20 @@ describe('IngredientService', () => {
       });
 
       it('should return undefined if no name', async () => {
-        expect(await service.get('')).toBe(undefined);
+        expect(await service.getBySlug('')).toBe(undefined);
       });
 
       it('should call findOneBySlug if slug exist', async () => {
-        expect(await service.get(ingredientLegumineMock.slug)).toEqual(ingredientLegumineMock);
+        expect(await service.getBySlug(ingredientLegumineMock.slug)).toEqual(ingredientLegumineMock);
       });
 
       it('should call findOneBySlug if slug don\'t exist', async () => {
-        expect(await service.get(ingredientAnimalFatMock.slug)).toEqual(ingredientAnimalFatMock);
+        expect(await service.getBySlug(ingredientAnimalFatMock.slug)).toEqual(ingredientAnimalFatMock);
         expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(ingredientAnimalFatMock.slug);
       });
 
       it('should force refresh', async () => {
-        expect(await service.get(ingredientMeatMock.slug, true)).toEqual(ingredientAnimalFatMock);
+        expect(await service.getBySlug(ingredientMeatMock.slug, true)).toEqual(ingredientAnimalFatMock);
         expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(ingredientMeatMock.slug);
       });
 
@@ -202,7 +201,7 @@ describe('IngredientService', () => {
         const error = new DocumentNotFoundError('test');
         (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockRejectedValue(error);
 
-        expect(await service.get(ingredientAnimalFatMock.slug)).toBe(undefined);
+        expect(await service.getBySlug(ingredientAnimalFatMock.slug)).toBe(undefined);
       });
     });
   });

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { RecipeModel } from '@models';
-import { RecipeService } from '@services';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {RecipeModel} from '@models';
+import {RecipeService} from '@services';
 
 @Injectable({providedIn: 'root'})
 export class RecipeResolver implements Resolve<RecipeModel | undefined> {
@@ -12,6 +12,6 @@ export class RecipeResolver implements Resolve<RecipeModel | undefined> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<RecipeModel | undefined> {
-    return await this.service.get(route.paramMap.get('slug') ?? '');
+    return await this.service.getBySlug(route.paramMap.get('slug') ?? '');
   }
 }

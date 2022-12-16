@@ -1,18 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { DocumentNotFoundError } from '@errors';
-import {
-  ingredientLegumineMock,
-  recipeLegumineMock,
-  recipeMeatMock,
-  recipeVegeMock,
-  recipeVegetableMock
-} from '@mocks';
-import { RecipeModel } from '@models';
-import { NgxsModule, Store } from '@ngxs/store';
-import { FirestoreService, IngredientService, LoggerService, RecipeService } from '@services';
-import { RecipeState } from '@stores';
-import { MockProvider } from 'ng-mocks';
-import { of } from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {DocumentNotFoundError} from '@errors';
+import {ingredientLegumineMock, recipeLegumineMock, recipeMeatMock, recipeVegeMock, recipeVegetableMock} from '@mocks';
+import {RecipeModel} from '@models';
+import {NgxsModule, Store} from '@ngxs/store';
+import {FirestoreService, IngredientService, LoggerService, RecipeService} from '@services';
+import {RecipeState} from '@stores';
+import {MockProvider} from 'ng-mocks';
 
 
 describe('RecipeService', () => {
@@ -188,15 +181,15 @@ describe('RecipeService', () => {
       });
 
       it('should return undefined if no name', async () => {
-        expect(await service.get('')).toBe(undefined);
+        expect(await service.getBySlug('')).toBe(undefined);
       });
 
       it('should call findOneBySlug if slug exist', async () => {
-        expect(await service.get(recipeLegumineMock.slug)).toEqual(recipeLegumineMock);
+        expect(await service.getBySlug(recipeLegumineMock.slug)).toEqual(recipeLegumineMock);
       });
 
       it('should call findOneBySlug if slug don\'t exist', async () => {
-        expect(await service.get(recipeVegeMock.slug)).toEqual(recipeVegeMock);
+        expect(await service.getBySlug(recipeVegeMock.slug)).toEqual(recipeVegeMock);
         expect(FirestoreService.prototype['findOneBySlug']).toBeCalledWith(recipeVegeMock.slug);
       });
 
@@ -204,7 +197,7 @@ describe('RecipeService', () => {
         const error = new DocumentNotFoundError('test');
         (FirestoreService.prototype['findOneBySlug'] as jest.Mock).mockRejectedValue(error);
 
-        expect(await service.get(recipeVegeMock.slug)).toBe(undefined);
+        expect(await service.getBySlug(recipeVegeMock.slug)).toBe(undefined);
       });
     });
   });

@@ -82,35 +82,49 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     });
   }
 
-  async getBySlug(slug: string): Promise<RecipeModel | undefined> {
+  async getById(id: string): Promise<RecipeModel | undefined> {
+    if (!id) {
+      return undefined;
+    }
+
     const recipes = await this.getListOrRefresh();
     const recipe = recipes.find((recipe: RecipeModel) => {
-      return recipe.slug === slug;
-    })!;
-    return recipe ?? undefined;
-  }
-
-  async getById(id: string): Promise<RecipeModel | undefined> {
-    const recipes = await this.getListOrRefresh();
-    const recipe = recipes.find((recipe: RecipeInterface) => {
       return recipe.id === id;
     })!;
-    return recipe ?? undefined;
+
+    if (!recipe) {
+      try {
+        let recipeData = await super.findOneById(id);
+        await this.addToStore(recipeData);
+        this.invalidLocalData();
+
+        return await this.hydrate(new RecipeModel(recipeData), recipes);
+      } catch (e) {
+        if (e instanceof DocumentNotFoundError) {
+          return undefined;
+        }
+      }
+    }
+    return recipe;
   }
 
-  async get(slug: string): Promise<RecipeModel | undefined> {
+  async getBySlug(slug: string): Promise<RecipeModel | undefined> {
     if (!slug) {
       return undefined;
     }
 
-    let recipe = await this.getBySlug(slug);
+    const recipes = await this.getListOrRefresh();
+    const recipe = recipes.find((recipe: RecipeModel) => {
+      return recipe.slug === slug;
+    })!;
+
     if (!recipe) {
       try {
         let recipeData = await super.findOneBySlug(slug);
         await this.addToStore(recipeData);
         this.invalidLocalData();
 
-        return new RecipeModel(recipeData);
+        return await this.hydrate(new RecipeModel(recipeData), recipes);
       } catch (e) {
         if (e instanceof DocumentNotFoundError) {
           return undefined;
@@ -145,7 +159,7 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
     return recipe;
   }
 
-  private async hydrate(recipe: RecipeModel, recipes: RecipeInterface[]): Promise<void> {
+  private async hydrate(recipe: RecipeModel, recipes: RecipeInterface[]): Promise<RecipeModel> {
     if (recipe.recipeIngredients) {
       for (const recipeIngredient of recipe.recipeIngredients) {
         if (recipeIngredient.ingredientId) {
@@ -162,5 +176,6 @@ export class RecipeService extends FirestoreService<RecipeInterface> {
         delete recipeIngredient.recipeId;
       }
     }
+    return recipe;
   }
 }
