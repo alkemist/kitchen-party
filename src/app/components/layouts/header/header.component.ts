@@ -284,7 +284,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       };
     });
 
-    if (this.cartItems.length > 0) {
+    if (cartItems.length > 0) {
       cartItems.push(
         {
           separator: true
@@ -304,15 +304,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
           );
         }
       });
-
-      cartItems.push(
-        {
-          label: this.translatorService.translate('Shopping list'),
-          icon: 'pi pi-shopping-cart',
-          badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
-          routerLink: `/shopping`
-        });
     }
+
+    cartItems.push(
+      {
+        label: this.translatorService.translate('Shopping list'),
+        icon: 'pi pi-shopping-cart',
+        badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
+        routerLink: `/shopping`
+      }
+    );
 
     this.cartItems = cartItems;
   }

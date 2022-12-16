@@ -82,7 +82,7 @@
                 pRipple type="button"></p-button>
     </div>
     <div class="flex flex-row align-items-center" *ngIf="loggedUser" style="margin-top: 40px;">
-      <p-button (click)="cartEl.toggle($event)" [disabled]="cartRecipesSize === 0"
+      <p-button (click)="cartEl.toggle($event)"
                 [pTooltip]="'Recipes Cart' | translate"
                 class="p-button-rounded p-button-text w-full" styleClass="w-full" icon="pi pi-shopping-cart"
                 [badge]="cartRecipesSize > 0 ? cartRecipesSize.toString() : ''"
