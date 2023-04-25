@@ -1,7 +1,17 @@
+[build]
+base = ""
+publish = "dist/kitchen-party"
+command = "npm run build"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
 [dev]
-    functionsPort = 1234
-    targetPort = 4020
-    port = 4242
+functionsPort = 1234
+targetPort = 4020
+port = 4242
 
 [functions."backup"]
-    schedule = "@weekly"
+schedule = "@weekly"
