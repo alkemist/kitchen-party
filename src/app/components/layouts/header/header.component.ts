@@ -246,6 +246,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
         badge: item.quantity > 1 ? item.quantity.toString() : '',
         items: [
           {
+            label: this.translatorService.translate('Recipe'),
+            icon: 'pi pi-eye',
+            styleClass: 'subItem',
+            cartItem: item,
+            command: async (event) => {
+              await this.router.navigate(['/', event.item.cartItem.recipe.slug])
+            }
+          },
+          {
             label: this.translatorService.translate('Add one'),
             icon: 'pi pi-plus',
             styleClass: 'subItem',
