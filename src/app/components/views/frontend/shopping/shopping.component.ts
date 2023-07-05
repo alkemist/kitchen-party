@@ -207,7 +207,9 @@ export class ShoppingComponent implements OnInit {
   }
 
   private async removeAll() {
-    this.cartIngredients.forEach((cartIngredient) => {
+    this.cartIngredients
+      .filter(cartIngredient => cartIngredient.checked)
+      .forEach((cartIngredient) => {
       this.cartIngredientService.remove(cartIngredient);
     })
   }
