@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import {
   IngredientComponent,
   IngredientsComponent,
@@ -8,32 +8,32 @@ import {
   RecipeComponent,
   RecipesComponent
 } from '@components';
-import {IngredientResolver, KitchenResolver, RecipeResolver} from '@resolvers';
+import { ingredientResolver, KitchenResolver, RecipeResolver } from '@resolvers';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/admin/recipes', pathMatch: 'full'},
+  { path: '', redirectTo: '/admin/recipes', pathMatch: 'full' },
   {
     path: 'ingredients',
     component: IngredientsComponent,
-    data: {title: 'Ingredients'}
+    data: { title: 'Ingredients' }
   },
   {
     path: 'ingredient/:slug',
     component: IngredientComponent,
     resolve: {
-      ingredient: IngredientResolver
+      ingredient: ingredientResolver
     },
-    data: {title: 'Ingredient'},
+    data: { title: 'Ingredient' },
   },
   {
     path: 'ingredient',
     component: IngredientComponent,
-    data: {title: 'Ingredient'},
+    data: { title: 'Ingredient' },
   },
   {
     path: 'recipes',
     component: RecipesComponent,
-    data: {title: 'Recipes'}
+    data: { title: 'Recipes' }
   },
   {
     path: 'recipe/:slug',
@@ -41,17 +41,17 @@ const routes: Routes = [
     resolve: {
       recipe: RecipeResolver
     },
-    data: {title: 'Recipe'},
+    data: { title: 'Recipe' },
   },
   {
     path: 'recipe',
     component: RecipeComponent,
-    data: {title: 'Recipe'},
+    data: { title: 'Recipe' },
   },
   {
     path: 'kitchen-ingredients',
     component: KitchenIngredientsComponent,
-    data: {title: 'Kitchen ingredients'}
+    data: { title: 'Kitchen ingredients' }
   },
   {
     path: 'kitchen-ingredient/:slug',
@@ -59,12 +59,12 @@ const routes: Routes = [
     resolve: {
       kitchenIngredient: KitchenResolver
     },
-    data: {title: 'Kitchen ingredient'},
+    data: { title: 'Kitchen ingredient' },
   },
   {
     path: 'kitchen-ingredient',
     component: KitchenIngredientComponent,
-    data: {title: 'Kitchen ingredient'},
+    data: { title: 'Kitchen ingredient' },
   },
 ];
 

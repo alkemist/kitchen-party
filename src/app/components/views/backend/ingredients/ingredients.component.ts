@@ -1,12 +1,11 @@
 import { Component, computed, OnInit, WritableSignal } from '@angular/core';
-import { Router } from '@angular/router';
 import { IngredientTypeLabelEnum } from '@enums';
 import { IngredientModel } from '@models';
-import { IngredientService, IngredientV2Service, TranslatorService } from '@services';
+import { IngredientV2Service, TranslatorService } from '@services';
 import { EnumHelper } from '@tools';
 import { IngredientV2State } from '@stores';
 import { Observe } from '@alkemist/ngx-state-manager';
-import { IngredientV2Interface } from '@interfaces';
+import { IngredientV2FrontInterface } from '@interfaces';
 
 @Component({
   selector: 'app-back-ingredients',
@@ -19,18 +18,13 @@ import { IngredientV2Interface } from '@interfaces';
 export class IngredientsComponent implements OnInit {
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
   @Observe(IngredientV2State, IngredientV2State.items)
-  protected _items!: WritableSignal<IngredientV2Interface[]>;
+  protected _items!: WritableSignal<IngredientV2FrontInterface[]>;
   protected ingredients = computed(
-    () => this._items().map(_item => {
-      const ingredient = new IngredientModel(_item);
-      return ingredient;
-    })
+    () => this._items().map(_item => new IngredientModel(_item))
   )
 
   constructor(
-    private ingredientService: IngredientService,
     private ingredientV2Service: IngredientV2Service,
-    private router: Router,
     private translatorService: TranslatorService
   ) {
   }

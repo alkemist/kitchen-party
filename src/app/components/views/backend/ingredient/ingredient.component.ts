@@ -1,32 +1,41 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IngredientTypeLabelEnum} from '@enums';
-import {IngredientInterface} from '@interfaces';
-import {IngredientModel} from '@models';
-import {IngredientService, TranslatorService} from '@services';
-import {EnumHelper, slugify} from '@tools';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import { AfterViewChecked, ChangeDetectorRef, Component, computed, OnInit, WritableSignal } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IngredientTypeLabelEnum } from '@enums';
+import { IngredientFormInterface, IngredientV2FrontInterface } from '@interfaces';
+import { IngredientModel } from '@models';
+import { IngredientService, IngredientV2Service, TranslatorService } from '@services';
+import { EnumHelper } from '@tools';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { IngredientV2State } from '@stores';
+import { Observe } from '@alkemist/ngx-state-manager';
 
 @Component({
   selector: 'app-back-ingredient',
   templateUrl: './ingredient.component.html',
-  styleUrls: ['./ingredient.component.scss'],
+  styleUrls: [ './ingredient.component.scss' ],
   host: {
     class: 'page-container'
   }
 })
 export class IngredientComponent implements OnInit, AfterViewChecked {
-  ingredient = new IngredientModel({});
   ingredientTypes = EnumHelper.enumToObject(IngredientTypeLabelEnum);
-
   form: UntypedFormGroup = new UntypedFormGroup({});
   loading = true;
   error: string = '';
+  @Observe(IngredientV2State, IngredientV2State.item)
+  protected _item!: WritableSignal<IngredientV2FrontInterface | null>;
+  ingredient = computed(
+    () =>
+      this._item() !== null
+        ? new IngredientModel(this._item()!)
+        : new IngredientModel({})
+  );
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private ingredientService: IngredientService,
+    private ingredientV2Service: IngredientV2Service,
     private routerService: Router,
     private translatorService: TranslatorService,
     private confirmationService: ConfirmationService,
@@ -61,16 +70,15 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
-    this.route.data.subscribe(
+    this.activatedRoute.data.subscribe(
       ((data: any) => {
-        if (data && data['ingredient']) {
-          this.ingredient = data['ingredient'];
-          this.form.patchValue(this.ingredient);
-          this.form.get('dateBegin')?.patchValue(this.ingredient.monthBegin
-            ? new Date(new Date().getFullYear(), this.ingredient.monthBegin - 1, 1)
+        if (this.ingredient().id) {
+          this.form.patchValue(this.ingredient().toForm());
+          this.form.get('dateBegin')?.patchValue(this.ingredient().monthBegin
+            ? new Date(new Date().getFullYear(), this.ingredient().monthBegin! - 1, 1)
             : null);
-          this.form.get('dateEnd')?.patchValue(this.ingredient.monthEnd
-            ? new Date(new Date().getFullYear(), this.ingredient.monthEnd - 1, 1)
+          this.form.get('dateEnd')?.patchValue(this.ingredient().monthEnd
+            ? new Date(new Date().getFullYear(), this.ingredient().monthEnd! - 1, 1)
             : null);
         }
         this.loading = false;
@@ -78,69 +86,48 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(IngredientModel.format(this.form.value));
-  }
-
-  async preSubmit(ingredient: IngredientInterface): Promise<void> {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      if (this.ingredient.id) {
-        ingredient.id = this.ingredient.id;
-      }
+      const ingredient = IngredientModel.format({
+        id: this.ingredient().id,
+        ...this.form.value as IngredientFormInterface
+      });
 
-      const checkExist = !this.ingredient.id || slugify(ingredient.name) !== slugify(this.ingredient.name);
-
-      if (checkExist) {
-        this.ingredientService.exist(ingredient.name!).then(async exist => {
-          if (exist) {
-            return this.name.setErrors({'exist': true});
-          }
-          await this.submit(ingredient);
-        });
-      } else {
-        await this.submit(ingredient);
+      if (!await this.ingredientV2Service.exist(
+        ingredient,
+        this.ingredient() ? this.ingredient()!.id : undefined
+      )) {
+        void this.submit(ingredient);
       }
     }
   }
 
-  async submit(localDocument: IngredientInterface): Promise<void> {
+  async submit(ingredient: IngredientModel): Promise<void> {
     this.loading = true;
-    if (this.ingredient.id) {
-      this.ingredientService.update(localDocument).then(async ingredient => {
-        this.ingredient = new IngredientModel(ingredient!);
+
+    if (this.ingredient().id) {
+      this.ingredientV2Service.update(ingredient.id!, ingredient).then(_ => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'success',
-          detail: await this.translatorService.instant(`Updated ingredient`)
-        });
-        await this.routerService.navigate([ '/', 'admin', 'ingredient', this.ingredient.slug ]);
-      });
+        void this.routerService.navigate([ "../../ingredients" ], { relativeTo: this.activatedRoute });
+      })
     } else {
-      await this.ingredientService.add(localDocument).then(async ingredient => {
-        this.ingredient = new IngredientModel(ingredient!);
+      this.ingredientV2Service.add(ingredient).then(_ => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'success',
-          detail: await this.translatorService.instant(`Added ingredient`),
-        });
-        await this.routerService.navigate([ '/', 'admin', 'ingredient', this.ingredient.slug ]);
-      });
+        void this.routerService.navigate([ "../../ingredients" ], { relativeTo: this.activatedRoute });
+      })
     }
   }
 
   async remove(): Promise<void> {
     this.confirmationService.confirm({
-      key: "ingredientConfirm",
-      message: await this.translatorService.instant('Are you sure you want to delete it ?'),
+      key: "ingredient",
+      message: $localize`Are you sure you want to delete it ?`,
       accept: () => {
-        this.ingredientService.remove(this.ingredient).then(async () => {
+        this.loading = true;
+        this.ingredientV2Service.delete(this.ingredient()!).then(async () => {
           this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            detail: await this.translatorService.instant(`Deleted ingredient`)
-          });
-          await this.routerService.navigate(['/', 'admin', 'ingredients']);
+          await this.routerService.navigate([ "../../ingredients" ], { relativeTo: this.activatedRoute });
         });
       }
     });

@@ -96,13 +96,8 @@ export const logoutMenuItem: MenuItem = {
   icon: 'pi pi-sign-out',
 };
 
-export const notLoggedMenuItems: MenuItem[] = [
-  {
-    separator: true
-  },
-  {
-    label: 'Log in',
-    icon: 'pi pi-user',
-    routerLink: [ '/', 'user', 'login' ],
-  }
-];
+export const notLoggedMenuItem: MenuItem = {
+  id: 'loginButton',
+  label: 'Log in',
+  icon: 'pi pi-user',
+};

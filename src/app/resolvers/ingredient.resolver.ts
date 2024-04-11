@@ -1,21 +1,8 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {IngredientModel} from '@models';
-import {IngredientService} from '@services';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
+import { IngredientV2Service } from '@services';
 
-@Injectable({providedIn: 'root'})
-export class IngredientResolver implements Resolve<IngredientModel | undefined> {
-  constructor(private service: IngredientService) {
-  }
-
-  async resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<IngredientModel | undefined> {
-    const ingredient = await this.service.getBySlug(route.paramMap.get('slug') ?? '');
-    if (ingredient) {
-      return ingredient;
-    }
-    return undefined;
-  }
-}
+export const ingredientResolver: ResolveFn<void | null> =
+  async (route: ActivatedRouteSnapshot) => {
+    return inject(IngredientV2Service).dispatchUserItem(route.paramMap.get('slug')!);
+  };

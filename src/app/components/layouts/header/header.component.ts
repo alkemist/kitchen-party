@@ -1,13 +1,7 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Router, RoutesRecognized } from '@angular/router';
-import {
-  baseMenuItems,
-  CustomMenuItemCommandEvent,
-  loggedMenuItems,
-  logoutMenuItem,
-  notLoggedMenuItems
-} from '@consts';
+import { baseMenuItems, CustomMenuItemCommandEvent, loggedMenuItems, logoutMenuItem, notLoggedMenuItem } from '@consts';
 import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
 import { CartRecipeInterface, IngredientInterface } from '@interfaces';
 import { CartRecipeModel, IngredientModel } from '@models';
@@ -152,7 +146,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      menuItems = menuItems.concat(notLoggedMenuItems);
+      menuItems = menuItems.concat([
+        {
+          separator: true
+        },
+        {
+          ...notLoggedMenuItem,
+          command: () => {
+            void this.userService.login();
+          }
+        }
+      ]);
     }
     this.menuItems = await this.translateMenu(menuItems);
     this.loading = false;

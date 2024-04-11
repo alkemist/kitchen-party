@@ -1,4 +1,4 @@
-import { IngredientV2Interface } from '@interfaces';
+import { IngredientV2FrontInterface } from '@interfaces';
 import { environment } from '../../environments/environment';
 import { DocumentFrontInterface, DocumentState, DocumentStateInterface } from '@alkemist/ngx-data-store';
 import { Action, Select, State, StateContext } from '@alkemist/ngx-state-manager';
@@ -11,14 +11,14 @@ import {
   IngredientUpdateAction
 } from '@app/stores';
 
-interface IngredientStateInterface extends DocumentStateInterface<IngredientV2Interface> {
+interface IngredientStateInterface extends DocumentStateInterface<IngredientV2FrontInterface> {
 }
 
 @State({
   name: 'Ingredient',
   class: IngredientV2State,
   defaults: <IngredientStateInterface>{
-    publicItems: [] as IngredientV2Interface[],
+    publicItems: [] as IngredientV2FrontInterface[],
     lastUpdatedPublicItems: null,
     item: null,
   },
@@ -26,7 +26,7 @@ interface IngredientStateInterface extends DocumentStateInterface<IngredientV2In
   enableLocalStorage: true,
   determineArrayIndexFn: () => 'id',
 })
-export class IngredientV2State extends DocumentState<IngredientV2Interface> {
+export class IngredientV2State extends DocumentState<IngredientV2FrontInterface> {
   @Select('lastUpdatedPublicItems')
   static lastUpdated<T extends DocumentFrontInterface>(state: DocumentStateInterface<T>) {
     return DocumentState.lastUpdatedPublicItems<T>(state);
@@ -43,27 +43,27 @@ export class IngredientV2State extends DocumentState<IngredientV2Interface> {
   }
 
   @Action(IngredientFillAction)
-  fill(context: StateContext<IngredientStateInterface>, payload: IngredientV2Interface[]) {
+  fill(context: StateContext<IngredientStateInterface>, payload: IngredientV2FrontInterface[]) {
     super.fillPublicItems(context, payload);
   }
 
   @Action(IngredientGetAction)
-  override get(context: StateContext<IngredientStateInterface>, payload: IngredientV2Interface) {
+  override get(context: StateContext<IngredientStateInterface>, payload: IngredientV2FrontInterface) {
     super.get(context, payload);
   }
 
   @Action(IngredientAddAction)
-  override add(context: StateContext<IngredientStateInterface>, payload: IngredientV2Interface) {
+  override add(context: StateContext<IngredientStateInterface>, payload: IngredientV2FrontInterface) {
     super.add(context, payload);
   }
 
   @Action(IngredientUpdateAction)
-  override update(context: StateContext<IngredientStateInterface>, payload: IngredientV2Interface) {
+  override update(context: StateContext<IngredientStateInterface>, payload: IngredientV2FrontInterface) {
     super.update(context, payload);
   }
 
   @Action(IngredientDeleteAction)
-  override remove(context: StateContext<IngredientStateInterface>, payload: IngredientV2Interface) {
+  override remove(context: StateContext<IngredientStateInterface>, payload: IngredientV2FrontInterface) {
     super.remove(context, payload);
   }
 
