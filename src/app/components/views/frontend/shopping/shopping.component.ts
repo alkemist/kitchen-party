@@ -13,6 +13,12 @@ import { DialogService } from "primeng/dynamicdialog";
 import {
   DialogCartIngredientComponent
 } from "@app/components/dialogs/cart-ingredient/dialog-cart-ingredient.component";
+// @TODO For the next version
+//import { CheckboxChangeEvent } from 'primeng/checkbox';
+
+interface CheckboxChangeEvent {
+  checked: boolean
+}
 
 @Component({
   selector: 'app-shopping',
@@ -30,8 +36,8 @@ export class ShoppingComponent implements OnInit {
   cart: CartElement[] = [];
   cartIndexes: string[] = [];
   kitchenIndexes: string[] = [];
-  @Select(KitchenIngredientState.all) private kitchenIngredients$?: Observable<KitchenIngredientModel[]>;
   subscriptions: Subscription[] = [];
+  @Select(KitchenIngredientState.all) private kitchenIngredients$?: Observable<KitchenIngredientModel[]>;
   @Select(CartIngredientState.all) private cartIngredients$?: Observable<CartIngredientModel[]>;
 
   constructor(
@@ -188,7 +194,7 @@ export class ShoppingComponent implements OnInit {
     });
   }
 
-  async onCheck($event: { checked: boolean }, cartElement: CartIngredientModel) {
+  async onCheck($event: CheckboxChangeEvent, cartElement: CartIngredientModel) {
     await this.cartIngredientService.update({
       ...cartElement,
       checked: $event.checked
@@ -210,8 +216,8 @@ export class ShoppingComponent implements OnInit {
     this.cartIngredients
       .filter(cartIngredient => cartIngredient.checked)
       .forEach((cartIngredient) => {
-      this.cartIngredientService.remove(cartIngredient);
-    })
+        this.cartIngredientService.remove(cartIngredient);
+      })
   }
 
   private async buildShoppingList() {

@@ -1,4 +1,15 @@
+// @TODO For the next version
+//import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { MenuItem } from 'primeng/api';
+import { CartRecipeModel } from '@models';
+
+export interface CustomMenuItem {
+  cartItem: CartRecipeModel;
+}
+
+export interface CustomMenuItemCommandEvent {//extends MenuItemCommandEvent {
+  item: CustomMenuItem
+}
 
 export const baseMenuItems: MenuItem[] = [
   {

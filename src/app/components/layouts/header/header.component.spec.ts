@@ -77,8 +77,6 @@ describe('HeaderComponent', () => {
     ingredientServiceMock = TestBed.inject(IngredientService);
     translatorServiceMock = TestBed.inject(TranslatorService);
     filteringService = TestBed.inject(FilteringService);
-    // @TODO Remove
-    // shoppingServiceMock.selectedRecipes = [];
   });
 
   beforeEach(() => {
@@ -267,12 +265,4 @@ describe('HeaderComponent', () => {
       items: [ { label: 'test' } ]
     } ])).toEqual([ { label: translatedLabel, items: [ { label: translatedLabel } ] } ]);
   });
-
-  // @TODO Remove
-  /*it('should go to shopping', async () => {
-    const routerSpy = jest.spyOn(routerMock, 'navigate');
-    component.gotoShopping();
-
-    expect(routerSpy).toBeCalled();
-  });*/
 });

@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { DataStoreModule } from '@alkemist/ngx-data-store';
+import { importProvidersFrom, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -42,6 +43,18 @@ import { TranslatorPipe } from './pipes';
     StoringModule,
     SharingModule,
     TranslatingRootModule,
+  ],
+  providers: [
+    importProvidersFrom(DataStoreModule.forRoot({
+      api_datastore_base_url: environment['DATASTORE_BASE_URL'],
+      api_project_key: 'kitchen-party',
+      front_callback_path: 'user/authorize/google',
+      front_logged_path: '/',
+      front_login_path: '/login',
+      local_storage_auth_key: 'token',
+      store_default_max_hour_outdated: 24,
+      offline_mode: false
+    })),
   ],
   bootstrap: [ AppComponent ],
 })

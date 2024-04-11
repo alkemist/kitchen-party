@@ -1,6 +1,6 @@
 <div class="page-container__content h-full">
-  <p-table #dt [loading]="loading" [pageLinks]="2" [paginator]="true" [rows]="10"
-           [value]="ingredients" breakpoint="400px" dataKey="id"
+  <p-table #dt [loading]="!loaded()" [pageLinks]="2" [paginator]="true" [rows]="10"
+           [value]="ingredients()" breakpoint="400px" dataKey="id"
            responsiveLayout="scroll" scrollHeight="flex"
            styleClass="p-datatable-m">
     <ng-template pTemplate="header">
@@ -35,10 +35,10 @@
     <ng-template let-ingredient pTemplate="body">
       <tr>
         <td>
-          {{ingredient.name}}
+          {{ ingredient.name }}
         </td>
         <td>
-          {{ingredient.typeName | translate}}
+          {{ ingredient.typeName | translate }}
         </td>
         <td>
           <a [routerLink]="['/', 'admin', 'ingredient', ingredient.slug]"

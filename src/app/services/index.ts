@@ -1,6 +1,7 @@
 export * from './filtering.service'
 export * from './firestore.service'
 export * from './ingredient.service'
+export * from './ingredientV2.service'
 export * from './kitchen.service'
 export * from './logger.service'
 export * from './recipe.service'

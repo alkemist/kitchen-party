@@ -8,9 +8,9 @@ import {
   ShoppingComponent
 } from '@components';
 import { DietResolver, RecipeResolver } from '@resolvers';
-import { LoggedGuard } from "@guards";
 import { Title } from '@angular/platform-browser';
 import { TranslatorService } from "@services";
+import { loggedInGuard } from '@alkemist/ngx-data-store';
 import packageJson from '../../../package.json';
 
 @Injectable()
@@ -50,7 +50,7 @@ export class CustomTitleStrategy extends TitleStrategy {
 const routes: Routes = [
   {
     path: 'admin',
-    canActivate: [ LoggedGuard ],
+    canActivate: [ loggedInGuard ],
     loadChildren: () => import('./admin/admin.module')
       .then(mod => mod.AdminModule)
   },
@@ -62,7 +62,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent, data: { title: 'About', showAppName: true } },
   { path: 'calendar', component: CalendarComponent, data: { title: 'Calendar', showAppName: true } },
   {
-    canActivate: [ LoggedGuard ],
+    canActivate: [ loggedInGuard ],
     path: 'shopping', component: ShoppingComponent,
     data: { title: 'Shopping list', showAppName: false, showFilters: false, showShopping: true }
   },
