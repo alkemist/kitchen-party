@@ -1,6 +1,6 @@
 <div class="page-container__content">
   <app-form-ingredient (onRemove)="remove()" (onSubmit)="handleSubmit()" [form]="form"
-                       [ingredientTypes]="ingredientTypes" [ingredient]="ingredient"
+                       [ingredientTypes]="ingredientTypes" [ingredient]="ingredient()"
                        [loading]="loading"></app-form-ingredient>
   <p-confirmDialog #cd [header]="'Confirmation' | translate" icon="pi pi-exclamation-triangle" key="ingredientConfirm">
     <p-footer>

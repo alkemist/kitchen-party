@@ -1,6 +1,7 @@
 import { IngredientTypeIconEnum, IngredientTypeKeyEnum, IngredientTypeLabelEnum, IngredientTypes } from '@enums';
-import { IngredientFormInterface, IngredientInterface } from '@interfaces';
+import { IngredientFormInterface, IngredientInterface, IngredientV2FrontInterface } from '@interfaces';
 import { DateHelper, EnumHelper, slugify } from '@tools';
+import { StringHelper } from '@alkemist/smart-tools';
 
 
 export class IngredientModel implements IngredientInterface {
@@ -48,6 +49,35 @@ export class IngredientModel implements IngredientInterface {
       ingredient.monthEnd = ingredientForm.dateEnd.getMonth() + 1;
     }
     return ingredient;
+  }
+
+  toForm() {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      monthBegin: this.monthBegin,
+      monthEnd: this.monthEnd,
+      isLiquid: this.isLiquid,
+    }
+  }
+
+  toStore(): Omit<IngredientV2FrontInterface, "user" | "slug"> {
+    return {
+      id: this.id!,
+      name: this.name,
+      type: this.type,
+      monthBegin: this.monthBegin,
+      monthEnd: this.monthEnd,
+      isLiquid: this.isLiquid,
+    }
+  }
+
+  toUniqueFields() {
+    return {
+      name: this.name,
+      slug: StringHelper.slugify(this.name)
+    }
   }
 
   nameContain(search: string): boolean {
