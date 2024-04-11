@@ -1,6 +1,8 @@
 export const environment = {
   production: false,
   APP_NAME: "",
+  APP_VERSION: "",
+  APP_OFFLINE: false,
   FIREBASE_API_KEY: "",
   FIREBASE_AUTH_DOMAIN: "",
   FIREBASE_PROJECT_ID: "",
@@ -9,4 +11,5 @@ export const environment = {
   FIREBASE_APP_ID: "",
   FIREBASE_MEASUREMENT_ID: "",
   GOOGLE_CLOUD_OPERATIONS_API_KEY: "",
+  DATASTORE_BASE_URL: "",
 };

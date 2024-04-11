@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MeasureUnitLabelEnum, RecipeTypeLabelEnum } from '@enums';
-import { UserInterface } from '@interfaces';
 import { RecipeIngredientModel, RecipeModel } from '@models';
 import { TranslatorService, UserService } from '@services';
 import { EnumHelper } from '@tools';
+import { DataStoreUserInterface } from '@alkemist/ngx-data-store';
 
 @Component({
   selector: 'app-front-recipe',
@@ -20,7 +20,7 @@ export class FrontRecipeComponent implements OnInit {
   recipe = new RecipeModel({});
   diet: string = '';
   loading = true;
-  loggedUser?: UserInterface;
+  loggedUser?: DataStoreUserInterface;
   noExist = false;
 
   constructor(
@@ -49,9 +49,7 @@ export class FrontRecipeComponent implements OnInit {
     this.recipeTypes = await this.translatorService.translateLabels(this.recipeTypes);
     this.measureUnits = await this.translatorService.translateLabels(this.measureUnits);
 
-    await this.userService.getLoggedUser((loggedUser) => {
-      this.loggedUser = loggedUser;
-    });
+    this.loggedUser = await this.userService.getLoggedUser();
   }
 
   unitOrMeasureToString(recipeIngredient: RecipeIngredientModel): string | undefined {

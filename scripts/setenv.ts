@@ -1,7 +1,7 @@
 // @ts-ignore
-const {writeFile} = require('fs');
+const { writeFile } = require('fs');
 // @ts-ignore
-const {argv} = require('yargs');
+const { argv } = require('yargs');
 // read environment variables from .env file
 require('dotenv').config();
 // read the command line arguments passed with yargs
@@ -18,6 +18,8 @@ const environmentFileContent = `
 export const environment = {
   production: ${ isProduction },
   APP_NAME: "${ process.env['APP_NAME'] }",
+  APP_VERSION: "${ process.env['APP_VERSION'] }",
+  APP_OFFLINE: "${ process.env['APP_OFFLINE'] }",
   FIREBASE_API_KEY: "${ process.env['FIREBASE_API_KEY'] }",
   FIREBASE_AUTH_DOMAIN: "${ process.env['FIREBASE_AUTH_DOMAIN'] }",
   FIREBASE_PROJECT_ID: "${ process.env['FIREBASE_PROJECT_ID'] }",
@@ -26,6 +28,7 @@ export const environment = {
   FIREBASE_APP_ID: "${ process.env['FIREBASE_APP_ID'] }",
   FIREBASE_MEASUREMENT_ID: "${ process.env['FIREBASE_MEASUREMENT_ID'] }",
   GOOGLE_CLOUD_OPERATIONS_API_KEY: "${ process.env['GOOGLE_CLOUD_OPERATIONS_API_KEY'] }",
+  DATASTORE_BASE_URL: "${ process.env['SH_DATASTORE_BASE_URL'] }",
 };
 `;
 //

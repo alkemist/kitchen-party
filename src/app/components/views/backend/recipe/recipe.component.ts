@@ -1,20 +1,20 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DialogIngredientComponent} from '@components';
-import {DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum} from '@enums';
-import {KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface} from '@interfaces';
-import {IngredientModel, RecipeIngredientModel, RecipeModel, RelationIngredientModel} from '@models';
-import {IngredientService, RecipeService, SearchService, TranslatorService, UploadService} from '@services';
-import {EnumHelper, slugify} from '@tools';
-import {recipeIngredientValidator} from '@validators';
-import {ConfirmationService, FilterService, MessageService} from 'primeng/api';
-import {DialogService} from 'primeng/dynamicdialog';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DialogIngredientComponent } from '@components';
+import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '@enums';
+import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '@interfaces';
+import { IngredientModel, RecipeIngredientModel, RecipeModel, RelationIngredientModel } from '@models';
+import { IngredientService, RecipeService, SearchService, TranslatorService, UploadService } from '@services';
+import { EnumHelper, slugify } from '@tools';
+import { recipeIngredientValidator } from '@validators';
+import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-back-recipe',
   templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.scss'],
+  styleUrls: [ './recipe.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -61,8 +61,8 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
       preparationDuration: new UntypedFormControl('', []),
       waitingDuration: new UntypedFormControl('', []),
       nbSlices: new UntypedFormControl('', []),
-      recipeIngredientForms: new UntypedFormArray([RecipeComponent.createRecipeIngredient()], []),
-      instructions: new UntypedFormArray([RecipeComponent.createInstructionRow()], [])
+      recipeIngredientForms: new UntypedFormArray([ RecipeComponent.createRecipeIngredient() ], []),
+      instructions: new UntypedFormArray([ RecipeComponent.createInstructionRow() ], [])
     });
   }
 
@@ -94,15 +94,15 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
     return new UntypedFormGroup({
       quantity: new UntypedFormControl('', []),
       unitOrMeasure: new UntypedFormControl('', []),
-      ingredientOrRecipe: new UntypedFormControl('', [Validators.required]),
+      ingredientOrRecipe: new UntypedFormControl('', [ Validators.required ]),
       optionCarne: new UntypedFormControl('', []),
       optionVege: new UntypedFormControl('', []),
       optionVegan: new UntypedFormControl('', []),
-    }, [recipeIngredientValidator()]);
+    }, [ recipeIngredientValidator() ]);
   }
 
   private static createInstructionRow(): UntypedFormControl {
-    return new UntypedFormControl('', [Validators.required]);
+    return new UntypedFormControl('', [ Validators.required ]);
   }
 
   ngOnInit(): void {
@@ -135,7 +135,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
       const i = this.recipe.orderedRecipeIngredients.indexOf(recipeIngredient);
       this.addRecipeIngredient();
 
-      const recipeIngredientForm: RecipeIngredientFormInterface = {...recipeIngredient};
+      const recipeIngredientForm: RecipeIngredientFormInterface = { ...recipeIngredient };
       recipeIngredientForm.ingredientOrRecipe = recipeIngredient.recipe ? recipeIngredient.recipe : recipeIngredient.ingredient!;
       recipeIngredientForm.unitOrMeasure = recipeIngredient.unit
         ? MeasureUnits.get(recipeIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(recipeIngredient.unit)!) : recipeIngredient.unit
@@ -182,7 +182,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   }
 
   async handleSubmit(): Promise<void> {
-    const formRecipe = {...this.form.value, recipeIngredients: []};
+    const formRecipe = { ...this.form.value, recipeIngredients: [] };
     for (let i = 0; i < this.recipeIngredients.length; i++) {
       formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
     }
@@ -203,7 +203,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
       if (checkExist) {
         this.recipeService.exist(formDocument.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({'exist': true});
+            return this.name.setErrors({ 'exist': true });
           }
           await this.submit(formDocument);
         });
@@ -231,7 +231,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
           severity: 'success',
           detail: await this.translatorService.instant(`Added recipe`)
         });
-        await this.routerService.navigate(['/', 'admin', 'recipe', recipe!.slug]);
+        await this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
       });
     }
   }
@@ -248,7 +248,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted recipe`)
           });
-          await this.routerService.navigate(['/', 'admin', 'recipes']);
+          await this.routerService.navigate([ '/', 'admin', 'recipes' ]);
         });
       }
     });
@@ -264,7 +264,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
 
   searchUnitOrMeasure($event: any) {
     this.unitsOrMeasures = this.measureUnits.filter(measureOrUnit => {
-      return this.filterService.filters.contains(measureOrUnit.key, $event.query);
+      return this.filterService.filters['contains'](measureOrUnit.key, $event.query);
     });
   }
 

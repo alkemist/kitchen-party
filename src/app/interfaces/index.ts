@@ -10,7 +10,6 @@ export * from './recipe.interface';
 export * from './relation-ingredient.interface';
 export * from './recipe-ingredient.interface';
 export * from './recipe-ingredient-form.interface';
-export * from './user.interface';
 export * from './cart-element.interface';
 export * from './cart-ingredient-form.interface';
 export * from './cart-ingredient.interface';

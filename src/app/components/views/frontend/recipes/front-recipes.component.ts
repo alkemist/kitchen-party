@@ -5,7 +5,7 @@ import { IngredientModel, RecipeModel } from '@models';
 import { FilteringService, IngredientService, RecipeService, UserService } from '@services';
 import { Subscription } from 'rxjs';
 import { CartRecipeService } from "@app/services/cart-recipe.service";
-import { UserInterface } from '@interfaces';
+import { DataStoreUserInterface } from '@alkemist/ngx-data-store';
 
 @Component({
   selector: 'app-front-recipes',
@@ -21,7 +21,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
   filteredRecipes: RecipeModel[] = [];
   loading = true;
   subscription?: Subscription;
-  loggedUser: UserInterface | undefined;
+  loggedUser: DataStoreUserInterface | undefined;
 
   constructor(
     private recipeService: RecipeService,
@@ -96,9 +96,7 @@ export class FrontRecipesComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.filter(this.filteringService.getFilters().value);
     });
-    await this.userService.getLoggedUser(async (loggedUser) => {
-      this.loggedUser = loggedUser;
-    });
+    this.loggedUser = await this.userService.getLoggedUser();
   }
 
   ngOnDestroy() {

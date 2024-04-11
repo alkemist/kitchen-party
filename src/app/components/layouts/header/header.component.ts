@@ -1,18 +1,25 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
-import {baseMenuItems, loggedMenuItems, logoutMenuItem, notLoggedMenuItems} from '@consts';
-import {DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum} from '@enums';
-import {CartRecipeInterface, IngredientInterface, UserInterface} from '@interfaces';
-import {CartRecipeModel, IngredientModel} from '@models';
-import {Select} from '@ngxs/store';
-import {FilteringService, IngredientService, TranslatorService, UserService} from '@services';
-import {CartRecipeState, IngredientState} from '@stores';
-import {EnumHelper} from '@tools';
-import {default as NoSleep} from 'nosleep.js';
-import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Observable, Subscription} from 'rxjs';
-import {CartRecipeService} from "@app/services/cart-recipe.service";
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Router, RoutesRecognized } from '@angular/router';
+import {
+  baseMenuItems,
+  CustomMenuItemCommandEvent,
+  loggedMenuItems,
+  logoutMenuItem,
+  notLoggedMenuItems
+} from '@consts';
+import { DietTypeLabelEnum, RecipeTypeLabelEnum, SweetSaltyLabelEnum } from '@enums';
+import { CartRecipeInterface, IngredientInterface } from '@interfaces';
+import { CartRecipeModel, IngredientModel } from '@models';
+import { Select } from '@ngxs/store';
+import { FilteringService, IngredientService, TranslatorService, UserService } from '@services';
+import { CartRecipeState, IngredientState } from '@stores';
+import { EnumHelper } from '@tools';
+import { default as NoSleep } from 'nosleep.js';
+import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { CartRecipeService } from "@app/services/cart-recipe.service";
+import { DataStoreUserInterface } from '@alkemist/ngx-data-store';
 
 
 export interface ToolbarFilters {
@@ -31,7 +38,7 @@ export interface ToolbarFilters {
   styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  loggedUser?: UserInterface;
+  loggedUser?: DataStoreUserInterface;
   menuItems: MenuItem[] = [];
   cartItems: MenuItem[] = [];
   title: string = '';
@@ -50,10 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   ingredients: IngredientModel[] = [];
-  @Select(IngredientState.all) private ingredients$?: Observable<IngredientInterface[]>;
-
   cartRecipesSize = 0;
   cartRecipes: CartRecipeModel[] = [];
+  @Select(IngredientState.all) private ingredients$?: Observable<IngredientInterface[]>;
   @Select(CartRecipeState.all) private cartRecipes$?: Observable<CartRecipeInterface[]>;
 
   constructor(
@@ -84,18 +90,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => {
-      subscription.unsubscribe();
-    })
-  }
-
   get form() {
     return this.filteringService.getFilters();
   }
 
   get filterSummary() {
     return this.filteringService.getFilterSummary();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    })
   }
 
   async ngOnInit(): Promise<void> {
@@ -133,25 +139,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
       );
     }
 
-    await this.userService.getLoggedUser(async (loggedUser) => {
-      this.loading = false;
-      this.loggedUser = loggedUser;
+    this.loggedUser = await this.userService.getLoggedUser();
 
-      let menuItems: MenuItem[] = baseMenuItems;
-      if (loggedUser) {
-        menuItems = menuItems.concat(loggedMenuItems);
-        menuItems.push({
-          ...logoutMenuItem, command: () => {
-            this.userService.logout().then(() => {
-              this.router.navigate([ '/' ]);
-            });
-          }
-        });
-      } else {
-        menuItems = menuItems.concat(notLoggedMenuItems);
-      }
-      this.menuItems = await this.translateMenu(menuItems);
-    });
+    let menuItems: MenuItem[] = baseMenuItems;
+    if (this.loggedUser) {
+      menuItems = menuItems.concat(loggedMenuItems);
+      menuItems.push({
+        ...logoutMenuItem, command: () => {
+          this.userService.logout().then(() => {
+            this.router.navigate([ '/' ]);
+          });
+        }
+      });
+    } else {
+      menuItems = menuItems.concat(notLoggedMenuItems);
+    }
+    this.menuItems = await this.translateMenu(menuItems);
+    this.loading = false;
   }
 
   async translateMenu(menuItems: MenuItem[]): Promise<MenuItem[]> {
@@ -187,6 +191,102 @@ export class HeaderComponent implements OnInit, OnDestroy {
       isSeason: false,
       ingredients: []
     } as ToolbarFilters);
+  }
+
+  buildCartItems(cartRecipes: CartRecipeModel[]) {
+    let totalSlice = 0;
+    this.cartRecipesSize = 0;
+
+    const cartItems: MenuItem[] = cartRecipes.map((item) => {
+      if (item.recipe?.nbSlices) {
+        totalSlice += item.recipe.nbSlices * item.quantity;
+      }
+      this.cartRecipesSize += item.quantity;
+
+      return {
+        label: item.recipe?.name,
+        badge: item.quantity > 1 ? item.quantity.toString() : '',
+        items: [
+          {
+            label: this.translatorService.translate('Recipe'),
+            icon: 'pi pi-eye',
+            styleClass: 'subItem',
+            cartItem: item,
+            command: async (event: CustomMenuItemCommandEvent) => {
+              await this.router.navigate([ '/', event.item.cartItem.recipe!.slug ])
+            }
+          },
+          {
+            label: this.translatorService.translate('Add one'),
+            icon: 'pi pi-plus',
+            styleClass: 'subItem',
+            cartItem: item,
+            command: async (event: CustomMenuItemCommandEvent) => {
+              await this.cartRecipeService.updateQuantity(event.item.cartItem, 1);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete one'),
+            icon: 'pi pi-minus',
+            styleClass: 'subItem',
+            cartItem: item,
+            command: async (event: CustomMenuItemCommandEvent) => {
+              await this.cartRecipeService.updateQuantity(event.item.cartItem, -1);
+            }
+          },
+          {
+            label: this.translatorService.translate('Delete all'),
+            icon: 'pi pi-trash',
+            styleClass: 'subItem',
+            cartItem: item,
+            command: async (event: CustomMenuItemCommandEvent) => {
+              this.confirmationService.confirm({
+                  key: "headerConfirm",
+                  message: `${ await this.translatorService.instant('Are you sure you want to delete it ?') }
+                  ${ item.recipe?.name }`,
+                  accept: async () => {
+                    await this.cartRecipeService.remove(event.item.cartItem);
+                  }
+                }
+              );
+            }
+          }
+        ],
+      };
+    });
+
+    if (cartItems.length > 0) {
+      cartItems.push(
+        {
+          separator: true
+        });
+
+      cartItems.push({
+        label: this.translatorService.translate('Empty the cart'),
+        icon: 'pi pi-trash',
+        command: async () => {
+          this.confirmationService.confirm({
+              key: "headerConfirm",
+              message: await this.translatorService.instant('Are you sure you want to empty the cart ?'),
+              accept: async () => {
+                await this.cartRecipeService.removeAll();
+              }
+            }
+          );
+        }
+      });
+    }
+
+    cartItems.push(
+      {
+        label: this.translatorService.translate('Shopping list'),
+        icon: 'pi pi-shopping-cart',
+        badge: totalSlice > 0 ? `${ totalSlice } ${ this.translatorService.translate('Slices') }` : '',
+        routerLink: `/shopping`
+      }
+    );
+
+    this.cartItems = cartItems;
   }
 
   private initVariables(routeData: any) {
@@ -229,101 +329,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.noSleep.disable();
       }
     }
-  }
-
-  buildCartItems(cartRecipes: CartRecipeModel[]) {
-    let totalSlice = 0;
-    this.cartRecipesSize = 0;
-
-    const cartItems: MenuItem[] = cartRecipes.map((item) => {
-      if (item.recipe?.nbSlices) {
-        totalSlice += item.recipe.nbSlices * item.quantity;
-      }
-      this.cartRecipesSize += item.quantity;
-
-      return {
-        label: item.recipe?.name,
-        badge: item.quantity > 1 ? item.quantity.toString() : '',
-        items: [
-          {
-            label: this.translatorService.translate('Recipe'),
-            icon: 'pi pi-eye',
-            styleClass: 'subItem',
-            cartItem: item,
-            command: async (event) => {
-              await this.router.navigate(['/', event.item.cartItem.recipe.slug])
-            }
-          },
-          {
-            label: this.translatorService.translate('Add one'),
-            icon: 'pi pi-plus',
-            styleClass: 'subItem',
-            cartItem: item,
-            command: async (event) => {
-              await this.cartRecipeService.updateQuantity(event.item.cartItem, 1);
-            }
-          },
-          {
-            label: this.translatorService.translate('Delete one'),
-            icon: 'pi pi-minus',
-            styleClass: 'subItem',
-            cartItem: item,
-            command: async (event) => {
-              await this.cartRecipeService.updateQuantity(event.item.cartItem, -1);
-            }
-          },
-          {
-            label: this.translatorService.translate('Delete all'),
-            icon: 'pi pi-trash',
-            styleClass: 'subItem',
-            cartItem: item,
-            command: async (event) => {
-              this.confirmationService.confirm({
-                  key: "headerConfirm",
-                  message: `${ await this.translatorService.instant('Are you sure you want to delete it ?') }
-                  ${ item.recipe?.name }`,
-                  accept: async () => {
-                    await this.cartRecipeService.remove(event.item.cartItem);
-                  }
-                }
-              );
-            }
-          }
-        ],
-      };
-    });
-
-    if (cartItems.length > 0) {
-      cartItems.push(
-        {
-          separator: true
-        });
-
-      cartItems.push({
-        label: this.translatorService.translate('Empty the cart'),
-        icon: 'pi pi-trash',
-        command: async () => {
-          this.confirmationService.confirm({
-              key: "headerConfirm",
-              message: await this.translatorService.instant('Are you sure you want to empty the cart ?'),
-              accept: async () => {
-                await this.cartRecipeService.removeAll();
-              }
-            }
-          );
-        }
-      });
-    }
-
-    cartItems.push(
-      {
-        label: this.translatorService.translate('Shopping list'),
-        icon: 'pi pi-shopping-cart',
-        badge: totalSlice > 0 ? `${totalSlice} ${this.translatorService.translate('Slices')}` : '',
-        routerLink: `/shopping`
-      }
-    );
-
-    this.cartItems = cartItems;
   }
 }
