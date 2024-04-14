@@ -89,7 +89,7 @@ export class IngredientComponent implements OnInit, AfterViewChecked {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      const ingredient = IngredientModel.format({
+      const ingredient = IngredientModel.import({
         id: this.ingredient().id,
         ...this.form.value as IngredientFormInterface
       });

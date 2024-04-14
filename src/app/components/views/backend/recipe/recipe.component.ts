@@ -1,15 +1,24 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, computed, OnInit, WritableSignal } from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogIngredientComponent } from '@components';
 import { DietTypeLabelEnum, MeasureUnitLabelEnum, MeasureUnits, RecipeTypeLabelEnum } from '@enums';
-import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface } from '@interfaces';
+import { KeyLabelInterface, RecipeIngredientFormInterface, RecipeInterface, RecipeV2FrontInterface } from '@interfaces';
 import { IngredientModel, RecipeIngredientModel, RecipeModel, RelationIngredientModel } from '@models';
-import { IngredientService, RecipeService, SearchService, TranslatorService, UploadService } from '@services';
-import { EnumHelper, slugify } from '@tools';
+import {
+  IngredientService,
+  RecipeService,
+  RecipeV2Service,
+  SearchService,
+  TranslatorService,
+  UploadService
+} from '@services';
+import { EnumHelper } from '@tools';
 import { recipeIngredientValidator } from '@validators';
 import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
+import { Observe } from '@alkemist/ngx-state-manager';
+import { RecipeV2State } from '@stores';
 
 @Component({
   selector: 'app-back-recipe',
@@ -33,11 +42,20 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   indexRecipeIngredient = 0;
   coverFiles: File[] = [];
   uploadClass: string = '';
+  @Observe(RecipeV2State, RecipeV2State.item)
+  protected _item!: WritableSignal<RecipeV2FrontInterface | null>;
+  _recipe = computed(
+    () =>
+      this._item() !== null
+        ? new RecipeModel(this._item()!)
+        : new RecipeModel({})
+  );
   private ingredientTranslation: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
+    private recipeV2Service: RecipeV2Service,
     private ingredientService: IngredientService,
     private searchService: SearchService,
     private routerService: Router,
@@ -176,7 +194,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
 
   recipeIngredientToString(i: number): string {
     const recipeIngredientData: RecipeIngredientFormInterface = this.recipeIngredients.at(i).value;
-    const recipeIngredient = RecipeIngredientModel.format(recipeIngredientData, this.measureUnits);
+    const recipeIngredient = RecipeIngredientModel.import(recipeIngredientData, this.measureUnits);
     const recipeIngredientString = RelationIngredientModel.relationIngredientToString(recipeIngredient, this.measureUnits);
     return recipeIngredientString !== '' ? recipeIngredientString : `${ this.ingredientTranslation } ${ i + 1 }`;
   }
@@ -184,7 +202,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
   async handleSubmit(): Promise<void> {
     const formRecipe = { ...this.form.value, recipeIngredients: [] };
     for (let i = 0; i < this.recipeIngredients.length; i++) {
-      formRecipe.recipeIngredients.push(RecipeIngredientModel.format(this.recipeIngredients.at(i).value, this.measureUnits));
+      formRecipe.recipeIngredients.push(RecipeIngredientModel.import(this.recipeIngredients.at(i).value, this.measureUnits));
     }
 
     await this.preSubmit(formRecipe);
@@ -198,7 +216,25 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
         formDocument.id = this.recipe.id;
       }
 
-      const checkExist = !this.recipe.id || slugify(formDocument.name) !== slugify(this.recipe.name);
+      const recipe = RecipeModel.import({
+        id: this.recipe.id,
+        ...this.form.value
+      }, this.measureUnits);
+
+      console.log("Measure units", this.measureUnits);
+      console.log("Recipe form values", this.form.value);
+      console.log("Recipe form entity", recipe);
+      console.log("Recipe form converted", await this.recipeV2Service.convert(recipe));
+      console.log("Recipe form for store", recipe.toStore());
+
+      void this.submit(recipe);
+
+      /*const ingredient = RecipeModel.import({
+        id: this.recipe.id,
+        ...this.form.value as IngredientFormInterface
+      });*/
+
+      /*const checkExist = !this.recipe.id || slugify(formDocument.name) !== slugify(this.recipe.name);
 
       if (checkExist) {
         this.recipeService.exist(formDocument.name!).then(async exist => {
@@ -209,12 +245,19 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
         });
       } else {
         await this.submit(formDocument);
-      }
+      }*/
     }
   }
 
-  async submit(localDocument: RecipeInterface): Promise<void> {
-    if (this.recipe.id) {
+  async submit(recipe: RecipeModel): Promise<void> {
+    this.loading = true;
+
+    this.recipeV2Service.add(recipe).then(async recipe => {
+      this.loading = false;
+      //await this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
+    });
+
+    /*if (this.recipe.id) {
       this.loading = true;
       this.recipeService.update(localDocument).then(async recipe => {
         this.loading = false;
@@ -233,7 +276,7 @@ export class RecipeComponent implements OnInit, AfterViewChecked {
         });
         await this.routerService.navigate([ '/', 'admin', 'recipe', recipe!.slug ]);
       });
-    }
+    }*/
   }
 
   async remove(): Promise<void> {

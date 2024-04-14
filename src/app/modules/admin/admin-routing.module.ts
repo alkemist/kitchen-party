@@ -8,7 +8,7 @@ import {
   RecipeComponent,
   RecipesComponent
 } from '@components';
-import { ingredientResolver, KitchenResolver, RecipeResolver } from '@resolvers';
+import { ingredientResolver, KitchenResolver, RecipeResolver, recipeResolver } from '@resolvers';
 
 const routes: Routes = [
   { path: '', redirectTo: '/admin/recipes', pathMatch: 'full' },
@@ -39,7 +39,8 @@ const routes: Routes = [
     path: 'recipe/:slug',
     component: RecipeComponent,
     resolve: {
-      recipe: RecipeResolver
+      recipe: RecipeResolver,
+      _recipe: recipeResolver
     },
     data: { title: 'Recipe' },
   },

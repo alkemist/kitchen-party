@@ -27,17 +27,27 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
     this.optionVegan = recipeIngredient.optionVegan || false;
   }
 
-  static format(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientInterface {
+  override get ingredientIds(): string[] {
+    if (this.ingredient) {
+      return [ this.ingredient.id! ];
+    } else if (this.recipe) {
+      return this.recipe.ingredientIds;
+    }
+    return [];
+  }
+
+  static import(recipeIngredientForm: RecipeIngredientFormInterface, measureUnits: KeyLabelInterface[]): RecipeIngredientModel {
     const recipeIngredient = { ...recipeIngredientForm };
 
     const ingredientOrRecipe = recipeIngredientForm.ingredientOrRecipe;
     delete recipeIngredient.ingredientOrRecipe;
+    delete recipeIngredient.id;
 
     if (ingredientOrRecipe) {
       if (ingredientOrRecipe instanceof RecipeModel) {
-        recipeIngredient.recipe = ingredientOrRecipe;
+        recipeIngredient.recipeId = ingredientOrRecipe.id;
       } else {
-        recipeIngredient.ingredient = ingredientOrRecipe;
+        recipeIngredient.ingredientId = ingredientOrRecipe.id;
       }
     }
 
@@ -61,26 +71,7 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
       }
     }
 
-    return recipeIngredient;
-  }
-
-  hasOption(option: string): boolean {
-    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
-      return true;
-    }
-    if (option === DietTypeLabelEnum.vege && this.optionVege) {
-      return true;
-    }
-    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
-  }
-
-  override get ingredientIds(): string[] {
-    if (this.ingredient) {
-      return [ this.ingredient.id! ];
-    } else if (this.recipe) {
-      return this.recipe.ingredientIds;
-    }
-    return [];
+    return new RecipeIngredientModel(recipeIngredient);
   }
 
   static recipeIngredientToString(recipeIngredient: RecipeIngredientInterface, measureUnits: KeyLabelInterface[]): string {
@@ -101,6 +92,33 @@ export class RecipeIngredientModel extends RelationIngredientModel implements Re
     }
 
     return str;
+  }
+
+  hasOption(option: string): boolean {
+    if (option === DietTypeLabelEnum.meat && this.optionCarne) {
+      return true;
+    }
+    if (option === DietTypeLabelEnum.vege && this.optionVege) {
+      return true;
+    }
+    return option === DietTypeLabelEnum.vegan && this.optionVegan!;
+  }
+
+  toStore() {
+    const data: Record<string, any> = {
+      quantity: this.quantity,
+      measure: this.measure,
+      unit: this.unit,
+
+      optionCarne: this.optionCarne,
+      optionVege: this.optionVege,
+      optionVegan: this.optionVegan,
+    }
+
+    if (this.recipeId) data['recipeId'] = this.recipeId;
+    if (this.ingredientId) data['ingredientId'] = this.ingredientId;
+
+    return data
   }
 }
 

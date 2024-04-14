@@ -1,8 +1,10 @@
-import {DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes} from '@enums';
-import {RecipeInterface} from '@interfaces';
-import {slugify} from '@tools';
-import {RecipeIngredientModel} from "./recipe-ingredient.model";
-import {RelationIngredientModel} from "./relation-ingredient.model";
+import { DietTypeLabelEnum, RecipeTypeKeyEnum, RecipeTypeLabelEnum, RecipeTypes } from '@enums';
+import { KeyLabelInterface, RecipeInterface, RecipeV2FrontInterface } from '@interfaces';
+import { slugify } from '@tools';
+import { RecipeIngredientModel } from "./recipe-ingredient.model";
+import { RelationIngredientModel } from "./relation-ingredient.model";
+import { StringHelper } from '@alkemist/smart-tools';
+import { RecipeFormInterface } from '@app/interfaces/recipe-form.interface';
 
 export class RecipeModel implements RecipeInterface {
   static saltyNames = [
@@ -95,6 +97,20 @@ export class RecipeModel implements RecipeInterface {
       }
     }
     return '';
+  }
+
+  static import(formData: RecipeFormInterface, measureUnits: KeyLabelInterface[]) {
+    const recipe = new RecipeModel(formData);
+
+    if (formData.recipeIngredientForms) {
+      formData.recipeIngredientForms.forEach(recipeIngredientForm => {
+        recipe.recipeIngredients.push(
+          RecipeIngredientModel.import(recipeIngredientForm, measureUnits)
+        )
+      })
+    }
+
+    return recipe;
   }
 
   nameContain(search: string): boolean {
@@ -295,6 +311,33 @@ export class RecipeModel implements RecipeInterface {
       }
     }
     return null;
+  }
+
+  toUniqueFields() {
+    return {
+      name: this.name,
+      slug: StringHelper.slugify(this.name)
+    }
+  }
+
+  toStore(): Omit<RecipeV2FrontInterface, "user" | "slug"> {
+    return {
+      id: this.id!,
+      name: this.name,
+
+      cookingDuration: this.cookingDuration,
+      preparationDuration: this.preparationDuration,
+      waitingDuration: this.waitingDuration,
+
+      nbSlices: this.nbSlices,
+      instructions: this.instructions,
+      type: this.type,
+      imageName: this.image,
+      source: this.source,
+
+      recipeIngredients: this.recipeIngredients
+        .map(recipeIngredient => recipeIngredient.toStore()),
+    }
   }
 }
 

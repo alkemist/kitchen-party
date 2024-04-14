@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {RecipeModel} from '@models';
-import {RecipeService} from '@services';
+import { inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, ResolveFn, RouterStateSnapshot } from '@angular/router';
+import { RecipeModel } from '@models';
+import { RecipeService, RecipeV2Service } from '@services';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class RecipeResolver implements Resolve<RecipeModel | undefined> {
   constructor(private service: RecipeService) {
   }
@@ -15,3 +15,8 @@ export class RecipeResolver implements Resolve<RecipeModel | undefined> {
     return await this.service.getBySlug(route.paramMap.get('slug') ?? '');
   }
 }
+
+export const recipeResolver: ResolveFn<void | null> =
+  async (route: ActivatedRouteSnapshot) => {
+    return inject(RecipeV2Service).dispatchUserItem(route.paramMap.get('slug')!);
+  };
