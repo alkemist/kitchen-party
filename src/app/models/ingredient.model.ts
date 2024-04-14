@@ -42,11 +42,11 @@ export class IngredientModel implements IngredientInterface {
     return icons.get(this.type) ?? '';
   }
 
-  static format(ingredientForm: IngredientFormInterface) {
-    const ingredient = new IngredientModel(ingredientForm);
-    if (ingredientForm.dateBegin && ingredientForm.dateEnd) {
-      ingredient.monthBegin = ingredientForm.dateBegin.getMonth() + 1;
-      ingredient.monthEnd = ingredientForm.dateEnd.getMonth() + 1;
+  static import(formData: IngredientFormInterface) {
+    const ingredient = new IngredientModel(formData);
+    if (formData.dateBegin && formData.dateEnd) {
+      ingredient.monthBegin = formData.dateBegin.getMonth() + 1;
+      ingredient.monthEnd = formData.dateEnd.getMonth() + 1;
     }
     return ingredient;
   }

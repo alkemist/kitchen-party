@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {IngredientTypeLabelEnum} from '@enums';
-import {IngredientInterface} from '@interfaces';
-import {IngredientModel} from '@models';
-import {IngredientService, TranslatorService} from '@services';
-import {EnumHelper, slugify} from '@tools';
-import {MessageService} from 'primeng/api';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { IngredientTypeLabelEnum } from '@enums';
+import { IngredientInterface } from '@interfaces';
+import { IngredientModel } from '@models';
+import { IngredientService, TranslatorService } from '@services';
+import { EnumHelper, slugify } from '@tools';
+import { MessageService } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-dialog-ingredient',
   templateUrl: './dialog-ingredient.component.html',
-  styleUrls: ['./dialog-ingredient.component.scss']
+  styleUrls: [ './dialog-ingredient.component.scss' ]
 })
 export class DialogIngredientComponent implements OnInit {
   ingredient = new IngredientModel({});
@@ -50,7 +50,7 @@ export class DialogIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(IngredientModel.format(this.form.value));
+    await this.preSubmit(IngredientModel.import(this.form.value));
   }
 
   async preSubmit(ingredient: IngredientInterface): Promise<void> {
@@ -66,7 +66,7 @@ export class DialogIngredientComponent implements OnInit {
       if (checkExist) {
         this.ingredientService.exist(ingredient.name!).then(async exist => {
           if (exist) {
-            return this.name.setErrors({'exist': true});
+            return this.name.setErrors({ 'exist': true });
           }
           await this.submit(ingredient);
         });

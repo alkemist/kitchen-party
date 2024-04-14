@@ -13,17 +13,17 @@ describe('IngredientModel', () => {
     });
 
     it('should contain isLiquid boolean value', () => {
-      expect(new IngredientModel({isLiquid: true})).toMatchObject({isLiquid: true});
+      expect(new IngredientModel({ isLiquid: true })).toMatchObject({ isLiquid: true });
     });
 
     it('should contain isLiquid null value', () => {
-      expect(new IngredientModel({})).toMatchObject({isLiquid: null});
+      expect(new IngredientModel({})).toMatchObject({ isLiquid: null });
     });
   });
 
   describe('IngredientModel.typeName', () => {
     it('should return type name', () => {
-      expect(new IngredientModel({type: IngredientTypeKeyEnum.meats}).typeName).toBe(IngredientTypeLabelEnum.meats);
+      expect(new IngredientModel({ type: IngredientTypeKeyEnum.meats }).typeName).toBe(IngredientTypeLabelEnum.meats);
     });
   });
 
@@ -33,7 +33,7 @@ describe('IngredientModel', () => {
       const keys = Object.keys(IngredientTypeKeyEnum);
 
       for (const key of keys) {
-        expect(new IngredientModel({type: key}).typeIcon).toBe(icons.get(key));
+        expect(new IngredientModel({ type: key }).typeIcon).toBe(icons.get(key));
       }
 
       expect.assertions(keys.length);
@@ -42,7 +42,7 @@ describe('IngredientModel', () => {
 
   describe('IngredientModel.format', () => {
     it('should format ingredient date', () => {
-      expect(IngredientModel.format({
+      expect(IngredientModel.import({
         dateBegin: dateMock,
         dateEnd: dateMock,
       }))
@@ -55,22 +55,22 @@ describe('IngredientModel', () => {
 
   describe('IngredientModel.nameContain', () => {
     it('should return true if name contain searched word', () => {
-      expect(new IngredientModel({name: 'ceci est un test', slug: 'rien'})
+      expect(new IngredientModel({ name: 'ceci est un test', slug: 'rien' })
         .nameContain('test')).toBe(true);
     });
 
     it('should return true if slug contain searched word', () => {
-      expect(new IngredientModel({name: 'rien', slug: 'ceci est un test'})
+      expect(new IngredientModel({ name: 'rien', slug: 'ceci est un test' })
         .nameContain('test')).toBe(true);
     });
 
     it('should return true if name and slug slug contain searched word', () => {
-      expect(new IngredientModel({name: 'test test', slug: 'ceci est un test'})
+      expect(new IngredientModel({ name: 'test test', slug: 'ceci est un test' })
         .nameContain('test')).toBe(true);
     });
 
     it('should return false if name and slug don\'t contain searched word', () => {
-      expect(new IngredientModel({name: 'rien', slug: 'nothing'})
+      expect(new IngredientModel({ name: 'rien', slug: 'nothing' })
         .nameContain('test')).toBe(false);
     });
   });
@@ -95,51 +95,51 @@ describe('IngredientModel', () => {
         type: IngredientTypeKeyEnum.salts,
         isLiquid: true,
       };
-      const objectToHydrated = new IngredientModel({name: 'test', id});
+      const objectToHydrated = new IngredientModel({ name: 'test', id });
 
       objectToHydrated.hydrate(hydratedValues);
 
-      expect(objectToHydrated).toEqual({...hydratedValues, id});
+      expect(objectToHydrated).toEqual({ ...hydratedValues, id });
     });
   });
 
   describe('IngredientModel.isMeat', () => {
     it.each(Array.from(ingredientTypeMeatMap))
     ('should %s return %p', (key, value) => {
-      expect(new IngredientModel({type: key}).isMeat()).toBe(value);
+      expect(new IngredientModel({ type: key }).isMeat()).toBe(value);
     });
   });
 
   describe('IngredientModel.isFish', () => {
     it.each(Array.from(ingredientTypeFishMap))
     ('should %s return %p', (key, value) => {
-      expect(new IngredientModel({type: key}).isFish()).toBe(value);
+      expect(new IngredientModel({ type: key }).isFish()).toBe(value);
     });
   });
 
   describe('IngredientModel.isVege', () => {
     it.each(Array.from(ingredientTypeVegeMap))
     ('should %s return %p', (key, value) => {
-      expect(new IngredientModel({type: key}).isVege()).toBe(value);
+      expect(new IngredientModel({ type: key }).isVege()).toBe(value);
     });
   });
 
   describe('IngredientModel.isVegan', () => {
     it.each(Array.from(ingredientTypeVeganMap))
     ('should %s return %p', (key, value) => {
-      expect(new IngredientModel({type: key}).isVegan()).toBe(value);
+      expect(new IngredientModel({ type: key }).isVegan()).toBe(value);
     });
   });
 
   describe('IngredientModel.isSweet', () => {
     it.each(IngredientModel.sweetNames)
     ('should %s return true', (name) => {
-      expect(new IngredientModel({name}).isSweet()).toBe(true);
+      expect(new IngredientModel({ name }).isSweet()).toBe(true);
     });
 
     it.each(IngredientModel.saltyNames)
     ('should %s return false', (name) => {
-      expect(new IngredientModel({name}).isSweet()).toBe(false);
+      expect(new IngredientModel({ name }).isSweet()).toBe(false);
     });
   });
 
@@ -149,22 +149,22 @@ describe('IngredientModel', () => {
       IngredientTypeKeyEnum.meats
     ])
     ('should %s return true', (type) => {
-      expect(new IngredientModel({type}).isSalty()).toBe(true);
+      expect(new IngredientModel({ type }).isSalty()).toBe(true);
     });
 
     it.each([ ...IngredientModel.saltyNames, 'bouillon de légume' ])
     ('should %s return true', (name) => {
-      expect(new IngredientModel({name}).isSalty()).toBe(true);
+      expect(new IngredientModel({ name }).isSalty()).toBe(true);
     });
 
     it.each(IngredientModel.sweetNames)
     ('should %s return false', (name) => {
-      expect(new IngredientModel({name}).isSalty()).toBe(false);
+      expect(new IngredientModel({ name }).isSalty()).toBe(false);
     });
 
     it.each([ '' ])
     ('should %s return false', (name) => {
-      expect(new IngredientModel({name}).isSalty()).toBe(false);
+      expect(new IngredientModel({ name }).isSalty()).toBe(false);
     });
   });
 

@@ -24,6 +24,9 @@ export class IngredientV2Service extends DataStoreStateService<IngredientV2Front
   protected _lastUpdatedPublicItems!: WritableSignal<Date | null>;
   protected _lastUpdatedUserItems: undefined;
 
+  @Observe(IngredientV2State, IngredientV2State.items)
+  protected ingredients!: WritableSignal<IngredientV2FrontInterface[]>;
+
   constructor(
     private messageService: MessageService,
     private loggerService: LoggerService,
@@ -77,5 +80,9 @@ export class IngredientV2Service extends DataStoreStateService<IngredientV2Front
       severity: "success",
       detail: $localize`Ingredient deleted`
     });
+  }
+
+  findIngredient(slug: string) {
+    return this.ingredients().find(ingredient => ingredient.slug === slug);
   }
 }

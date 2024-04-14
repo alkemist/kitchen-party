@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecipeTypeLabelEnum } from '@enums';
 import { RecipeModel } from '@models';
-import { RecipeService, TranslatorService } from '@services';
+import { RecipeService, RecipeV2Service, TranslatorService } from '@services';
 import { EnumHelper } from '@tools';
 
 @Component({
@@ -20,6 +20,7 @@ export class RecipesComponent implements OnInit {
 
   constructor(
     private recipeService: RecipeService,
+    private recipeV2Service: RecipeV2Service,
     private router: Router,
     private translatorService: TranslatorService
   ) {

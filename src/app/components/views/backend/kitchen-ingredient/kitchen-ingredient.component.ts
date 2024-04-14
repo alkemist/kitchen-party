@@ -1,18 +1,24 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MeasureUnitLabelEnum, MeasureUnits} from '@enums';
-import {KitchenIngredientInterface} from '@interfaces';
-import {IngredientModel, KitchenIngredientModel, RecipeIngredientModel} from '@models';
-import {IngredientService, KitchenIngredientService, RecipeService, SearchService, TranslatorService} from '@services';
-import {EnumHelper, slugify} from '@tools';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {RelationIngredientFormInterface} from "@app/interfaces/relation-ingredient-form.interface";
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MeasureUnitLabelEnum, MeasureUnits } from '@enums';
+import { KitchenIngredientInterface } from '@interfaces';
+import { IngredientModel, KitchenIngredientModel, RecipeIngredientModel } from '@models';
+import {
+  IngredientService,
+  KitchenIngredientService,
+  RecipeService,
+  SearchService,
+  TranslatorService
+} from '@services';
+import { EnumHelper, slugify } from '@tools';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { RelationIngredientFormInterface } from "@app/interfaces/relation-ingredient-form.interface";
 
 @Component({
   selector: 'app-kitchen-ingredient',
   templateUrl: './kitchen-ingredient.component.html',
-  styleUrls: ['./kitchen-ingredient.component.scss'],
+  styleUrls: [ './kitchen-ingredient.component.scss' ],
   host: {
     class: 'page-container'
   }
@@ -40,7 +46,7 @@ export class KitchenIngredientComponent implements OnInit {
     this.form = new UntypedFormGroup({
       quantity: new UntypedFormControl('', []),
       unitOrMeasure: new UntypedFormControl('', []),
-      ingredient: new UntypedFormControl('', [Validators.required]),
+      ingredient: new UntypedFormControl('', [ Validators.required ]),
     });
   }
 
@@ -53,7 +59,7 @@ export class KitchenIngredientComponent implements OnInit {
         if (data && data['kitchenIngredient']) {
           this.kitchenIngredient = data['kitchenIngredient'];
 
-          const kitchenIngredientForm: RelationIngredientFormInterface = {...this.kitchenIngredient};
+          const kitchenIngredientForm: RelationIngredientFormInterface = { ...this.kitchenIngredient };
           kitchenIngredientForm.ingredient = this.kitchenIngredient.ingredient!;
           kitchenIngredientForm.unitOrMeasure = this.kitchenIngredient.unit
             ? MeasureUnits.get(this.kitchenIngredient.unit) ? await this.translatorService.instant(MeasureUnits.get(this.kitchenIngredient.unit)!) : this.kitchenIngredient.unit
@@ -72,7 +78,7 @@ export class KitchenIngredientComponent implements OnInit {
   }
 
   async handleSubmit(): Promise<void> {
-    await this.preSubmit(RecipeIngredientModel.format(this.form.value, this.measureUnits));
+    await this.preSubmit(RecipeIngredientModel.import(this.form.value, this.measureUnits));
 
   }
 
@@ -90,7 +96,7 @@ export class KitchenIngredientComponent implements OnInit {
       if (checkExist) {
         this.kitchenIngredientService.exist(formDocument.name).then(async exist => {
           if (exist) {
-            return this.form.get('ingredientOrRecipe')?.setErrors({'exist': true});
+            return this.form.get('ingredientOrRecipe')?.setErrors({ 'exist': true });
           }
           await this.submit(formDocument);
         });
@@ -136,7 +142,7 @@ export class KitchenIngredientComponent implements OnInit {
             severity: 'success',
             detail: await this.translatorService.instant(`Deleted ingredient`)
           });
-          await this.routerService.navigate(['/', 'admin', 'kitchen-ingredients']);
+          await this.routerService.navigate([ '/', 'admin', 'kitchen-ingredients' ]);
         });
       }
     });

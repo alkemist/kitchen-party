@@ -12,3 +12,5 @@ export * from './cart-recipe.action';
 export * from './cart-recipe.state';
 export * from './ingredient-v2.action';
 export * from './ingredient-v2.state';
+export * from './recipe-v2.action';
+export * from './recipe-v2.state';
