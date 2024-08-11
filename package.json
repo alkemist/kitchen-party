@@ -12,12 +12,13 @@
     "reset": "rm -rf node_modules && rm yarn.lock && yarn install",
     "config": "ts-node ./scripts/setenv.ts",
     "netlify": "netlify dev",
-    "netlify:backup": "netlify functions:invoke backup --port 1234"
+    "netlify:backup": "netlify functions:invoke backup --port 1234",
+    "deploy": "git pull; yarn install; rm -rf wwww ; yarn build"
   },
   "private": true,
   "dependencies": {
     "@alkemist/compare-engine": "^1.3.6",
-    "@alkemist/ngx-data-store": "^1.1.18",
+    "@alkemist/ngx-data-store": "^1.1.38",
     "@alkemist/ngx-form-supervisor": "^1.1.16",
     "@alkemist/ngx-state-manager": "^1.2.25",
     "@alkemist/smart-tools": "^1.1.17",

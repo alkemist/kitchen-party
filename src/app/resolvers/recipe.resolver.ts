@@ -16,7 +16,7 @@ export class RecipeResolver implements Resolve<RecipeModel | undefined> {
   }
 }
 
-export const recipeResolver: ResolveFn<void | null> =
+export const recipeResolver =
   async (route: ActivatedRouteSnapshot) => {
     return inject(RecipeV2Service).dispatchUserItem(route.paramMap.get('slug')!);
   };
