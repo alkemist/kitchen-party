@@ -1,6 +1,6 @@
 import { Injectable, WritableSignal } from '@angular/core';
 import { RecipeV2BackInterface, RecipeV2FrontInterface } from '@interfaces';
-import { IngredientService, IngredientV2Service, LoggerService } from '@services';
+import {IngredientService, IngredientV2Service, LoggerService, UserService} from '@services';
 import {
   RecipeAddAction,
   RecipeDeleteAction,
@@ -27,13 +27,18 @@ export class RecipeV2Service extends DataStoreStateService<RecipeV2FrontInterfac
   protected _lastUpdatedUserItems!: WritableSignal<Date | null>;
 
   constructor(
+    userService: UserService,
     private messageService: MessageService,
     private ingredientService: IngredientService,
     private ingredientV2Service: IngredientV2Service,
     private loggerService: LoggerService,
   ) {
     super(
+      userService,
       'recipe',
+      RecipeV2State,
+      RecipeV2State.publicItems,
+      RecipeV2State.userItems,
       RecipeFillPublicAction,
       RecipeFillUserAction,
       RecipeGetAction,

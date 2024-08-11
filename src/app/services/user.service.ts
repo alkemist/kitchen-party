@@ -13,7 +13,8 @@ export class UserService extends DataStoreUserService<Record<string, any>> {
     super();
   }
 
-  logout() {
+  override async logout() {
+    await super.logout();
     return Promise.resolve();
   }
 }
