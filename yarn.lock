@@ -7,6 +7,13 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.0.1.tgz#b38b444ad3aa5fedbb15f2f746dcd934226a12dd"
   integrity sha512-+u76oB43nOHrF4DDWRLWDCtci7f3QJoEBigemIdIeTi1ODqjx6Tad9NCVnPRwewWlKkVab5PlK8DCtPTyX7S8g==
 
+"@alkemist/ngx-data-store@^1.1.38":
+  version "1.1.38"
+  resolved "https://registry.yarnpkg.com/@alkemist/ngx-data-store/-/ngx-data-store-1.1.38.tgz#06a9b0948c03fdab14d5fc58489faa9882810cb6"
+  integrity sha512-JeFj6IHWGtLhPjHJ9eGNCW/xtfe/pFhzjixpfRXJMKHdxnRrZZCswcJXSO0n/qi4Q0gtWZOmqb6mpNxymbrT6g==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ampproject/remapping@2.2.0", "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
