@@ -4,6 +4,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./out-tsc/app",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "types": [
       "@angular/localize"
     ],
