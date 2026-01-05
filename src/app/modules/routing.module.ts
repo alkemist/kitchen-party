@@ -11,9 +11,12 @@ import { DietResolver, RecipeResolver } from '@resolvers';
 import { LoggedGuard } from "@guards";
 import { Title } from '@angular/platform-browser';
 import { TranslatorService } from "@services";
+import packageJson from '../../../package.json';
 
 @Injectable()
 export class CustomTitleStrategy extends TitleStrategy {
+  public version: string = packageJson.version;
+
   constructor(
     private readonly title: Title,
     private readonly translatorService: TranslatorService,
@@ -37,9 +40,9 @@ export class CustomTitleStrategy extends TitleStrategy {
     }
 
     if (title !== undefined) {
-      this.title.setTitle(`${ title } | Kitchen Party`);
+      this.title.setTitle(`${ title } | Kitchen Party - ${ this.version }`);
     } else {
-      this.title.setTitle(`Kitchen Party`);
+      this.title.setTitle(`Kitchen Party - ${ this.version }`);
     }
   }
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserService} from '@services';
+import packageJson from '../../../../../../package.json';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ import {UserService} from '@services';
   }
 })
 export class LoginComponent implements OnInit {
+  public version: string = packageJson.version;
   form: UntypedFormGroup;
   error: string = '';
 
