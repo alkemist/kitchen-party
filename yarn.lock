@@ -2915,26 +2915,26 @@
   dependencies:
     tslib "^1.9.0"
 
-"@ngxs/logger-plugin@^3.7.3":
-  version "3.7.6"
-  resolved "https://registry.yarnpkg.com/@ngxs/logger-plugin/-/logger-plugin-3.7.6.tgz#108abe251108d9a7c6b99d749732c97a43e10bbb"
-  integrity sha512-whB+cS6gmoEQg6+rKohrjYBj6jS1Z2TLGXMmluPNJLt1ZAmd2LVX1O9tdK5tDu/imu5/wD40k5UM5ffEUcJXlw==
+"@ngxs/logger-plugin@^3.8.0":
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/logger-plugin/-/logger-plugin-3.8.1.tgz#837405f2ab61d5c901a8ccb2617c40c48da4780d"
+  integrity sha512-ySgt8jUkLQJcp3jxg1a1d7pkD141ltHeOHdtjrTP4MT4ICazE9s6NJV2Gzb616R/IYOVES4xUA8XSg0+ng8Pzg==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.2.0"
 
-"@ngxs/storage-plugin@^3.7.3":
-  version "3.7.6"
-  resolved "https://registry.yarnpkg.com/@ngxs/storage-plugin/-/storage-plugin-3.7.6.tgz#29da7025491bc988e3462f2990f5f64ce41c4f00"
-  integrity sha512-jeeoUgsMdb4M8kIHdnO0X6I73okmRJhMW9znaqhYF/aZ+PiQrogdJ5xvSXmoQ7Gg57YfQEhVErM+zf/HD7fnMA==
+"@ngxs/storage-plugin@^3.8.0":
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/storage-plugin/-/storage-plugin-3.8.1.tgz#264b9f6db9ed0c228426f34aefe8bd70bf15bc11"
+  integrity sha512-bMCPuqURMM2LvSdQ9HAI12wT4liB6NaaJvZy8rlixHjFWqjYKvlFUpR0FLxcDmm2TTz2TBFBnoL0wAkyOHAlGA==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.2.0"
 
-"@ngxs/store@^3.7.3":
-  version "3.7.6"
-  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.7.6.tgz#567190b17e1111ec7f9bcc451c99bbdac82c950a"
-  integrity sha512-ljnrkVrO/HmDakQImWr9G2NbpbNd8MjoPI3Ad2GsIbK/Ey4psEyMGgg6jcaMyhDfDAs2Z69Q+5TVJS0GV4euMw==
+"@ngxs/store@^3.8.0":
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.8.1.tgz#dc4b823fc179149c32ac6158149877dda615abd2"
+  integrity sha512-nbapLdMx+mtnb57BUWXbD6qYfVICv6Rp2NdoGx1++qDbc44ALC49KbF7rSjyPltlExxharAzoNpzO3JuueCP+A==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.2.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -13991,6 +13991,11 @@ tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
+
+tslib@^2.2.0:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.2.tgz#1b6f07185c881557b0ffa84b111a0106989e8338"
+  integrity sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==
 
 tslib@~2.1.0:
   version "2.1.0"
