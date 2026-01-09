@@ -35,7 +35,7 @@
     "@ngxs/storage-plugin": "^3.7.3",
     "@ngxs/store": "^3.7.3",
     "dotenv": "^14.2.0",
-    "firebase": "^9.6.3",
+    "firebase": "^9.21.0",
     "mailgun.js": "^5.0.2",
     "material-icons": "^1.10.6",
     "ng-mocks": "^13.0.3",
