@@ -37,7 +37,7 @@
     "dotenv": "^14.2.0",
     "firebase": "^9.6.3",
     "mailgun.js": "^5.0.2",
-    "material-icons": "^1.10.6",
+    "material-icons": "^1.13.6",
     "ng-mocks": "^13.0.3",
     "nosleep.js": "^0.12.0",
     "primeflex": "^3.1.2",
